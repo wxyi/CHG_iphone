@@ -20,220 +20,96 @@
 }
 
 /**
- *  核准输入的短信验证码
+ * 用户登录获取token
  *
  *  @return <#return value description#>
  */
-+(NSString*) ApiCheckCaptcha
++(NSString*) ApiGetOauthToken
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/checkCaptcha.action"];
+    return [[ConfigManager sharedInstance].PubServer_TokenUrl stringByAppendingString:@"oauth/token"];
 }
 
 /**
- *  核准用户登录
- *
- *  @return <#return value description#>
+ *  获得用户配置信息
  */
-+(NSString*) ApiCheckLogin
++(NSString*) ApiGetUserConfig
 {
-    DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_URL);
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/checkLogin.action"];
-}
-
-/**
- *  获取用户信息
- *
- *  @return <#return value description#>
- */
-+(NSString*) ApiGetUser
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/getUser.action"];
-}
-
-/**
- *  用户登录名唯一验证 *
- *  @return <#return value description#>
- */
-+(NSString*) ApiExistUser
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/existUser.action"];
-}
-
-/**
- *  根据用户主键查用户
- *  @return <#return value description#>
- */
-+(NSString*) ApiGetUserById
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/getUserById.action"];
-}
-
-/**
- *  通过旧密码重置密码
- *  @return <#return value description#>
- */
-+(NSString*) ApiUpdatePwdByOld;
-
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/updatePwdByOld.action"];
-}
-
-/**
- *  通过短信验证码重置密码
- *  @return <#return value description#>
- */
-+(NSString*) ApiUpdatePwdByCaptcha
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/updatePwdByCaptcha.action"];
-}
-
-/**
- *  核准注册
- *  @return <#return value description#>
- */
-+(NSString*) ApiVerifyRegister
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/verifyRegister.action"];
-}
-
-/**
- *  新建用户
- *  @return <#return value description#>
- */
-+(NSString*) ApiCreateUser;
-
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/createUser.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getUserConfig"];
 }
 
 
 /**
- *  获取会员信息
+ *  获取验证码
  */
-+(NSString*) ApiGetMemberByUserId
++(NSString*) ApiGetCheckCode
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/getMemberByUserId.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getCheckCode"];
 }
 
 /**
- *  编辑会员信息地址
+ *  修改密码
  */
-+(NSString*) ApiModifyMemberByUserId
++(NSString*) ApiUpdatePassword
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/modifyMemberByUserId.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"updatePassword"];
 }
 
 
-/*********************产品接口*********************/
 /**
- *  获取产品类别
+ *  重置密码/忘记密码
  */
-+(NSString*) ApiSearchPcategoryList;
++(NSString*) ApiResetPassword
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/searchPcategoryList.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"resetPassword"];
 }
 
 /**
- *  获取产品列表
+ *   活动列表
  */
-+(NSString*) ApiSearchProductList
++(NSString*) ApiGetPromoList
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/searchProductList.action"];
-}
-
-/**
- *  获取产品详情
- */
-+(NSString*) ApiSearchProductInfoById
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/searchProductInfoById.action"];
-}
-/**
- *  添加产品（含详情）
- */
-+(NSString*) ApiAddProduct
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/addProduct.action"];
-}
-/**
- *  更新产品（含详情）
- */
-+(NSString*) ApiUpdateProduct
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/updateProduct.action"];
-}
-/**
- *  发布产品
- */
-+(NSString*) ApiReleaseProduct
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/releaseProduct.action"];
-}
-
-/**
- *  搜索产品列表
- */
-+(NSString*) ApiGetProductListByCond
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/getProductListByCond.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getPromoList"];
 }
 
 
-/*********************收藏接口*********************/
 /**
- *  添加收藏
+ *   我的基础信息
  */
-+(NSString*) ApiAddCollect
++(NSString*) ApiGetMyProfile;
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/addCollect.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getMyProfile"];
 }
 /**
- *  删除收藏
+ *   银行卡列表
  */
-+(NSString*) ApiDeleteCollect
++(NSString*) ApiGetBankCardList
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/deleteCollect.action"];
-}
-
-/**
- *  获取收藏列表
- */
-+(NSString*) ApiSearchCollect
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/searchCollect.action"];
-}
-
-/*********************广告接口*********************/
-/**
- *  获取广告列表
- */
-+(NSString*) ApiGetAdList
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/getAdList.action"];
-}
-
-/*********************附件接口*********************/
-/**
- *  上传附件
- */
-+(NSString*) ApiUploadAnnex
-{
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/uploadAnnex.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getBankCardList"];
 }
 
 /**
- *  删除附件
+ *   添加银行卡
  */
-+(NSString*) ApiDeleteAnnex
++(NSString*) ApiAddBankCard
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/deleteAnnex.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"addBankCard"];
 }
 
 /**
- *  获得附件路径
+ *    检测新版本
  */
-+(NSString*) ApiGetAnnexUrl
++(NSString*) ApiCheckVersion
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"/getAnnexUrl.action"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"checkVersion"];
 }
+
+/**
+ *    验证手机号
+ */
++(NSString*) ApiValidateCustMobile
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"validateCustMobile"];
+}
+
+
 @end

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface BaseViewController : UIViewController
+@property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 - (void)viewDidCurrentView;
 @end

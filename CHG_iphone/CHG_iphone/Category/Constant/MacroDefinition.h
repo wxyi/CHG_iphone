@@ -282,4 +282,17 @@ return self; \
 
 #define RELOADIMAGE @"reloadImage"
 
+typedef void(^BaseViewSkipAction)(NSInteger tag);
+
+#define ZbarRead_With 170
+
+
+typedef enum
+{
+    StatisticalTypeStoreSales = 0,//门店销售
+    StatisticalTypeMembershipGrowth,      //会员增长
+    StatisticalTypePinRewards,        //动销奖励
+    StatisticalTypePartnersRewards,        //合作商分账奖励
+    
+}StatisticalType;
 #endif

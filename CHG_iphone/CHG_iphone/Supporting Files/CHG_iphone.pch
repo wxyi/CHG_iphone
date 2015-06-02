@@ -27,4 +27,12 @@
     #import "SFHFKeychainUtils.h"
     #import "MImageFile.h"
     #import "UIImage+ResizeMagick.h"
+    #import "MyTableViewCell.h"
+    #import "ZBarSDK.h"
+    #import "NSObject+Helper.h"
+    #import "AppDelegate.h"
+    #import "BaseCell.h"
+    #import "SWTableViewCell.h"
+    #import <STAlertView/STAlertView.h>
+    #import "QRCodeGenerator.h"
 #endif

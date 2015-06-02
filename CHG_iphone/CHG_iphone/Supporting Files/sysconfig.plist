@@ -3,8 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>PubServer_HOST</key>
-	<string>http://tsed.doing360.com/app</string>
+	<string>http://27.115.74.138:8080/chg/api/app/v1/</string>
 	<key>clientVersion</key>
 	<string>1.1</string>
+	<key>PubServer_Token</key>
+	<string>http://27.115.74.138:8080/chg/</string>
 </dict>
 </plist>

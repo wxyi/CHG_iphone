@@ -32,8 +32,11 @@ static SUHelper *sSharedInstance;
     if (![ConfigManager sharedInstance].PubServer_URL) {
         [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKey:@"PubServer_HOST"];
     }
-    
+    if (![ConfigManager sharedInstance].PubServer_TokenUrl) {
+        [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token"];
+    }
     DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_URL);
+    DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_TokenUrl);
     [ConfigManager sharedInstance].deviceName = [self deviceString];
     
     if([self hasUser]){

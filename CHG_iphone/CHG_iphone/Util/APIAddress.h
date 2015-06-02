@@ -11,155 +11,63 @@
 @interface APIAddress : NSObject
 
 /**
- *  发送短信验证码
+ * 用户登录获取token
  *
  *  @return <#return value description#>
  */
-+(NSString*) ApiSendSMSCaptcha;
++(NSString*) ApiGetOauthToken;
 
 /**
- *  核准输入的短信验证码
- *
- *  @return <#return value description#>
+ *  获得用户配置信息
  */
-+(NSString*) ApiCheckCaptcha;
++(NSString*) ApiGetUserConfig;
+
 
 /**
- *  核准用户登录
- *
- *  @return <#return value description#>
+ *  获取验证码
  */
-+(NSString*) ApiCheckLogin;
++(NSString*) ApiGetCheckCode;
 
 /**
- *  获取用户信息
- *
- *  @return <#return value description#>
+ *  修改密码
  */
-+(NSString*) ApiGetUser;
++(NSString*) ApiUpdatePassword;
+
 
 /**
- *  用户登录名唯一验证 *
- *  @return <#return value description#>
+ *  重置密码/忘记密码
  */
-+(NSString*) ApiExistUser;
++(NSString*) ApiResetPassword;
 
 /**
- *  根据用户主键查用户
- *  @return <#return value description#>
+ *   活动列表
  */
-+(NSString*) ApiGetUserById;
++(NSString*) ApiGetPromoList;
 
 /**
- *  通过旧密码重置密码
- *  @return <#return value description#>
+ *   我的基础信息
  */
-+(NSString*) ApiUpdatePwdByOld;
++(NSString*) ApiGetMyProfile;
 
 /**
- *  通过短信验证码重置密码
- *  @return <#return value description#>
+ *   银行卡列表
  */
-+(NSString*) ApiUpdatePwdByCaptcha;
++(NSString*) ApiGetBankCardList;
 
 /**
- *  核准注册
- *  @return <#return value description#>
+ *   添加银行卡
  */
-+(NSString*) ApiVerifyRegister;
++(NSString*) ApiAddBankCard;
 
 /**
- *  新建用户
- *  @return <#return value description#>
+ *    检测新版本
  */
-+(NSString*) ApiCreateUser;
++(NSString*) ApiCheckVersion;
 
 /**
- *  获取会员信息
+ *    验证手机号
  */
-+(NSString*) ApiGetMemberByUserId;
-
-/**
- *  编辑会员信息地址
- */
-+(NSString*) ApiModifyMemberByUserId;
++(NSString*) ApiValidateCustMobile;
 
 
-
-/*********************产品接口*********************/
-/**
- *  获取产品类别
- */
-+(NSString*) ApiSearchPcategoryList;
-
-/**
- *  获取产品列表
- */
-+(NSString*) ApiSearchProductList;
-
-/**
- *  获取产品详情
- */
-+(NSString*) ApiSearchProductInfoById;
-
-/**
- *  添加产品（含详情）
- */
-+(NSString*) ApiAddProduct;
-
-/**
- *  更新产品（含详情）
- */
-+(NSString*) ApiUpdateProduct;
-
-/**
- *  发布产品
- */
-+(NSString*) ApiReleaseProduct;
-
-/**
- *  搜索产品列表
- */
-+(NSString*) ApiGetProductListByCond;
-
-
-
-/*********************收藏接口*********************/
-/**
- *  添加收藏
- */
-+(NSString*) ApiAddCollect;
-
-/**
- *  删除收藏
- */
-+(NSString*) ApiDeleteCollect;
-
-/**
- *  获取收藏列表
- */
-+(NSString*) ApiSearchCollect;
-
-/*********************广告接口*********************/
-/**
- *  获取广告列表
- */
-+(NSString*) ApiGetAdList;
-
-
-/*********************附件接口*********************/
-/**
- *  上传附件
- */
-+(NSString*) ApiUploadAnnex;
-
-/**
- *  删除附件
- */
-+(NSString*) ApiDeleteAnnex;
-
-/**
- *  获得附件路径
- */
-+(NSString*) ApiGetAnnexUrl;
 @end

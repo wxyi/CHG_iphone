@@ -7,7 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import "CHGNavigationController.h"
+#import "REFrostedViewController.h"
+#import "SidebarMenuTableViewController.h"
+#import "HomePageViewController.h"
 
+#import "LoginViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -17,6 +22,24 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // Create content and menu controllers
+    //
+    
+    [[SUHelper sharedInstance] sysInit:^(BOOL success) {
+        
+        if(success) {
+            
+            DLog(@"success");
+        }
+    }];
+
+    [self setupLoginViewController];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -42,4 +65,26 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+-(void)setupLoginViewController
+{
+    LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    
+    self.window.rootViewController = loginview;
+}
+
+-(void)setupHomePageViewController
+{
+    CHGNavigationController *navigationController = [[CHGNavigationController alloc] initWithRootViewController:[[HomePageViewController alloc] init]];
+    SidebarMenuTableViewController *SidebarMenu = [[SidebarMenuTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    // Create frosted view controller
+    //
+    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
+    frostedViewController.direction = REFrostedViewControllerDirectionLeft;
+    frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    
+    // Make it a root controller
+    //
+    self.window.rootViewController = frostedViewController;
+}
 @end

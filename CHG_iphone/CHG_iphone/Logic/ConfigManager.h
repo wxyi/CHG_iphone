@@ -15,6 +15,11 @@
  */
 @property(nonatomic,assign) NSString * PubServer_URL;
 
+
+/**
+ *  获取token
+ */
+@property(nonatomic,assign) NSString * PubServer_TokenUrl;
 /**
  *  系统版本
  */
@@ -27,4 +32,8 @@
 
 //当前登录人员信息
 @property(nonatomic,assign) NSString * currentUserInfo;
+
+
+//token
+@property(nonatomic,assign) NSString * access_token;
 @end
