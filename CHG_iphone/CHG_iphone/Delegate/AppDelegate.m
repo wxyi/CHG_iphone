@@ -11,7 +11,7 @@
 #import "REFrostedViewController.h"
 #import "SidebarMenuTableViewController.h"
 #import "HomePageViewController.h"
-
+#import "AFNetworking/AFNetworkActivityIndicatorManager.h"
 #import "LoginViewController.h"
 @interface AppDelegate ()
 
@@ -25,9 +25,16 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     // Create content and menu controllers
     //
-    
+    if (IOS_VERSION >= 7.0) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        [[UINavigationBar appearance] setBackgroundColor:[UIColor blackColor]];
+       
+    }
     [[SUHelper sharedInstance] sysInit:^(BOOL success) {
         
         if(success) {

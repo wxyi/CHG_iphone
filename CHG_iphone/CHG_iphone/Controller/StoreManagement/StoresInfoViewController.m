@@ -52,7 +52,19 @@
         cell = (StoreManagementCell*)[[self.StoreManagementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
-    cell.icon.image = [UIImage imageNamed:@"image1.jpg"];
+    NSString* imagename ;
+    if (indexPath.row == 0) {
+        imagename = @"icon_boss.png";
+    }
+    else if(indexPath.row == 1)
+    {
+        imagename = @"icon_Shopowner.png";
+    }
+    else
+    {
+        imagename = @"icon_shopping_guide.png";
+    }
+    cell.icon.image = [UIImage imageNamed:imagename];
     cell.clerkName.text = @"武新义";
     cell.clerkiphone.text = @"13382050875";
     cell.clerktype.text = @"门店老板";

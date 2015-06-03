@@ -54,7 +54,8 @@
     if (indexPath.row == 1) {
         NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
         badgeView2.backgroundColor = self.view.backgroundColor;
-        badgeView2.text = [NSString stringWithFormat:@"当前版本:%@",[ConfigManager sharedInstance].sysVersion];
+        
+        badgeView2.text = [NSString stringWithFormat:@"%@",[ConfigManager sharedInstance].sysVersion];
         badgeView2.tintColor = [UIColor orangeColor];
         badgeView2.textColor = [UIColor blackColor];
         [badgeView2 sizeToFit];

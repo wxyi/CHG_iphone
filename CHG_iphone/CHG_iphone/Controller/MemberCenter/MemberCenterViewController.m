@@ -22,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"会员中心";
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -74,9 +75,11 @@
             cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-//        cell.backgroundColor = [UIColor brownColor];
+        cell.contentView.backgroundColor = UIColorFromRGB(0x171c61);
         cell.nameLab.text = @"本月会员总消费";
+        cell.nameLab.textColor = [UIColor whiteColor];
         cell.amountLab.text = @"5795.53";
+        cell.amountLab.textColor = [UIColor whiteColor];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -89,7 +92,7 @@
         }
         
         NSArray* items = [NSArray arrayWithObjects:
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"icon",@"会员管理",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"member_management.png",@"icon",@"会员管理",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],nil];
         [cell setupView:items];
@@ -104,7 +107,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return 80;
+        return 75;
     }
     else if (indexPath.row == 0) {
         return 85;

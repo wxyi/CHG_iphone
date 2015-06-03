@@ -52,8 +52,6 @@
         
     }
     
-    [cell setupCell];
-    
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];

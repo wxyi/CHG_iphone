@@ -95,7 +95,7 @@
     
     UIButton* changebtn = [UIButton buttonWithType:UIButtonTypeCustom];
     changebtn.tag = 101;
-    changebtn.backgroundColor = [UIColor brownColor];
+    changebtn.backgroundColor = UIColorFromRGB(0x171c61);
     [changebtn.layer setMasksToBounds:YES];
     [changebtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
     //    [loginout.layer setBorderWidth:1.0]; //边框

@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "JKCountDownButton.h"
 @interface RegisteredMembersCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UITextField* textField;
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
+@property(nonatomic,weak)IBOutlet UIButton* Verification;
+@property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
+- (IBAction)countDownXibTouched:(JKCountDownButton*)sender;
 @end

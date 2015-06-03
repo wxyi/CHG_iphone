@@ -53,7 +53,7 @@
         
     }
     
-    [cell setupCell];
+   
     
     cell.didSkipSubItem = ^(NSInteger tag){
         

@@ -8,10 +8,10 @@
 
 #import "DidNotPickGoodsViewController.h"
 #import "AllOrdersCell.h"
-#import "amountCell.h"
+#import "OrderAmountCell.h"
 @interface DidNotPickGoodsViewController ()
 @property UINib* AllOrdersNib;
-@property UINib* amountNib;
+@property UINib* OrderAmountNib;
 @end
 
 @implementation DidNotPickGoodsViewController
@@ -42,12 +42,23 @@
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
-    self.amountNib = [UINib nibWithNibName:@"amountCell" bundle:nil];
+    self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
+//    self.amountNib = [UINib nibWithNibName:@"amountCell" bundle:nil];
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     if (sender.tag == 100) {
         DLog(@"终止订单");
+        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+            DLog(@"否");
+            
+            
+        } otherButtonBlock:^{
+            DLog(@"是");
+            
+        }];
+        
+        [self.stAlertView show];
     }
     else if(sender.tag == 101)
     {
@@ -60,10 +71,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return  1;
-    }
-    return self.items.count;
+    return 1;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -79,15 +87,19 @@
     }
     else
     {
-        amountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"amountCell"];
+        OrderAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderAmountCell"];
         if(cell==nil){
-            cell = (amountCell*)[[self.amountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.nameLab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"title"];
-        cell.priceLab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"price"];
+       
+        cell.receivablelab.text = @"$336";
+        cell.Receivedlab.text = @"320";
+        [cell.Receivedlab setEnabled:NO];
+        cell.favorablelab.text = @"16";
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
+        
     }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,7 +107,7 @@
     if (indexPath.section == 0) {
         return 410;
     }
-    return 40;
+    return 90;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

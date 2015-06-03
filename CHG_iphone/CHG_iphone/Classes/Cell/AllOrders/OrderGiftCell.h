@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TextStepperField.h"
 @interface OrderGiftCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UIImageView* GoodImage;
 @property(nonatomic,weak)IBOutlet UILabel* titlelab;
-@property(nonatomic,weak)IBOutlet UILabel* countlab;
+@property(nonatomic,weak)IBOutlet TextStepperField* TextStepper;
+@property(nonatomic,assign)NSInteger counter;
+- (IBAction)ibStepperDidStep:(id)sender ;
+-(void)setupCell;
 @end

@@ -11,5 +11,6 @@
 @interface DidNotPickGoodsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)STAlertView* stAlertView;
 -(IBAction)orderProcessing:(id)sender;
 @end

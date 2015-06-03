@@ -13,6 +13,6 @@
 @property(nonatomic,weak)IBOutlet UITextField* resetpasswordField;
 @property(nonatomic,weak)IBOutlet UITextField* confirmpasswordfield;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
--(void)setupCell;
+
 -(IBAction)ResetPassword:(UIButton*)sender;
 @end

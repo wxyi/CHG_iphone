@@ -16,6 +16,6 @@
 @property (nonatomic, strong) AllOrdersViewController *AllOrdersView;
 @property (nonatomic, strong) OutstandingOrdersViewController *OutstandingOrdersView;
 @property (nonatomic, strong) CompleteOrderViewController *CompleteOrderView;
-
+@property(nonatomic,strong)STAlertView* stAlertView;
 @property (nonatomic, strong) BaseViewController *vcAll;
 @end

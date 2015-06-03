@@ -6,7 +6,7 @@
 //
 
 #import "NSObject+Helper.h"
-
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation NSObject(common)
 

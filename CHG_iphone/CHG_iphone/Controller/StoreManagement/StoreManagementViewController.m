@@ -22,6 +22,7 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+    self.title = @"门店管理";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }

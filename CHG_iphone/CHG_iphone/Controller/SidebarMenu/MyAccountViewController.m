@@ -10,6 +10,7 @@
 #import "RewardsCell.h"
 #import "SettlementCell.h"
 #import "GrowthCell.h"
+#import "StoreSalesViewController.h"
 @interface MyAccountViewController ()
 @property UINib* RewardsNib;
 @property UINib* SettlementNib;
@@ -20,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"我的账户";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -194,6 +195,11 @@
 {
     
     DLog(@"详情");
+   
+    
+    StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
+    StoreSalesView.statisticalType = StatisticalTypePinRewards;
+    [self.navigationController pushViewController:StoreSalesView animated:YES];
     
 }
 /*

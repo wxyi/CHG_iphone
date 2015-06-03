@@ -13,7 +13,7 @@
 @property(nonatomic,weak)IBOutlet UITextField* userTextfield;
 @property(nonatomic,weak)IBOutlet UITextField* passwordTextfield;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
--(void)setupCell;
+
 -(IBAction)Login:(UIButton*)sender;
 
 @end

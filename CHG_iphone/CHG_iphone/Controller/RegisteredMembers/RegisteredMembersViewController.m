@@ -17,6 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"会员注册";
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -40,48 +41,57 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0 || indexPath.row == 1) {
-        RegisteredMembersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RegisteredMembersCell.h"];
-        if(cell==nil){
-            cell = (RegisteredMembersCell*)[[self.RegisteredMembersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        if (indexPath.row == 0) {
-            cell.namelab.text = @"手机号码:";
-        }
-        else
-        {
-            cell.namelab.text = @"会员姓名:";
-        }
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+    RegisteredMembersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RegisteredMembersCell.h"];
+    if(cell==nil){
+        cell = (RegisteredMembersCell*)[[self.RegisteredMembersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        
+    }
+    
+    cell.Verification.hidden = YES;
+    if (indexPath.row == 0) {
+        cell.namelab.text = @"手机号码:";
+    }
+    else if(indexPath.row == 1)
+    {
+        cell.namelab.text = @"会员姓名:";
     }
     else
     {
-        static NSString *CellIdentifier = @"cell";
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil){
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        UIButton* nextBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        nextBtn.frame = CGRectMake(6, 45, CGRectGetWidth(self.view.bounds)-12, 40);
-        [nextBtn setBackgroundColor:[UIColor redColor]];
-        [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
-        [nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [nextBtn addTarget:self action:@selector(nextBtn) forControlEvents:UIControlEventTouchUpInside];
-        [cell.contentView addSubview:nextBtn];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+        cell.namelab.text = @"验证码:";
+        cell.textField.frame = CGRectMake(90, 0, SCREEN_WIDTH - 210, 45);
+        cell.Verification.hidden = NO;
     }
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    return cell;
+    
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0 || indexPath.row == 1) {
-        return 45;
-    }
-    return 85;
+    return 45;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 80;
+}
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
+   
+    UIButton* nextBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    nextBtn.frame = CGRectMake(6, 45, CGRectGetWidth(self.view.bounds)-12, 40);
+    [nextBtn.layer setMasksToBounds:YES];
+    [nextBtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
+    [nextBtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+    [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [nextBtn addTarget:self action:@selector(nextBtn) forControlEvents:UIControlEventTouchUpInside];
+    [v_footer addSubview:nextBtn];
+    return v_footer;
 }
 -(void)nextBtn
 {

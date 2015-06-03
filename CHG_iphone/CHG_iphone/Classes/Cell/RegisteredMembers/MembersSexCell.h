@@ -13,5 +13,5 @@
 @property (nonatomic, strong) IBOutlet UILabel* bglabel;
 @property (nonatomic, strong) IBOutlet RadioButton* radioButton;
 
--(void)setupCell;
+//-(void)setupCell;
 @end

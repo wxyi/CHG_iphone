@@ -37,10 +37,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"首页";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Menu"
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:(CHGNavigationController *)self.navigationController
-                                                                            action:@selector(showMenu)];
+    self.navigationController.navigationBar.barTintColor = UIColorFromRGB(0x171c61);
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_btn.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(showMenu)];
     
     [self setupView];
 }
@@ -99,9 +97,9 @@
             
         }
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",@"36",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员数",@"title",@"36",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员数",@"title",@"36",@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",@"36 ",@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",@"36 ",@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员",@"title",@"36 ",@"count", nil], nil];
         [cell setupView:itme];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             
@@ -119,7 +117,7 @@
             cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        
+//        cell.backgroundColor = UIColorFromRGB(0x646464);
         cell.nameLab.text = @"奖励总额";
         cell.amountLab.text = @"5795.53";
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -136,7 +134,7 @@
         NSArray* itme = [NSArray arrayWithObjects:
                          [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",@"4128.60",@"count", nil],
                          [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",@"36",@"count", nil], nil];
-        
+        cell.RewardsView.backgroundColor = UIColorFromRGB(0x878787);
         [cell setupView:itme];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
@@ -154,13 +152,13 @@
         }
 
         NSArray* items = [NSArray arrayWithObjects:
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"icon",@"会员中心",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image2.jpg",@"icon",@"会员注册",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image3.jpg",@"icon",@"预售",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image4.jpg",@"icon",@"卖货",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image5.jpg",@"icon",@"订单管理",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image6.jpg",@"icon",@"统计分析",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"icon",@"门店管理",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"member_center.png",@"icon",@"会员中心",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"member_registration.png",@"icon",@"会员注册",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"selling_goods.png",@"icon",@"卖货",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"order_management.png",@"icon",@"订单管理",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"statistical_analysis.png",@"icon",@"统计分析",@"title", nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"store_management.png",@"icon",@"门店管理",@"title", nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],nil];
         [cell setupView:items];

@@ -14,14 +14,7 @@
     // Initialization code
     
 }
--(void)setupCell
-{
-    
-    self.bgView.layer.borderWidth = 1;
-    self.bgView.layer.masksToBounds = YES;
-    self.bgView.layer.cornerRadius = 10.0; //圆角
-    self.bgView.layer.borderColor = [[UIColor blackColor] CGColor];
-}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

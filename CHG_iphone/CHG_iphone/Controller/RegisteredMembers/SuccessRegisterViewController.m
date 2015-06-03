@@ -21,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title = @"会员信息";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -45,7 +45,8 @@
 {
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [NSObject setExtraCellLineHidden:self.tableview];
+//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.SuccessRegistereNib = [UINib nibWithNibName:@"SuccessRegistereCell" bundle:nil];
     self.MenuNib = [UINib nibWithNibName:@"MenuCell" bundle:nil];
     
@@ -80,8 +81,8 @@
         }
         
         NSArray* items = [NSArray arrayWithObjects:
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"icon",@"卖货",@"title", nil],
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"image2.jpg",@"icon",@"预售",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"selling_goods.png",@"icon",@"卖货",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                           nil];
         [cell setupView:items];
@@ -103,6 +104,10 @@
         return 30;
     }
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 1;
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -113,12 +118,26 @@
         return 106;
     }
 }
--(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    if (section ==1) {
+//        return @"您还可以继续";
+//    }
+//    return @"";
+//}
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section ==1) {
-        return @"您还可以继续";
+    if (section == 1) {
+        UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
+        v_header.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+        title.text = @"您还可以继续";
+        title.font = FONT(13);
+        title.textColor = [UIColor lightGrayColor];
+        [v_header addSubview:title];
+        return v_header;
     }
-    return @"";
+    return nil;
 }
 -(void)didSelectMenuCell:(NSIndexPath*)indexPath
 {

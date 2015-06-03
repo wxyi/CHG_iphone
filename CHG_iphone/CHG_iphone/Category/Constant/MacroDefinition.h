@@ -295,4 +295,10 @@ typedef enum
     StatisticalTypePartnersRewards,        //合作商分账奖励
     
 }StatisticalType;
+
+typedef enum
+{
+    SaleTypeSellingGoods = 0,//卖货
+    SaleTypePresell      //预售
+}SaleType;
 #endif

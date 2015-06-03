@@ -22,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"会员信息";
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -71,10 +72,11 @@
         }
         
         NSArray* items = [NSArray arrayWithObjects:
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"icon",@"卖货",@"title", nil],
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"image2.jpg",@"icon",@"预售",@"title", nil],
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"image3.jpg",@"icon",@"订单管理",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"selling_goods.png",@"icon",@"卖货",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"order_management.png",@"icon",@"订单管理",@"title", nil],
                           nil];
+        
         [cell setupView:items];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);

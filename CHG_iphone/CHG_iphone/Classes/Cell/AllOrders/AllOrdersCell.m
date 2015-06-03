@@ -32,7 +32,7 @@
     
     
     
-    self.items = [NSArray arrayWithObjects:[NSArray arrayWithObjects:dict,dict,dict, nil],[NSArray arrayWithObjects:dict1,dict1, nil], nil];
+    self.allitems = [NSArray arrayWithObjects:[NSArray arrayWithObjects:dict,dict,dict, nil],[NSArray arrayWithObjects:dict1,dict1, nil], nil];
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.scrollEnabled = NO;
@@ -44,12 +44,12 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.items.count;
+    return [self.allitems count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.items objectAtIndex:section] count];
+    return 3;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -59,7 +59,7 @@
             cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
+        NSDictionary* dict =  [[self.allitems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
         
         cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
         cell.titlelab.text = [dict objectForKey:@"title"];
@@ -76,11 +76,11 @@
             cell = (OrderGiftCell*)[[self.OrderGiftNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
+        NSDictionary* dict =  [[self.allitems objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
         
+        [cell setupCell];
         cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
         cell.titlelab.text = [dict objectForKey:@"title"];
-        cell.countlab.text = [dict objectForKey:@"count"];
         return cell;
     }
     

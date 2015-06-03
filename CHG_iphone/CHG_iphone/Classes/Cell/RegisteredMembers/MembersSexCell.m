@@ -19,18 +19,7 @@
 
     // Configure the view for the selected state
 }
--(void)setupCell
-{
-    
-//    self.bgview.layer.borderWidth = 1;
-    self.bgview.layer.masksToBounds = YES;
-    self.bgview.layer.cornerRadius = 10.0; //圆角
-    
-//    self.bglabel.layer.borderWidth = 1;
-    self.bglabel.layer.masksToBounds = YES;
-    self.bglabel.layer.cornerRadius = 10.0; //圆角
-    //    self.bgView.layer.borderColor = [[UIColor blackColor] CGColor];
-}
+
 -(IBAction)onRadioBtn:(RadioButton*)sender
 {
     DLog(@"%@",[NSString stringWithFormat:@"Selected: %@", sender.titleLabel.text]) ;

@@ -73,6 +73,16 @@
         else if(tag == 102)
         {
             DLog(@"终止订单");
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                
+            }];
+            
+            [self.stAlertView show];
         }
     };
     

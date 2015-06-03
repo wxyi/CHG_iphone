@@ -7,7 +7,7 @@
 //
 
 #import "ForgetViewController.h"
-
+#import "JKCountDownButton.h"
 @interface ForgetViewController ()
 
 @end
@@ -16,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"忘记密码";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -60,17 +61,35 @@
     textField.returnKeyType = UIReturnKeyDone;
     textField.clearButtonMode = UITextFieldViewModeWhileEditing; //编辑时会出现个修改X
     [cell.contentView addSubview:textField];
+
+    UIImageView* line = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-100, 2, 1, 40)];
+    line.image = [UIImage imageNamed:@"line_y.png"];
+    [cell.contentView addSubview:line];
     
-    UIButton* forgetbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [forgetbtn.layer setMasksToBounds:YES];
-    forgetbtn.tag = 100;
-    forgetbtn.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
-    [forgetbtn setTitle:@"再次发送" forState:UIControlStateNormal];
-    [forgetbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [forgetbtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.contentView addSubview:forgetbtn];
+    JKCountDownButton* countDownCode = [JKCountDownButton buttonWithType:UIButtonTypeCustom];
+    countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
+    [countDownCode setTitle:@"再次发送" forState:UIControlStateNormal];
+    [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    countDownCode.backgroundColor = [UIColor whiteColor];
 
     
+    [cell.contentView addSubview:countDownCode];
+    [countDownCode addToucheHandler:^(JKCountDownButton*sender, NSInteger tag) {
+        sender.enabled = NO;
+        
+        [sender startWithSecond:60];
+        
+        [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
+            NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+            return title;
+        }];
+        [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+            countDownButton.enabled = YES;
+            return @"点击重新获取";
+            
+        }];
+        
+    }];
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -100,7 +119,7 @@
     
     UIButton* confirmbtn = [UIButton buttonWithType:UIButtonTypeCustom];
     confirmbtn.tag = 101;
-    confirmbtn.backgroundColor = [UIColor brownColor];
+    confirmbtn.backgroundColor = UIColorFromRGB(0x171c61);
     [confirmbtn.layer setMasksToBounds:YES];
     [confirmbtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
     //    [loginout.layer setBorderWidth:1.0]; //边框
@@ -113,13 +132,7 @@
 }
 -(void)confirm:(UIButton*)sender
 {
-    if (sender.tag == 100) {
-        DLog(@"在次发送")
-    }
-    else if (sender.tag == 101)
-    {
-        DLog(@"确认");
-    }
+    DLog(@"确认");
     
 }
 /*

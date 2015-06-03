@@ -8,7 +8,7 @@
 
 #import "PresellGoodsViewController.h"
 #import "PresellCell.h"
-
+#import "OrderCounterViewController.h"
 @interface PresellGoodsViewController ()
 @property UINib* PresellNib;
 @end
@@ -183,11 +183,11 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return self.items.count;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.items.count;
+    return 1;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -213,6 +213,8 @@
 -(IBAction)ConfirmInfo:(id)sender
 {
     DLog(@"确认信息");
+    OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
+    [self.navigationController pushViewController:OrderCounterView animated:YES];
 }
 /*
 #pragma mark - Navigation

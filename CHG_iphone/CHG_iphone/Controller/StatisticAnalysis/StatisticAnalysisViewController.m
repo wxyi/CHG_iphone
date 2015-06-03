@@ -16,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"统计分析";
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }

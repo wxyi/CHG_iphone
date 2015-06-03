@@ -12,6 +12,6 @@
 @property(nonatomic,weak)IBOutlet UIImageView* image;
 @property(nonatomic,weak)IBOutlet UILabel* VersionNum;
 //@property(nonatomic,weak)IBOutlet UIButton* DownBtn;
--(void)setUpdateVersionCell;
+//-(void)setUpdateVersionCell;
 //-(IBAction)DownVersion:(id)sender;
 @end

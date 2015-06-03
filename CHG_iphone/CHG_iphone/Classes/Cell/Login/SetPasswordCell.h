@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "JKCountDownButton.h"
 @interface SetPasswordCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UIView* bgView;
 @property(nonatomic,weak)IBOutlet UITextField* setpasswordField;
 @property(nonatomic,weak)IBOutlet UITextField* confirmpasswordfield;
 @property(nonatomic,weak)IBOutlet UITextField* Verificationfield;
+@property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
--(void)setupCell;
+
 -(IBAction)SetPassword:(UIButton*)sender;
+- (IBAction)countDownXibTouched:(JKCountDownButton*)sender;
 @end

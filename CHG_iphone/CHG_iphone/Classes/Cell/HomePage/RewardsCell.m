@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    self.RewardsView.backgroundColor = [UIColor lightGrayColor];
+//    self.RewardsView.backgroundColor = [UIColor lightGrayColor];
 //    [self setupView];
 }
 

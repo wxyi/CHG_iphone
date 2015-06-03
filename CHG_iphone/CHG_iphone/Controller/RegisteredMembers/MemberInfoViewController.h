@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "UUDatePicker.h"
+#import "JTImageLabel.h"
 @interface MemberInfoViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,strong)UUDatePicker *datePicker;
+@property (weak, nonatomic) IBOutlet JTImageLabel *promptlabel;
 -(IBAction)SubmitCompleted:(id)sender;
 @end

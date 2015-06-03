@@ -11,5 +11,6 @@
 @interface MembersBirthdayCell : UITableViewCell
 @property (nonatomic, strong) IBOutlet UIView* bgview;
 @property (nonatomic, strong) IBOutlet UILabel* bglabel;
--(void)setupCell;
+@property (nonatomic, strong) IBOutlet UITextField* Birthdayfield;
+
 @end

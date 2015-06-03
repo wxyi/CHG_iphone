@@ -29,6 +29,7 @@
 {
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.tableview.backgroundColor = [UIColor lightGrayColor];
     self.UpdateVersionNib = [UINib nibWithNibName:@"UpdateVersionViCell" bundle:nil];
@@ -44,7 +45,6 @@
         cell = (UpdateVersionViCell*)[[self.UpdateVersionNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
-    [cell setUpdateVersionCell];
     cell.image.image = [UIImage imageNamed:@"image1.jpg"];
     cell.VersionNum.text = [NSString stringWithFormat:@"版本号:%@",[ConfigManager sharedInstance].sysVersion];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
