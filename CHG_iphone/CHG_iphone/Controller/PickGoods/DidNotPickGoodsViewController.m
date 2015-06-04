@@ -63,6 +63,9 @@
     else if(sender.tag == 101)
     {
         DLog(@"提货");
+        if (self.didSkipSubItem) {
+            self.didSkipSubItem(sender.tag);
+        }
     }
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -83,6 +86,12 @@
         }
         
         [cell setupView:nil];
+        cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+            if (self.didSelectedSubItemAction) {
+                self.didSelectedSubItemAction(indexPath);
+            }
+        };
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
     else

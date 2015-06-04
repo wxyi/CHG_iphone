@@ -12,10 +12,15 @@
 #import "OrderAmountCell.h"
 #import "PresellGoodsViewController.h"
 #import "ConfirmOrderViewController.h"
-@interface OrderCounterViewController ()
+#import "PresellCell.h"
+#import "PickAndReturnCell.h"
+@interface OrderCounterViewController ()<SWTableViewCellDelegate>
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderGiftNib;
 @property UINib* OrderAmountNib;
+@property UINib* PresellNib;
+@property UINib* PickAndReturnNib;
+
 @end
 
 @implementation OrderCounterViewController
@@ -47,9 +52,26 @@
 //    self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
+    
+    self.PresellNib = [UINib nibWithNibName:@"PresellCell" bundle:nil];
+
     self.OrderGiftNib = [UINib nibWithNibName:@"OrderGiftCell" bundle:nil];
     
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
+    
+    self.PickAndReturnNib = [UINib nibWithNibName:@"PickAndReturnCell" bundle:nil];
+    
+    if (self.orderSaletype == SaleTypeReturnGoods) {
+        [self.button setTitle:@"确认退货" forState:UIControlStateNormal];
+    }
+    else if(self.orderSaletype == SaleTypePickingGoods)
+    {
+        [self.button setTitle:@"确认提货" forState:UIControlStateNormal];
+    }
+    else
+    {
+        [self.button setTitle:@"确认订单" forState:UIControlStateNormal];
+    }
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -62,19 +84,47 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
-        if(cell==nil){
-            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        if (self.orderSaletype == SaleTypeSellingGoods) {
+            OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
+            if(cell==nil){
+                cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
             
+            cell.GoodImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
+            cell.titlelab.text = [self.dict  objectForKey:@"title"];
+            cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
+            cell.countlab.text = [self.dict  objectForKey:@"count"];
+            
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
         }
-   
-        cell.GoodImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
-        cell.titlelab.text = [self.dict  objectForKey:@"title"];
-        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
-        cell.countlab.text = [self.dict  objectForKey:@"count"];
+        else
+        {
+            PresellCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PresellCell"];
+            if(cell==nil){
+                cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                NSMutableArray *rightUtilityButtons = [NSMutableArray new];
+                
+                
+                [rightUtilityButtons sw_addUtilityButtonWithColor:
+                 [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
+                                                             icon:[UIImage imageNamed:@"left_slide_delete.png"]];
+                [cell setRightUtilityButtons:rightUtilityButtons WithButtonWidth:60.0f];
+                cell.delegate = self;
+                
+            }
+            
+            
+            cell.GoodsImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
+            cell.titlelab.text = [self.dict  objectForKey:@"title"];
+            cell.pricelab.text = @"111";
+           [cell setupCell];
+            
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+        }
         
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
     }
     else if(indexPath.section == 1)
     {
@@ -93,15 +143,42 @@
     }
     else
     {
-        OrderAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderAmountCell"];
-        if(cell==nil){
-            cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
+        if (self.orderSaletype == SaleTypePickingGoods ||self.orderSaletype == SaleTypeReturnGoods) {
+            PickAndReturnCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PickAndReturnCell"];
+            if(cell==nil){
+                cell = (PickAndReturnCell*)[[self.PickAndReturnNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
+            if (self.orderSaletype == SaleTypePickingGoods) {
+                cell.receivableNameLab.text =@"应收金额";
+                cell.actualNameLab.text = @"实收金额";
+            }
+            else
+            {
+                cell.receivableNameLab.text =@"应退金额";
+                cell.actualNameLab.text = @"实退金额";
+                [cell.actualtext setEnabled:NO];
+            }
+            cell.receivableLab.text = @"$336";
+            cell.actualtext.text = @"220";
+//            cell.receivablelab.text = @"$336";
+//            cell.favorablelab.text = @"16";
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
         }
-        cell.receivablelab.text = @"$336";
-        cell.favorablelab.text = @"16";
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+        else
+        {
+            OrderAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderAmountCell"];
+            if(cell==nil){
+                cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
+            cell.receivablelab.text = @"$336";
+            cell.favorablelab.text = @"16";
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+
+        }
     }
     
     
@@ -134,24 +211,112 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0 || indexPath.section == 1) {
+        return 70;
+    }
+    if (self.orderSaletype == SaleTypePickingGoods
+        ||self.orderSaletype == SaleTypeReturnGoods)
+    {
         return 60;
     }
-    return 90;
+    else
+    {
+        return 90;
+    }
+    
 }
 -(IBAction)OrderCounterView:(UIButton*)sender
 {
     if (sender.tag == 100) {
         DLog(@"继续扫描")
-//        PresellGoodsViewController* PresellGoodsView= [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
-//        [self.navigationController pushViewController:PresellGoodsView animated:YES];
+
         [self.navigationController popViewControllerAnimated:YES];
     }
     else if(sender.tag == 101)
     {
-        DLog(@"确认订单");
-        ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-        [self.navigationController pushViewController:ConfirmOrderView animated:YES];
+        if (self.orderSaletype == SaleTypeReturnGoods) {
+            DLog(@"确认退货");
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                DLog(@"否");
+          
+                
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+           
+            }];
+        }
+        else if(self.orderSaletype == SaleTypePickingGoods)
+        {
+            DLog(@"确认提货");
+        }
+        else
+        {
+            DLog(@"确认订单");
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否需要添加赠品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                DLog(@"否");
+                ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+                [self.navigationController pushViewController:ConfirmOrderView animated:YES];
+                
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            
+            [self.stAlertView show];
+        }
+        
+        
     }
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
+{
+    switch (index) {
+        case 0:
+        {
+            [cell hideUtilityButtonsAnimated:YES];
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                
+            }];
+            
+            [self.stAlertView show];
+            
+            
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (BOOL)swipeableTableViewCellShouldHideUtilityButtonsOnSwipe:(SWTableViewCell *)cell
+{
+    // allow just one cell's utility button to be open at once
+    return YES;
+}
+
+- (BOOL)swipeableTableViewCell:(SWTableViewCell *)cell canSwipeToState:(SWCellState)state
+{
+    switch (state) {
+        case 1:
+            // set to NO to disable all left utility buttons appearing
+            return YES;
+            break;
+        case 2:
+            // set to NO to disable all right utility buttons appearing
+            return YES;
+            break;
+        default:
+            break;
+    }
+    
+    return YES;
 }
 /*
 #pragma mark - Navigation

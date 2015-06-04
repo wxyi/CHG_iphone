@@ -8,6 +8,8 @@
 
 #import "OrderManagementViewController.h"
 #import "PickGoodsViewController.h"
+#import "PresellGoodsViewController.h"
+#import "GoodsDetailsViewController.h"
 @interface OrderManagementViewController ()
 
 @end
@@ -54,7 +56,10 @@
         PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
         [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
     };
-    
+    self.AllOrdersView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+    };
     /**
      未完成订单
      
@@ -73,7 +78,7 @@
         else if(tag == 102)
         {
             DLog(@"终止订单");
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
                 DLog(@"否");
                 
                 
@@ -82,9 +87,32 @@
                 
             }];
             
-            [self.stAlertView show];
+            [weakSelf.stAlertView show];
         }
+        else
+        {
+            SaleType satype;
+            if (tag == 103) {
+                DLog(@" 退货");
+                satype = SaleTypeReturnGoods;
+            }
+            else if(tag == 104)
+            {
+                DLog(@"提货");
+                satype = SaleTypePickingGoods;
+                
+            }
+            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            PresellGoodsView.orderSaletype = satype;
+            [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
+        }
+        
     };
+    self.OutstandingOrdersView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+    };
+    
     
     
     /**
@@ -101,10 +129,16 @@
         }
         else if(tag == 102)
         {
-            DLog(@"终止订单");
+            SaleType satype = SaleTypeReturnGoods;
+            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            PresellGoodsView.orderSaletype = satype;
+            [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
     };
-    
+    self.CompleteOrderView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+    };
     [self.slideSwitchView buildUI];
     [self.view addSubview:self.slideSwitchView];
 }

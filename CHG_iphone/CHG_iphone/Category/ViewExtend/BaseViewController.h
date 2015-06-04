@@ -10,5 +10,6 @@
 
 @interface BaseViewController : UIViewController
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
+@property (nonatomic, copy) AccountBriefSelect didSelectedSubItemAction;
 - (void)viewDidCurrentView;
 @end

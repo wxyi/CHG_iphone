@@ -65,7 +65,7 @@
         cell.titlelab.text = [dict objectForKey:@"title"];
         cell.pricelab.text = [dict objectForKey:@"price"];
         cell.countlab.text = [dict objectForKey:@"count"];
-        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         return cell;
     }
@@ -81,6 +81,7 @@
         [cell setupCell];
         cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
         cell.titlelab.text = [dict objectForKey:@"title"];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
     
@@ -129,5 +130,11 @@
     }
     
     return v_header;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.didSelectedSubItemAction) {
+        self.didSelectedSubItemAction(indexPath);
+    }
 }
 @end

@@ -8,9 +8,11 @@
 
 #import "PresellGoodsViewController.h"
 #import "PresellCell.h"
+#import "OrdersGoodsCell.h"
 #import "OrderCounterViewController.h"
 @interface PresellGoodsViewController ()
 @property UINib* PresellNib;
+@property UINib* OrdersGoodsNib;
 @end
 
 @implementation PresellGoodsViewController
@@ -22,7 +24,7 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.title = @"卖货";
+    
     
     self.items = [[NSMutableArray alloc] init];
     // Do any additional setup after loading the view from its nib.
@@ -43,7 +45,20 @@
 {
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"336",@"price",@"X 2",@"count", nil];
     
-    
+    if (self.orderSaletype == SaleTypePresell) {
+        self.title = @"预售";
+    }
+    else if (self.orderSaletype == SaleTypeSellingGoods) {
+        self.title = @"卖货";
+    }
+    else if(self.orderSaletype == SaleTypeReturnGoods)
+    {
+        self.title = @"退货扫描";
+    }
+    else if (self.orderSaletype == SaleTypePickingGoods)
+    {
+        self.title = @"提货货扫描";
+    }
     for (int i = 0; i < 5; i++) {
         [self.items addObject:dict];
     }
@@ -61,6 +76,8 @@
     self.tableview.tableHeaderView = v_header;
     
     self.PresellNib = [UINib nibWithNibName:@"PresellCell" bundle:nil];
+    self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
+    
     [self loopDrawLine];
     
 }
@@ -191,20 +208,40 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PresellCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PresellCell"];
-    if(cell==nil){
-        cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+    if (self.orderSaletype == SaleTypeSellingGoods
+     || self.orderSaletype == SaleTypeReturnGoods
+     ||self.orderSaletype == SaleTypePickingGoods) {
+        OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
+        if(cell==nil){
+            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            
+        }
+        NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+        cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
+        cell.titlelab.text = [dict  objectForKey:@"title"];
+        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
+        cell.countlab.text = [dict  objectForKey:@"count"];
         
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        return cell;
     }
-    NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
-    
-    cell.GoodsImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
-    cell.titlelab.text = [dict objectForKey:@"title"];
-    cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
-    [cell setupCell];
-    
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
+    else
+    {
+        PresellCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PresellCell"];
+        if(cell==nil){
+            cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            
+        }
+        NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+        
+        cell.GoodsImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
+        cell.titlelab.text = [dict objectForKey:@"title"];
+        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
+        [cell setupCell];
+        
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        return cell;
+    }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -214,6 +251,7 @@
 {
     DLog(@"确认信息");
     OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
+    OrderCounterView.orderSaletype = self.orderSaletype;
     [self.navigationController pushViewController:OrderCounterView animated:YES];
 }
 /*

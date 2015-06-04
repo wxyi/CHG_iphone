@@ -11,6 +11,6 @@
 @interface DidPickGoodsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
--(IBAction)orderProcessing:(id)sender;
+-(IBAction)orderProcessing:(UIButton*)sender;
 
 @end

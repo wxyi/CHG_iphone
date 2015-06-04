@@ -283,7 +283,7 @@ return self; \
 #define RELOADIMAGE @"reloadImage"
 
 typedef void(^BaseViewSkipAction)(NSInteger tag);
-
+typedef void(^AccountBriefSelect)(NSIndexPath* indexPath);
 #define ZbarRead_With 170
 
 
@@ -299,6 +299,8 @@ typedef enum
 typedef enum
 {
     SaleTypeSellingGoods = 0,//卖货
-    SaleTypePresell      //预售
+    SaleTypePresell,      //预售
+    SaleTypeReturnGoods,    //退货
+    SaleTypePickingGoods //提货
 }SaleType;
 #endif

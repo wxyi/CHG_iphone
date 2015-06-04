@@ -7,15 +7,32 @@
 //
 
 #import "StoresDetailsViewController.h"
+#import "LMContainsLMComboxScrollView.h"
 
-@interface StoresDetailsViewController ()<UITextFieldDelegate>
-
+#define kDropDownListTag 1000
+@interface StoresDetailsViewController ()
+{
+//    LMContainsLMComboxScrollView *bgScrollView;
+    NSMutableDictionary *addressDict;   //地址选择字典
+    NSDictionary *areaDic;
+    NSArray *province;
+    NSArray *city;
+    NSArray *district;
+    
+    NSString *selectedProvince;
+    NSString *selectedCity;
+    NSString *selectedArea;
+}
+@property(nonatomic,weak)IBOutlet LMContainsLMComboxScrollView *bgScrollView;
 @end
 
 @implementation StoresDetailsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     self.title = @"门店详情";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
@@ -27,65 +44,185 @@
 }
 -(void)setupView
 {
-    self.tableview.dataSource = self;
-    self.tableview.delegate = self;
-    [NSObject setExtraCellLineHidden:self.tableview];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    //将触摸事件添加到当前view
+    [self.view addGestureRecognizer:tapGestureRecognizer];
+    
+    [self ParsingAddress];
+    [self setUpBgScrollView];
+    
+}
+-(void)keyboardHide:(UITapGestureRecognizer*)tap{
+    [self.locationField resignFirstResponder];
+}
+-(void)ParsingAddress
+{
+    //解析全国省市区信息
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"area" ofType:@"plist"];
+    areaDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    NSArray *components = [areaDic allKeys];
+    NSArray *sortedArray = [components sortedArrayUsingComparator: ^(id obj1, id obj2) {
+        
+        if ([obj1 integerValue] > [obj2 integerValue]) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        if ([obj1 integerValue] < [obj2 integerValue]) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+    
+    NSMutableArray *provinceTmp = [NSMutableArray array];
+    for (int i=0; i<[sortedArray count]; i++) {
+        NSString *index = [sortedArray objectAtIndex:i];
+        NSArray *tmp = [[areaDic objectForKey: index] allKeys];
+        [provinceTmp addObject: [tmp objectAtIndex:0]];
+    }
+    
+    province = [NSArray arrayWithArray:provinceTmp];
+    
+    NSString *index = [sortedArray objectAtIndex:0];
+    NSString *selected = [province objectAtIndex:0];
+    NSDictionary *dic = [NSDictionary dictionaryWithDictionary: [[areaDic objectForKey:index]objectForKey:selected]];
+    
+    NSArray *cityArray = [dic allKeys];
+    NSDictionary *cityDic = [NSDictionary dictionaryWithDictionary: [dic objectForKey: [cityArray objectAtIndex:0]]];
+    city = [NSArray arrayWithArray:[cityDic allKeys]];
+    
+    selectedCity = [city objectAtIndex:0];
+    district = [NSArray arrayWithArray:[cityDic objectForKey:selectedCity]];
+    
+    addressDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                   province,@"province",
+                   city,@"city",
+                   district,@"area",nil];
+    
+    selectedProvince = [province objectAtIndex:0];
+    selectedArea = [district objectAtIndex:0];
+}
+-(void)setUpBgScrollView
+{
+    
+    
+    NSArray *keys = [NSArray arrayWithObjects:@"province",@"city",@"area", nil];
+    for(NSInteger i=0;i<[keys count];i++)
+    {
+        LMComBoxView *comBox = [[LMComBoxView alloc]initWithFrame:CGRectMake(80+((SCREEN_WIDTH - 123)/3)*i, 0, (SCREEN_WIDTH - 123)/3, 40)];
+        comBox.backgroundColor = [UIColor whiteColor];
+        comBox.arrowImgName = @"down_dark0.png";
+        NSMutableArray *itemsArray = [NSMutableArray arrayWithArray:[addressDict objectForKey:[keys objectAtIndex:i]]];
+        comBox.titlesList = itemsArray;
+        comBox.delegate = self;
+        comBox.supView = self.bgScrollView;
+        [comBox defaultSettings];
+        comBox.tag = kDropDownListTag + i;
+        [self.bgScrollView addSubview:comBox];
+    }
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+#pragma mark -LMComBoxViewDelegate
+-(void)selectAtIndex:(int)index inCombox:(LMComBoxView *)_combox
 {
-    return 1;
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 2;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 40;
-}
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
-    
-    UILabel* shopName = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH, 40)];
-    shopName.text = @"门店";
-    [v_header addSubview:shopName];
-    
-    UILabel* bossName = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 40)];
-    bossName.text = @"花相似";
-    bossName.textAlignment = NSTextAlignmentRight;
-    [v_header addSubview:bossName];
-    return v_header;
-}
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    NSInteger tag = _combox.tag - kDropDownListTag;
+    switch (tag) {
+        case 0:
+        {
+            selectedProvince =  [[addressDict objectForKey:@"province"]objectAtIndex:index];
+            //字典操作
+            NSDictionary *tmp = [NSDictionary dictionaryWithDictionary: [areaDic objectForKey: [NSString stringWithFormat:@"%d", index]]];
+            NSDictionary *dic = [NSDictionary dictionaryWithDictionary: [tmp objectForKey: selectedProvince]];
+            NSArray *cityArray = [dic allKeys];
+            NSArray *sortedArray = [cityArray sortedArrayUsingComparator: ^(id obj1, id obj2) {
+                
+                if ([obj1 integerValue] > [obj2 integerValue]) {
+                    return (NSComparisonResult)NSOrderedDescending;//递减
+                }
+                
+                if ([obj1 integerValue] < [obj2 integerValue]) {
+                    return (NSComparisonResult)NSOrderedAscending;//上升
+                }
+                return (NSComparisonResult)NSOrderedSame;
+            }];
+            
+            NSMutableArray *array = [[NSMutableArray alloc] init];
+            for (int i=0; i<[sortedArray count]; i++) {
+                NSString *index = [sortedArray objectAtIndex:i];
+                NSArray *temp = [[dic objectForKey: index] allKeys];
+                [array addObject: [temp objectAtIndex:0]];
+            }
+            city = [NSArray arrayWithArray:array];
+            
+            NSDictionary *cityDic = [dic objectForKey: [sortedArray objectAtIndex: 0]];
+            district = [NSArray arrayWithArray:[cityDic objectForKey:[city objectAtIndex:0]]];
+            //刷新市、区
+            addressDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                           province,@"province",
+                           city,@"city",
+                           district,@"area",nil];
+            LMComBoxView *cityCombox = (LMComBoxView *)[self.bgScrollView viewWithTag:tag + 1 + kDropDownListTag];
+            cityCombox.titlesList = [NSMutableArray arrayWithArray:[addressDict objectForKey:@"city"]];
+            [cityCombox reloadData];
+            LMComBoxView *areaCombox = (LMComBoxView *)[self.bgScrollView viewWithTag:tag + 2 + kDropDownListTag];
+            areaCombox.titlesList = [NSMutableArray arrayWithArray:[addressDict objectForKey:@"area"]];
+            [areaCombox reloadData];
+            
+            selectedCity = [city objectAtIndex:0];
+            selectedArea = [district objectAtIndex:0];
+            break;
+        }
+        case 1:
+        {
+            selectedCity = [[addressDict objectForKey:@"city"]objectAtIndex:index];
+            
+            NSString *provinceIndex = [NSString stringWithFormat: @"%d", [province indexOfObject: selectedProvince]];
+            NSDictionary *tmp = [NSDictionary dictionaryWithDictionary: [areaDic objectForKey: provinceIndex]];
+            NSDictionary *dic = [NSDictionary dictionaryWithDictionary: [tmp objectForKey: selectedProvince]];
+            NSArray *dicKeyArray = [dic allKeys];
+            NSArray *sortedArray = [dicKeyArray sortedArrayUsingComparator: ^(id obj1, id obj2) {
+                
+                if ([obj1 integerValue] > [obj2 integerValue]) {
+                    return (NSComparisonResult)NSOrderedDescending;
+                }
+                
+                if ([obj1 integerValue] < [obj2 integerValue]) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                }
+                return (NSComparisonResult)NSOrderedSame;
+            }];
+            
+            NSDictionary *cityDic = [NSDictionary dictionaryWithDictionary: [dic objectForKey: [sortedArray objectAtIndex: index]]];
+            NSArray *cityKeyArray = [cityDic allKeys];
+            district = [NSArray arrayWithArray:[cityDic objectForKey:[cityKeyArray objectAtIndex:0]]];
+            //刷新区
+            addressDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                           province,@"province",
+                           city,@"city",
+                           district,@"area",nil];
+            LMComBoxView *areaCombox = (LMComBoxView *)[self.bgScrollView viewWithTag:tag + 1 + kDropDownListTag];
+            areaCombox.titlesList = [NSMutableArray arrayWithArray:[addressDict objectForKey:@"area"]];
+            [areaCombox reloadData];
+            
+            selectedArea = [district objectAtIndex:0];
+            break;
+        }
+        case 2:
+        {
+            selectedArea = [[addressDict objectForKey:@"area"]objectAtIndex:index];
+            break;
+        }
+        default:
+            break;
     }
-    cell.textLabel.text = @"门店地址";
-    
-    UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, SCREEN_WIDTH-100 , 40)];
-    //        [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
-    
-    textField.placeholder = @""; //默认显示的字
-    
-    
-    textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    textField.returnKeyType = UIReturnKeyDone;
-    textField.clearButtonMode = UITextFieldViewModeWhileEditing; //编辑时会出现个修改X
-    
-    textField.delegate = self;
-    [cell.contentView addSubview:textField];
-    
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
+    NSLog(@"===%@===%@===%@",selectedProvince,selectedCity,selectedArea);
 }
+-(IBAction)locationAddress:(UIButton*)sender
+{
+    DLog(@"定位地置");
+}
+
 /*
 #pragma mark - Navigation
 

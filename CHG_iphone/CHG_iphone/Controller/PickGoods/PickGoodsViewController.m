@@ -7,7 +7,8 @@
 //
 
 #import "PickGoodsViewController.h"
-
+#import "PresellGoodsViewController.h"
+#import "GoodsDetailsViewController.h"
 @interface PickGoodsViewController ()
 
 @end
@@ -42,13 +43,36 @@
     
     
     self.slideSwitchView.slideSwitchViewDelegate = self;
-    
+    __weak typeof(self) weakSelf = self;
     self.DidNotPickGoodsView = [[DidNotPickGoodsViewController alloc] initWithNibName:@"DidNotPickGoodsViewController" bundle:nil];
-    
-    
-    self.DidPickGoodsView = [[DidPickGoodsViewController alloc] initWithNibName:@"OutstandingOrdersViewController" bundle:nil];
-    
- 
+    self.DidNotPickGoodsView.didSkipSubItem =^(NSInteger tag){
+        if (tag == 101)
+        {
+            SaleType satype = SaleTypePickingGoods;
+            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            PresellGoodsView.orderSaletype = satype;
+            [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
+        }
+        
+    };
+    self.DidNotPickGoodsView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+    };
+    self.DidPickGoodsView = [[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
+    self.DidPickGoodsView.didSkipSubItem =^(NSInteger tag){
+//        if (tag == 101)
+        {
+            SaleType satype = SaleTypeReturnGoods;
+            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            PresellGoodsView.orderSaletype = satype;
+            [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
+        }
+    };
+    self.DidPickGoodsView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+    };
     [self.slideSwitchView buildUI];
     [self.view addSubview:self.slideSwitchView];
 }

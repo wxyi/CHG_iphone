@@ -12,5 +12,5 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
 
--(IBAction)returnGoods:(id)sender;
+-(IBAction)returnGoods:(UIButton*)sender;
 @end

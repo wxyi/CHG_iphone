@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-typedef void(^AccountBriefSelect)(NSIndexPath* indexPath);
+
 @interface MyTableViewCell : UITableViewCell
 @property (nonatomic, copy) AccountBriefSelect didSelectedSubItemAction;
 @property(nonatomic,strong)NSArray* items;

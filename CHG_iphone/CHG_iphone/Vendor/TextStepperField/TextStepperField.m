@@ -63,7 +63,7 @@ UIEdgeInsets insetButtonImage={13,13,13,13};
     // middle image
     _middleImage = [[UIImageView alloc] init];
     self.middleImage.frame = CGRectMake(BFStepperButton.width, 0, self.frame.size.width - (BFStepperButton.width*2), BFStepperButton.height);
-    [self.middleImage setImage:[[UIImage  imageNamed:@"UIStepperMiddle.png"]resizableImageWithCapInsets:insetMiddleImage]];
+//    [self.middleImage setImage:[[UIImage  imageNamed:@"UIStepperMiddle.png"]resizableImageWithCapInsets:insetMiddleImage]];
     self.middleImage.autoresizingMask = UIViewAutoresizingNone; //push to none
     self.middleImage.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight |UIViewAutoresizingFlexibleBottomMargin;
     [self addSubview:self.middleImage];
@@ -71,9 +71,9 @@ UIEdgeInsets insetButtonImage={13,13,13,13};
     // button minus in to left
     _minusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.minusButton.frame = CGRectMake(0.0, 0.0, BFStepperButton.width, BFStepperButton.height);
-    [self.minusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperLeft.png"] resizableImageWithCapInsets:insetButtonImage] forState:UIControlStateNormal];
-    [self.minusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperLeftPressed.png"] resizableImageWithCapInsets:insetButtonImage]forState:UIControlStateHighlighted];
-    [self.minusButton setImage:[UIImage imageNamed:@"UIStepperMinus"] forState:UIControlStateNormal];
+//    [self.minusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperLeft.png"] resizableImageWithCapInsets:insetButtonImage] forState:UIControlStateNormal];
+//    [self.minusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperLeftPressed.png"] resizableImageWithCapInsets:insetButtonImage]forState:UIControlStateHighlighted];
+    [self.minusButton setImage:[UIImage imageNamed:@"but_minus.png"] forState:UIControlStateNormal];
     [self.minusButton addTarget:self action:@selector(didPressMinusButton) forControlEvents:UIControlEventTouchUpInside];
     [self.minusButton addTarget:self action:@selector(didBeginMinusLongTap) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
     [self.minusButton addTarget:self action:@selector(didEndLongTap) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragExit];
@@ -84,9 +84,9 @@ UIEdgeInsets insetButtonImage={13,13,13,13};
     // button plus in to right
     _plusButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.plusButton.frame = CGRectMake(self.frame.size.width - BFStepperButton.width, 0.0, BFStepperButton.width, BFStepperButton.height);
-    [self.plusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperRight.png"]resizableImageWithCapInsets:insetButtonImage] forState:UIControlStateNormal];
-    [self.plusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperRightPressed.png"] resizableImageWithCapInsets:insetButtonImage] forState:UIControlStateHighlighted];
-    [self.plusButton setImage:[UIImage imageNamed:@"UIStepperPlus"] forState:UIControlStateNormal];
+//    [self.plusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperRight.png"]resizableImageWithCapInsets:insetButtonImage] forState:UIControlStateNormal];
+//    [self.plusButton setBackgroundImage:[[UIImage imageNamed:@"UIStepperRightPressed.png"] resizableImageWithCapInsets:insetButtonImage] forState:UIControlStateHighlighted];
+    [self.plusButton setImage:[UIImage imageNamed:@"but_plus.png"] forState:UIControlStateNormal];
     [self.plusButton addTarget:self action:@selector(didPressPlusButton) forControlEvents:UIControlEventTouchUpInside];
     [self.plusButton addTarget:self action:@selector(didBeginPlusLongTap) forControlEvents:UIControlEventTouchDown | UIControlEventTouchDragEnter];
     [self.plusButton addTarget:self action:@selector(didEndLongTap)  forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside | UIControlEventTouchCancel | UIControlEventTouchDragExit];

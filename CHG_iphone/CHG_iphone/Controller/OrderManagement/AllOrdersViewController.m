@@ -8,7 +8,7 @@
 
 #import "AllOrdersViewController.h"
 #import "AllOrdersCell.h"
-
+#import "GoodsDetailsViewController.h"
 @interface AllOrdersViewController ()
 @property UINib* AllOrdersNib;
 @end
@@ -50,6 +50,11 @@
     }
     
     [cell setupView:nil];
+    cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+        if (self.didSelectedSubItemAction) {
+            self.didSelectedSubItemAction(indexPath);
+        }
+    };
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }

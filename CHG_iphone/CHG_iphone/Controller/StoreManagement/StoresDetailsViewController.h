@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LMComBoxView.h"
+@interface StoresDetailsViewController : UIViewController<LMComBoxViewDelegate>
 
-@interface StoresDetailsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
-@property(nonatomic,weak)IBOutlet UITableView* tableview;
-
+@property(nonatomic,weak)IBOutlet UILabel* storeNamelab;
+@property(nonatomic,weak)IBOutlet UITextField* locationField;
+-(IBAction)locationAddress:(UIButton*)sender;
 @end

@@ -34,6 +34,9 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
+    if (self.didSkipSubItem) {
+        self.didSkipSubItem(sender.tag);
+    }
 }
 -(void)setupView
 {
@@ -61,6 +64,12 @@
         }
         
         [cell setupView:nil];
+        cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+            if (self.didSelectedSubItemAction) {
+                self.didSelectedSubItemAction(indexPath);
+            }
+        };
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
     else
@@ -124,6 +133,7 @@
     
     return v_footer;
 }
+
 /*
 #pragma mark - Navigation
 

@@ -18,10 +18,10 @@
 #import "MemberCenterViewController.h"
 #import "RegisteredMembersViewController.h"
 #import "OrderManagementViewController.h"
-#import "SellingGoodsViewController.h"
 #import "StoreManagementViewController.h"
 #import "PresellGoodsViewController.h"
 #import "StatisticAnalysisViewController.h"
+#import "StopViewController.h"
 @interface HomePageViewController ()
 @property UINib* PromoListNib;
 @property UINib* AccountBriefNib;
@@ -244,20 +244,23 @@
             break;
         }
         case 2:
+        case 3:
         {
             DLog(@"预售");
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            if (indexPath.row == 2)
+            {
+                PresellGoodsView.orderSaletype = SaleTypePresell;
+            }
+            else
+            {
+                PresellGoodsView.orderSaletype = SaleTypeSellingGoods;
+            }
+            
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }
-        case 3:
-        {
-            DLog(@"卖货");
-            
-            SellingGoodsViewController* SellingGoodsView = [[SellingGoodsViewController alloc] initWithNibName:@"SellingGoodsViewController" bundle:nil];
-            [self.navigationController pushViewController:SellingGoodsView animated:YES];
-            break;
-        }
+
         case 4:
         {
             DLog(@"订单管理");
@@ -278,8 +281,8 @@
         {
             DLog(@"门店管理");
             
-            StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
-            [self.navigationController pushViewController:StoreManagementView animated:YES];
+            StopViewController* StopView = [[StopViewController alloc] initWithNibName:@"StopViewController" bundle:nil];
+            [self.navigationController pushViewController:StopView animated:YES];
             break;
         }
         default:

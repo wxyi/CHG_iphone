@@ -10,7 +10,6 @@
 #import "successfulIdentifyCell.h"
 #import "MenuCell.h"
 
-#import "SellingGoodsViewController.h"
 #import "OrderManagementViewController.h"
 #import "PresellGoodsViewController.h"
 @interface successfulIdentifyViewController ()
@@ -117,17 +116,18 @@
 {
     switch (indexPath.row) {
         case 0:
-        {
-            DLog(@"卖货");
-            SellingGoodsViewController* SellingGoodsView = [[SellingGoodsViewController alloc] initWithNibName:@"SellingGoodsViewController" bundle:nil];
-            [self.navigationController pushViewController:SellingGoodsView animated:YES];
-            break;
-        }
         case 1:
         {
             DLog(@"预售");
             
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            if (indexPath.row == 0) {
+                PresellGoodsView.orderSaletype = SaleTypeSellingGoods;
+            }
+            else if(indexPath.row == 1)
+            {
+                PresellGoodsView.orderSaletype = SaleTypePresell;
+            }
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }

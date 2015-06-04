@@ -9,6 +9,7 @@
 #import "OutstandingOrdersViewController.h"
 #import "OrdersGoodsCell.h"
 #import "PickGoodsViewController.h"
+
 @interface OutstandingOrdersViewController ()
 @property UINib* OrdersGoodsNib;
 @end
@@ -45,7 +46,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return [[self.items objectAtIndex:section] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -130,6 +131,12 @@
     [v_footer addSubview:Terminationbtn];
     return v_footer;
 }
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.didSelectedSubItemAction) {
+        self.didSelectedSubItemAction(indexPath);
+    }
+}
 -(void)goskipdetails:(UIButton*)sender
 {
     if (self.didSkipSubItem) {
@@ -139,16 +146,12 @@
     
 }
 
--(IBAction)Returngoods:(id)sender
+-(IBAction)Returngoods:(UIButton*)sender
 {
-    UIButton* btn = (UIButton*)sender;
-    if (btn.tag == 103) {
-        DLog(@" 退货");
+    if (self.didSkipSubItem) {
+        self.didSkipSubItem(sender.tag);
     }
-    else if(btn.tag == 104)
-    {
-        DLog(@"提货");
-    }
+    
 }
 /*
 #pragma mark - Navigation

@@ -9,6 +9,7 @@
 #import "CompleteOrderViewController.h"
 #import "OrdersGoodsCell.h"
 #import "PickGoodsViewController.h"
+#import "PresellGoodsViewController.h"
 @interface CompleteOrderViewController ()
 @property UINib* OrdersGoodsNib;
 @end
@@ -43,7 +44,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return [[self.items objectAtIndex:section] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -128,6 +129,12 @@
     
     return v_footer;
 }
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.didSelectedSubItemAction) {
+        self.didSelectedSubItemAction(indexPath);
+    }
+}
 -(void)goskipdetails:(UIButton*)sender
 {
     
@@ -136,9 +143,13 @@
     }
     
 }
--(IBAction)returnGoods:(id)sender
+-(IBAction)returnGoods:(UIButton*)sender
 {
     DLog(@"退货");
+    if (self.didSkipSubItem) {
+        self.didSkipSubItem(sender.tag);
+    }
+    
 }
 /*
 #pragma mark - Navigation

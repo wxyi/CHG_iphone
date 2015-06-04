@@ -10,9 +10,11 @@
 
 @interface OrderCounterViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,weak)IBOutlet UIButton* button;
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,strong)NSDictionary* dict;
 @property(nonatomic,assign)SaleType orderSaletype;
+@property(nonatomic,strong)STAlertView* stAlertView;
 -(IBAction)OrderCounterView:(id)sender;
 
 @end
