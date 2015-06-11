@@ -377,7 +377,7 @@
     }
     else
     {
-        return @"_";
+        return @"";
     }
 }
 

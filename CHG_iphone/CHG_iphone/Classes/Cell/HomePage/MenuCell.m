@@ -13,8 +13,9 @@
 - (void)awakeFromNib {
     // Initialization code
     
-    self.MenuCollection.backgroundColor = [UIColor lightGrayColor];
+//    self.MenuCollection.backgroundColor = [UIColor lightGrayColor];
 //    [self setupView];
+    self.items = [[NSMutableArray alloc] init];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -22,10 +23,12 @@
 
     // Configure the view for the selected state
 }
--(void)setupView:(NSArray*)items
+-(void)setupView:(NSMutableArray*)items
 {
     self.items = items;
     [self modifyCollectionView:NO];
+    self.MenuCollection.frame = CGRectMake(1, 0, SCREEN_WIDTH-2, self.height);
+    DLog(@"self.MenuCollection.frame = %@",NSStringFromCGRect(self.MenuCollection.frame) );
     [self.MenuCollection registerNib:[UINib nibWithNibName:@"MenuCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
     self.MenuCollection.delegate = self;
     self.MenuCollection.dataSource=self;
@@ -39,7 +42,7 @@
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setItemSize:CGSizeMake((SCREEN_WIDTH-2)/3, (SCREEN_WIDTH-2)/3)];
     [flowLayout setMinimumLineSpacing:1.f];
-    [flowLayout setMinimumInteritemSpacing:1.f];
+    [flowLayout setMinimumInteritemSpacing:0.f];
     [self.MenuCollection setCollectionViewLayout:flowLayout];
     
 }
@@ -63,5 +66,16 @@
     if (self.didSelectedSubItemAction && title.length > 0) {
         self.didSelectedSubItemAction(indexPath);
     }
+}
+
+- (void)layoutSubviews //在这里进行元素的详细设置
+{
+    [super layoutSubviews];
+
+    CGRect rect = self.frame;
+    rect.size.height = self.height;
+    self.frame = rect;
+//    self.contentView.frame = rect;
+    DLog(@"self.frame = %@",NSStringFromCGRect(self.frame) );
 }
 @end

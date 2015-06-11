@@ -255,100 +255,27 @@ const int checktable[] = { 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 };//校验值对应�
  */
 + (BOOL) isValidCreditNumber:(NSString*)value
 {
-    BOOL result = TRUE;
-//    NSInteger length = [value length];
-//    if (length >= 13)
-//    {
-//        result = [IdentifierValidator isValidNumber:value];
-//        if (result)
-//        {
-//            NSInteger twoDigitBeginValue = [[value substringWithRange:NSMakeRange(0, 2)] integerValue];
-//            NSInteger threeDigitBeginValue = [[value substringWithRange:NSMakeRange(0, 3)] integerValue];
-//            NSInteger fourDigitBeginValue = [[value substringWithRange:NSMakeRange(0, 4)] integerValue];
-//            //Diner's Club
-//            if (((threeDigitBeginValue >= 300 && threeDigitBeginValue <= 305)||
-//                 fourDigitBeginValue == 3095||twoDigitBeginValue==36||twoDigitBeginValue==38) && (14 != length))
-//            {
-//                result = FALSE;
-//            }
-//            //VISA
-//            else if([value isStartWithString:@"4"] && !(13 == length||16 == length))
-//            {
-//                result = FALSE;
-//            }
-//            //MasterCard
-//            else if((twoDigitBeginValue >= 51||twoDigitBeginValue <= 55) && (16 != length))
-//            {
-//                result = FALSE;
-//            }
-//            //American Express
-//            else if(([value isStartWithString:@"34"]||[value isStartWithString:@"37"]) && (15 != length))
-//            {
-//                result = FALSE;
-//            }
-//            //Discover
-//            else if([value isStartWithString:@"6011"] && (16 != length))
-//            {
-//                result = FALSE;
-//            }
-//            else
-//            {
-//                NSInteger begin = [[value substringWithRange:NSMakeRange(0, 6)] integerValue];
-//                //CUP
-//                if ((begin >= 622126 && begin <= 622925) && (16 != length))
-//                {
-//                    result = FALSE;
-//                }
-//                //other
-//                else
-//                {
-//                    result = TRUE;
-//                }
-//            }
-//        }
-//        if (result)
-//        {
-//            NSInteger digitValue;
-//            NSInteger checkSum = 0;
-//            NSInteger index = 0;
-//            NSInteger leftIndex;
-//            //even length, odd index
-//            if (0 == length%2)
-//            {
-//                index = 0;
-//                leftIndex = 1;
-//            }
-//            //odd length, even index
-//            else
-//            {
-//                index = 1;
-//                leftIndex = 0;
-//            }
-//            while (index < length)
-//            {
-//                digitValue = [[value substringWithRange:NSMakeRange(index, 1)] integerValue];
-//                digitValue = digitValue*2;
-//                if (digitValue >= 10)
-//                {
-//                    checkSum += digitValue/10 + digitValue%10;
-//                }
-//                else
-//                {
-//                    checkSum += digitValue;
-//                }
-//                digitValue = [[value substringWithRange:NSMakeRange(leftIndex, 1)] integerValue];
-//                checkSum += digitValue;
-//                index += 2;
-//                leftIndex += 2;
-//            }
-//            result = (0 == checkSum%10) ? TRUE:FALSE;
-//        }
-//    }
-//    else
-//    {
-//        result = FALSE;
-//    }
-    return result;
+    int sum = 0;
+    int len = [value length];
+    int i = 0;
+    
+    while (i < len) {
+        NSString *tmpString = [value substringWithRange:NSMakeRange(len - 1 - i, 1)];
+        int tmpVal = [tmpString intValue];
+        if (i % 2 != 0) {
+            tmpVal *= 2;
+            if(tmpVal>=10) {
+                tmpVal -= 9;
+            }
+        }
+        sum += tmpVal;
+        i++;
+    }
+    
+    if((sum % 10) == 0)
+        return YES;
+    else
+        return NO;
 }
 + (BOOL) isValidBirthday:(NSString*)birthday
 {
@@ -468,8 +395,6 @@ const int checktable[] = { 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 };//校验值对应�
     }
     return result;
 }
-//- (void) dealloc 
-//{
-//    [super dealloc];
-//}
+
+
 @end

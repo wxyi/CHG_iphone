@@ -11,4 +11,5 @@
 @interface BasicInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSDictionary* BasicInfo;
 @end

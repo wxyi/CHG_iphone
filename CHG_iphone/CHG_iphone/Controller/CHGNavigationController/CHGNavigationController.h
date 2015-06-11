@@ -10,4 +10,6 @@
 
 @interface CHGNavigationController : UINavigationController
 - (void)showMenu;
+- (void)goback;
+-(void)skipPage;
 @end

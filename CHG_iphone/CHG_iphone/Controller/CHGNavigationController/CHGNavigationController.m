@@ -9,6 +9,8 @@
 #import "CHGNavigationController.h"
 #import "UIViewController+REFrostedViewController.h"
 #import "SidebarMenuTableViewController.h"
+
+#import "OrderQuryViewController.h"
 @interface CHGNavigationController ()
 @property (strong, readwrite, nonatomic) SidebarMenuTableViewController *SidebarMenuController;
 @end
@@ -17,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
     // Do any additional setup after loading the view from its nib.
 }
@@ -27,15 +30,30 @@
 }
 - (void)showMenu
 {
+    DLog(@"count = %d",[self.viewControllers count]);
     [self.frostedViewController presentMenuViewController];
 }
 
+-(void)skipPage
+{
+    DLog(@"搜索");
+    OrderQuryViewController* OrderQueryView = [[OrderQuryViewController alloc] initWithNibName:@"OrderQuryViewController" bundle:nil];
+    [self pushViewController:OrderQueryView animated:YES];
+}
+- (void)goback
+{
+    [self popToRootViewControllerAnimated:YES];
+}
 #pragma mark -
 #pragma mark Gesture recognizer
 
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender
 {
-    [self.frostedViewController panGestureRecognized:sender];
+    DLog(@"count = %d",[self.viewControllers count]);
+    if ([self.viewControllers count] == 1) {
+        [self.frostedViewController panGestureRecognized:sender];
+    }
+    
 }
 /*
 #pragma mark - Navigation

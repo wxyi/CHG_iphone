@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface StatisticsCell : UITableViewCell
+@property(nonatomic,strong) UIView* bottomview;
 @property(nonatomic,strong) UIView* bgview;
 @property(nonatomic,strong) UILabel* dateLab;
 @property(nonatomic,strong) UILabel* numlab;
 
--(void)setStatistics:(NSString*)date number:(NSString*)number;
+-(void)setStatistics:(NSString*)date number:(NSInteger)number;
 @end

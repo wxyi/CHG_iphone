@@ -8,11 +8,11 @@
 
 #import "SuccessRegisterViewController.h"
 #import "SuccessRegistereCell.h"
-#import "MenuCell.h"
+#import "registeredMenuCell.h"
 #import "PresellGoodsViewController.h"
 @interface SuccessRegisterViewController ()
 @property UINib* SuccessRegistereNib;
-@property UINib* MenuNib;
+@property UINib* registeredMenuNib;
 @end
 
 @implementation SuccessRegisterViewController
@@ -20,6 +20,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"会员信息";
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -46,7 +48,8 @@
     [NSObject setExtraCellLineHidden:self.tableview];
 //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.SuccessRegistereNib = [UINib nibWithNibName:@"SuccessRegistereCell" bundle:nil];
-    self.MenuNib = [UINib nibWithNibName:@"MenuCell" bundle:nil];
+    self.registeredMenuNib
+    = [UINib nibWithNibName:@"registeredMenuCell" bundle:nil];
     
 }
 
@@ -72,9 +75,9 @@
     }
     else
     {
-        MenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MenuCell"];
+        registeredMenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"registeredMenuCell"];
         if(cell==nil){
-            cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (registeredMenuCell*)[[self.registeredMenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
         
@@ -109,7 +112,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return  150;
+        return  110;
     }
     else
     {
@@ -127,7 +130,7 @@
 {
     if (section == 1) {
         UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-        v_header.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        v_header.backgroundColor = [UIColor clearColor];
         UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
         title.text = @"您还可以继续";
         title.font = FONT(13);

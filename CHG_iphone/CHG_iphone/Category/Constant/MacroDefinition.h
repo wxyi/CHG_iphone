@@ -284,6 +284,7 @@ return self; \
 
 typedef void(^BaseViewSkipAction)(NSInteger tag);
 typedef void(^AccountBriefSelect)(NSIndexPath* indexPath);
+typedef void(^ShowInfoAlert)(NSString* info);
 #define ZbarRead_With 170
 
 
@@ -303,4 +304,23 @@ typedef enum
     SaleTypeReturnGoods,    //退货
     SaleTypePickingGoods //提货
 }SaleType;
+
+typedef enum
+{
+    MenuTypeMemberCenter = 0,//会员中心
+    MenuTypeOrderManagement, //订单管理
+}MenuType;
+
+typedef enum
+{
+    StorePersonnelTypeManager = 0,//店长
+    StorePersonnelTypeShoppers, //导购
+}StorePersonnelType;
+
+typedef enum
+{
+    PickUpTypeDidNot = 0,//未提货
+    PickUpTypeDid, //已提货
+    
+}PickUpType;
 #endif

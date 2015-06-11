@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
@@ -14,7 +15,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lkr-zt-k8f">
-                        <rect key="frame" x="5" y="25" width="310" height="145"/>
+                        <rect key="frame" x="5" y="20" width="310" height="140"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="82a-Te-EDv">
                                 <rect key="frame" x="20" y="25" width="77" height="80"/>
@@ -26,55 +27,57 @@
                                 <rect key="frame" x="214" y="25" width="77" height="80"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FgG-p4-xsx" customClass="RadioButton">
-                                <rect key="frame" x="214" y="110" width="79" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="其他" image="unchecked.png">
+                                <rect key="frame" x="218" y="110" width="79" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="  其他" image="unchecked.png">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="selected" title="其他" image="checked.png"/>
+                                <state key="selected" title="  其他" image="checked.png"/>
                                 <connections>
                                     <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="xdr-aS-Mtl"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfP-bI-y5z" customClass="RadioButton">
-                                <rect key="frame" x="117" y="110" width="79" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="父亲" image="unchecked.png">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="44g-iq-YOO" customClass="RadioButton">
+                                <rect key="frame" x="25" y="110" width="79" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="  母亲" image="unchecked.png">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="selected" title="父亲" image="checked.png"/>
-                                <connections>
-                                    <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="F0e-7z-Egx"/>
-                                    <outletCollection property="groupButtons" destination="FgG-p4-xsx" id="mwd-Fn-ETB"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="44g-iq-YOO" customClass="RadioButton">
-                                <rect key="frame" x="20" y="110" width="79" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="母亲" image="unchecked.png">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="selected" title="母亲" image="checked.png"/>
+                                <state key="selected" title="  母亲" image="checked.png"/>
                                 <connections>
                                     <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="PI0-yI-8O0"/>
                                     <outletCollection property="groupButtons" destination="SfP-bI-y5z" id="Oc2-ew-5wt"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SfP-bI-y5z" customClass="RadioButton">
+                                <rect key="frame" x="121" y="110" width="79" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="  父亲" image="unchecked.png">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" title="  父亲" image="checked.png"/>
+                                <connections>
+                                    <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="F0e-7z-Egx"/>
+                                    <outletCollection property="groupButtons" destination="FgG-p4-xsx" id="mwd-Fn-ETB"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="10"/>
+                                <integer key="value" value="4"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="title_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="aWH-S8-4hZ">
+                        <rect key="frame" x="85" y="0.0" width="150" height="40"/>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="与宝宝关系" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H75-v0-4dK">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
-                        <color key="backgroundColor" red="0.0" green="0.19238619779999999" blue="0.40322681179999997" alpha="1" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -86,7 +89,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                 </subviews>
-                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             </tableViewCellContentView>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <connections>
@@ -94,12 +97,13 @@
                 <outlet property="bgview" destination="lkr-zt-k8f" id="TTu-lm-6xU"/>
                 <outlet property="radioButton" destination="44g-iq-YOO" id="G4n-C7-V2P"/>
             </connections>
-            <point key="canvasLocation" x="325" y="225"/>
+            <point key="canvasLocation" x="325" y="224"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="checked.png" width="24" height="24"/>
         <image name="image1.jpg" width="2200" height="1650"/>
+        <image name="title_bg.png" width="150" height="40"/>
         <image name="unchecked.png" width="24" height="24"/>
     </resources>
 </document>

@@ -26,9 +26,9 @@
 }
 -(void)setupView:(NSArray *)items
 {
-    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"336",@"price",@"X 2",@"count", nil];
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"336",@"price",@"x 2",@"count", nil];
     
-    NSDictionary* dict1 = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"X 2",@"count", nil];
+    NSDictionary* dict1 = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"x 2",@"count", nil];
     
     
     
@@ -49,7 +49,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return [[self.allitems objectAtIndex:section] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -88,7 +88,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 60;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -101,12 +101,13 @@
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), 30)];
-    v_header.backgroundColor = [UIColor whiteColor];
+//    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    v_header.backgroundColor = [UIColor clearColor];
     if (section == 0) {
         UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
         datelab.textAlignment = NSTextAlignmentLeft;
         datelab.font = FONT(13);
-        datelab.textColor = [UIColor lightGrayColor];
+        datelab.textColor = UIColorFromRGB(0x878787);
         datelab.text = @"2015-05-19 10:10:10";
         [v_header addSubview:datelab];
         
@@ -114,7 +115,7 @@
         UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
         orderstatus.textAlignment = NSTextAlignmentRight;
         orderstatus.font = FONT(13);
-        orderstatus.textColor = [UIColor lightGrayColor];
+        orderstatus.textColor = UIColorFromRGB(0x878787);
         orderstatus.text = @"已完成 卖货订单";
         [v_header addSubview:orderstatus];
         
@@ -124,7 +125,7 @@
         UILabel* namelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
         namelab.textAlignment = NSTextAlignmentLeft;
         namelab.font = FONT(13);
-        namelab.textColor = [UIColor lightGrayColor];
+        namelab.textColor = UIColorFromRGB(0x878787);
         namelab.text = @"赠品";
         [v_header addSubview:namelab];
     }
@@ -137,4 +138,15 @@
         self.didSelectedSubItemAction(indexPath);
     }
 }
+- (void)layoutSubviews //在这里进行元素的详细设置
+{
+    [super layoutSubviews];
+    
+    CGRect rect = self.frame;
+    rect.size.height = self.height;
+    self.frame = rect;
+    //    self.contentView.frame = rect;
+    DLog(@"self.frame = %@",NSStringFromCGRect(self.frame) );
+}
+
 @end

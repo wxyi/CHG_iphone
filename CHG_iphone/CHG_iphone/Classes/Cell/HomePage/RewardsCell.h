@@ -10,6 +10,6 @@
 
 @interface RewardsCell : MyTableViewCell<UICollectionViewDataSource,UICollectionViewDelegate>
 @property(nonatomic,weak)IBOutlet UICollectionView* RewardsView;
-
+@property(nonatomic,assign)BOOL isMy;
 
 @end

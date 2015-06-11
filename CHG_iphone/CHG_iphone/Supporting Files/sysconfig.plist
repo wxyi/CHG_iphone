@@ -7,6 +7,6 @@
 	<key>clientVersion</key>
 	<string>1.1</string>
 	<key>PubServer_Token</key>
-	<string>http://27.115.74.138:8080/chg/</string>
+	<string>https://27.115.74.138:8443/chg/</string>
 </dict>
 </plist>

@@ -45,6 +45,37 @@
             ];
 }
 
+
++ (NSMutableString *)URLWithBaseString:(NSString *)baseString parameters:(NSDictionary *)parameters{
+    
+    NSMutableString *urlString =[NSMutableString string];   //The URL starts with the base string[urlString appendString:baseString];
+    
+    [urlString appendString:baseString];
+    
+    NSString *escapedString;
+    
+    NSInteger keyIndex = 0;
+    
+    for (id key in parameters) {
+        
+        //First Parameter needs to be prefixed with a ? and any other parameter needs to be prefixed with an &
+        if(keyIndex ==0) {
+            escapedString =(NSString*)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(CFStringRef)[parameters valueForKey:key], NULL, CFSTR(":/?#[]@!$&’()*+,;="), kCFStringEncodingUTF8);
+            
+            [urlString appendFormat:@"?%@=%@",key,escapedString];
+            [escapedString release];
+            
+        }else{
+            escapedString =(NSString*)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(CFStringRef)[parameters valueForKey:key], NULL, CFSTR(":/?#[]@!$&’()*+,;="), kCFStringEncodingUTF8);
+            
+            [urlString appendFormat:@"&%@=%@",key,escapedString];
+            [escapedString release];
+        }
+        keyIndex++;
+    }
+    return urlString;
+}
+
 /*
 //转千分位
 -(NSString*) toThousand:(NSString*) strnormal

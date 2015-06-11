@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "JKCountDownButton.h"
 @interface RegisteredMembersCell : UITableViewCell
-@property(nonatomic,weak)IBOutlet UITextField* textField;
-@property(nonatomic,weak)IBOutlet UILabel* namelab;
-@property(nonatomic,weak)IBOutlet UIButton* Verification;
+@property(nonatomic,weak)IBOutlet UITextField* iphoneField;
+@property(nonatomic,weak)IBOutlet UITextField* nameField;
+@property(nonatomic,weak)IBOutlet UITextField* codeField;
+
+@property (nonatomic, copy) ShowInfoAlert didshowInfo;
 @property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender;
 @end

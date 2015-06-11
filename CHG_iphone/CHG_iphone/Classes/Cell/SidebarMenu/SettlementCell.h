@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface SettlementCell : UITableViewCell
+@property(nonatomic,weak)IBOutlet UILabel* datelab;
+@property(nonatomic,weak)IBOutlet UILabel* statelab;
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
 @property(nonatomic,weak)IBOutlet UILabel* pricelab;
 @property(nonatomic,weak)IBOutlet UILabel* BankCardlab;

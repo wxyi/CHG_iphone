@@ -36,15 +36,18 @@
     //    self.slideSwitchView.frame = self.view.bounds;
     
     //    self.slideSwitchView.frame = self.view.bounds;
-    self.slideSwitchView.tabItemNormalColor = [QCSlideSwitchView colorFromHexRGB:@"000000"];
-    self.slideSwitchView.tabItemSelectedColor = [QCSlideSwitchView colorFromHexRGB:@"ee85ec"];
-    self.slideSwitchView.shadowImage = [[NSObject createImageWithColor:[UIColor blueColor]]
+    self.slideSwitchView.backgroundColor = [QCSlideSwitchView colorFromHexRGB:@"f0f0f0"];
+    self.slideSwitchView.tabItemNormalColor = [QCSlideSwitchView colorFromHexRGB:@"878787"];
+    self.slideSwitchView.tabItemSelectedColor = [QCSlideSwitchView colorFromHexRGB:@"171c61"];
+    self.slideSwitchView.shadowImage = [[NSObject createImageWithColor:[QCSlideSwitchView colorFromHexRGB:@"171c61"]]
                                         stretchableImageWithLeftCapWidth:SCREEN_WIDTH/3 topCapHeight:0.0f];
     
     
     self.slideSwitchView.slideSwitchViewDelegate = self;
     __weak typeof(self) weakSelf = self;
     self.DidNotPickGoodsView = [[DidNotPickGoodsViewController alloc] initWithNibName:@"DidNotPickGoodsViewController" bundle:nil];
+    self.DidNotPickGoodsView.title = @"未提货";
+    self.DidNotPickGoodsView.picktype = PickUpTypeDidNot;
     self.DidNotPickGoodsView.didSkipSubItem =^(NSInteger tag){
         if (tag == 101)
         {
@@ -59,7 +62,9 @@
         GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
         [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
-    self.DidPickGoodsView = [[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
+    self.DidPickGoodsView = [[DidNotPickGoodsViewController alloc] initWithNibName:@"DidNotPickGoodsViewController" bundle:nil];
+    self.DidPickGoodsView.title = @"已提货";
+    self.DidPickGoodsView.picktype = PickUpTypeDid;
     self.DidPickGoodsView.didSkipSubItem =^(NSInteger tag){
 //        if (tag == 101)
         {

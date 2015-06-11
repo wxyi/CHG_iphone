@@ -31,7 +31,7 @@
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.scrollEnabled = NO;
-    self.tableview.backgroundColor = [UIColor whiteColor];
+//    self.tableview.backgroundColor = [UIColor whiteColor];
     self.SetPasswordNib = [UINib nibWithNibName:@"SetPasswordCell" bundle:nil];
 }
 
@@ -71,7 +71,7 @@
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
-    v_header.backgroundColor = [UIColor whiteColor];
+    v_header.backgroundColor = [UIColor clearColor];
     UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
     
     imageview.image = [UIImage imageNamed:@"logo.png"];

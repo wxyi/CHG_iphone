@@ -11,4 +11,6 @@
 @interface AddShoppersViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,assign)StorePersonnelType PersonnerType;
+@property(nonatomic,strong)NSString* storeName;
 @end

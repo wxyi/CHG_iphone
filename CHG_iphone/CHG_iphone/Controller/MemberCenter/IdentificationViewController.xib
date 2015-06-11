@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
@@ -19,9 +20,9 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s1p-xz-9PD" customClass="ZBarReaderView">
                     <color key="backgroundColor" white="0.99294354839999999" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
-                <button opaque="NO" tag="100" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUN-dQ-ebe">
+                <button opaque="NO" tag="1010" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUN-dQ-ebe">
                     <rect key="frame" x="0.0" y="464" width="320" height="40"/>
-                    <color key="backgroundColor" red="0.0" green="0.25906345749999998" blue="0.5449538934" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" title="下一步">
                         <color key="titleColor" white="0.99294354839999999" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -30,30 +31,30 @@
                         <action selector="IdentificationMember:" destination="-1" eventType="touchDown" id="Xoz-3w-Bpw"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="scan_corner.png" translatesAutoresizingMaskIntoConstraints="NO" id="LM0-HI-KWp">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="scan.png" translatesAutoresizingMaskIntoConstraints="NO" id="LM0-HI-KWp">
                     <rect key="frame" x="75" y="15" width="170" height="170"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_hint_nor.png" translatesAutoresizingMaskIntoConstraints="NO" id="JLn-gx-GK0">
-                    <rect key="frame" x="90" y="190" width="20" height="20"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_tips_small.png" translatesAutoresizingMaskIntoConstraints="NO" id="JLn-gx-GK0">
+                    <rect key="frame" x="90" y="192" width="20" height="20"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="扫描二维码识别商品信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Wb-9z-Kpp">
-                    <rect key="frame" x="119" y="180" width="126" height="35"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <rect key="frame" x="115" y="186" width="126" height="35"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qqw-yF-0bq" customClass="TPKeyboardAvoidingTableView">
                     <rect key="frame" x="0.0" y="220" width="325" height="244"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <point key="canvasLocation" x="325" y="250"/>
         </view>
     </objects>
     <resources>
-        <image name="icon_hint_nor.png" width="15" height="15"/>
-        <image name="scan_corner.png" width="240" height="240"/>
+        <image name="icon_tips_small.png" width="15" height="15"/>
+        <image name="scan.png" width="170" height="170"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

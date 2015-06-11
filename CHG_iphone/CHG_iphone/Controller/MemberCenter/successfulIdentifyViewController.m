@@ -22,6 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"会员信息";
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -32,9 +33,13 @@
 }
 -(void)setupView
 {
+//    self.view.backgroundColor = UIColorFromRGB(0xdddddd);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [NSObject setExtraCellLineHidden:self.tableview];
+    self.tableview.scrollEnabled = NO;
+//    self.tableview.backgroundColor = UIColorFromRGB(0xdddddd);
     self.successfulIdentifyNib = [UINib nibWithNibName:@"successfulIdentifyCell" bundle:nil];
     self.MenuNib = [UINib nibWithNibName:@"MenuCell" bundle:nil];
     
@@ -75,8 +80,9 @@
                           [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"order_management.png",@"icon",@"订单管理",@"title", nil],
                           nil];
+        cell.height = 105;
+        [cell setupView:[items mutableCopy]];
         
-        [cell setupView:items];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
             [weakSelf didSelectMenuCell:indexPath];
@@ -84,6 +90,13 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 1;
+    }
+    return SCREEN_HEIGHT - 290;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -153,5 +166,6 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 
 @end

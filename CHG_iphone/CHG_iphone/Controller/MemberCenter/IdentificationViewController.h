@@ -12,6 +12,8 @@
 @property(nonatomic,weak)IBOutlet ZBarReaderView* ZBarReader;
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)UIImageView* lineImage;
+@property(nonatomic,assign)MenuType m_MenuType;
+@property(nonatomic,assign)BOOL isScan;
 @property (assign)BOOL is_have;
 @property (assign)BOOL is_Anmotion;
 

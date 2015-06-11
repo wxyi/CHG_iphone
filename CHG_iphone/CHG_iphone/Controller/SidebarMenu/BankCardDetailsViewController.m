@@ -29,13 +29,18 @@
 
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"武新义",@"name",@"开户名",@"title", nil],
+    self.items = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"武新义",@"name",@" 开户名",@"title", nil],
                                            [NSDictionary dictionaryWithObjectsAndKeys:@"6222222222222222",@"name",@"银行卡号",@"title" ,nil],
                                             [NSDictionary dictionaryWithObjectsAndKeys:@"工商银行",@"name",@"开户银行",@"title" ,nil], nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.BankCardDetailsNib = [UINib nibWithNibName:@"BankCardDetailsCell" bundle:nil];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -52,6 +57,10 @@
     cell.Detailslab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"name"];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
 }
 /*
 #pragma mark - Navigation

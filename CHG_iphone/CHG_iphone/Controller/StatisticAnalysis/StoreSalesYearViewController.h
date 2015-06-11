@@ -11,6 +11,7 @@
 @interface StoreSalesYearViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property (nonatomic, assign) StatisticalType statisticalType;
-
+@property(nonatomic,assign)int custCount;
+@property(nonatomic,strong)NSArray* items;
 @property(nonatomic,strong)NSString* strtitle;
 @end

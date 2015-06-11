@@ -8,14 +8,14 @@
 
 #import "MemberCenterViewController.h"
 
-#import "RewardsCell.h"
+#import "MemberRewardsCell.h"
 #import "awardTotalAmountCell.h"
-#import "MenuCell.h"
+#import "MemberMenuCell.h"
 #import "IdentificationViewController.h"
 @interface MemberCenterViewController ()
 @property UINib* awardTotalAmountNib;
-@property UINib* RewardsNib;
-@property UINib* MenuNib;
+@property UINib* MemberRewardsNib;
+@property UINib* MemberMenuNib;
 @end
 
 @implementation MemberCenterViewController
@@ -32,14 +32,21 @@
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.scrollEnabled = NO;
+    self.tableview.backgroundColor = UIColorFromRGB(0xdddddd);
+    [NSObject setExtraCellLineHidden:self.tableview];
     self.awardTotalAmountNib = [UINib nibWithNibName:@"awardTotalAmountCell" bundle:nil];
-    self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
-    self.MenuNib = [UINib nibWithNibName:@"MenuCell" bundle:nil];
+    self.MemberRewardsNib = [UINib nibWithNibName:@"MemberRewardsCell" bundle:nil];
+    self.MemberMenuNib = [UINib nibWithNibName:@"MemberMenuCell" bundle:nil];
 
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -49,9 +56,9 @@
 {
     __weak typeof(self) weakSelf = self;
     if (indexPath.row == 0) {
-        RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
+        MemberRewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MemberRewardsCell"];
         if(cell==nil){
-            cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MemberRewardsCell*)[[self.MemberRewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
         
@@ -76,18 +83,19 @@
             
         }
         cell.contentView.backgroundColor = UIColorFromRGB(0x171c61);
-        cell.nameLab.text = @"本月会员总消费";
-        cell.nameLab.textColor = [UIColor whiteColor];
+        cell.nameLab.text = @"本月会员总消费(元)";
+        cell.nameLab.textColor = UIColorFromRGB(0xf0f0f0);
         cell.amountLab.text = @"5795.53";
+        cell.amountLab.font = FONT(40);
         cell.amountLab.textColor = [UIColor whiteColor];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
     else
     {
-        MenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MenuCell"];
+        MemberMenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MemberMenuCell"];
         if(cell==nil){
-            cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MemberMenuCell*)[[self.MemberMenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
         
@@ -95,7 +103,8 @@
                           [NSDictionary dictionaryWithObjectsAndKeys:@"member_management.png",@"icon",@"会员管理",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],nil];
-        [cell setupView:items];
+        cell.height = 106;
+        [cell setupView:[items mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
             [weakSelf skipPage:0];
@@ -107,20 +116,25 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return 75;
-    }
-    else if (indexPath.row == 0) {
         return 85;
+    }
+    else if (indexPath.row == 1) {
+        return 96;
     }
     else
     {
-        return 106;
+        return 72;
     }
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 7;
 }
 -(void)skipPage:(NSInteger)tag
 {
     DLog(@"会员识别");
     IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
+    IdentificationView.m_MenuType = MenuTypeMemberCenter;
     [self.navigationController pushViewController:IdentificationView animated:YES];
 }
 /*

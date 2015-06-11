@@ -48,10 +48,10 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    
+    cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 200, 44)];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
-    
+    textField.textColor = [UIColor clearColor];
     textField.placeholder = @"动态验证码"; //默认显示的字
     
     textField.secureTextEntry = YES; //密码
@@ -67,10 +67,11 @@
     [cell.contentView addSubview:line];
     
     JKCountDownButton* countDownCode = [JKCountDownButton buttonWithType:UIButtonTypeCustom];
+    countDownCode.backgroundColor = [UIColor clearColor];
     countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
     [countDownCode setTitle:@"再次发送" forState:UIControlStateNormal];
     [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    countDownCode.backgroundColor = [UIColor whiteColor];
+//    countDownCode.backgroundColor = [UIColor whiteColor];
 
     
     [cell.contentView addSubview:countDownCode];
@@ -105,9 +106,17 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 44;
 }
--(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [NSString stringWithFormat:@"手机号码 %@",@"13382050875"];
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 45)];
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 45)];
+    title.textColor = UIColorFromRGB(0x323232);
+    title.font = FONT(15);
+    UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
+    title.text = [NSString stringWithFormat:@"手机号码 %@",cfg.strMobile];
+    [v_header addSubview:title];
+    return v_header;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -121,7 +130,7 @@
     confirmbtn.tag = 101;
     confirmbtn.backgroundColor = UIColorFromRGB(0x171c61);
     [confirmbtn.layer setMasksToBounds:YES];
-    [confirmbtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
+    [confirmbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
     //    [loginout.layer setBorderWidth:1.0]; //边框
     confirmbtn.frame = CGRectMake(5, 40, SCREEN_WIDTH-10 , 40);
     [confirmbtn setTitle:@"确认" forState:UIControlStateNormal];

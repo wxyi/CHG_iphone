@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "DropDownChooseProtocol.h"
-@interface StoreManagementViewController : UIViewController<DropDownChooseDelegate,DropDownChooseDataSource>
+@interface StoreManagementViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,strong)NSArray* items;
 -(IBAction)goSkipStore:(id)sender;
 @end

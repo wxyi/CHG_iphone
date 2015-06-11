@@ -27,13 +27,18 @@
 
 -(void)setupView
 {
+    [self httpGetMyProfile];
     self.title = @"基本信息";
-    self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"二维码名片",@"身份证", nil];
+    self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"二维码名片",@"身份证号", nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
-
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.items count];
@@ -47,9 +52,77 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
+    cell.contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+    title.textColor = UIColorFromRGB(0x323232);
+    title.font = FONT(15);
+    title.text = [self.items objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:title];
+    
+    UILabel* infolab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+    infolab.textColor = UIColorFromRGB(0x323232);
+    infolab.font = FONT(15);
+    infolab.textAlignment = NSTextAlignmentRight;
+    NSString* info;
+    if (indexPath.row == 0) {
+        info = self.BasicInfo[@"userName"];
+    }
+    else if (indexPath.row == 1)
+    {
+        info = self.BasicInfo[@"mobile"];
+    }
+    else if (indexPath.row == 3)
+    {
+        info = self.BasicInfo[@"idcardNumber"];
+    }
+    infolab.text = info;
+    [cell.contentView addSubview:infolab];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
+-(void)viewDidLayoutSubviews
+{
+    if ([self.tableview respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableview setSeparatorInset:UIEdgeInsetsMake(0,0,0,0)];
+    }
+    
+    if ([self.tableview respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableview setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
+    }
+}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+}
+
+-(void)httpGetMyProfile
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyProfile] parameters:parameter];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@,msg = %@",data,msg);
+        self.BasicInfo = data;
+        [self.tableview reloadData];
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

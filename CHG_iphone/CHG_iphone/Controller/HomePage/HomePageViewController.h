@@ -11,5 +11,7 @@
 @interface HomePageViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property (retain, nonatomic) NSMutableArray* pagearray;
+@property (nonatomic,strong)NSDictionary* AccountBriefDict;
+@property (nonatomic,strong)NSMutableArray* menuArr;
 
 @end

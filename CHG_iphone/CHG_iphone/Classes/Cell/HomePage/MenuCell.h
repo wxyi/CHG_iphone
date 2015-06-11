@@ -10,5 +10,5 @@
 
 @interface MenuCell : MyTableViewCell<UICollectionViewDataSource,UICollectionViewDelegate>
 @property(nonatomic,weak)IBOutlet UICollectionView* MenuCollection;
-
+@property(nonatomic,assign)CGFloat height;
 @end

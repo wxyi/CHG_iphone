@@ -62,6 +62,7 @@
     //解析全国省市区信息
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"area" ofType:@"plist"];
     areaDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    DLog(@"areaDic = %@",areaDic);
     NSArray *components = [areaDic allKeys];
     NSArray *sortedArray = [components sortedArrayUsingComparator: ^(id obj1, id obj2) {
         
@@ -222,6 +223,7 @@
 {
     DLog(@"定位地置");
 }
+
 
 /*
 #pragma mark - Navigation

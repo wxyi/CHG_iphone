@@ -36,6 +36,10 @@
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.items.count;
@@ -48,18 +52,23 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
+    cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+    title.textColor = UIColorFromRGB(0x323232);
+    title.font = FONT(15);
+    title.text = [self.items objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:title];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     if (indexPath.row == 1) {
         NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
-        badgeView2.backgroundColor = self.view.backgroundColor;
+        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
         
         badgeView2.text = [NSString stringWithFormat:@"%@",[ConfigManager sharedInstance].sysVersion];
         badgeView2.tintColor = [UIColor orangeColor];
-        badgeView2.textColor = [UIColor blackColor];
+        badgeView2.textColor = [UIColor whiteColor];
         [badgeView2 sizeToFit];
-        badgeView2.frame = CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -20, 10, badgeView2.frame.size.width, badgeView2.frame.size.height);
+        badgeView2.frame = CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -30, 10, badgeView2.frame.size.width, badgeView2.frame.size.height);
         [cell.contentView addSubview:badgeView2];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -68,6 +77,10 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 80;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -78,13 +91,13 @@
     [v_footer addSubview:line];
     
     UIButton* loginout = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginout.backgroundColor = [UIColor redColor];
+    loginout.backgroundColor = UIColorFromRGB(0xce2028);
     [loginout.layer setMasksToBounds:YES];
-    [loginout.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
+    [loginout.layer setCornerRadius:4]; //设置矩形四个圆角半径
 //    [loginout.layer setBorderWidth:1.0]; //边框
     loginout.frame = CGRectMake(5, 40, SCREEN_WIDTH-10 , 40);
     [loginout setTitle:@"退出账号" forState:UIControlStateNormal];
-    [loginout setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [loginout setTitleColor:UIColorFromRGB(0xf0f0f0) forState:UIControlStateNormal];
     [loginout addTarget:self action:@selector(loginout) forControlEvents:UIControlEventTouchUpInside];
     [v_footer addSubview:loginout];
     return v_footer;

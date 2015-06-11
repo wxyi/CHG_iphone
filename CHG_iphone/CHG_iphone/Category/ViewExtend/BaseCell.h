@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface BaseCell : UITableViewCell
-
+@property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 @end

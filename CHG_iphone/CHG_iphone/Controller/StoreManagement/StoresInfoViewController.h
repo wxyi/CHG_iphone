@@ -10,6 +10,7 @@
 
 @interface StoresInfoViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSMutableArray* items;
+@property(nonatomic,strong)NSDictionary* shopinfo;
 -(IBAction)addStoresInfo:(UIButton*)sender;
 @end

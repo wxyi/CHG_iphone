@@ -31,12 +31,7 @@
     [self setupView];
 
 }
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.ZBarReader stop];
-    
-}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -66,14 +61,8 @@
     
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    v_header.backgroundColor = [UIColor lightGrayColor];
-    UILabel* titlelab = [[UILabel alloc] initWithFrame:v_header.frame];
-    titlelab.textAlignment = NSTextAlignmentCenter;
-    titlelab.text = @"扫描结果";
-    titlelab.font = FONT(14);
-    [v_header addSubview:titlelab];
-    self.tableview.tableHeaderView = v_header;
+    
+//    self.tableview.tableHeaderView = v_header;
     
     self.PresellNib = [UINib nibWithNibName:@"PresellCell" bundle:nil];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
@@ -81,16 +70,23 @@
     [self loopDrawLine];
     
 }
-//-(void)viewDidAppear:(BOOL)animated
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.ZBarReader stop];
+    self.is_have = NO;
+    self.is_Anmotion = NO;
+    
+    
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //    self.is_have = NO;
+    self.is_Anmotion = YES;
+    [self loopDrawLine];
+    //    [self.ZBarReader start];
+}
 
 
 -(void)readerView:(ZBarReaderView *)readerView didReadSymbols:(ZBarSymbolSet *)symbols fromImage:(UIImage *)image
@@ -100,9 +96,12 @@
         codeData = sym.data;
         break;
     }
-    
-    
-    
+    DLog(@"codeData = %@",codeData);
+    [self httpQrCode:codeData];
+//    [SGInfoAlert showInfo:codeData
+//                  bgColor:[[UIColor darkGrayColor] CGColor]
+//                   inView:self.view
+//                 vertical:0.7];
     [self.tableview reloadData];
 }
 
@@ -200,11 +199,11 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.items.count;
+    return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return self.items.count;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -243,9 +242,30 @@
         return cell;
     }
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 35;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.1;
+}
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
+    v_header.backgroundColor = [UIColor clearColor];
+    UILabel* titlelab = [[UILabel alloc] initWithFrame:v_header.frame];
+    titlelab.textAlignment = NSTextAlignmentCenter;
+    titlelab.text = @"扫描结果";
+    titlelab.font = FONT(13);
+    titlelab.textColor = UIColorFromRGB(0x323232);
+    [v_header addSubview:titlelab];
+    return v_header;
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 60;
 }
 -(IBAction)ConfirmInfo:(id)sender
 {
@@ -253,6 +273,18 @@
     OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
     OrderCounterView.orderSaletype = self.orderSaletype;
     [self.navigationController pushViewController:OrderCounterView animated:YES];
+}
+
+-(void)httpQrCode:(NSString*)strurl
+{
+    [HttpClient asynchronousRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,msg);
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

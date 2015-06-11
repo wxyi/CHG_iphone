@@ -10,4 +10,5 @@
 
 @interface LoginViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,assign)BOOL isfrist;
 @end

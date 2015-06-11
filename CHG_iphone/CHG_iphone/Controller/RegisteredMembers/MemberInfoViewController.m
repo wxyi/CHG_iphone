@@ -11,7 +11,7 @@
 #import "MembersBirthdayCell.h"
 #import "MembersSexCell.h"
 #import "SuccessRegisterViewController.h"
-
+#import "CHGNavigationController.h"
 @interface MemberInfoViewController ()<UUDatePickerDelegate>
 @property UINib* MembersRelationNib;
 @property UINib* MembersBirthdayNib;
@@ -26,7 +26,7 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:self.navigationController action:@selector(skipPage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -38,8 +38,8 @@
 -(void)skipPage
 {
     DLog(@"跳过");
-//    SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
-//    [self.navigationController pushViewController:SuccessRegisterView animated:YES];
+    SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
+    [self.navigationController pushViewController:SuccessRegisterView animated:YES];
 }
 -(void)setupView
 {
@@ -53,7 +53,7 @@
     self.MembersSexNib = [UINib nibWithNibName:@"MembersSexCell" bundle:nil];
     
     //delegate
-    self.datePicker= [[UUDatePicker alloc]initWithframe:CGRectMake(0, 0, 320, 200)
+    self.datePicker= [[UUDatePicker alloc]initWithframe:CGRectMake(0, 0, SCREEN_WIDTH, 200)
                                                         Delegate:self
                                                      PickerStyle:UUDateStyle_YearMonthDay];
     NSDate *now = [NSDate date];
@@ -64,8 +64,9 @@
     self.promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     self.promptlabel.textLabel.text = @"请仔细校对填写信息,确认之后不能修改";
     self.promptlabel.textLabel.font = FONT(12);
-    self.promptlabel.textLabel.textColor = [UIColor blackColor];
+    self.promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
     self.promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+    self.promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
 }
 /*
 #pragma mark - Navigation
@@ -124,7 +125,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 10;
+    return 7;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -137,15 +138,49 @@
     }
     else
     {
-        return 165;
+        return 160;
     }
 }
 
 -(IBAction)SubmitCompleted:(id)sender
 {
     DLog(@"提交完成");
-    SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
-    [self.navigationController pushViewController:SuccessRegisterView animated:YES];
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
+    NSString* info;
+    if (textfield.text.length == 0) {
+        info = @"请输入宝宝生日";
+    }
+    if (info.length != 0) {
+        
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+    }
+    NSIndexPath* indexpath = [NSIndexPath indexPathForItem:0 inSection:0];
+    MembersRelationCell *cell = (MembersRelationCell*)[self.tableview cellForRowAtIndexPath:indexpath];
+    
+    self.strBabyRelation = cell.radioButton.titleLabel.text;
+    
+    
+    indexpath = [NSIndexPath indexPathForItem:0 inSection:2];
+    MembersSexCell *cell1 = (MembersSexCell*)[self.tableview cellForRowAtIndexPath:indexpath];
+    NSString* sex = cell1.radioButton.titleLabel.text;
+    sex = [sex stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if ([sex isEqualToString:@"女宝宝"]) {
+        sex = @"F";
+    }
+    else
+    {
+        sex = @"M";
+    }
+    self.strBabyGender = sex;
+    
+    
+    
+    [self httpCreateCustomer];
+    
 }
 #pragma mark - UUDatePicker's delegate
 - (void)uuDatePicker:(UUDatePicker *)datePicker
@@ -158,5 +193,41 @@
 {
     UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
     textfield.text = [NSString stringWithFormat:@"%@年%@月%@日",year,month,day];
+    
+    
+    self.strBabyBirthday = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
+}
+-(void)httpCreateCustomer
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomer] parameters:parameter];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:self.strCustMobile forKey:@"custMobile"];
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObject:self.strCustName forKey:@"custName"];
+    [param setObject:self.strBabyBirthday forKey:@"babyBirthday"];
+    [param setObject:self.strBabyRelation forKey:@"babyRelation"];
+    [param setObject:self.strBabyGender forKey:@"babyGender"];
+    [param setObject:self.strCheckCode forKey:@"checkCode"];
+    
+    DLog(@"param = %@",param);
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@",data);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
+            [self.navigationController pushViewController:SuccessRegisterView animated:YES];
+        }
+        
+        
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 @end

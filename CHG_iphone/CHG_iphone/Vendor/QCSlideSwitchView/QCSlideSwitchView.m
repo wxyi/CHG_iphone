@@ -12,6 +12,8 @@
 static const CGFloat kHeightOfTopScrollView = 44.0f;
 static const CGFloat kWidthOfButtonMargin = 0.0f;
 static const CGFloat kFontSizeOfTabButton = 14.0f;
+static const CGFloat kBgWidthTabMargin = 10.0f;
+
 static const NSUInteger kTagOfRightSideButton = 999;
 
 @implementation QCSlideSwitchView
@@ -48,6 +50,8 @@ static const NSUInteger kTagOfRightSideButton = 999;
     _viewArray = [[NSMutableArray alloc] init];
     
     _isBuildUI = NO;
+    
+    _isNative = YES;
     
 }
 
@@ -133,7 +137,15 @@ static const NSUInteger kTagOfRightSideButton = 999;
         [_rootScrollView addSubview:vc.view];
         NSLog(@"%@",[vc.view class]);
     }
-    [self createNameButtons];
+    
+    if (_isNative) {
+        [self createNameButtons];
+    }
+    else
+    {
+        [self createStatisticalButtons];
+    }
+//    [self createNameButtons];
     
     //选中第一个view
     if (self.slideSwitchViewDelegate && [self.slideSwitchViewDelegate respondsToSelector:@selector(slideSwitchView:didselectTab:)]) {
@@ -170,6 +182,8 @@ static const NSUInteger kTagOfRightSideButton = 999;
         CGSize textSize = [vc.title sizeWithFont:[UIFont systemFontOfSize:kFontSizeOfTabButton]
                                constrainedToSize:CGSizeMake(_topScrollView.bounds.size.width, kHeightOfTopScrollView)
                                    lineBreakMode:NSLineBreakByTruncatingTail];
+        
+        
         //累计每个tab文字的长度
         topScrollViewContentWidth += SCREEN_WIDTH/[_viewArray count];
         //设置按钮尺寸
@@ -180,7 +194,7 @@ static const NSUInteger kTagOfRightSideButton = 999;
         
         [button setTag:i+100];
         if (i == 0) {
-            _shadowImageView.frame = CGRectMake(kWidthOfButtonMargin, 42, SCREEN_WIDTH/[_viewArray count], _shadowImage.size.height);
+            _shadowImageView.frame = CGRectMake(kWidthOfButtonMargin, 42, SCREEN_WIDTH/[_viewArray count], 4);
             button.selected = YES;
         }
         [button setTitle:vc.title forState:UIControlStateNormal];
@@ -199,7 +213,71 @@ static const NSUInteger kTagOfRightSideButton = 999;
     _topScrollView.contentSize = CGSizeMake(topScrollViewContentWidth, kHeightOfTopScrollView);
 }
 
-
+/**
+ *  自定义按键
+ *
+ *  @return <#return value description#>
+ */
+- (void)createStatisticalButtons
+{
+    
+    _shadowImageView = [[UIImageView alloc] init];
+    [_shadowImageView setImage:_shadowImage];
+    [_topScrollView addSubview:_shadowImageView];
+    
+    //顶部tabbar的总长度
+    CGFloat topScrollViewContentWidth = kWidthOfButtonMargin;
+    //每个tab偏移量
+    
+    UIView* bgview = [[UIView alloc] initWithFrame:CGRectMake(kBgWidthTabMargin, 0, SCREEN_WIDTH-2*kBgWidthTabMargin, kHeightOfTopScrollView - 10)];
+    [bgview.layer setMasksToBounds:YES];
+    [bgview.layer setCornerRadius:10.0];
+    [bgview.layer setBorderWidth:1.0];
+    [bgview.layer setBorderColor:[[UIColor whiteColor] CGColor]];
+    
+    
+    CGFloat xOffset = kWidthOfButtonMargin ;
+    for (int i = 0; i < [_viewArray count]; i++) {
+        UIViewController *vc = _viewArray[i];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        CGSize textSize = [vc.title sizeWithFont:[UIFont systemFontOfSize:kFontSizeOfTabButton]
+                               constrainedToSize:CGSizeMake(bgview.bounds.size.width, kHeightOfTopScrollView)
+                                   lineBreakMode:NSLineBreakByTruncatingTail];
+        
+        //累计每个tab文字的长度
+        topScrollViewContentWidth += (SCREEN_WIDTH - 2*kBgWidthTabMargin)/[_viewArray count];
+        //设置按钮尺寸
+        [button setFrame:CGRectMake(xOffset,0,
+                                    (SCREEN_WIDTH - 2*kBgWidthTabMargin)/[_viewArray count], bgview.bounds.size.height)];
+        
+        //计算下一个tab的x偏移量
+        xOffset += (SCREEN_WIDTH - 2*kBgWidthTabMargin)/[_viewArray count];
+        
+        [button setTag:i+100];
+        if (i == 0) {
+            _shadowImageView.frame = CGRectMake(kBgWidthTabMargin, 33, (SCREEN_WIDTH - 2*kBgWidthTabMargin)/[_viewArray count], 10);
+            _shadowImageView.contentMode = UIViewContentModeCenter;
+            button.selected = YES;
+        }
+        [button.layer setMasksToBounds:YES];
+//        [button.layer setCornerRadius:10.0];
+        [button.layer setBorderWidth:1.0];
+        [button.layer setBorderColor:[[UIColor whiteColor] CGColor]];
+        [button setTitle:vc.title forState:UIControlStateNormal];
+        
+        button.titleLabel.font = [UIFont systemFontOfSize:kFontSizeOfTabButton];
+        button.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [button setTitleColor:self.tabItemNormalColor forState:UIControlStateNormal];
+        [button setTitleColor:self.tabItemSelectedColor forState:UIControlStateSelected];
+        [button setBackgroundImage:self.tabItemNormalBackgroundImage forState:UIControlStateNormal];
+        [button setBackgroundImage:self.tabItemSelectedBackgroundImage forState:UIControlStateSelected];
+        [button addTarget:self action:@selector(selectNameButton:) forControlEvents:UIControlEventTouchUpInside];
+        [bgview addSubview:button];
+    }
+    [_topScrollView addSubview:bgview];
+    //设置顶部滚动视图的内容总尺寸
+    _topScrollView.contentSize = CGSizeMake(topScrollViewContentWidth, kHeightOfTopScrollView);
+}
 #pragma mark - 顶部滚动视图逻辑方法
 
 /*!
@@ -229,7 +307,19 @@ static const NSUInteger kTagOfRightSideButton = 999;
         
         [UIView animateWithDuration:0.25 animations:^{
             
-            [_shadowImageView setFrame:CGRectMake(sender.frame.origin.x, 42, sender.frame.size.width, _shadowImage.size.height)];
+            CGFloat y;
+            if (_isNative) {
+                y= 42;
+                [_shadowImageView setFrame:CGRectMake(sender.frame.origin.x, y, sender.frame.size.width, 4)];
+            }
+            else
+            {
+                y = 33;
+                DLog(@"sender.frame = %@",NSStringFromCGRect(sender.frame));
+                _shadowImageView.frame = CGRectMake(sender.frame.origin.x + kBgWidthTabMargin, y, (SCREEN_WIDTH - 2*kBgWidthTabMargin)/[_viewArray count], 10);
+//                _shadowImageView.contentMode = UIViewContentModeCenter;
+            }
+            
             
         } completion:^(BOOL finished) {
             if (finished) {

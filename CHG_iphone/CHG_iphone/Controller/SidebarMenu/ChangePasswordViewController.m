@@ -32,6 +32,10 @@
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.items.count;
@@ -44,13 +48,18 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
-    
+    cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+    title.textColor = UIColorFromRGB(0x323232);
+    title.font = FONT(15);
+    title.text = [self.items objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:title];
+
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
 //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     
     textField.placeholder = [self.items objectAtIndex:indexPath.row]; //默认显示的字
-    
+    textField.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     textField.secureTextEntry = YES; //密码
     
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -66,7 +75,8 @@
         forgetbtn.tag = 100;
         forgetbtn.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
         [forgetbtn setTitle:@"忘记密码" forState:UIControlStateNormal];
-        [forgetbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        forgetbtn.titleLabel.font = FONT(15);
+        [forgetbtn setTitleColor:UIColorFromRGB(0x323232) forState:UIControlStateNormal];
         [forgetbtn addTarget:self action:@selector(ChangePassword:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:forgetbtn];
 
@@ -80,7 +90,10 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
-
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 80;
@@ -97,7 +110,7 @@
     changebtn.tag = 101;
     changebtn.backgroundColor = UIColorFromRGB(0x171c61);
     [changebtn.layer setMasksToBounds:YES];
-    [changebtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
+    [changebtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
     //    [loginout.layer setBorderWidth:1.0]; //边框
     changebtn.frame = CGRectMake(5, 40, SCREEN_WIDTH-10 , 40);
     [changebtn setTitle:@"确认修改" forState:UIControlStateNormal];
@@ -116,8 +129,85 @@
     else if(sender.tag == 101)
     {
         DLog(@"确认修改");
+        [self ConfirmTheChange];
     }
     
+}
+-(void)ConfirmTheChange
+{
+    UITextField* passfield0 = (UITextField*)[self.view viewWithTag:1010];
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1012];
+    NSString* info ;
+    if (passfield0.text.length == 0) {
+        info = @"请输入密码";
+    }
+    else if (passfield0.text.length < 6)
+    {
+        info = @"密码必须大于6位";
+    }
+    else if(passfield1.text.length == 0)
+    {
+        info = @"请确认密码";
+    }
+    else if (passfield1.text.length < 6)
+    {
+        info = @"密码必须大于6位";
+    }
+    else if(passfield2.text.length == 0)
+    {
+        info = @"请确认密码";
+    }
+    else if (passfield2.text.length < 6)
+    {
+        info = @"密码必须大于6位";
+    }
+    else if (![passfield1.text isEqualToString:passfield2.text])
+    {
+        info = @"密码输入不一致";
+    }
+    
+    if (info.length != 0) {
+        
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+    }
+    else
+    {
+        [self httpResetPassWord];
+    }
+    
+    
+}
+-(void)httpResetPassWord
+{
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1012];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:@"924051" forKey:@"checkCode"];
+    [parameter setObject:[NSObject md5:passfield1.text] forKey:@"newpwd"];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:@"100861" forKey:@"checkCode"];
+    [param setObject:passfield1.text forKey:@"newpwd"];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",data,msg);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+            [delegate setupHomePageViewController];
+        }
+        
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>icon</key>
+		<string>member_center.png</string>
+		<key>title</key>
+		<string>会员中心</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string>member_registration.png</string>
+		<key>title</key>
+		<string>会员注册</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string>presell.png</string>
+		<key>title</key>
+		<string>预售</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string>selling_goods.png</string>
+		<key>title</key>
+		<string>卖货</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string>order_management.png</string>
+		<key>title</key>
+		<string>订单管理</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string>statistical_analysis.png</string>
+		<key>title</key>
+		<string>统计分析</string>
+	</dict>
+</array>
+</plist>

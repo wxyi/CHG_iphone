@@ -32,6 +32,7 @@
 }
 -(void)setupView
 {
+    [self httpGetMyAccount];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
@@ -58,10 +59,12 @@
         }
         
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",@"4128.60",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",@"36",@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"可用奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.dictionary[@"awardUsing"] intValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%d",[self.dictionary[@"awardTotal"] intValue]],@"count", nil], nil];
+        cell.RewardsView.backgroundColor = UIColorFromRGB(0xf0f0f0);
+        cell.isMy = YES;
+        [cell setupView:[itme mutableCopy]];
         
-        [cell setupView:itme];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
 //            [weakSelf didSelectRewardsCell:indexPath];
@@ -76,11 +79,21 @@
             cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+//        cell.datelab.text = @"2015-06-15";
+//        cell.statelab.text = @"支出";
+//        cell.namelab.text = @"晨冠以结算";
+//        cell.pricelab.text = @"￥200";
+//        cell.BankCardlab.text = @"工商银行";
+//        cell.CardNumlab.text = @"6210*******79263";
         
+        
+        cell.datelab.text = self.dictionary[@"awardArriveDate"];
+        cell.statelab.text = @"支出";
         cell.namelab.text = @"晨冠以结算";
-        cell.pricelab.text = @"￥200";
-        cell.BankCardlab.text = @"工商银行";
-        cell.CardNumlab.text = @"6210*******79263";
+        cell.pricelab.text = [NSString stringWithFormat:@"%.0f",[self.dictionary[@"awardArrive"] doubleValue]];
+        cell.BankCardlab.text = self.dictionary[@"awardArriveBank"];
+        cell.CardNumlab.text = [NSString stringWithFormat:@"%d",[self.dictionary[@"awardAccount"] intValue]];
+
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -92,9 +105,26 @@
             cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.namelab.text = @"动销奖励";
-        cell.iphonelab.text = @"￥200";
-        cell.iphonelab.textColor = [UIColor orangeColor];
+        
+        if (indexPath.section == 2) {
+            cell.datelab.text = self.dictionary[@"awardSaleAmountDate"];;
+            cell.statelab.text = @"收入";
+            cell.namelab.text = @"动销奖励";
+            cell.iphonelab.text = [NSString stringWithFormat:@"%.0f",[self.dictionary[@"awardSaleAmount"] doubleValue]];
+        }
+        else
+        {
+            cell.datelab.text = self.dictionary[@"awardPartnerAmountDate"];;
+            cell.statelab.text = @"收入";
+            cell.namelab.text = @"销费分账奖励";
+            cell.iphonelab.text = [NSString stringWithFormat:@"%.0f",[self.dictionary[@"awardPartnerAmount"] doubleValue]];
+        }
+        
+        cell.iphonelab.textColor = UIColorFromRGB(0xf5a541);
+        cell.didSkipSubItem = ^(NSInteger tag){
+            
+            [weakSelf goskipdetails];
+        };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -104,22 +134,15 @@
     if (section == 0) {
         return 1;
     }
-    else
+    else if(section == 1)
     {
-        return 35;
+        return 30;
     }
+    return 5;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 30;
-    }
-    else if(section == 1)
-    {
-        return 1;
-    }
-    else
-        return 36;
+    return 1;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -128,66 +151,23 @@
     }
     else if(indexPath.section == 1)
     {
-        return 60;
+        return 90;
     }
     else
-        return 40;
+        return 105;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return nil;
-    }
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    v_header.backgroundColor = [UIColor whiteColor];
-    UILabel* line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
-    line.backgroundColor = [UIColor lightGrayColor];
-    [v_header addSubview:line];
-    UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, SCREEN_WIDTH, 30)];
-    datelab.textAlignment = NSTextAlignmentLeft;
-    datelab.font = FONT(13);
-    datelab.textColor = [UIColor lightGrayColor];
-    datelab.text = @"2015-05-19 10:10:10";
-    [v_header addSubview:datelab];
-    
-    
-    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
-    orderstatus.textAlignment = NSTextAlignmentRight;
-    orderstatus.font = FONT(13);
-    orderstatus.textColor = [UIColor lightGrayColor];
-    orderstatus.text = @"支出";
-    [v_header addSubview:orderstatus];
-    
-    return v_header;
-
-}
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section == 0) {
-        UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-        v_footer.backgroundColor = [UIColor lightGrayColor];
-        UILabel* detaillab = [[UILabel alloc] initWithFrame:v_footer.frame];
+    if (section == 1) {
+        UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
+//        v_header.backgroundColor = UIColorFromRGB(0xdddddd);;
+        UILabel* detaillab = [[UILabel alloc] initWithFrame:v_header.frame];
         detaillab.textAlignment = NSTextAlignmentCenter;
         detaillab.textColor = [UIColor grayColor];
         detaillab.text = @"账户明细";
         detaillab.font = FONT(14);
-        [v_footer addSubview:detaillab];
-        return v_footer;
-    }
-    else if(section == 2||section == 3)
-    {
-        UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
-        v_footer.backgroundColor = [UIColor whiteColor];
-        UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [detailsbtn.layer setMasksToBounds:YES];
-        [detailsbtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
-        [detailsbtn.layer setBorderWidth:1.0]; //边框
-        detailsbtn.frame = CGRectMake(SCREEN_WIDTH-90, 3, 80, 29);
-        [detailsbtn setTitle:@"详情" forState:UIControlStateNormal];
-        [detailsbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [detailsbtn addTarget:self action:@selector(goskipdetails) forControlEvents:UIControlEventTouchUpInside];
-        [v_footer addSubview:detailsbtn];
-        return v_footer;
+        [v_header addSubview:detaillab];
+        return v_header;
     }
     return nil;
 }
@@ -201,6 +181,28 @@
     StoreSalesView.statisticalType = StatisticalTypePinRewards;
     [self.navigationController pushViewController:StoreSalesView animated:YES];
     
+}
+
+-(void)httpGetMyAccount
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+  
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyAccount] parameters:parameter];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",data,msg);
+        [MMProgressHUD dismiss];
+        self.dictionary = data;
+        [self.tableview reloadData];
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

@@ -8,6 +8,7 @@
 
 #import "ResetPasswordViewController.h"
 #import "ResetPasswordCell.h"
+#import "StoreManagementViewController.h"
 @interface ResetPasswordViewController ()
 @property UINib* ResetPasswordNib;
 @end
@@ -26,7 +27,7 @@
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.scrollEnabled = NO;
-    self.tableview.backgroundColor = [UIColor whiteColor];
+//    self.tableview.backgroundColor = [UIColor whiteColor];
     self.ResetPasswordNib = [UINib nibWithNibName:@"ResetPasswordCell" bundle:nil];
 }
 - (void)didReceiveMemoryWarning {
@@ -71,7 +72,7 @@
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
-    v_header.backgroundColor = [UIColor whiteColor];
+    v_header.backgroundColor = [UIColor clearColor];
     UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
     
     imageview.image = [UIImage imageNamed:@"logo.png"];
@@ -83,14 +84,92 @@
 -(void)skipPage:(NSInteger)tag
 {
     if (tag == 100) {
+        UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
+        [passfield1 resignFirstResponder];
+        UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1012];
+        [passfield2 resignFirstResponder];
         DLog(@"确认修改");
-        AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-        [delegate setupHomePageViewController];
-
+        [self ConfirmTheChange];
+        
     }
     
 }
 
+-(void)ConfirmTheChange
+{
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1012];
+    NSString* info ;
+    if (passfield1.text.length == 0) {
+        info = @"请输入密码";
+    }
+    else if (passfield1.text.length < 6)
+    {
+        info = @"密码必须大于6位";
+    }
+    else if(passfield2.text.length == 0)
+    {
+        info = @"请确认密码";
+    }
+    else if (![passfield1.text isEqualToString:passfield2.text])
+    {
+        info = @"密码输入不一致";
+    }
+    
+    if (info.length != 0) {
+    
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+    }
+    else
+    {
+        [self httpResetPassWord];
+    }
+    
+    
+}
+-(void)httpResetPassWord
+{
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:@"924051" forKey:@"checkCode"];
+    [parameter setObject:[NSObject md5:passfield1.text] forKey:@"newpwd"];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:@"100861" forKey:@"checkCode"];
+    [param setObject:passfield1.text forKey:@"newpwd"];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",data,msg);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
+                
+                
+                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+                [self presentViewController:StoreManagementView animated:YES completion:^{
+                    
+                }];
+            }
+            else
+            {
+
+                AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+                [delegate setupHomePageViewController];
+            }
+        }
+        
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
 /*
 #pragma mark - Navigation
 

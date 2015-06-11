@@ -24,6 +24,7 @@ static SUHelper *sSharedInstance;
 //    [ConfigManager sharedInstance].currentBaseVersion = 15;
     DLog(@"systemName:%@",[self deviceString]);
     DLog(@"model:%@",[[UIDevice currentDevice] name]);
+    DLog(@"identifier:%@",[[[UIDevice currentDevice] identifierForVendor] UUIDString]);
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"sysconfig" ofType:@"plist"];
     NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
     [ConfigManager sharedInstance].sysVersion =[dictionary objectForKey:@"clientVersion"];
@@ -36,12 +37,10 @@ static SUHelper *sSharedInstance;
         [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token"];
     }
     DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_URL);
-    DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_TokenUrl);
+    DLog(@"PubServer_Token = %@",[ConfigManager sharedInstance].PubServer_TokenUrl);
     [ConfigManager sharedInstance].deviceName = [self deviceString];
+    [ConfigManager sharedInstance].identifier =  [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     
-    if([self hasUser]){
-        [self httpGetClientConfig];
-    }
     //[[SQLiteManager sharedInstance] test];
     successBlock(YES);
 }
@@ -77,16 +76,42 @@ static SUHelper *sSharedInstance;
     NSLog(@"NOTE: Unknown device type: %@", deviceString);
     return deviceString;
 }
--(BOOL) hasUser{
-    NSString *currentUser = [ConfigManager sharedInstance].currentUserInfo;
-    if(currentUser.length==0){
-        return NO;
-    } else {
-        return YES;
+
+-(UserConfig *) currentUserConfig
+{
+    NSString *usercfg = [ConfigManager sharedInstance].usercfg;
+    if(usercfg.length==0){
+        return nil;
     }
-}
--(void)httpGetClientConfig{
-   
+    NSData *data = [usercfg dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *result = [data objectFromJSONData];
+    UserConfig *Config = [[UserConfig alloc] initWithDictionary:result];
+    return Config;
 }
 
+
+//-(void)httpRequestDate:(NSString*)strUrl parameter:(NSDictionary*)parameter success:(SuccessBlock)SuccessBlock
+//{
+//   
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleFade];
+//    [MMProgressHUD showDeterminateProgressWithTitle:nil status:@""];
+//    [HttpClient asynchronousRequestWithProgress:strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+//        
+//        if (success) {
+//            SuccessBlock(data,msg);
+//            [MMProgressHUD dismiss];
+//        }
+//        else
+//        {
+//            [MMProgressHUD dismissWithError:msg];
+//        }
+//        
+//  
+//       
+//    } failureBlock:^(NSString *description) {
+//        [MMProgressHUD dismissWithError:description];
+//    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+//        
+//    }];
+//}
 @end

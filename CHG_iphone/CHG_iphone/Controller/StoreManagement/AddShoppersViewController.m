@@ -7,16 +7,21 @@
 //
 
 #import "AddShoppersViewController.h"
-#import "NIAttributedLabel.h"
+#import "JTImageLabel.h"
+#import "AddShoppersCell.h"
 @interface AddShoppersViewController ()<UITextFieldDelegate>
-
+@property UINib* AddShoppersNib;
 @end
 
 @implementation AddShoppersViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"添加导购";
+    if (self.PersonnerType == StorePersonnelTypeManager)
+        self.title = @"添加店长";
+    else
+        self.title = @"添加导购";
+    
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -31,6 +36,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
+    self.AddShoppersNib = [UINib nibWithNibName:@"AddShoppersCell" bundle:nil];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -42,29 +48,27 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    AddShoppersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AddShoppersCell"];
+    if(cell==nil){
+        cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        
     }
-    cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
+    cell.namelab.text = [self.items objectAtIndex:indexPath.row];
+    cell.nametext.placeholder = @"必填";
+    cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     
-    UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, SCREEN_WIDTH-100 , 40)];
-    //        [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
-    
-    textField.placeholder = @""; //默认显示的字
-    
-    
-    textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    textField.returnKeyType = UIReturnKeyDone;
-    textField.clearButtonMode = UITextFieldViewModeWhileEditing; //编辑时会出现个修改X
-    
-    textField.delegate = self;
-    [cell.contentView addSubview:textField];
-    
+    if (indexPath.row == 1) {
+        cell.nametext.keyboardType = UIKeyboardTypeNumberPad;
+    }
+//    cell.nametext.text = @"345立水火火";
+/*    if (indexPath.row == 1) {
+        cell.nametext.enabled = YES;
+    }
+    else
+    {
+        cell.nametext.enabled = NO;
+    }
+ */
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -77,11 +81,15 @@
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
     
     UILabel* shopName = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH, 40)];
-    shopName.text = @"门店";
+    shopName.text = @"职务";
     [v_header addSubview:shopName];
     
     UILabel* bossName = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 40)];
-    bossName.text = @"花相似";
+    if (self.PersonnerType == StorePersonnelTypeManager)
+        bossName.text = @"店长";
+    else
+        bossName.text = @"导购";
+    
     bossName.textAlignment = NSTextAlignmentRight;
     [v_header addSubview:bossName];
     return v_header;
@@ -93,29 +101,23 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
-    NIAttributedLabel* label = [[NIAttributedLabel alloc] initWithFrame:CGRectZero];
     
-    // When we assign the text we do not include any markup for the images.
-    label.text = @"确认添加后信息不可修改";
-    
-    label.autoresizingMask = UIViewAutoresizingFlexibleDimensions;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = FONT(14);
-    label.textColor = [UIColor lightGrayColor];
-    label.frame = CGRectInset(self.view.bounds, 40, 0);
-    [label insertImage:[UIImage imageNamed:@"icon_tips_small.png"]
-               atIndex:0
-               margins:UIEdgeInsetsMake(15, 10, 5, 5)];
-    
-    [v_footer addSubview:label];
+    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
+    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+    promptlabel.textLabel.text = @"确认添加后信息不可修改";
+    promptlabel.textLabel.font = FONT(12);
+    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+    promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+//    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+    [v_footer addSubview:promptlabel];
     UIButton* Confirmbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    Confirmbtn.backgroundColor = [UIColor redColor];
+    Confirmbtn.backgroundColor = UIColorFromRGB(0x171c61);
     [Confirmbtn.layer setMasksToBounds:YES];
-    [Confirmbtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
+    [Confirmbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
     //    [loginout.layer setBorderWidth:1.0]; //边框
     Confirmbtn.frame = CGRectMake(5, 40, SCREEN_WIDTH-10 , 40);
     [Confirmbtn setTitle:@"确认添加" forState:UIControlStateNormal];
-    [Confirmbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [Confirmbtn setTitleColor:UIColorFromRGB(0xf0f0f0) forState:UIControlStateNormal];
     [Confirmbtn addTarget:self action:@selector(Confirm) forControlEvents:UIControlEventTouchUpInside];
     [v_footer addSubview:Confirmbtn];
     
@@ -124,6 +126,73 @@
 -(void)Confirm
 {
     DLog(@"确认添加");
+    UITextField* textfield;
+    for (int i = 0; i < 3; i++) {
+        NSInteger tag = [[NSString stringWithFormat:@"101%d",i] intValue];
+        textfield = (UITextField*)[self.view viewWithTag:tag];
+        
+        if (textfield.text.length == 0) {
+            [SGInfoAlert showInfo:@"请完善信息"
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            return;
+        }
+    }
+    [self httpUpdateSeller];
+}
+-(void)httpUpdateSeller
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiUpdateSeller] parameters:parameter];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+//    {"shopId":"1",
+//        "personType":"0",
+
+//        "sellerName":"MsellerName",
+//        "sellerMobile":"15912345678",
+//        "idCardNumber":"667778899"}
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    NSString* personType;
+    if (self.PersonnerType == StorePersonnelTypeManager) {
+        personType = @"1";
+    }
+    else
+    {
+        personType = @"0";
+    }
+    [param setObject:personType forKey:@"personType"];
+    //姓名
+    
+    NSArray* array =  @[@"sellerName", @"sellerMobile", @"idCardNumber"];
+    UITextField* textfield;
+    for (int i = 0; i < array.count; i++) {
+        NSInteger tag = [[NSString stringWithFormat:@"101%d",i] intValue];
+        textfield = (UITextField*)[self.view viewWithTag:tag];
+        [param setObject:textfield.text forKey:[array objectAtIndex:i]];
+    }
+    DLog(@"param = %@",param);
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

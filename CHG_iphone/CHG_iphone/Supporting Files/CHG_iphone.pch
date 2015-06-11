@@ -35,4 +35,10 @@
     #import "SWTableViewCell.h"
     #import <STAlertView/STAlertView.h>
     #import "QRCodeGenerator.h"
+    #import "SGInfoAlert.h"
+    #import "IdentifierValidator.h"
+    #import "CHGNavigationController.h"
+    #import "JSONKit.h"
+    #import "MMProgressHUD.h"
+#define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_
 #endif

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
@@ -24,41 +25,43 @@
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D1-7F-lBC" customClass="RadioButton">
                                 <rect key="frame" x="180" y="110" width="79" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="男宝宝" image="unchecked.png">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="   男宝宝" image="unchecked.png">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="selected" image="checked.png"/>
+                                <state key="selected" title="   男宝宝" image="checked.png"/>
                                 <connections>
                                     <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="PBx-tG-3u7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdC-DX-ljn" customClass="RadioButton">
-                                <rect key="frame" x="50" y="110" width="79" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="女宝宝" image="unchecked.png">
+                                <rect key="frame" x="53" y="110" width="79" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="   女宝宝" image="unchecked.png">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="selected" title="女宝宝" image="checked.png"/>
+                                <state key="selected" title="   女宝宝" image="checked.png"/>
                                 <connections>
                                     <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="V7Y-vT-wex"/>
                                     <outletCollection property="groupButtons" destination="4D1-7F-lBC" id="dgU-Ko-ea8"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                            <userDefinedRuntimeAttribute type="number" keyPath="keyPath">
-                                <integer key="value" value="10"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="4"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="title_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="eQw-NQ-iGH">
+                        <rect key="frame" x="85" y="0.0" width="150" height="40"/>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="宝宝性别" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lew-a3-8Aq">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
-                        <color key="backgroundColor" red="0.0" green="0.25906345749999998" blue="0.5449538934" alpha="1" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -70,6 +73,7 @@
                         </userDefinedRuntimeAttributes>
                     </label>
                 </subviews>
+                <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             </tableViewCellContentView>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <connections>
@@ -83,6 +87,7 @@
     <resources>
         <image name="checked.png" width="24" height="24"/>
         <image name="image1.jpg" width="2200" height="1650"/>
+        <image name="title_bg.png" width="150" height="40"/>
         <image name="unchecked.png" width="24" height="24"/>
     </resources>
 </document>

@@ -10,7 +10,8 @@
 
 @interface MyTableViewCell : UITableViewCell
 @property (nonatomic, copy) AccountBriefSelect didSelectedSubItemAction;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,assign)CGFloat height;
+@property(nonatomic,strong)NSMutableArray* items;
 
--(void)setupView:(NSArray*)items;
+-(void)setupView:(NSMutableArray*)items;
 @end

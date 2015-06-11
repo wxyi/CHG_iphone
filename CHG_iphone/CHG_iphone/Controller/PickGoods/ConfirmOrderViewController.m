@@ -64,7 +64,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 100;
+    return 105;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -74,24 +74,61 @@
     titlelab.textColor = [UIColor lightGrayColor];
     titlelab.textAlignment = NSTextAlignmentCenter;
     [v_footer addSubview:titlelab];
-    UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    detailsbtn.frame = CGRectMake(6, 65, CGRectGetWidth(self.view.bounds)-12, 35);
-    [detailsbtn.layer setMasksToBounds:YES];
-    [detailsbtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
-    [detailsbtn setBackgroundColor:UIColorFromRGB(0x171c61)];
-    [detailsbtn setTitle:@"订单详情" forState:UIControlStateNormal];
-    [detailsbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [detailsbtn addTarget:self action:@selector(detailsbtn) forControlEvents:UIControlEventTouchUpInside];
-    [v_footer addSubview:detailsbtn];
+    
+    if (self.Confirmsaletype == SaleTypeSellingGoods) {
+        UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        detailsbtn.tag = 100;
+        detailsbtn.frame = CGRectMake(6, 65, CGRectGetWidth(self.view.bounds)-12, 40);
+        [detailsbtn.layer setMasksToBounds:YES];
+        [detailsbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
+        [detailsbtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+        [detailsbtn setTitle:@"订单详情" forState:UIControlStateNormal];
+        [detailsbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [detailsbtn addTarget:self action:@selector(detailsbtn:) forControlEvents:UIControlEventTouchUpInside];
+        [v_footer addSubview:detailsbtn];
+
+    }
+    else if (self.Confirmsaletype == SaleTypePresell)
+    {
+        UIButton* Pickupbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        Pickupbtn.frame = CGRectMake(5, 65, (CGRectGetWidth(self.view.bounds)-20)/2, 40);
+        Pickupbtn.tag = 101;
+        [Pickupbtn.layer setMasksToBounds:YES];
+        [Pickupbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
+        [Pickupbtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+        [Pickupbtn setTitle:@"提货" forState:UIControlStateNormal];
+        [Pickupbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [Pickupbtn addTarget:self action:@selector(detailsbtn:) forControlEvents:UIControlEventTouchUpInside];
+        [v_footer addSubview:Pickupbtn];
+        
+        UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        detailsbtn.frame = CGRectMake(165, 65, (CGRectGetWidth(self.view.bounds)-20)/2, 40);
+        [detailsbtn.layer setMasksToBounds:YES];
+        [detailsbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
+        [detailsbtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+        [detailsbtn setTitle:@"订单详情" forState:UIControlStateNormal];
+        [detailsbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [detailsbtn addTarget:self action:@selector(detailsbtn:) forControlEvents:UIControlEventTouchUpInside];
+        [v_footer addSubview:detailsbtn];
+    }
     
     return v_footer;
 }
 
--(void)detailsbtn
+-(void)detailsbtn:(UIButton*)sender
 {
-    DLog(@"订单详情");
-    PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-    [self.navigationController pushViewController:PickGoodsView animated:YES];
+    if (sender.tag == 100) {
+        DLog(@"订单详情");
+        PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+        [self.navigationController pushViewController:PickGoodsView animated:YES];
+    }
+    else if(sender.tag == 101)
+    {
+        DLog(@"提货");
+        
+    }
+    
+    
 }
 /*
 #pragma mark - Navigation

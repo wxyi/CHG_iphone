@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface GrowthCell : BaseCell
+@property(nonatomic,weak)IBOutlet UILabel* datelab;
+@property(nonatomic,weak)IBOutlet UILabel* statelab;
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
 @property(nonatomic,weak)IBOutlet UILabel* iphonelab;
+
+-(IBAction)skipdetails:(UIButton*)sender;
 @end

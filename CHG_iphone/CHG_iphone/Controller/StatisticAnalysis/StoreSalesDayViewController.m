@@ -12,6 +12,7 @@
 #import "pinCell.h"
 #import "GrowthCell.h"
 #import "PartnersCell.h"
+#import "MembegrowthCell.h"
 @interface StoreSalesDayViewController ()
 @property UINib* StatisticAnalysisTopNib;
 @property UINib* StoresInfoNib;
@@ -47,7 +48,8 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    DLog(@"self.items.count = %d",self.items.count);
+    return self.items.count + 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -62,7 +64,7 @@
             
         }
         cell.nameLab.text = self.strtitle;
-        cell.pricelab.text = @"900";
+        cell.pricelab.text = [NSString stringWithFormat:@"%d",self.custCount];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -77,20 +79,27 @@
                     cell = (StoresInfoCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                     
                 }
-                cell.namelab.text = @"王俊";
-                cell.producerlab.text = @"王俊";
-                cell.pricelab.text =@"$135";
+                NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section - 1];
+                DLog(@"%@",dictionary);
+                cell.datelab.text = dictionary[@"orderDate"];
+                cell.statelab.text = [NSString stringWithFormat:@"订单编号:%d",[dictionary[@"orderCode"] intValue]];
+                cell.namelab.text = [NSString stringWithFormat:@"%d",[dictionary[@"custName"] intValue]];
+                cell.producerlab.text = [NSString stringWithFormat:@"订单制作:%d",[dictionary[@"orderCreater"] intValue]];
+                cell.pricelab.text = [NSString stringWithFormat:@"￥%d",[dictionary[@"orderAmount"] intValue]];
                 [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                 return cell;
                 break;
             }
             case StatisticalTypeMembershipGrowth:
             {
-                GrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
+                MembegrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
                 if(cell==nil){
-                    cell = (GrowthCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                    cell = (MembegrowthCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                     
                 }
+                cell.datelab.text = @"2015年05月19日 10:10:10";
+                cell.statelab.text = @"门店APP";
+                
                 cell.namelab.text = @"王俊";
                 cell.iphonelab.text = @"13382050875";
                 [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -104,6 +113,8 @@
                     cell = (pinCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                     
                 }
+                cell.datelab.text = @"2015年05月19日 10:10:10";;
+                cell.statelab.text = @"订单编号:952712345";
                 cell.pricelab.text = @"$100";
                 [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                 return cell;
@@ -116,6 +127,8 @@
                     cell = (PartnersCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                     
                 }
+                cell.datelab.text = @"2015年05月19日 10:10:10";
+                cell.statelab.text = @"订单编号:952712345";
                 cell.namelab.text = @"王俊";
                 cell.pricelab.text = @"$100";
                 [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -143,69 +156,15 @@
     }
     else
     {
-        return 30;
+        return 5;
     }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
-    return 35;
+    return 0.5;
+    
 }
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return nil;
-    }
-    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
-    v_footer.backgroundColor = [UIColor whiteColor];
-    
-    
-    UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [detailsbtn.layer setMasksToBounds:YES];
-    [detailsbtn.layer setCornerRadius:10.0]; //设置矩形四个圆角半径
-    [detailsbtn.layer setBorderWidth:1.0]; //边框
-    detailsbtn.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 30);
-    [detailsbtn setTitle:@"详情" forState:UIControlStateNormal];
-    [detailsbtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [detailsbtn addTarget:self action:@selector(goskipdetails) forControlEvents:UIControlEventTouchUpInside];
-    [v_footer addSubview:detailsbtn];
-    
-    return v_footer;
-}
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return nil;
-    }
-    
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    
-    v_header.backgroundColor = [UIColor whiteColor];
-    
-    UILabel* line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
-    line.backgroundColor = [UIColor lightGrayColor];
-    [v_header addSubview:line];
-    
-    UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, SCREEN_WIDTH-20, 25)];
-    datelab.textAlignment = NSTextAlignmentLeft;
-    datelab.font = FONT(13);
-    datelab.textColor = [UIColor lightGrayColor];
-    datelab.text = @"2015-05-19 10:10:10";
-    [v_header addSubview:datelab];
-    
-    
-    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, SCREEN_WIDTH-20, 25)];
-    orderstatus.textAlignment = NSTextAlignmentRight;
-    orderstatus.font = FONT(13);
-    orderstatus.textColor = [UIColor lightGrayColor];
-    orderstatus.text = @"订单编号:952712345";
-    [v_header addSubview:orderstatus];
-    
-    
-    return v_header;
-}
+
 -(void)goskipdetails
 {
     
@@ -216,39 +175,73 @@
 }
 -(void)PageInfo
 {
+    NSString* strUrl;
+   
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:@"2015" forKey:@"year"];
+    [parameter setObject:@"5" forKey:@"month"];
+    [parameter setObject:@"18" forKey:@"day"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
             self.strtitle = @"今日销售额(元)";
-            self.width = 60;
+            self.width = 120;
             self.strNibName = @"StoresInfoCell";
+            
+            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfDay] parameters:parameter];
             break;
         }
         case StatisticalTypeMembershipGrowth:
         {
             self.strtitle = @"今日新增会员(人)";
-            self.width = 40;
-            self.strNibName = @"GrowthCell";
+            self.width = 75;
+            self.strNibName = @"MembegrowthCell";
+            
+            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfDay] parameters:parameter];
             break;
         }
         case StatisticalTypePinRewards:
         {
             self.strtitle = @"今日动销奖励(元)";
-            self.width = 40;
+            self.width = 100;
             self.strNibName = @"pinCell";
+            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfDay] parameters:parameter];
             break;
         }
         case StatisticalTypePartnersRewards:
         {
             self.strtitle = @"今日合作商消费账奖励(元)";
-            self.width = 60;
+            self.width = 120;
             self.strNibName = @"PartnersCell";
+            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfDay] parameters:parameter];
             break;
         }
         default:
             break;
     }
 
+    [self httpGetStatisticAnalysis:strUrl];
+}
+
+-(void)httpGetStatisticAnalysis:(NSString*)strurl
+{
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        [MMProgressHUD dismiss];
+        DLog(@"data = %@",data);
+        self.custCount = [data[@"custCount"] intValue];
+        self.items = [data objectForKey:@"custList"];
+        [self.tableview reloadData];
+        
+    } failureBlock:^(NSString *description) {
+        
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

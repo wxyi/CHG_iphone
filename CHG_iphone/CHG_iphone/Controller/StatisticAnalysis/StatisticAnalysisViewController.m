@@ -33,7 +33,10 @@
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
-
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.items.count;
@@ -46,11 +49,20 @@
     if (cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-
+    cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+    title.textColor = UIColorFromRGB(0x323232);
+    title.font = FONT(15);
+    title.text = [self.items objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:title];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
+    
     return cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

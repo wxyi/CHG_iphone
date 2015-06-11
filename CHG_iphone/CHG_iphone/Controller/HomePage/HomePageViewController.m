@@ -22,6 +22,7 @@
 #import "PresellGoodsViewController.h"
 #import "StatisticAnalysisViewController.h"
 #import "StopViewController.h"
+#import "IdentificationViewController.h"
 @interface HomePageViewController ()
 @property UINib* PromoListNib;
 @property UINib* AccountBriefNib;
@@ -37,7 +38,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"首页";
-    self.navigationController.navigationBar.barTintColor = UIColorFromRGB(0x171c61);
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+//    self.navigationController.navigationBar.barTintColor = UIColorFromRGB(0x171c61);
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"bgnav.png"] forBarMetrics:UIBarMetricsDefault];
+    
+//    self.navigationController.navigationBar.layer.contents = (id)[NSObject createImageWithColor:UIColorFromRGB(0x171c61)].CGImage;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_btn.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(showMenu)];
     
     [self setupView];
@@ -45,6 +52,11 @@
 
 -(void)setupView
 {
+    
+    self.menuArr = [[NSMutableArray alloc] init];
+    self.menuArr = [self GetMenuArr];
+    [self httpGetPromoList];
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -78,7 +90,7 @@
     if (indexPath.row == 0) {
 
         if (self.listcell == nil) {
-            CGRect rect= CGRectMake(0, -10, SCREEN_WIDTH, 120);
+            CGRect rect= CGRectMake(0, -10, SCREEN_WIDTH, 128);
             self.listcell=[[PromoListCell  alloc]initWithFrame:rect homeNews:self.pagearray];
         }
         
@@ -96,11 +108,15 @@
             cell = (AccountBriefCell*)[[self.AccountBriefNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+        
+        
+        
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",@"36 ",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",@"36 ",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员",@"title",@"36 ",@"count", nil], nil];
-        [cell setupView:itme];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKey:@"custTotalCount"] intValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKey:@"custMonthCount"] intValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKey:@"custDayCount"] intValue]],@"count", nil], nil];
+        
+        [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             
               DLog(@"row = %ld",(long)indexPath.row);
@@ -118,8 +134,8 @@
             
         }
 //        cell.backgroundColor = UIColorFromRGB(0x646464);
-        cell.nameLab.text = @"奖励总额";
-        cell.amountLab.text = @"5795.53";
+        cell.nameLab.text = @"奖励总额(元)";
+        cell.amountLab.text = [self.AccountBriefDict objectForKey:@"awardTotalAmount"];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -132,10 +148,10 @@
         }
 
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",@"4128.60",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",@"36",@"count", nil], nil];
-        cell.RewardsView.backgroundColor = UIColorFromRGB(0x878787);
-        [cell setupView:itme];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[self.AccountBriefDict objectForKey:@"awardSaleAmount"],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",[self.AccountBriefDict objectForKey:@"awardPartnerAmount"],@"count", nil], nil];
+
+        [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
             [weakSelf didSelectRewardsCell:indexPath];
@@ -151,17 +167,11 @@
             
         }
 
-        NSArray* items = [NSArray arrayWithObjects:
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"member_center.png",@"icon",@"会员中心",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"member_registration.png",@"icon",@"会员注册",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"selling_goods.png",@"icon",@"卖货",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"order_management.png",@"icon",@"订单管理",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"statistical_analysis.png",@"icon",@"统计分析",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"store_management.png",@"icon",@"门店管理",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
-                      [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],nil];
-        [cell setupView:items];
+
+        
+        cell.height = self.menuArr.count/3 * 105;
+        [cell setupView:self.menuArr];
+        
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
             [weakSelf didSelectMenuCell:indexPath];
@@ -174,16 +184,16 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return 120;
+        return 128;
     }
     else if(indexPath.row == 1)
-        return 50;
+        return 48;
     else if(indexPath.row == 2)
         return 100;
     else if (indexPath.row == 3)
         return 75;
     else
-        return SCREEN_WIDTH;
+        return self.menuArr.count/3 * 105;
 }
 
 -(void)didSelectAccountBriefCell:(NSIndexPath*)indexPath
@@ -265,8 +275,11 @@
         {
             DLog(@"订单管理");
             
-            OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            [self.navigationController pushViewController:OrderManagementView animated:YES];
+            IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
+            IdentificationView.m_MenuType = MenuTypeOrderManagement;
+            [self.navigationController pushViewController:IdentificationView animated:YES];
+            
+            
             break;
         }
         case 5:
@@ -288,6 +301,83 @@
         default:
             break;
     }
+}
+
+-(void)httpGetPromoList
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
+//    [NSString stringWithFormat:@"%d"]
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetPromoList] parameters:parameter];
+    
+    
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        
+        self.pagearray = data;
+        [self httpGetAccountBrief];
+        
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+    
+}
+-(void)httpGetAccountBrief
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetAccountBrief] parameters:parameter];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        self.AccountBriefDict = data;
+
+        for (int i = 1; i < 4; i ++ ) {
+            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:i inSection:0];
+            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        
+        [MMProgressHUD dismiss];
+        DLog(@"self.AccountBriefDict = %@",self.AccountBriefDict);
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
+
+-(NSMutableArray*) GetMenuArr
+{
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"sysmenu" ofType:@"plist"];
+    NSMutableArray *menuArr = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
+    
+    UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
+    
+    if ([cfg.Roles isEqualToString:@"SHOP_OWNER"]) {
+        [menuArr addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"store_management.png",@"icon",@"门店管理",@"title", nil]];
+    }
+    
+    
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil];
+    if (menuArr.count%3 == 1) {
+        [menuArr addObject:dict];
+        [menuArr addObject:dict];
+    }
+    else if(menuArr.count%3 == 2)
+    {
+        [menuArr addObject:dict];
+    }
+    
+    return menuArr;
 }
 /*
 #pragma mark - Navigation

@@ -19,6 +19,8 @@
 + (UIImage*) createImageWithColor: (UIColor*) color;
 
 + (NSString *)md5:(NSString *)str;
+
++ (NSMutableString *)URLWithBaseString:(NSString *)baseString parameters:(NSDictionary *)parameters;
 /*
 //转千分位
 -(NSString*)toThousand:(NSString*) strnormal;

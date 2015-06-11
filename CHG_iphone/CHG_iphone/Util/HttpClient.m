@@ -12,11 +12,12 @@
 
 +(void)asynchronousRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
 {
+    
     url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     DLog(@"url = %@",url);
     NSError *error;
     AFHTTPRequestSerializer *requestSerializer=[[AFHTTPRequestSerializer alloc] init];
-    NSMutableURLRequest *request=[requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error:&error];
+    NSMutableURLRequest *request=[requestSerializer requestWithMethod:@"GET" URLString:url parameters:parameters error:&error];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
     
@@ -26,11 +27,7 @@
         return nil;
     }];
     
-//    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, NSInteger totalBytesRead, NSInteger totalBytesExpectedToRead) {
-//        if(progressBlock){
-//            progressBlock(bytesRead,totalBytesRead,totalBytesExpectedToRead);
-//        }
-//    }];
+
     [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         progressBlock(bytesRead,totalBytesRead,totalBytesExpectedToRead);
     }];
@@ -38,10 +35,11 @@
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error;
         NSDictionary *json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
+        DLog(@"json = %@",json);
         if(!error){
 //            successBlock(YES,json,@"");
-            if([json objectForKey:@"code"] &&[[[json objectForKey:@"code"] substringFromIndex:2]  intValue]==1){
-                successBlock(YES,[json objectForKey:@"data"],@"");
+            if([json objectForKey:@"code"] &&[[json objectForKey:@"code"]  intValue]==200){
+                successBlock(YES,[json objectForKey:@"datas"],@"");
             }else{
                 successBlock(NO,nil,[json objectForKey:@"msg"]);
             }
@@ -53,6 +51,7 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
+        DLog(@"error = %@",error);
         failureBlock(error.localizedDescription);
         
     }];
@@ -112,8 +111,11 @@
 }
 +(void)asynchronousCommonJsonRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
 {
+    
     NSError *error;
-    AFHTTPRequestSerializer *requestSerializer=[[AFHTTPRequestSerializer alloc] init];
+    AFJSONRequestSerializer *requestSerializer=[[AFJSONRequestSerializer alloc] init];
+
+    
     NSMutableURLRequest *request=[requestSerializer requestWithMethod:@"POST" URLString:url parameters:parameters error:&error];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
@@ -141,8 +143,9 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
+        DLog(@"error = %@",error)
         failureBlock(error.localizedDescription);
-        
+    
     }];
     [operation start];
 }
@@ -178,5 +181,24 @@
         failureBlock(error.localizedDescription);
     }];
     [operation start];
+}
+
+
+//+(void)asynchronousRequestPostWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(void (^)(NSURL *))successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
+//{
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//    NSDictionary *parameters = @{@"foo": @"bar"};
+//    [manager POST:@"http://example.com/resources.json" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSLog(@"JSON: %@", responseObject);
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+//}
++(void)inithttps{
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy defaultPolicy];
+
+    securityPolicy.allowInvalidCertificates = YES;
+    [AFHTTPRequestOperationManager manager].securityPolicy = securityPolicy;
+
 }
 @end

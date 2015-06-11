@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface StoreManagementCell : UITableViewCell
+@interface StoreManagementCell : BaseCell
 @property(nonatomic,weak)IBOutlet UIImageView* icon;
-@property(nonatomic,weak)IBOutlet UILabel* clerkName;
-@property(nonatomic,weak)IBOutlet UILabel* clerktype;
-@property(nonatomic,weak)IBOutlet UILabel* clerkiphone;
+
+@property(nonatomic,weak)IBOutlet UILabel* nameAndIphonelab;
+@property(nonatomic,weak)IBOutlet UILabel* positionlab;
 @property(nonatomic,weak)IBOutlet UIImageView* sconImage;
+-(IBAction)showQrcode:(UIButton*)sender;
 @end

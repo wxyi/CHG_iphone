@@ -8,8 +8,9 @@
 
 #import "BankCardViewController.h"
 #import "BanKCardCell.h"
-#import "AddBankCardTableViewController.h"
+//#import "AddBankCardTableViewController.h"
 #import "BankCardDetailsViewController.h"
+#import "addBankCardViewController.h"
 @interface BankCardViewController ()
 @property UINib* BanKCardNib;
 @end
@@ -32,20 +33,19 @@
 
 -(void)setupView
 {
+    self.items = [[NSMutableArray alloc] init];
+    [self httpGetBankCardList];
     self.title = @"银行卡";
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled= NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.BanKCardNib = [UINib nibWithNibName:@"BanKCardCell" bundle:nil];
-    self.isEmpty = NO;
-    if (self.isEmpty) {
-        self.tableview.hidden = YES;
-    }
 }
 -(IBAction)addBankCard:(id)sender{
     DLog(@"填加银行卡");
     
-    AddBankCardTableViewController* AddBankCardView = [[AddBankCardTableViewController alloc] initWithNibName:@"AddBankCardTableViewController" bundle:nil];
+    addBankCardViewController* AddBankCardView = [[addBankCardViewController alloc] initWithNibName:@"addBankCardViewController" bundle:nil];
     [self.navigationController pushViewController:AddBankCardView animated:YES];
 }
 
@@ -55,7 +55,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return self.items.count;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -67,17 +67,21 @@
         
         
         [rightUtilityButtons sw_addUtilityButtonWithColor:
-         [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
+         [UIColor whiteColor]
                                                  icon:[UIImage imageNamed:@"left_slide_delete.png"]];
         [cell setRightUtilityButtons:rightUtilityButtons WithButtonWidth:60.0f];
         cell.delegate = self;
 
         
     }
-    cell.BankImage.image = [UIImage imageNamed:@"image1.jpg"];
-    cell.BankNameLab.text = @"工商银行";
-    cell.CardTypeLab.text = @"信用卡";
-    cell.tailNumLab.text = @"9527";
+    
+    NSDictionary* dict = [self.items objectAtIndex:indexPath.row];
+    [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+    cell.BankNameLab.text = dict[@"bankCode"];
+    cell.CardTypeLab.text = dict[@"cardType"];
+    
+    NSString* numlab = dict[@"cardNumber"];
+    cell.tailNumLab.text = [numlab substringFromIndex:numlab.length - 4];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -87,7 +91,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 63;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -106,6 +110,15 @@
                 
             } otherButtonBlock:^{
                 DLog(@"是");
+                
+                // Delete button was pressed
+                NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];
+                
+                [self.items removeObjectAtIndex:cellIndexPath.row];
+                [self.tableview deleteRowsAtIndexPaths:@[cellIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
+                
+                self.tableview.hidden = YES;
+                self.addbtn.hidden = NO;
                 
             }];
             
@@ -140,6 +153,38 @@
     }
     
     return YES;
+}
+
+-(void)httpGetBankCardList
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    
+    [ConfigManager sharedInstance].access_token = @"5cc21d49-67a0-40c4-9e92-abfd1cf015da";
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetBankCardList] parameters:parameter];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@,msg = %@",data,msg);
+        
+        
+        if (data == nil) {
+            self.tableview.hidden = YES;
+            self.addbtn.hidden = NO;
+        }
+        else
+        {
+            [self.items addObject:data];
+            self.tableview.hidden = NO;
+            self.addbtn.hidden = YES;
+            [self.tableview reloadData];
+        }
+
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

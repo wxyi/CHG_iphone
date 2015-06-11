@@ -80,8 +80,9 @@
     [v_header addSubview:logoimage];
     
 
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 35)];
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 90, SCREEN_WIDTH, 35)];
     title.text = @"晨冠";
+    title.textColor = UIColorFromRGB(0x323232);
     title.textAlignment = NSTextAlignmentCenter;
     [v_header addSubview:title];
     return v_header;
@@ -91,6 +92,7 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 35)];
     title.text = @"客服务热线:400-8008-404";
+    title.textColor = UIColorFromRGB(0x323232);
     title.textAlignment = NSTextAlignmentCenter;
     [v_footer addSubview:title];
     return v_footer;

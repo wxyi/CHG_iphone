@@ -19,4 +19,6 @@
 //+(void)asynchronousDownLoadFileWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(void (^)(NSURL* filePath))successBlock failureBlock:(void (^)(NSString *description))failureBlock;
 
 +(void)asynchronousDownLoadFileWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(void (^)(NSURL* filePath))successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock;
+
++ (void)inithttps;
 @end

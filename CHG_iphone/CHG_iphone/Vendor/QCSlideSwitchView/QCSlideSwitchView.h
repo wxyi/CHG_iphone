@@ -49,7 +49,8 @@
 @property (nonatomic, strong) UIImage *shadowImage;
 @property (nonatomic, strong) NSMutableArray *viewArray;
 @property (nonatomic, strong) IBOutlet UIButton *rigthSideButton;
-
+@property (nonatomic, assign) BOOL isNative;//是否为原生控件
+- (void)selectNameButton:(UIButton *)sender;
 /*!
  * @method 创建子视图UI
  * @abstract

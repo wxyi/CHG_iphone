@@ -19,5 +19,10 @@
 
     // Configure the view for the selected state
 }
-
+-(IBAction)skipdetails:(UIButton*)sender
+{
+    if (self.didSkipSubItem) {
+        self.didSkipSubItem(sender.tag);
+    }
+}
 @end

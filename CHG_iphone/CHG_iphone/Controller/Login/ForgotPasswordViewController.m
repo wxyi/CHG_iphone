@@ -27,7 +27,7 @@
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.scrollEnabled = NO;
-    self.tableview.backgroundColor = [UIColor whiteColor];
+//    self.tableview.backgroundColor = [UIColor whiteColor];
     self.ForgotPasswordNib = [UINib nibWithNibName:@"ForgotPasswordCell" bundle:nil];
 }
 - (void)didReceiveMemoryWarning {
@@ -71,7 +71,7 @@
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
-    v_header.backgroundColor = [UIColor whiteColor];
+    v_header.backgroundColor = [UIColor clearColor];
     UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
     
     imageview.image = [UIImage imageNamed:@"logo.png"];
@@ -84,7 +84,7 @@
 {
     if (tag == 100) {
         DLog(@"点击获取");
-        
+//        [self httpGetCheckCode];
     }
     else if(tag == 101)
     {
@@ -97,7 +97,52 @@
     }
     
 }
-
+-(void)LoginAccount
+{
+    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* passfield = (UITextField*)[self.view viewWithTag:1012];
+    NSString* info ;
+    if (namefield.text.length == 0) {
+        info = @"请输入手机号码";
+    }
+    else if (![IdentifierValidator isValid:IdentifierTypePhone value:namefield.text ])
+    {
+        info = @"手机格式不正确";
+    }
+    else if(passfield.text.length == 0)
+    {
+        info = @"请输入验证码";
+    }
+    else if (passfield.text.length > 6)
+    {
+        info = @"验证码不能大于6位";
+    }
+    
+    if (info.length != 0) {
+        
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+    }
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:@"password" forKey:@"grant_type"];
+    [parameter setObject:@"admin" forKey:@"username"];
+    [parameter setObject:[[NSObject md5:@"admin"] uppercaseString] forKey:@"password"];
+    [parameter setObject:@"app" forKey:@"client_id"];
+    [parameter setObject:@"appSecret" forKey:@"client_secret"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOauthToken] parameters:parameter];
+    
+    //    url = @"https://27.115.74.138:8443/chg/oauth/token?grant_type=password&username=admin&password=21232F297A57A5A743894A0E4A801FC3&client_id=app&client_secret=appSecret";
+    DLog(@"url = %@",url);
+//    [self httpLoadData:url];
+    
+    return ;
+    
+}
 
 /*
 #pragma mark - Navigation

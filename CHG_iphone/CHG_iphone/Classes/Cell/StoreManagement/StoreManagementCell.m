@@ -19,5 +19,11 @@
 
     // Configure the view for the selected state
 }
-
+-(IBAction)showQrcode:(UIButton*)sender
+{
+    DLog(@"二维码显示");
+    if (self.didSkipSubItem) {
+        self.didSkipSubItem(sender.tag);
+    }
+}
 @end

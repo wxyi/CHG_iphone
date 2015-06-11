@@ -10,6 +10,7 @@
 #import "PickGoodsViewController.h"
 #import "PresellGoodsViewController.h"
 #import "GoodsDetailsViewController.h"
+#import "DidPickGoodsViewController.h"
 @interface OrderManagementViewController ()
 
 @end
@@ -22,20 +23,31 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+//    btn_serch_hl@2x.png
+//    btn_serch@2x.png
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
     
 }
-
+-(void)skipPage
+{
+    DLog(@"搜索");
+//    OrderQueryViewController* OrderQueryView = [[OrderQueryViewController alloc] initWithNibName:@"OrderQueryViewController" bundle:nil];
+//    [self.navigationController pushViewController:OrderQueryView animated:YES];
+}
 -(void)setupView
 {
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     //    self.slideSwitchView.frame = self.view.bounds;
     
     //    self.slideSwitchView.frame = self.view.bounds;
-    self.slideSwitchView.tabItemNormalColor = [QCSlideSwitchView colorFromHexRGB:@"000000"];
-    self.slideSwitchView.tabItemSelectedColor = [QCSlideSwitchView colorFromHexRGB:@"ee85ec"];
-    self.slideSwitchView.shadowImage = [[NSObject createImageWithColor:[UIColor blueColor]]
+    self.slideSwitchView.backgroundColor = [QCSlideSwitchView colorFromHexRGB:@"f0f0f0"];
+    self.slideSwitchView.tabItemNormalColor = [QCSlideSwitchView colorFromHexRGB:@"878787"];
+    self.slideSwitchView.tabItemSelectedColor = [QCSlideSwitchView colorFromHexRGB:@"171c61"];
+    self.slideSwitchView.shadowImage = [[NSObject createImageWithColor:[QCSlideSwitchView colorFromHexRGB:@"171c61"]]
                                         stretchableImageWithLeftCapWidth:SCREEN_WIDTH/3 topCapHeight:0.0f];
     
     
@@ -109,8 +121,9 @@
         
     };
     self.OutstandingOrdersView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        DidPickGoodsViewController* GoodsDetailsView =[[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
         [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+        
     };
     
     

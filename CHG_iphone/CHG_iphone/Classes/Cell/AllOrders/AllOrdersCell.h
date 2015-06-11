@@ -11,4 +11,5 @@
 @interface AllOrdersCell : MyTableViewCell<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* allitems;
+@property(nonatomic,assign)CGFloat height;
 @end

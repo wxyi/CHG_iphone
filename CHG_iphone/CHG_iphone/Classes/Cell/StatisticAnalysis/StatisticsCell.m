@@ -12,12 +12,14 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    
+    
+    self.bottomview = [[UIView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH -20, 30)];
+    self.bottomview.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    [self addSubview:self.bottomview];
+    
     self.bgview = [[UIView alloc] initWithFrame:CGRectZero];
-    [self addSubview:self.bgview];
-    
-    
-
-    
+    [self.bottomview addSubview:self.bgview];
     
 }
 
@@ -26,13 +28,13 @@
 
     // Configure the view for the selected state
 }
--(void)setStatistics:(NSString*)date number:(NSString*)number
+-(void)setStatistics:(NSString*)date number:(NSInteger)number
 {
     CGRect frame = self.bgview.frame;
     frame.size.width = 160;
-    frame.origin.x = 10;
+    frame.origin.x = 0;
     frame.size.height = 30;
-    frame.size.width += [number intValue];
+    frame.size.width += number;
     self.bgview.frame = frame;
     self.bgview.backgroundColor = [UIColor grayColor];
     
@@ -46,7 +48,7 @@
     self.numlab = [[UILabel alloc] initWithFrame:frame];
     self.numlab.textAlignment = NSTextAlignmentRight;
     self.numlab.font = FONT(12);
-    self.numlab.text = number;
+    self.numlab.text = [NSString stringWithFormat:@"%d",number];
     [self.bgview addSubview:self.numlab];
     
 }

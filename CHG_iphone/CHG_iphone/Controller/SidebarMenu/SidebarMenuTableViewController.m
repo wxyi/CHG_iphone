@@ -21,16 +21,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    self.tableView.backgroundColor = UIColorFromRGB(0xdddddd);
     
-    self.tableView.separatorColor = [UIColor colorWithRed:150/255.0f green:161/255.0f blue:177/255.0f alpha:1.0f];
+   // self.tableView.separatorColor = [UIColor colorWithRed:150/255.0f green:161/255.0f blue:177/255.0f alpha:1.0f];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.opaque = NO;
+    self.tableView.scrollEnabled = NO;
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+   
+//    self.tableView.opaque = NO;
+    
     [NSObject setExtraCellLineHidden:self.tableView];
-    self.tableView.backgroundColor = [UIColor clearColor];
+//    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.tableHeaderView = ({
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 184.0f)];
-        view.backgroundColor = [UIColor grayColor];
+        
+        view.backgroundColor = UIColorFromRGB(0x171c61);
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 100, 100)];
         imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         imageView.image = [UIImage imageNamed:@"avatar.jpg"];
@@ -44,7 +50,7 @@
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
         label.text = @"神仙小武子";
-        label.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        label.font = FONT(14);
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor whiteColor];
         [label sizeToFit];
@@ -59,39 +65,11 @@
 #pragma mark -
 #pragma mark UITableView Delegate
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor colorWithRed:62/255.0f green:68/255.0f blue:75/255.0f alpha:1.0f];
-    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
-}
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)sectionIndex
-{
-    if (sectionIndex == 0)
-        return nil;
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 34)];
-    view.backgroundColor = [UIColor colorWithRed:167/255.0f green:167/255.0f blue:167/255.0f alpha:0.6f];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 8, 0, 0)];
-    label.text = @"Friends Online";
-    label.font = [UIFont systemFontOfSize:15];
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor clearColor];
-    [label sizeToFit];
-    [view addSubview:label];
-    
-    return view;
-}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)sectionIndex
-{
-    if (sectionIndex == 0)
-        return 0;
-    
-    return 34;
-}
+
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -136,7 +114,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 54;
+    return 40;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -158,16 +136,38 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    NSArray *titles = @[@"基本信息", @"银行卡", @"我的账户", @"设置"];
+    cell.textLabel.text = titles[indexPath.row];
+    cell.textLabel.textColor = UIColorFromRGB(0x646464);
+    cell.textLabel.font = FONT(16);
     
-    if (indexPath.section == 0) {
-        NSArray *titles = @[@"基本信息", @"银行卡", @"我的账户", @"设置"];
-        cell.textLabel.text = titles[indexPath.row];
-    } else {
-        NSArray *titles = @[@"John Appleseed", @"John Doe", @"Test User"];
-        cell.textLabel.text = titles[indexPath.row];
+    
+    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    return cell;
+}
+-(void)viewDidLayoutSubviews
+{
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableView setSeparatorInset:UIEdgeInsetsMake(0,0,0,0)];
     }
     
-    return cell;
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableView setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
+    }
+}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+
 }
 
 @end

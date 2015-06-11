@@ -29,12 +29,15 @@
 {
     self.title = [self pagetitle];
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
+    self.slideSwitchView.backgroundColor = UIColorFromRGB(0x171c61);
     //    self.slideSwitchView.frame = self.view.bounds;
-    
+    self.slideSwitchView.isNative = NO;
     //    self.slideSwitchView.frame = self.view.bounds;
-    self.slideSwitchView.tabItemNormalColor = [QCSlideSwitchView colorFromHexRGB:@"000000"];
-    self.slideSwitchView.tabItemSelectedColor = [QCSlideSwitchView colorFromHexRGB:@"ee85ec"];
-    self.slideSwitchView.shadowImage = [[NSObject createImageWithColor:[UIColor blueColor]]
+    self.slideSwitchView.tabItemNormalColor = [QCSlideSwitchView colorFromHexRGB:@"f0f0f0"];
+    self.slideSwitchView.tabItemSelectedColor = [QCSlideSwitchView colorFromHexRGB:@"171c61"];
+    self.slideSwitchView.tabItemNormalBackgroundImage = [NSObject createImageWithColor:[QCSlideSwitchView colorFromHexRGB:@"171c61"]];
+    self.slideSwitchView.tabItemSelectedBackgroundImage = [NSObject createImageWithColor:[QCSlideSwitchView colorFromHexRGB:@"f0f0f0"]];
+    self.slideSwitchView.shadowImage = [[UIImage imageNamed:@"head.png"]
                                         stretchableImageWithLeftCapWidth:SCREEN_WIDTH/3 topCapHeight:0.0f];
     
     
@@ -51,38 +54,30 @@
         [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
     };
     
+    
 
     self.StoreSalesMonth = [[StoreSalesMonthViewController alloc] initWithNibName:@"StoreSalesMonthViewController" bundle:nil];
     
     self.StoreSalesMonth.statisticalType = self.statisticalType;
     self.StoreSalesMonth.didSkipSubItem =^(NSInteger tag){
-//        DLog(@"row = %ld",(long)tag);
-//        if (tag == 101) {
-//            DLog(@"订单详情");
-//            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-//            [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
-//        }
-//        else if(tag == 102)
-//        {
-//            DLog(@"终止订单");
-//        }
+
     };
-    
+    self.StoreSalesMonth.didSelectedSubItemAction =^(NSIndexPath* indexPath){
+        UIButton* button = (UIButton*)[weakSelf.view viewWithTag:100];
+
+        [weakSelf.slideSwitchView selectNameButton:button];
+    };
    
     self.StoreSalesYear = [[StoreSalesYearViewController alloc] initWithNibName:@"StoreSalesYearViewController" bundle:nil];
     self.StoreSalesYear.statisticalType = self.statisticalType;
     self.StoreSalesYear.didSkipSubItem =^(NSInteger tag){
-//        if (tag == 101) {
-//            DLog(@"订单详情");
-//            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-//            [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
-//        }
-//        else if(tag == 102)
-//        {
-//            DLog(@"终止订单");
-//        }
+
     };
-    
+    self.StoreSalesYear.didSelectedSubItemAction =^(NSIndexPath* indexPath){
+        UIButton* button = (UIButton*)[weakSelf.view viewWithTag:101];
+        
+        [weakSelf.slideSwitchView selectNameButton:button];
+    };
     [self.slideSwitchView buildUI];
     [self.view addSubview:self.slideSwitchView];
 }

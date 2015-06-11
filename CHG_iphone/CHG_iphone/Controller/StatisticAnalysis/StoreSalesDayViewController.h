@@ -11,6 +11,7 @@
 @interface StoreSalesDayViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,assign)int custCount;
 @property (nonatomic, assign) StatisticalType statisticalType;
 
 

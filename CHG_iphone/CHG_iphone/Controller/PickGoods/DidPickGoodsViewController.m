@@ -7,10 +7,12 @@
 //
 
 #import "DidPickGoodsViewController.h"
-#import "AllOrdersCell.h"
+//#import "AllOrdersCell.h"
 #import "OrderAmountCell.h"
+#import "OrdersGoodsCell.h"
 @interface DidPickGoodsViewController ()
-@property UINib* AllOrdersNib;
+@property UINib* OrdersGoodsNib;
+//@property UINib* AllOrdersNib;
 @property UINib* OrderAmountNib;
 @end
 
@@ -18,7 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"以提货";
+    self.title = @"已提货";
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -43,7 +45,8 @@
     
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
+//    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
+    self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -57,20 +60,34 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
+        OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
         if(cell==nil){
-            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+        //        NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
         
-        [cell setupView:nil];
-        cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-            if (self.didSelectedSubItemAction) {
-                self.didSelectedSubItemAction(indexPath);
-            }
-        };
+        cell.GoodImage.image = [UIImage imageNamed:@"image1.jpg"];
+        cell.titlelab.text = @"理；大口日大日大田土日大田日土田大日";
+        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
+        cell.countlab.text = @"500";
+        
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
+//        AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
+//        if(cell==nil){
+//            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        
+//        [cell setupView:nil];
+//        cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+//            if (self.didSelectedSubItemAction) {
+//                self.didSelectedSubItemAction(indexPath);
+//            }
+//        };
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
     }
     else
     {
@@ -91,14 +108,14 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return 410;
+        return 65;
     }
     return 90;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 1;
+        return 35;
     }
     else
     {
@@ -112,13 +129,44 @@
     }
     return 1;
 }
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section != 0) {
+        return nil;
+    }
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
+    //    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    v_header.backgroundColor = [UIColor clearColor];
+    
+    UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
+    line.backgroundColor = UIColorFromRGB(0xdddddd);
+    [v_header addSubview:line];
+    
+    UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
+    datelab.textAlignment = NSTextAlignmentLeft;
+    datelab.font = FONT(13);
+    datelab.textColor = UIColorFromRGB(0x878787);;
+    datelab.text = @"已提商品";
+    [v_header addSubview:datelab];
+    
+    
+    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
+    orderstatus.textAlignment = NSTextAlignmentRight;
+    orderstatus.font = FONT(13);
+    orderstatus.textColor = UIColorFromRGB(0x878787);;
+    orderstatus.text = @"制单人:武新义(导购)";
+    [v_header addSubview:orderstatus];
+    
+    return v_header;
+}
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (section != 0) {
         return nil;
     }
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    v_footer.backgroundColor = [UIColor whiteColor];
+//    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    v_footer.backgroundColor = [UIColor clearColor];
     UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
     goodscountlab.text = @" 共3件商品 1件赠品";
     goodscountlab.font = FONT(14);

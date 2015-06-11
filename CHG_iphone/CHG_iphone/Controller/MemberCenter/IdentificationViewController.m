@@ -10,8 +10,11 @@
 #import "IdentificationCell.h"
 #import "RegisteredMembersViewController.h"
 #import "successfulIdentifyViewController.h"
+#import "OrderManagementViewController.h"
+#import "IdentUserInfoCell.h"
 @interface IdentificationViewController ()
 @property UINib* IdentificationNib;
+@property UINib* IdentUserInfoNib;
 @end
 
 @implementation IdentificationViewController
@@ -22,14 +25,27 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.title = @"会员识别";
-    // Do any additional setup after loading the view from its nib.
     [self setupView];
+    // Do any additional setup after loading the view from its nib.
+    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self.ZBarReader stop];
+    self.is_have = NO;
+    self.is_Anmotion = NO;
     
+    
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    self.is_have = NO;
+    self.isScan = NO;
+    self.is_Anmotion = YES;
+    [self loopDrawLine];
+//    [self.ZBarReader start];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -39,17 +55,12 @@
 {
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    v_header.backgroundColor = [UIColor lightGrayColor];
-    UILabel* titlelab = [[UILabel alloc] initWithFrame:v_header.frame];
-    titlelab.textAlignment = NSTextAlignmentCenter;
-    titlelab.text = @"用户信息";
-    titlelab.font = FONT(14);
-    [v_header addSubview:titlelab];
-    self.tableview.tableHeaderView = v_header;
-    self.IdentificationNib = [UINib nibWithNibName:@"IdentificationCell" bundle:nil];
     
-    [self loopDrawLine];
+//    self.tableview.tableHeaderView = v_header;
+    self.IdentificationNib = [UINib nibWithNibName:@"IdentificationCell" bundle:nil];
+    self.IdentUserInfoNib = [UINib nibWithNibName:@"IdentUserInfoCell" bundle:nil];
+    [self setBtnTitle];
+    
     
 }
 
@@ -60,6 +71,36 @@
     for (ZBarSymbol *sym in symbols) {
         codeData = sym.data;
         break;
+    }
+    //判断是否包含 头'http:'
+    NSString *regex = @"http+:[^\\s]*";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    
+    //判断是否包含 头'ssid:'
+    NSString *ssid = @"ssid+:[^\\s]*";;
+    NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+    
+    //判断是否为纯数字'
+    NSString * num        = @"^-?\\d+$";
+    NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", num];
+    
+    
+    if ([predicate evaluateWithObject:codeData]) {
+        
+        DLog(@"判断是否包含 头'http:");
+        
+        
+    }
+    else if([ssidPre evaluateWithObject:codeData]){
+        DLog(@"判断是否包含 头'ssid:");
+    }
+    else if([numpred evaluateWithObject:codeData]){
+        DLog(@"判断是否为纯数字");
+        if ([IdentifierValidator isValid:IdentifierTypePhone value:codeData]) {
+            DLog(@"手机号");
+            self.isScan = YES;
+            [self httpValidateMobile:codeData];
+        }
     }
     
     
@@ -87,6 +128,7 @@
 }
 -(void)loopDrawLine
 {
+//    self.is_Anmotion = ye;
     CGRect  rect = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2, 15, ZbarRead_With, 2);
     if (self.lineImage) {
         [self.lineImage removeFromSuperview];
@@ -143,6 +185,7 @@
         
         [self.ZBarReader start];
         self.is_have = YES;
+        
     }
     [self.view addSubview:self.lineImage];
 }
@@ -167,48 +210,164 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    IdentificationCell *cell=[tableView dequeueReusableCellWithIdentifier:@"IdentificationCell"];
-    if(cell==nil){
-        cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-        
-    }
-
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 40;
-}
--(IBAction)IdentificationMember:(UIButton*)sender
-{
-    BOOL isSuccess = NO;
-    if (isSuccess) {
-        
-        DLog(@"识别成功");
-        successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
-        
-        [self.navigationController pushViewController:successfulIdentifyView animated:YES];
+    if (self.isScan) {
+        IdentUserInfoCell *cell=[tableView dequeueReusableCellWithIdentifier:@"IdentUserInfoCell"];
+        if(cell==nil){
+            cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            
+        }
+        cell.iphonelab.text = [NSString stringWithFormat:@"手机号码:%@",@"13382050875"];
+        cell.namelab.text = [NSString stringWithFormat:@"姓名:%@",@"武新义"];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        return cell;
     }
     else
     {
-        DLog(@"识别失败");
-        self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-            DLog(@"否");
-            UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
-            textfield.text = @"";
+        IdentificationCell *cell=[tableView dequeueReusableCellWithIdentifier:@"IdentificationCell"];
+        if(cell==nil){
+            cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
-        } otherButtonBlock:^{
-            DLog(@"是");
-            RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
-            [self.navigationController pushViewController:RegisteredMembersView animated:YES];
-        }];
+        }
         
-        [self.stAlertView show];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        return cell;
     }
+    
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.isScan) {
+        return 90;
+    }
+    return 40;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 35;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.1;
+}
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
+    v_header.backgroundColor = [UIColor clearColor];
+    UILabel* titlelab = [[UILabel alloc] initWithFrame:v_header.frame];
+    titlelab.textAlignment = NSTextAlignmentCenter;
+    titlelab.text = @"用户信息";
+    titlelab.textColor = UIColorFromRGB(0x323232);
+    titlelab.font = FONT(14);
+    [v_header addSubview:titlelab];
+    return v_header;
+}
+
+-(IBAction)IdentificationMember:(UIButton*)sender
+{
+
+    if (self.isScan) {
+        if (self.m_MenuType == MenuTypeMemberCenter) {
+            successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
+            
+            [self.navigationController pushViewController:successfulIdentifyView animated:YES];
+        }
+        else
+        {
+            OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+            OrderManagementView.strCustId = @"1";
+            [self.navigationController pushViewController:OrderManagementView animated:YES];
+        }
+    }
+    else
+    {
+        UITextField* texield = (UITextField*)[self.view viewWithTag:100];
+        if (texield.text.length == 0) {
+            [SGInfoAlert showInfo:@"请输入手机号"
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            return ;
+        }
+        [self httpValidateMobile:texield.text];
+    }
+    
     
    
     
+}
+-(void)setBtnTitle
+{
+    UIButton* button = (UIButton*)[self.view viewWithTag:1010];
+    if (self.m_MenuType == MenuTypeMemberCenter) {
+        
+        button.titleLabel.text = @"下一步";
+    }
+    else if (self.m_MenuType == MenuTypeOrderManagement)
+    {
+        button.titleLabel.text = @"订单管理";
+    }
+}
+
+-(void)httpValidateMobile:(NSString*)custMobile
+{
+    
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:custMobile forKey:@"mobile"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateMobile] parameters:parameter];
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            
+            DLog(@"识别成功");
+            if (self.isScan) {
+                [self.tableview reloadData];
+                return ;
+            }
+            
+            if (!self.isScan) {
+                if (self.m_MenuType == MenuTypeMemberCenter) {
+                    successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
+                    
+                    [self.navigationController pushViewController:successfulIdentifyView animated:YES];
+                }
+                else
+                {
+                    OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+                    OrderManagementView.strCustId = @"1";
+                    [self.navigationController pushViewController:OrderManagementView animated:YES];
+                }
+
+            }
+        }
+        else if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==5002)
+        {
+            DLog(@"识别失败");
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                DLog(@"否");
+                //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
+                //                textfield.text = @"";
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
+                [self.navigationController pushViewController:RegisteredMembersView animated:YES];
+            }];
+            
+            [self.stAlertView show];
+        }
+        
+
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

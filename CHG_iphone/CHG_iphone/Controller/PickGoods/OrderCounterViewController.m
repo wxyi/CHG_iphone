@@ -84,7 +84,9 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        if (self.orderSaletype == SaleTypeSellingGoods) {
+        if (self.orderSaletype == SaleTypeSellingGoods
+            ||self.orderSaletype == SaleTypeReturnGoods
+            ||self.orderSaletype == SaleTypePickingGoods) {
             OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
             if(cell==nil){
                 cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
@@ -132,6 +134,11 @@
         if(cell==nil){
             cell = (OrderGiftCell*)[[self.OrderGiftNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
+        }
+        if (self.orderSaletype == SaleTypeReturnGoods
+            ||self.orderSaletype == SaleTypePickingGoods)
+        {
+            cell.TextStepper.enabled = NO;
         }
         [cell setupCell];
         
@@ -188,12 +195,12 @@
     if (section == 0 || section == 1) {
         return 30;
     }
-    return 1;
+    return 0.1;
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 1;
+    return 0.1;
 }
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -208,6 +215,10 @@
         return @"";
     
 }
+//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+////    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)]
+//}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0 || indexPath.section == 1) {
@@ -248,6 +259,7 @@
         else if(self.orderSaletype == SaleTypePickingGoods)
         {
             DLog(@"确认提货");
+            [self httpCreateSaleOrder];
         }
         else
         {
@@ -255,6 +267,7 @@
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否需要添加赠品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
                 DLog(@"否");
                 ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+                ConfirmOrderView.Confirmsaletype = self.orderSaletype;
                 [self.navigationController pushViewController:ConfirmOrderView animated:YES];
                 
                 
@@ -317,6 +330,49 @@
     }
     
     return YES;
+}
+-(void)httpCreateSaleOrder
+{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:@"100817" forKey:@"shopId"];
+    [param setObject:@"100840" forKey:@"custId"];
+    [param setObject:@"1" forKey:@"orderAmount"];
+    [param setObject:@"2" forKey:@"orderFactAmount"];
+    [param setObject:@"3" forKey:@"orderDiscount"];
+    
+    
+    NSMutableDictionary *product = [NSMutableDictionary dictionary];
+    [product setObject:@"25" forKey:@"productId"];
+    [product setObject:@"1" forKey:@"quantity"];
+    [product setObject:@"999999999999" forKey:@"productCode"];
+    
+    NSArray*  productList = [NSArray arrayWithObjects:product, nil];
+    [param setObject:productList forKey:@"productList"];
+    
+    
+    NSMutableDictionary *gift = [NSMutableDictionary dictionary];
+    [gift setObject:@"25" forKey:@"productId"];
+    [gift setObject:@"1" forKey:@"quantity"];
+    [gift setObject:@"999999999999" forKey:@"productCode"];
+    NSArray*  giftList = [NSArray arrayWithObjects:gift, nil];
+    [param setObject:giftList forKey:@"giftList"];
+    
+    DLog(@"param = %@",param);
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* strurl = [NSObject URLWithBaseString:[APIAddress ApiCreateSaleOrder] parameters:parameter];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:strurl parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,msg);
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+    
+    
 }
 /*
 #pragma mark - Navigation

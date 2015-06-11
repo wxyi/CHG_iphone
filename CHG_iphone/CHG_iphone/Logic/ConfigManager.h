@@ -36,4 +36,16 @@
 
 //token
 @property(nonatomic,assign) NSString * access_token;
+
+//获取设备的唯一标示符
+@property(nonatomic,assign) NSString * identifier;
+
+//用户配置
+@property(nonatomic,assign) NSString * usercfg;
+
+//商品ID
+@property(nonatomic,assign) NSString * shopId;
+
+//商品ID
+@property(nonatomic,assign) NSString * strAddress;
 @end
