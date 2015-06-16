@@ -12,6 +12,7 @@
 #import "successfulIdentifyViewController.h"
 #import "OrderManagementViewController.h"
 #import "IdentUserInfoCell.h"
+#import "PresellGoodsViewController.h"
 @interface IdentificationViewController ()
 @property UINib* IdentificationNib;
 @property UINib* IdentUserInfoNib;
@@ -216,8 +217,8 @@
             cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.iphonelab.text = [NSString stringWithFormat:@"手机号码:%@",@"13382050875"];
-        cell.namelab.text = [NSString stringWithFormat:@"姓名:%@",@"武新义"];
+        cell.iphonelab.text = [NSString stringWithFormat:@"手机号码:%@",self.dict[@"custMobile"]];
+        cell.namelab.text = [NSString stringWithFormat:@"姓名:%@",self.dict[@"custName"]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -266,17 +267,7 @@
 {
 
     if (self.isScan) {
-        if (self.m_MenuType == MenuTypeMemberCenter) {
-            successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
-            
-            [self.navigationController pushViewController:successfulIdentifyView animated:YES];
-        }
-        else
-        {
-            OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            OrderManagementView.strCustId = @"1";
-            [self.navigationController pushViewController:OrderManagementView animated:YES];
-        }
+        [self skipVariousPages];
     }
     else
     {
@@ -306,6 +297,14 @@
     {
         button.titleLabel.text = @"订单管理";
     }
+    else if (self.m_MenuType == MenuTypeSellingGoods)
+    {
+        button.titleLabel.text = @"卖货";
+    }
+    else if (self.m_MenuType == MenuTypePresell)
+    {
+        button.titleLabel.text = @"预售";
+    }
 }
 
 -(void)httpValidateMobile:(NSString*)custMobile
@@ -324,24 +323,15 @@
         DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKey:@"datas"] objectForKey:@"Cust"] objectForKey:@"custId"] intValue]];
             DLog(@"识别成功");
             if (self.isScan) {
+                self.dict = [[data objectForKey:@"datas"] objectForKey:@"Cust"];
                 [self.tableview reloadData];
                 return ;
             }
-            
-            if (!self.isScan) {
-                if (self.m_MenuType == MenuTypeMemberCenter) {
-                    successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
-                    
-                    [self.navigationController pushViewController:successfulIdentifyView animated:YES];
-                }
-                else
-                {
-                    OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-                    OrderManagementView.strCustId = @"1";
-                    [self.navigationController pushViewController:OrderManagementView animated:YES];
-                }
+            else  {
+                [self skipVariousPages];
 
             }
         }
@@ -355,6 +345,8 @@
                 
             } otherButtonBlock:^{
                 DLog(@"是");
+                self.isScan = NO;
+                [self.ZBarReader stop];
                 RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
                 [self.navigationController pushViewController:RegisteredMembersView animated:YES];
             }];
@@ -369,6 +361,52 @@
         
     }];
 }
+-(void)skipVariousPages
+{
+    self.isScan = NO;
+    [self.ZBarReader stop];
+    switch (self.m_MenuType) {
+        case MenuTypeMemberCenter:
+        {
+            DLog(@"会员管理")
+            successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
+            
+            [self.navigationController pushViewController:successfulIdentifyView animated:YES];
+            break;
+        }
+        case MenuTypeOrderManagement:
+        {
+            DLog(@"订单管理")
+            OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+            OrderManagementView.strCustId =[NSString stringWithFormat:@"%d",[self.dict[@"custId"] intValue]] ;
+            OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
+            [self.navigationController pushViewController:OrderManagementView animated:YES];
+            break;
+        }
+        case MenuTypeSellingGoods:
+        case MenuTypePresell:
+        {
+            
+            DLog(@"预售");
+            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            if (self.m_MenuType == MenuTypePresell)
+            {
+                PresellGoodsView.orderSaletype = SaleTypePresell;
+            }
+            else
+            {
+                PresellGoodsView.orderSaletype = SaleTypeSellingGoods;
+            }
+            
+            [self.navigationController pushViewController:PresellGoodsView animated:YES];
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
 /*
 #pragma mark - Navigation
 

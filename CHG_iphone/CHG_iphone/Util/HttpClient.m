@@ -13,7 +13,7 @@
 +(void)asynchronousRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
 {
     
-    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     DLog(@"url = %@",url);
     NSError *error;
     AFHTTPRequestSerializer *requestSerializer=[[AFHTTPRequestSerializer alloc] init];
@@ -130,7 +130,7 @@
     }];
    
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(responseObject);
+//        NSLog(responseObject);
         NSError *error;
         NSDictionary *json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
         if(!error){

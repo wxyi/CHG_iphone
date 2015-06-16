@@ -10,6 +10,7 @@
 
 @interface GoodsDetailsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIWebViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,strong)NSString* strProductId;
 @property (nonatomic,strong)UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) UIWebView *myWebView;//商品详情ＷＥＢ
 @property (assign)BOOL isWebViewLoad;

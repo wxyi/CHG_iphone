@@ -11,6 +11,7 @@
 #import "PresellGoodsViewController.h"
 #import "GoodsDetailsViewController.h"
 #import "DidPickGoodsViewController.h"
+#import "CompletedOrderDetailsViewController.h"
 @interface OrderManagementViewController ()
 
 @end
@@ -26,7 +27,7 @@
 //    btn_serch_hl@2x.png
 //    btn_serch@2x.png
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
-    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
@@ -61,15 +62,39 @@
      :returns: <#return value description#>
      */
     self.AllOrdersView = [[AllOrdersViewController alloc] initWithNibName:@"AllOrdersViewController" bundle:nil];
-    
-    self.AllOrdersView.didSkipSubItem =^(NSInteger tag){
+    self.AllOrdersView.strCustId = self.strCustId;
+    self.AllOrdersView.ManagementTyep = self.ManagementTyep;
+    self.AllOrdersView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
+        NSString* strtag = [NSString stringWithFormat:@"%d",tag];
+        NSInteger ntag = [[strtag substringToIndex:2] intValue];
         
-        DLog(@"跳转详情");
-        PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-        [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+        if (ntag == 10) {
+            DLog(@"详情");
+            if ([dictionary[@"orderStatus"] intValue] == 0) {
+                DLog(@"未完成订单")
+                PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+            }
+            else
+            {
+                DLog(@"已完成订单");
+                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+                
+            }
+        }
+        else
+        {
+            DLog(@"终止定单")
+        }
+        
+        
     };
-    self.AllOrdersView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+    self.AllOrdersView.CellSkipSelect=^(NSDictionary* dictionary){
         GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
         [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
     /**
@@ -78,14 +103,27 @@
      :returns: <#return value description#>
      */
     self.OutstandingOrdersView = [[OutstandingOrdersViewController alloc] initWithNibName:@"OutstandingOrdersViewController" bundle:nil];
-    
-    
-    self.OutstandingOrdersView.didSkipSubItem =^(NSInteger tag){
+    self.OutstandingOrdersView.strCustId = self.strCustId;
+    self.OutstandingOrdersView.ManagementTyep = self.ManagementTyep;
+    self.OutstandingOrdersView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
         DLog(@"row = %ld",(long)tag);
-        if (tag == 101) {
-            DLog(@"订单详情");
-            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-            [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+        NSString* strtag = [NSString stringWithFormat:@"%d",tag];
+        NSInteger ntag = [[strtag substringToIndex:2] intValue];
+        if (ntag == 10) {
+            if ([dictionary[@"orderStatus"] intValue] == 0) {
+                DLog(@"未完成订单")
+                PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+            }
+            else
+            {
+                DLog(@"已完成订单");
+                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+                
+            }
+
         }
         else if(tag == 102)
         {
@@ -120,11 +158,12 @@
         }
         
     };
-    self.OutstandingOrdersView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-        DidPickGoodsViewController* GoodsDetailsView =[[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
+    self.OutstandingOrdersView.CellSkipSelect=^(NSDictionary* dictionary){
+        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
         [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
-        
     };
+
     
     
     
@@ -134,11 +173,16 @@
      :returns: <#return value description#>
      */
     self.CompleteOrderView = [[CompleteOrderViewController alloc] initWithNibName:@"CompleteOrderViewController" bundle:nil];
-    self.CompleteOrderView.didSkipSubItem =^(NSInteger tag){
+    self.CompleteOrderView.strCustId = self.strCustId;
+    self.CompleteOrderView.ManagementTyep = self.ManagementTyep;
+    self.CompleteOrderView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
         if (tag == 101) {
             DLog(@"订单详情");
-            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-            [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+            DLog(@"已完成订单");
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+
         }
         else if(tag == 102)
         {
@@ -148,10 +192,12 @@
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
     };
-    self.CompleteOrderView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+    self.CompleteOrderView.CellSkipSelect=^(NSDictionary* dictionary){
         GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
         [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
+
     [self.slideSwitchView buildUI];
     [self.view addSubview:self.slideSwitchView];
 }
@@ -191,6 +237,8 @@
     }
     [self.vcAll viewDidCurrentView];
 }
+
+
 /*
 #pragma mark - Navigation
 

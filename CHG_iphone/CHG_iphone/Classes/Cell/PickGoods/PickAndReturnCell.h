@@ -11,6 +11,6 @@
 @interface PickAndReturnCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UILabel* receivableNameLab;
 @property(nonatomic,weak)IBOutlet UILabel* actualNameLab;
-@property(nonatomic,weak)IBOutlet UILabel* receivableLab;
+@property(nonatomic,weak)IBOutlet UITextField* receivableLab;
 @property(nonatomic,weak)IBOutlet UITextField* actualtext;
 @end

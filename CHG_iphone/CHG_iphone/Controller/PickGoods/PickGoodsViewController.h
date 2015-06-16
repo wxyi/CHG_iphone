@@ -13,6 +13,8 @@
 @interface PickGoodsViewController : UIViewController<QCSlideSwitchViewDelegate>
 @property (nonatomic, strong) QCSlideSwitchView *slideSwitchView;
 @property (nonatomic, strong) DidNotPickGoodsViewController *DidNotPickGoodsView;
-@property (nonatomic, strong) DidNotPickGoodsViewController *DidPickGoodsView;
+@property (nonatomic, strong) DidPickGoodsViewController *DidPickGoodsView;
 @property (nonatomic, strong) BaseViewController *vcAll;
+@property (nonatomic, strong) NSString *strOrderId;
+@property (nonatomic,assign)OrderManagementType ManagementTyep;
 @end

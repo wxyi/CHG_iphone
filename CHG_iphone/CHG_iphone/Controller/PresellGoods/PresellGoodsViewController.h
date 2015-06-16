@@ -14,6 +14,7 @@
 @property(nonatomic,strong)UIImageView* lineImage;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)SaleType orderSaletype;
+@property(nonatomic,assign)NSString* strCustId;
 @property (assign)BOOL is_have;
 @property (assign)BOOL is_Anmotion;
 

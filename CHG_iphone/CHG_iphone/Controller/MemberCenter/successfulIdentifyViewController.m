@@ -9,7 +9,7 @@
 #import "successfulIdentifyViewController.h"
 #import "successfulIdentifyCell.h"
 #import "MenuCell.h"
-
+#import "IdentificationViewController.h"
 #import "OrderManagementViewController.h"
 #import "PresellGoodsViewController.h"
 @interface successfulIdentifyViewController ()
@@ -146,8 +146,9 @@
         }
         case 2:
         {
-            DLog(@"订单管理");
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+            OrderManagementView.strCustId =[ConfigManager sharedInstance].strCustId ;
+            OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             break;
         }

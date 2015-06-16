@@ -12,7 +12,7 @@
 #import "ResetPasswordViewController.h"
 #import "ForgotPasswordViewController.h"
 #import "StoreManagementViewController.h"
-
+#import "SetPasswordViewController.h"
 @interface LoginViewController ()
 @property UINib* LoginNib;
 @end
@@ -117,10 +117,10 @@
     if (namefield.text.length == 0) {
         info = @"请输入手机号码";
     }
-    else if (![IdentifierValidator isValid:IdentifierTypePhone value:namefield.text ])
-    {
-        info = @"手机格式不正确";
-    }
+//    else if (![IdentifierValidator isValid:IdentifierTypePhone value:namefield.text ])
+//    {
+//        info = @"手机格式不正确";
+//    }
     else if(passfield.text.length == 0)
     {
         info = @"请输入密码";
@@ -141,8 +141,12 @@
      
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setObject:@"password" forKey:@"grant_type"];
-    [parameter setObject:@"admin" forKey:@"username"];
-    [parameter setObject:[[NSObject md5:@"admin"] uppercaseString] forKey:@"password"];
+    
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
+    [parameter setObject:textfield.text forKey:@"username"];
+    
+    textfield = (UITextField*)[self.view viewWithTag:1012];
+    [parameter setObject:[[NSObject md5:textfield.text] uppercaseString] forKey:@"password"];
     [parameter setObject:@"app" forKey:@"client_id"];
     [parameter setObject:@"appSecret" forKey:@"client_secret"];
     
@@ -165,16 +169,19 @@
         
         DLog(@"data = %@",data);
 
-        if ([ConfigManager sharedInstance].access_token.length == 0)
-            self.isfrist = NO;
-        else
-            self.isfrist = YES;
-        [ConfigManager sharedInstance].access_token =  @"8eafa36e-9dda-490e-bf40-065f6a8bbfd6";
-
-        
-        [self httpGetUserConfig];
-
-        
+//        if ([ConfigManager sharedInstance].access_token.length == 0)
+//            self.isfrist = NO;
+//        else
+//            self.isfrist = YES;
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            
+            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+            
+            DLog(@"access_token = %@",[ConfigManager sharedInstance].access_token);
+            
+            [self httpGetUserConfig];
+        }
     } failureBlock:^(NSString *description) {
         DLog(@"description = %@",description);
 //        [MMProgressHUD dismissWithError:description];
@@ -200,9 +207,11 @@
             
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
-            if (!self.isfrist)
+            
+            
+            if ([[data objectForKey:@"loginFirst"] intValue] == 0)
             {
-                ResetPasswordViewController* ResetPasswordView = [[ResetPasswordViewController alloc] initWithNibName:@"ResetPasswordViewController" bundle:nil];
+                SetPasswordViewController* ResetPasswordView = [[SetPasswordViewController alloc] initWithNibName:@"SetPasswordViewController" bundle:nil];
                 [self presentViewController:ResetPasswordView animated:YES completion:^{
                     
                 }];

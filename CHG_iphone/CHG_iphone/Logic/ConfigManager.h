@@ -46,6 +46,11 @@
 //商品ID
 @property(nonatomic,assign) NSString * shopId;
 
-//商品ID
-@property(nonatomic,assign) NSString * strAddress;
+
+//会员ID
+@property(nonatomic,assign) NSString * strCustId;
+
+
+//用户手机号
+@property(nonatomic,assign) NSString * strIphone;
 @end

@@ -141,7 +141,7 @@
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:@"100861" forKey:@"checkCode"];
-    [param setObject:passfield1.text forKey:@"newpwd"];
+    [param setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newpwd"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {

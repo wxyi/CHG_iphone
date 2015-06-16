@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OrderAmountCell : UITableViewCell
-@property(nonatomic,weak)IBOutlet UILabel*  receivablelab;
+@interface OrderAmountCell : UITableViewCell<UITextFieldDelegate>
+@property(nonatomic,weak)IBOutlet UITextField* receivablelab;
 @property(nonatomic,weak)IBOutlet UITextField* Receivedlab;
-@property(nonatomic,weak)IBOutlet UILabel* favorablelab;
+@property(nonatomic,weak)IBOutlet UITextField* favorablelab;
+@property(nonatomic,assign)double allprice;
 @end

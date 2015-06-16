@@ -36,6 +36,8 @@
     
 //    [HttpClient inithttps];
     
+    
+    
     if (IOS_VERSION >= 7.0) {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
         [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];

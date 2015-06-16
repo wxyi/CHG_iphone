@@ -397,4 +397,19 @@
 {
     return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"bankCode"];
 }
+/**
+ *    二维码扫描识别商品
+ */
++(NSString*) ApiGetProductBrief
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getProductBrief"];
+}
+
+/**
+ *    订单详情
+ */
++(NSString*) ApiGetOrder;
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getOrder"];
+}
 @end

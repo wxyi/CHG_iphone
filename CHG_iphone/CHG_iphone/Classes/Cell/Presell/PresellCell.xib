@@ -24,7 +24,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d6d-iH-aWX" customClass="TextStepperField">
-                        <rect key="frame" x="230" y="15" width="80" height="30"/>
+                        <rect key="frame" x="230" y="15" width="90" height="30"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
                             <action selector="ibStepperDidStep:" destination="KGk-i7-Jjw" eventType="valueChanged" id="XyA-WB-JGz"/>

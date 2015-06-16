@@ -18,5 +18,5 @@
 @dynamic identifier;
 @dynamic usercfg;
 @dynamic shopId;
-@dynamic strAddress;
+@dynamic strCustId;
 @end

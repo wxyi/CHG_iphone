@@ -135,7 +135,7 @@
         }
 //        cell.backgroundColor = UIColorFromRGB(0x646464);
         cell.nameLab.text = @"奖励总额(元)";
-        cell.amountLab.text = [self.AccountBriefDict objectForKey:@"awardTotalAmount"];
+        cell.amountLab.text = [NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardTotalAmount"] intValue]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -148,8 +148,8 @@
         }
 
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[self.AccountBriefDict objectForKey:@"awardSaleAmount"],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",[self.AccountBriefDict objectForKey:@"awardPartnerAmount"],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardSaleAmount"] intValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardPartnerAmount"] intValue]],@"count", nil], nil];
 
         [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -256,29 +256,32 @@
         case 2:
         case 3:
         {
-            DLog(@"预售");
-            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
-            if (indexPath.row == 2)
-            {
-                PresellGoodsView.orderSaletype = SaleTypePresell;
-            }
-            else
-            {
-                PresellGoodsView.orderSaletype = SaleTypeSellingGoods;
-            }
-            
-            [self.navigationController pushViewController:PresellGoodsView animated:YES];
-            break;
-        }
-
-        case 4:
-        {
             DLog(@"订单管理");
             
             IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
-            IdentificationView.m_MenuType = MenuTypeOrderManagement;
+            if (indexPath.row == 2) {
+                IdentificationView.m_MenuType = MenuTypePresell;
+            }
+            else if(indexPath.row == 3)
+            {
+                IdentificationView.m_MenuType = MenuTypeSellingGoods;
+            }
+            else
+            {
+                IdentificationView.m_MenuType = MenuTypeOrderManagement;
+            }
             [self.navigationController pushViewController:IdentificationView animated:YES];
             
+            break;
+            
+        }
+        case 4:
+        {
+
+            OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+            OrderManagementView.strCustId =@"" ;
+            OrderManagementView.ManagementTyep = OrderManagementTypeAll;
+            [self.navigationController pushViewController:OrderManagementView animated:YES];
             
             break;
         }
@@ -306,7 +309,7 @@
 -(void)httpGetPromoList
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
+//    UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
 //    [NSString stringWithFormat:@"%d"]
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];

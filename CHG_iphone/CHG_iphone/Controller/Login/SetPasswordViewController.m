@@ -8,7 +8,7 @@
 
 #import "SetPasswordViewController.h"
 #import "SetPasswordCell.h"
-
+#import "StoreManagementViewController.h"
 @interface SetPasswordViewController ()
 @property UINib* SetPasswordNib;
 @end
@@ -56,6 +56,10 @@
         
         [weakSelf skipPage:tag];
     };
+    cell.didGetCode = ^(NSString* checkcode)
+    {
+        weakSelf.strCheckCode = checkcode;
+    };
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -87,10 +91,98 @@
     else if(tag == 101)
     {
         DLog(@"确认设置");
-        AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-        [delegate setupHomePageViewController];
+        [self ConfirmTheChange];
     }
 }
+
+-(void)ConfirmTheChange
+{
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1010];
+    UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* checkcode = (UITextField*)[self.view viewWithTag:1012];
+    NSString* info ;
+    if (passfield1.text.length == 0) {
+        info = @"请输入密码";
+    }
+    else if (passfield1.text.length < 16 )
+    {
+        info = @"密码必须大于6位";
+    }
+    else if(passfield2.text.length == 0)
+    {
+        info = @"请确认密码";
+    }
+    else if (![passfield1.text isEqualToString:passfield2.text])
+    {
+        info = @"密码输入不一致";
+    }
+    else if(checkcode.text.length == 0)
+    {
+        info = @"请输入验证码";
+    }
+    else if(![checkcode.text isEqualToString:self.strCheckCode])
+    {
+        info = @"验证码错误";
+    }
+        
+    
+    if (info.length != 0) {
+        
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+    }
+    else
+    {
+        [self httpResetPassWord];
+    }
+    
+    
+}
+-(void)httpResetPassWord
+{
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    [param setObject:config.strUsername forKey:@"userName"];
+    [param setObject:[[NSObject md5:passfield1.text] uppercaseString]forKey:@"newpwd"];
+    [param setObject:self.strCheckCode forKey:@"checkCode"];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",data,msg);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
+                
+                
+                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+                [self presentViewController:StoreManagementView animated:YES completion:^{
+                    
+                }];
+            }
+            else
+            {
+                
+                AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+                [delegate setupHomePageViewController];
+            }
+        }
+        
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
+
 /*
 #pragma mark - Navigation
 

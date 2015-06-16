@@ -102,6 +102,7 @@
         [v_footer addSubview:Pickupbtn];
         
         UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        detailsbtn.tag = 100;
         detailsbtn.frame = CGRectMake(165, 65, (CGRectGetWidth(self.view.bounds)-20)/2, 40);
         [detailsbtn.layer setMasksToBounds:YES];
         [detailsbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径

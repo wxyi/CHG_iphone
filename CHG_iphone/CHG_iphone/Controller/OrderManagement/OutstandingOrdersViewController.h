@@ -11,6 +11,7 @@
 @interface OutstandingOrdersViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
-
+@property (nonatomic, strong) NSString* strCustId;
+@property (nonatomic,assign)OrderManagementType ManagementTyep;
 -(IBAction)Returngoods:(UIButton*)sender;
 @end

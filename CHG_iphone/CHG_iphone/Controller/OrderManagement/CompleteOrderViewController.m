@@ -10,6 +10,8 @@
 #import "OrdersGoodsCell.h"
 #import "PickGoodsViewController.h"
 #import "PresellGoodsViewController.h"
+#import "NimbusAttributedLabel.h"
+#import "NSMutableAttributedString+NimbusAttributedLabel.h"
 @interface CompleteOrderViewController ()
 @property UINib* OrdersGoodsNib;
 @end
@@ -23,6 +25,12 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
+    
+    if (self.ManagementTyep == OrderManagementTypeAll) {
+        CGRect rect = self.tableview.frame;
+        rect.size.height = rect.size.height + 40;
+        self.tableview.frame = rect;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,11 +40,10 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
-    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"336",@"price",@"x 2",@"count", nil];
+
     
-    
-    self.items = [NSArray arrayWithObjects:[NSArray arrayWithObjects:dict,dict,dict, nil],[NSArray arrayWithObjects:dict,dict, nil], nil];
-    [self.tableview reloadData];
+    [self httpGetCompleteOrderList];
+
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -44,7 +51,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.items objectAtIndex:section] count];
+    return [[[self.items objectAtIndex:section] objectForKey:@"productList"] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -53,18 +60,20 @@
         cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
-    NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
+    NSArray* array = [[self.items objectAtIndex:indexPath.section] objectForKey:@"productList"];
+    NSDictionary* dict = [array objectAtIndex:indexPath.row];
     
-    cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
-    cell.titlelab.text = [dict objectForKey:@"title"];
-    cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
-    cell.countlab.text = [dict objectForKey:@"count"];
+    [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+    cell.titlelab.text = dict[@"productName"];
+    cell.pricelab.text = dict[@"productPrice"];;
+    cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKey:@"quantity"] intValue] ];
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     return 60;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -79,20 +88,21 @@
     UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
     line.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_header addSubview:line];
-    
+     NSDictionary* dict = [self.items objectAtIndex:section] ;
     UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
     datelab.textColor = UIColorFromRGB(0x878787);;
-    datelab.text = @"2015-05-19 10:10:10";
+    datelab.text = dict[@"orderDate"];
     [v_header addSubview:datelab];
     
     
     UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
     orderstatus.textAlignment = NSTextAlignmentRight;
     orderstatus.font = FONT(13);
-    orderstatus.textColor = UIColorFromRGB(0x878787);;
-    orderstatus.text = @"已完成 卖货订单";
+    orderstatus.textColor = UIColorFromRGB(0x878787);
+    orderstatus.text = [NSString stringWithFormat:@"%@ ",dict[@"orderType"]];
+    
     [v_header addSubview:orderstatus];
     
     return v_header;
@@ -107,16 +117,22 @@
 //    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
     v_footer.backgroundColor = [UIColor clearColor];
     
-    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
-    goodscountlab.text = @"共3件商品 0件赠品";
-    goodscountlab.font = FONT(13);
+    NSDictionary* dict = [self.items objectAtIndex:section] ;
+    NSString* string = [NSString stringWithFormat:@"共%d件商品",[dict[@"productList"] count]];
+    NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[dict[@"productList"] count]]];
+    NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
+    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
-    goodscountlab.textAlignment = NSTextAlignmentLeft;
+    NIAttributedLabel* goodscountlab = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+    goodscountlab.font = FONT(15);
+    goodscountlab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
+    goodscountlab.attributedText = text;
     [v_footer addSubview:goodscountlab];
     
     UILabel* line = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, SCREEN_WIDTH, 0.5)];
     line.backgroundColor = [UIColor lightGrayColor];
     [v_footer addSubview:line];
+    
     
     UIButton* orderDetailsbtn = [UIButton buttonWithType:UIButtonTypeCustom];
     orderDetailsbtn.tag = 101;
@@ -136,8 +152,9 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.didSelectedSubItemAction) {
-        self.didSelectedSubItemAction(indexPath);
+    NSDictionary* dict;
+    if (self.CellSkipSelect) {
+        self.CellSkipSelect(dict);
     }
 }
 -(void)goskipdetails:(UIButton*)sender
@@ -155,6 +172,27 @@
         self.didSkipSubItem(sender.tag);
     }
     
+}
+-(void)httpGetCompleteOrderList
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObject:self.strCustId forKey:@"custId"];
+    [parameter setObject:@"0" forKey:@"orderStatus"];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,msg);
+        
+        self.items = [data objectForKey:@"datas"];
+        [self.tableview reloadData];
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

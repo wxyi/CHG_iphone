@@ -14,6 +14,7 @@
 #import "ConfirmOrderViewController.h"
 #import "PresellCell.h"
 #import "PickAndReturnCell.h"
+#import "ConfirmOrderViewController.h"
 @interface OrderCounterViewController ()<SWTableViewCellDelegate>
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderGiftNib;
@@ -30,6 +31,7 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.title = @"订单柜台";
     [self setupView];
 
@@ -75,10 +77,13 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return self.items.count;
+    }
     return 1;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -93,10 +98,13 @@
                 
             }
             
-            cell.GoodImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
-            cell.titlelab.text = [self.dict  objectForKey:@"title"];
-            cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
-            cell.countlab.text = [self.dict  objectForKey:@"count"];
+            NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+            
+            
+            [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+            cell.titlelab.text = dict[@"productName"] ;
+            cell.pricelab.text = dict[@"productPrice"];
+            cell.countlab.text = [NSString stringWithFormat:@"%d",[dict[@"QrcList"] count]];
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -118,36 +126,40 @@
             }
             
             
-            cell.GoodsImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
-            cell.titlelab.text = [self.dict  objectForKey:@"title"];
-            cell.pricelab.text = @"111";
-           [cell setupCell];
             
+           [cell setupCell];
+            NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+            
+            
+            [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+            cell.titlelab.text = dict[@"productName"] ;
+            cell.pricelab.text = dict[@"productPrice"];
+            cell.TextStepper.Current = [dict[@"quantity"] doubleValue];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
         
     }
-    else if(indexPath.section == 1)
-    {
-        OrderGiftCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderGiftCell"];
-        if(cell==nil){
-            cell = (OrderGiftCell*)[[self.OrderGiftNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        if (self.orderSaletype == SaleTypeReturnGoods
-            ||self.orderSaletype == SaleTypePickingGoods)
-        {
-            cell.TextStepper.enabled = NO;
-        }
-        [cell setupCell];
-        
-        
-        cell.GoodImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
-        cell.titlelab.text = [self.dict objectForKey:@"title"];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
-    }
+//    else if(indexPath.section == 1)
+//    {
+//        OrderGiftCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderGiftCell"];
+//        if(cell==nil){
+//            cell = (OrderGiftCell*)[[self.OrderGiftNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        if (self.orderSaletype == SaleTypeReturnGoods
+//            ||self.orderSaletype == SaleTypePickingGoods)
+//        {
+//            cell.TextStepper.enabled = NO;
+//        }
+//        [cell setupCell];
+//        
+//        
+//        cell.GoodImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
+//        cell.titlelab.text = [self.dict objectForKey:@"title"];
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//    }
     else
     {
         if (self.orderSaletype == SaleTypePickingGoods ||self.orderSaletype == SaleTypeReturnGoods) {
@@ -166,8 +178,15 @@
                 cell.actualNameLab.text = @"实退金额";
                 [cell.actualtext setEnabled:NO];
             }
-            cell.receivableLab.text = @"$336";
-            cell.actualtext.text = @"220";
+            double allPrice;
+            for (int i = 0; i< self.items.count; i++) {
+                double price = [[self.items[i] objectForKey:@"productPrice"] doubleValue];
+                int count = [[self.items[i] objectForKey:@"QrcList"] count];
+                allPrice += price * count;
+                
+            }
+            cell.receivableLab.text = [NSString stringWithFormat:@"%.1f",allPrice];
+            cell.actualtext.text = @"";
 //            cell.receivablelab.text = @"$336";
 //            cell.favorablelab.text = @"16";
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -180,8 +199,26 @@
                 cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                 
             }
-            cell.receivablelab.text = @"$336";
-            cell.favorablelab.text = @"16";
+            double allPrice;
+            
+            for (int i = 0; i< self.items.count; i++) {
+                double price = [[self.items[i] objectForKey:@"productPrice"] doubleValue];
+                int count;
+                if (self.orderSaletype == SaleTypeSellingGoods) {
+                    count = [[self.items[i] objectForKey:@"QrcList"] count];
+                }
+                else
+                {
+                    count = [[self.items[i] objectForKey:@"quantity"] intValue];
+                }
+                
+                allPrice += price * count;
+                
+            }
+//            cell.receivableLab.text = [NSString stringWithFormat:@"%.1f",allPrice];
+            cell.allprice = allPrice;
+            cell.receivablelab.text = [NSString stringWithFormat:@"%.1f",allPrice];
+//            cell.favorablelab.text = @"16";
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
 
@@ -192,7 +229,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0 || section == 1) {
+    if (section == 0 ) {
         return 30;
     }
     return 0.1;
@@ -207,10 +244,10 @@
     if (section == 0) {
         return @"商品";
     }
-    else if(section == 1)
-    {
-        return @"赠品";
-    }
+//    else if(section == 1)
+//    {
+//        return @"赠品";
+//    }
     else
         return @"";
     
@@ -221,7 +258,7 @@
 //}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 || indexPath.section == 1) {
+    if (indexPath.section == 0 /*|| indexPath.section == 1*/) {
         return 70;
     }
     if (self.orderSaletype == SaleTypePickingGoods
@@ -237,15 +274,19 @@
 }
 -(IBAction)OrderCounterView:(UIButton*)sender
 {
-    if (sender.tag == 100) {
+    if (sender.tag == 104) {
         DLog(@"继续扫描")
 
         [self.navigationController popViewControllerAnimated:YES];
     }
-    else if(sender.tag == 101)
+    else if(sender.tag == 105)
     {
-        if (self.orderSaletype == SaleTypeReturnGoods) {
-            DLog(@"确认退货");
+        if (self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods) {
+            DLog(@"提货退货");
+            if (self.orderSaletype) {
+                <#statements#>
+            }
+            __weak typeof(self) weakSelf = self;
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
                 DLog(@"否");
           
@@ -254,28 +295,46 @@
             } otherButtonBlock:^{
                 DLog(@"是");
            
+                SaleType satype = SaleTypeReturnGoods;
+               
+                PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+                PresellGoodsView.orderSaletype = satype;
+                [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
+            
             }];
+            [self.stAlertView show];
         }
         else if(self.orderSaletype == SaleTypePickingGoods)
         {
             DLog(@"确认提货");
-            [self httpCreateSaleOrder];
+            
+            
+            SaleType satype = SaleTypePickingGoods;
+            
+            
+            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            PresellGoodsView.orderSaletype = satype;
+            [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
+            
+        }];
+        
         }
         else
         {
             DLog(@"确认订单");
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否需要添加赠品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-                DLog(@"否");
-                ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-                ConfirmOrderView.Confirmsaletype = self.orderSaletype;
-                [self.navigationController pushViewController:ConfirmOrderView animated:YES];
-                
-                
-            } otherButtonBlock:^{
-                DLog(@"是");
-                
-                [self.navigationController popViewControllerAnimated:YES];
-            }];
+            [self httpOrderCounter];
+//            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否需要添加赠品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+//                DLog(@"否");
+//                ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+//                ConfirmOrderView.Confirmsaletype = self.orderSaletype;
+//                [self.navigationController pushViewController:ConfirmOrderView animated:YES];
+//                
+//                
+//            } otherButtonBlock:^{
+//                DLog(@"是");
+//                
+//                [self.navigationController popViewControllerAnimated:YES];
+//            }];
             
             [self.stAlertView show];
         }
@@ -331,41 +390,119 @@
     
     return YES;
 }
--(void)httpCreateSaleOrder
+-(void)httpOrderCounter
 {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:@"100817" forKey:@"shopId"];
-    [param setObject:@"100840" forKey:@"custId"];
-    [param setObject:@"1" forKey:@"orderAmount"];
-    [param setObject:@"2" forKey:@"orderFactAmount"];
-    [param setObject:@"3" forKey:@"orderDiscount"];
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObject:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
+    
+    NSString* strurl;
+    switch (self.orderSaletype) {
+        case SaleTypeSellingGoods://卖货
+        case SaleTypePresell://预售
+        {
+            if (self.orderSaletype == SaleTypeSellingGoods) {
+                strurl = [APIAddress ApiCreateSaleOrder];
+            }
+            else
+            {
+                strurl = [APIAddress ApiCreateEngageOrder];
+            }
+            
+//            [param setObject:@"1" forKey:@"orderAmount"];
+//            [param setObject:@"2" forKey:@"orderFactAmount"];
+//            [param setObject:@"3" forKey:@"orderDiscount"];
+            
+            NSArray* Amount = @[@"orderAmount",@"orderFactAmount",@"orderDiscount"];
+            for (int i = 0; i < Amount.count; i++) {
+                UITextField* textField = (UITextField*)[self.view viewWithTag:[[NSString stringWithFormat:@"101%d",i] intValue]];
+                DLog(@"text = %@",textField.text);
+                [param setObject:textField.text forKey:Amount[i]];
+            }
+            
+            
+            break;
+        }
+        case SaleTypeReturnGoods://卖货退货
+        {
+            strurl = [APIAddress ApiCreateReturnOrder];
+            [param setObject:@"1" forKey:@"orderAmount"];
+            
+            
+            break;
+        }
+        case SaleTypeReturnEngageGoods://待提货退货
+        {
+//            [param setObject:self.strcustId forKey:@"custId"];
+            strurl = [APIAddress ApiCreateReturnEngageOrder];
+            break;
+        }
+        case SaleTypePickingGoods://预定订单提货
+        {
+            strurl = [APIAddress ApiCreateSubOrder];
+            break;
+        }
+        
+        default:
+            break;
+    }
+    
+    NSMutableArray*  productList = [[NSMutableArray alloc] init];
+    if (self.orderSaletype != SaleTypeReturnEngageGoods) {
+        
+        for (int i = 0; i < self.items.count; i ++) {
+            if (self.orderSaletype == SaleTypeSellingGoods)
+            {
+                NSArray* qrcArr = [self.items[i] objectForKey:@"QrcList"];
+                
+                for (int j = 0; j < qrcArr.count; j++) {
+                    
+                    NSMutableDictionary *product = [NSMutableDictionary dictionary];
+                    [product setObject:[self.items[i] objectForKey:@"productId"] forKey:@"productId"];
+                    [product setObject:qrcArr[j] forKey:@"productCode"];
+                    
+                    [product setObject:@"1"forKey:@"quantity"];
+
+                    [productList addObject:product];
+                }
+                
+            }
+            else if (self.orderSaletype == SaleTypePresell)
+            {
+            
+                NSMutableDictionary *product = [NSMutableDictionary dictionary];
+                [product setObject:self.items[i][@"productId"] forKey:@"productId"];
+                
+                [product setObject:self.items[i][@"quantity"] forKey:@"quantity"];
+                
+                [productList addObject:product];
+            }
+            
+        }
+        
+        
+        [param setObject:productList forKey:@"productList"];
+    }
+        
+        
     
     
-    NSMutableDictionary *product = [NSMutableDictionary dictionary];
-    [product setObject:@"25" forKey:@"productId"];
-    [product setObject:@"1" forKey:@"quantity"];
-    [product setObject:@"999999999999" forKey:@"productCode"];
-    
-    NSArray*  productList = [NSArray arrayWithObjects:product, nil];
-    [param setObject:productList forKey:@"productList"];
-    
-    
-    NSMutableDictionary *gift = [NSMutableDictionary dictionary];
-    [gift setObject:@"25" forKey:@"productId"];
-    [gift setObject:@"1" forKey:@"quantity"];
-    [gift setObject:@"999999999999" forKey:@"productCode"];
-    NSArray*  giftList = [NSArray arrayWithObjects:gift, nil];
-    [param setObject:giftList forKey:@"giftList"];
-    
-    DLog(@"param = %@",param);
+
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    NSString* url = [NSObject URLWithBaseString:strurl parameters:parameter];
     
-    NSString* strurl = [NSObject URLWithBaseString:[APIAddress ApiCreateSaleOrder] parameters:parameter];
-    
-    [HttpClient asynchronousCommonJsonRequestWithProgress:strurl parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
+            
+            ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+            ConfirmOrderView.Confirmsaletype = self.orderSaletype;
+            ConfirmOrderView.strOrderId = [[data objectForKey:@"datas"] objectForKey:@"orderId"];
+            [self.navigationController pushViewController:ConfirmOrderView animated:YES];
+            }
     } failureBlock:^(NSString *description) {
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {

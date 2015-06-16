@@ -46,8 +46,8 @@
     self.slideSwitchView.slideSwitchViewDelegate = self;
     __weak typeof(self) weakSelf = self;
     self.DidNotPickGoodsView = [[DidNotPickGoodsViewController alloc] initWithNibName:@"DidNotPickGoodsViewController" bundle:nil];
-    self.DidNotPickGoodsView.title = @"未提货";
-    self.DidNotPickGoodsView.picktype = PickUpTypeDidNot;
+    self.DidNotPickGoodsView.strOrderId = self.strOrderId;
+    self.DidNotPickGoodsView.ManagementTyep = self.ManagementTyep;
     self.DidNotPickGoodsView.didSkipSubItem =^(NSInteger tag){
         if (tag == 101)
         {
@@ -62,9 +62,9 @@
         GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
         [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
-    self.DidPickGoodsView = [[DidNotPickGoodsViewController alloc] initWithNibName:@"DidNotPickGoodsViewController" bundle:nil];
-    self.DidPickGoodsView.title = @"已提货";
-    self.DidPickGoodsView.picktype = PickUpTypeDid;
+    self.DidPickGoodsView = [[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
+    self.DidPickGoodsView.strOrderId = self.strOrderId;
+    self.DidPickGoodsView.ManagementTyep = self.ManagementTyep;
     self.DidPickGoodsView.didSkipSubItem =^(NSInteger tag){
 //        if (tag == 101)
         {

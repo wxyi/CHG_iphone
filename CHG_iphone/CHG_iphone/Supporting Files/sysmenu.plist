@@ -30,7 +30,7 @@
 		<key>icon</key>
 		<string>order_management.png</string>
 		<key>title</key>
-		<string>订单管理</string>
+		<string>门店订单</string>
 	</dict>
 	<dict>
 		<key>icon</key>

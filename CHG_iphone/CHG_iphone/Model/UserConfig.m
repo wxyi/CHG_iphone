@@ -30,16 +30,16 @@
                 NSArray* roleslist = obj;
                 
                 for (int i = 0; i < roleslist.count; i++) {
-                    if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOP_OWNER"])
+                    if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOP_OWNER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopOwner"])
                     {
                         self.Roles = @"SHOP_OWNER";
                         break;
                     }
-                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]) {
+                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]||[[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]) {
                         self.Roles = @"SHOPLEADER";
                         break;
                     }
-                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPSELLER"]) {
+                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPSELLER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopSeller"]) {
                         self.Roles = @"SHOPSELLER";
                         break;
                     }

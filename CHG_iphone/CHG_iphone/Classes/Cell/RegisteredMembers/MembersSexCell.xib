@@ -17,10 +17,10 @@
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yMd-42-ny1">
                         <rect key="frame" x="5" y="20" width="310" height="145"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="eND-wd-w5X">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_register_girl.png" translatesAutoresizingMaskIntoConstraints="NO" id="eND-wd-w5X">
                                 <rect key="frame" x="50" y="25" width="80" height="80"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="V2a-rX-AQ0">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_register_boy.png" translatesAutoresizingMaskIntoConstraints="NO" id="V2a-rX-AQ0">
                                 <rect key="frame" x="180" y="25" width="80" height="80"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D1-7F-lBC" customClass="RadioButton">
@@ -86,7 +86,8 @@
     </objects>
     <resources>
         <image name="checked.png" width="24" height="24"/>
-        <image name="image1.jpg" width="2200" height="1650"/>
+        <image name="icon_register_boy.png" width="137" height="118"/>
+        <image name="icon_register_girl.png" width="170" height="123"/>
         <image name="title_bg.png" width="150" height="40"/>
         <image name="unchecked.png" width="24" height="24"/>
     </resources>

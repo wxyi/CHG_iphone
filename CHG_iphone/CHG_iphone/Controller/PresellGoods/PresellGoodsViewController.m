@@ -25,7 +25,7 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.items = [[NSMutableArray alloc] init];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
@@ -38,7 +38,7 @@
 }
 -(void)setupView
 {
-    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"image1.jpg",@"image",@"Hikid聪尔壮金装复合益生源或工工工工式工工工工工工",@"title",@"336",@"price",@"X 2",@"count", nil];
+    
     
     if (self.orderSaletype == SaleTypePresell) {
         self.title = @"预售";
@@ -54,10 +54,6 @@
     {
         self.title = @"提货货扫描";
     }
-    for (int i = 0; i < 5; i++) {
-        [self.items addObject:dict];
-    }
-    
     
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
@@ -97,12 +93,34 @@
         break;
     }
     DLog(@"codeData = %@",codeData);
-    [self httpQrCode:codeData];
-//    [SGInfoAlert showInfo:codeData
-//                  bgColor:[[UIColor darkGrayColor] CGColor]
-//                   inView:self.view
-//                 vertical:0.7];
-    [self.tableview reloadData];
+    //判断是否包含 头'http:'
+    NSString *regex = @"http+:[^\\s]*";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    
+    //判断是否包含 头'ssid:'
+    NSString *ssid = @"ssid+:[^\\s]*";;
+    NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+    
+    //判断是否为纯数字'
+    NSString * num        = @"^-?\\d+$";
+    NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", num];
+    if ([predicate evaluateWithObject:codeData]) {
+        
+        DLog(@"判断是否包含 头'http:");
+        [self httpQrCode:codeData];
+        
+    }
+    else if([ssidPre evaluateWithObject:codeData]){
+        DLog(@"判断是否包含 头'ssid:");
+    }
+    else if([numpred evaluateWithObject:codeData]){
+        DLog(@"判断是否为纯数字");
+        if (self.orderSaletype != SaleTypeReturnGoods && self.orderSaletype != SaleTypeReturnEngageGoods) {
+            [self httpQrCode:codeData];
+        }
+        
+        
+    }
 }
 
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -114,14 +132,14 @@
         break;
     
     
-    
-    //判断是否包含 头'http:'
-    NSString *regex = @"http+:[^\\s]*";
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
-    
-    //判断是否包含 头'ssid:'
-    NSString *ssid = @"ssid+:[^\\s]*";;
-    NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+//    
+//    //判断是否包含 头'http:'
+//    NSString *regex = @"http+:[^\\s]*";
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+//    
+//    //判断是否包含 头'ssid:'
+//    NSString *ssid = @"ssid+:[^\\s]*";;
+//    NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
     
     
 }
@@ -216,11 +234,12 @@
             
         }
         NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
-        cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
-        cell.titlelab.text = [dict  objectForKey:@"title"];
-        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
-        cell.countlab.text = [dict  objectForKey:@"count"];
-        
+
+
+         [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+        cell.titlelab.text = dict[@"productName"] ;
+        cell.pricelab.text = dict[@"productPrice"];
+        cell.countlab.text = [NSString stringWithFormat:@"%d",[dict[@"QrcList"] count]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -231,13 +250,18 @@
             cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
-        
-        cell.GoodsImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
-        cell.titlelab.text = [dict objectForKey:@"title"];
-        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
         [cell setupCell];
         
+        NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+
+        [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+        cell.titlelab.text = dict[@"productName"] ;
+        cell.pricelab.text = dict[@"productPrice"];
+
+        
+        cell.TextStepper.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
+        
+        [cell.TextStepper setCurrent:[dict[@"QrcList"] count]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -272,19 +296,208 @@
     DLog(@"确认信息");
     OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
     OrderCounterView.orderSaletype = self.orderSaletype;
+    
+    if (self.orderSaletype == SaleTypeSellingGoods) {
+        OrderCounterView.items = self.items;
+    }
+    else if(self.orderSaletype == SaleTypePresell)
+    {
+        for (int i = 0; i < self.items.count; i++) {
+            NSInteger tag  = [[NSString stringWithFormat:@"101%d",i] intValue];
+            TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
+            DLog(@"textstepper = %.f",TextStepper.Current);
+            NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
+            anotherDict = [self.items objectAtIndex:i];
+            [anotherDict setObject:[NSString stringWithFormat:@"%.f", TextStepper.Current ] forKey:@"quantity"];
+            [self.items replaceObjectAtIndex:i withObject:anotherDict];
+        }
+        OrderCounterView.items = self.items;
+    }
+    
+//    OrderCounterView.strcustId = self.strCustId;
+    
     [self.navigationController pushViewController:OrderCounterView animated:YES];
 }
 
--(void)httpQrCode:(NSString*)strurl
+-(void)httpQrCode:(NSString*)parame
 {
-    [HttpClient asynchronousRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObject:parame forKey:@"productCode"];
+    [parameter setObject:self.strCustId forKey:@"custId"];
+    
+    NSString* type;
+    if (self.orderSaletype == SaleTypeSellingGoods) {
+        type = @"0";
+    }
+    else if(self.orderSaletype == SaleTypePresell)
+    {
+        type = @"1";
+    }
+    [parameter setObject:type forKey:@"type"];
+//    NSMutableDictionary *productpar = [NSMutableDictionary dictionary];
+//    [productpar setObject:parame forKey:@"productCode"];
+//    DLog(@"parameter = %@",productpar);
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetProductBrief] parameters:parameter];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
+        if (self.orderSaletype == SaleTypeSellingGoods) {
+            [self addProductforSingleHair:[data objectForKey:@"datas"]];
+        }
+        else if(self.orderSaletype == SaleTypePresell)
+        {
+            [self addProductforSingleMultiple:[data objectForKey:@"datas"]];
+        }
+        
     } failureBlock:^(NSString *description) {
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
+}
+
+-(void)addProductforSingleMultiple:(NSArray*)datas
+{
+    /**
+     *  首次添加扫描信息，将二维码信息重新打包
+     */
+    NSMutableDictionary* product = [self productInfo:datas];
+    if (product == nil) {
+        return;
+    }
+    if (self.items.count == 0 ) {
+        [self.items addObject:product];
+    }
+    else
+    {
+        NSMutableArray* tempArray = [self.items mutableCopy];
+        BOOL isSameId = NO;
+        NSInteger index = 0 ;
+        for (int i = 0; i < tempArray.count; i++) {
+            
+            NSInteger productId = [[tempArray[i] objectForKey:@"productId"] intValue];
+            NSInteger dataproId = [product[@"productId"] intValue];
+            
+            if (productId == dataproId) {
+                isSameId = YES;
+                index = i;
+                
+
+            }
+
+        }
+        if (!isSameId) {
+            [self.items addObject:product];
+        }
+        else
+        {
+            NSMutableArray *QrcArr = tempArray[index][@"QrcList"];
+            NSMutableArray *prodQrcArr = product[@"QrcList"];
+            
+            for (int i = 0; i < prodQrcArr.count; i++) {
+                [QrcArr addObject:prodQrcArr[i]];
+            }
+            [product setObject:QrcArr forKey:@"QrcList"];
+            [self.items replaceObjectAtIndex:index withObject:product];
+        }
+    }
+    
+    [self.tableview reloadData];
+}
+
+-(void)addProductforSingleHair:(NSArray*)datas
+{
+    
+    NSMutableDictionary* product = [self productInfo:datas];
+    if (product == nil) {
+        return;
+    }
+    if (self.items.count == 0 ) {
+        [self.items addObject:product];
+    }
+    else
+    {
+        NSMutableArray* tempArray = [self.items copy];
+        BOOL isSameId = NO;
+        NSInteger index = 0 ;
+        for (int i = 0; i < tempArray.count; i++) {
+            
+                NSInteger productId = [[tempArray[i] objectForKey:@"productId"] intValue];
+                NSInteger dataproId = [product[@"productId"] intValue];
+                
+                if (productId == dataproId) {
+                    isSameId = YES;
+                    index = i;
+                }
+            
+        }
+        
+        if (!isSameId) {
+            [self.items addObject:product];
+        }
+        else
+        {
+            NSMutableArray *QrcArr = self.items[index][@"QrcList"];
+            NSMutableArray *prodQrcArr = product[@"QrcList"];
+            
+    
+            NSPredicate * QrcPredicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)",QrcArr];
+            
+            NSArray * prodQrcfilter = [prodQrcArr filteredArrayUsingPredicate:QrcPredicate];
+            
+            NSPredicate * prodQrcredicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)",prodQrcArr];
+            NSArray * Qrcfilter = [QrcArr filteredArrayUsingPredicate:prodQrcredicate];
+            
+            
+            if (prodQrcfilter.count == 0 && Qrcfilter.count == 0) {
+                [self.items removeObjectAtIndex:index];
+            }
+            else
+            {
+                NSMutableArray *datas = [[NSMutableArray alloc] init];
+                datas = [Qrcfilter mutableCopy];
+                if (prodQrcfilter.count != 0) {
+                    for (int i = 0; i < prodQrcfilter.count; i++) {
+                        [datas addObject:prodQrcfilter[i]];
+                    }
+                }
+                [product setObject:datas forKey:@"QrcList"];
+                [self.items replaceObjectAtIndex:index withObject:product];
+                
+            }
+            
+           
+        }
+    }
+    [self.tableview reloadData];
+}
+-(NSMutableDictionary*)productInfo:(NSArray*)datas
+{
+    if (datas.count > 0) {
+        NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
+        NSMutableArray *QrcArr = [[NSMutableArray alloc] init];
+        [anotherDict setObject:[datas[0] objectForKey:@"productName"] forKey:@"productName"];
+        [anotherDict setObject:[datas[0] objectForKey:@"productPrice"] forKey:@"productPrice"];
+        [anotherDict setObject:[datas[0] objectForKey:@"productSmallUrl"] forKey:@"productSmallUrl"];
+        [anotherDict setObject:[datas[0] objectForKey:@"productId"] forKey:@"productId"];
+
+        for (int i = 0; i < datas.count; i++) {
+            
+            [QrcArr addObject:datas[i][@"productCode"]];
+        }
+        [anotherDict setObject:QrcArr forKey:@"QrcList"];
+        
+        
+        return anotherDict;
+
+    }
+    else
+    {
+        return nil;
+    }
+    
 }
 /*
 #pragma mark - Navigation

@@ -249,4 +249,14 @@
  *    获取地址列表
  */
 +(NSString*) ApiBankCode;
+
+/**
+ *    二维码扫描识别商品
+ */
++(NSString*) ApiGetProductBrief;
+
+/**
+ *    订单详情
+ */
++(NSString*) ApiGetOrder;
 @end

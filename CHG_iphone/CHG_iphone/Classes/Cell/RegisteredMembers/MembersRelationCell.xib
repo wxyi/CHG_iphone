@@ -17,13 +17,13 @@
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lkr-zt-k8f">
                         <rect key="frame" x="5" y="20" width="310" height="140"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="82a-Te-EDv">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_register_woman.png" translatesAutoresizingMaskIntoConstraints="NO" id="82a-Te-EDv">
                                 <rect key="frame" x="20" y="25" width="77" height="80"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="bkC-Wv-jeM">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_register_man.png" translatesAutoresizingMaskIntoConstraints="NO" id="bkC-Wv-jeM">
                                 <rect key="frame" x="117" y="25" width="77" height="80"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Nkt-Fe-sgU">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_register_other.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nkt-Fe-sgU">
                                 <rect key="frame" x="214" y="25" width="77" height="80"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FgG-p4-xsx" customClass="RadioButton">
@@ -102,7 +102,9 @@
     </objects>
     <resources>
         <image name="checked.png" width="24" height="24"/>
-        <image name="image1.jpg" width="2200" height="1650"/>
+        <image name="icon_register_man.png" width="137" height="153"/>
+        <image name="icon_register_other.png" width="130" height="159"/>
+        <image name="icon_register_woman.png" width="149" height="156"/>
         <image name="title_bg.png" width="150" height="40"/>
         <image name="unchecked.png" width="24" height="24"/>
     </resources>

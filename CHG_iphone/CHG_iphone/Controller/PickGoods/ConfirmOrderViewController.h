@@ -11,4 +11,5 @@
 @interface ConfirmOrderViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,assign)SaleType Confirmsaletype;
+@property(nonatomic,strong)NSString* strOrderId;
 @end

@@ -7,12 +7,12 @@
 //
 
 #import "DidPickGoodsViewController.h"
-//#import "AllOrdersCell.h"
+#import "AllOrdersCell.h"
 #import "OrderAmountCell.h"
 #import "OrdersGoodsCell.h"
 @interface DidPickGoodsViewController ()
 @property UINib* OrdersGoodsNib;
-//@property UINib* AllOrdersNib;
+@property UINib* AllOrdersNib;
 @property UINib* OrderAmountNib;
 @end
 
@@ -32,6 +32,7 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
+    [self httpGetOrder];
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
@@ -45,9 +46,17 @@
     
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-//    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
+    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
+    
+    if (self.ManagementTyep == OrderManagementTypeAll) {
+        CGRect rect = self.tableview.frame;
+        rect.size.height = rect.size.height + 40;
+        self.tableview.frame = rect;
+        self.returnbtn.hidden = YES;
+        self.line.hidden = YES;
+    }
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -60,34 +69,35 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
-        if(cell==nil){
-            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        //        NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
-        
-        cell.GoodImage.image = [UIImage imageNamed:@"image1.jpg"];
-        cell.titlelab.text = @"理；大口日大日大田土日大田日土田大日";
-        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
-        cell.countlab.text = @"500";
-        
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
-//        AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
+//        OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
 //        if(cell==nil){
-//            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
 //            
 //        }
+//        //        NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
 //        
-//        [cell setupView:nil];
-//        cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-//            if (self.didSelectedSubItemAction) {
-//                self.didSelectedSubItemAction(indexPath);
-//            }
-//        };
+//        cell.GoodImage.image = [UIImage imageNamed:@"image1.jpg"];
+//        cell.titlelab.text = @"理；大口日大日大田土日大田日土田大日";
+//        cell.pricelab.text = @"111";//[dict objectForKey:@"price"];
+//        cell.countlab.text = @"500";
+//        
 //        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 //        return cell;
+        AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
+        if(cell==nil){
+            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            
+        }
+        cell.picktype = PickUpTypeDid;
+        cell.height = self.m_height;
+        [cell setupAllOrderView:self.items];
+        cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+            if (self.didSelectedSubItemAction) {
+                self.didSelectedSubItemAction(indexPath);
+            }
+        };
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        return cell;
     }
     else
     {
@@ -96,11 +106,13 @@
             cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        
-        cell.receivablelab.text = @"$336";
-        cell.Receivedlab.text = @"320";
+        cell.receivablelab.text =[NSString stringWithFormat:@"%.f", [self.items[@"orderAmount"] doubleValue]];
+        cell.Receivedlab.text = [NSString stringWithFormat:@"%.f", [self.items[@"orderFactAmount"] doubleValue]];
         [cell.Receivedlab setEnabled:NO];
-        cell.favorablelab.text = @"16";
+        cell.favorablelab.text = [NSString stringWithFormat:@"%.f", [self.items[@"orderDiscount"] doubleValue]];
+
+        [cell.Receivedlab setEnabled:NO];
+
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -108,80 +120,92 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return 65;
+        return self.m_height;
     }
     return 90;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 35;
-    }
-    else
-    {
-        return 10;
-    }
+    return 5;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 30;
-    }
-    return 1;
+        return 1;
 }
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    if (section != 0) {
+//        return nil;
+//    }
+//    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
+//    //    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//    v_header.backgroundColor = [UIColor clearColor];
+//    
+//    UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
+//    line.backgroundColor = UIColorFromRGB(0xdddddd);
+//    [v_header addSubview:line];
+//    
+//    UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
+//    datelab.textAlignment = NSTextAlignmentLeft;
+//    datelab.font = FONT(13);
+//    datelab.textColor = UIColorFromRGB(0x878787);;
+//    datelab.text = @"已提商品";
+//    [v_header addSubview:datelab];
+//    
+//    
+//    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
+//    orderstatus.textAlignment = NSTextAlignmentRight;
+//    orderstatus.font = FONT(13);
+//    orderstatus.textColor = UIColorFromRGB(0x878787);;
+//    orderstatus.text = @"制单人:武新义(导购)";
+//    [v_header addSubview:orderstatus];
+//    
+//    return v_header;
+//}
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    if (section != 0) {
+//        return nil;
+//    }
+//    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
+////    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//    v_footer.backgroundColor = [UIColor clearColor];
+//    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+//    goodscountlab.text = @" 共3件商品 1件赠品";
+//    goodscountlab.font = FONT(14);
+//    goodscountlab.textAlignment = NSTextAlignmentLeft;
+//    [v_footer addSubview:goodscountlab];
+//    
+//    UILabel* Pickuplab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+//    Pickuplab.text = @"共提货2次";
+//    Pickuplab.font = FONT(14);
+//    Pickuplab.textAlignment = NSTextAlignmentRight;
+//    [v_footer addSubview:Pickuplab];
+//    
+//    return v_footer;
+//}
+-(void)httpGetOrder
 {
-    if (section != 0) {
-        return nil;
-    }
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
-    //    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    v_header.backgroundColor = [UIColor clearColor];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
-    UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
-    line.backgroundColor = UIColorFromRGB(0xdddddd);
-    [v_header addSubview:line];
-    
-    UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
-    datelab.textAlignment = NSTextAlignmentLeft;
-    datelab.font = FONT(13);
-    datelab.textColor = UIColorFromRGB(0x878787);;
-    datelab.text = @"已提商品";
-    [v_header addSubview:datelab];
+    [parameter setObject:self.strOrderId forKey:@"orderId"];
     
     
-    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
-    orderstatus.textAlignment = NSTextAlignmentRight;
-    orderstatus.font = FONT(13);
-    orderstatus.textColor = UIColorFromRGB(0x878787);;
-    orderstatus.text = @"制单人:武新义(导购)";
-    [v_header addSubview:orderstatus];
+    DLog(@"parameter = %@",parameter);
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrder] parameters:parameter];
     
-    return v_header;
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@,msg = %@",data,msg);
+        self.items = [data objectForKey:@"order"];
+        self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5;
+        [self.tableview reloadData];
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section != 0) {
-        return nil;
-    }
-    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-//    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    v_footer.backgroundColor = [UIColor clearColor];
-    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
-    goodscountlab.text = @" 共3件商品 1件赠品";
-    goodscountlab.font = FONT(14);
-    goodscountlab.textAlignment = NSTextAlignmentLeft;
-    [v_footer addSubview:goodscountlab];
-    
-    UILabel* Pickuplab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
-    Pickuplab.text = @"共提货2次";
-    Pickuplab.font = FONT(14);
-    Pickuplab.textAlignment = NSTextAlignmentRight;
-    [v_footer addSubview:Pickuplab];
-    
-    return v_footer;
-}
-
 /*
 #pragma mark - Navigation
 

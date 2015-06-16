@@ -10,6 +10,8 @@
 
 @interface AllOrdersCell : MyTableViewCell<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,strong)NSArray* allitems;
+@property(nonatomic,strong)NSDictionary* allitems;
 @property(nonatomic,assign)CGFloat height;
+@property(nonatomic,assign)PickUpType picktype;
+-(void)setupAllOrderView:(NSDictionary *)items;
 @end

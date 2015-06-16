@@ -42,6 +42,8 @@
     [self.activityIndicatorView setActivityIndicatorViewStyle: UIActivityIndicatorViewStyleGray] ;
     
     [self.view addSubview : self.activityIndicatorView] ;
+    
+    [self httpGetProduct ];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -201,6 +203,26 @@
 {
     NSLog(@"开始加载");
     return YES;
+}
+
+-(void)httpGetProduct
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObject:self.strProductId forKey:@"productId"];
+    
+    DLog(@"parameter = %@",parameter);
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,msg);
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+    
+    }];
 }
 /*
 #pragma mark - Navigation
