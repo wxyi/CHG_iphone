@@ -283,9 +283,7 @@
     {
         if (self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods) {
             DLog(@"提货退货");
-            if (self.orderSaletype) {
-                <#statements#>
-            }
+
             __weak typeof(self) weakSelf = self;
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
                 DLog(@"否");
@@ -314,10 +312,8 @@
             
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
-            [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
-            
-        }];
-        
+            [self.navigationController pushViewController:PresellGoodsView animated:YES];
+
         }
         else
         {
