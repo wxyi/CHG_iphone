@@ -99,13 +99,27 @@
         [self LoginAccount];
     }
     else if(tag == 101)
-    { 
+    {
+        DLog(@"忘记密码");
+        UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+        NSString* info;
+        if (namefield.text.length == 0) {
+            info = @"请输入账号";
+        }
+        if (info.length != 0) {
+            
+            [SGInfoAlert showInfo:info
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            return ;
+        }
         ForgotPasswordViewController *ForgotPasswordView = [[ForgotPasswordViewController alloc] initWithNibName:@"ForgotPasswordViewController" bundle:nil];
         
         [self presentViewController:ForgotPasswordView animated:YES completion:^{
             
         }];
-        DLog(@"忘记密码");
+        
     }
     
 }
@@ -117,6 +131,7 @@
     if (namefield.text.length == 0) {
         info = @"请输入手机号码";
     }
+    
 //    else if (![IdentifierValidator isValid:IdentifierTypePhone value:namefield.text ])
 //    {
 //        info = @"手机格式不正确";
@@ -125,9 +140,9 @@
     {
         info = @"请输入密码";
     }
-    else if (passfield.text.length < 6)
+    else if (passfield.text.length > 16)
     {
-        info = @"密码不能小于6位";
+        info = @"密码不能大于16位";
     }
     
     if (info.length != 0) {
@@ -209,7 +224,7 @@
             [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
             
             
-            if ([[data objectForKey:@"loginFirst"] intValue] == 0)
+            if ([[data objectForKey:@"loginFirst"] intValue] != 0)
             {
                 SetPasswordViewController* ResetPasswordView = [[SetPasswordViewController alloc] initWithNibName:@"SetPasswordViewController" bundle:nil];
                 [self presentViewController:ResetPasswordView animated:YES completion:^{

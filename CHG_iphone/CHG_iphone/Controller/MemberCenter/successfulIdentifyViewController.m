@@ -62,8 +62,8 @@
             cell = (successfulIdentifyCell*)[[self.successfulIdentifyNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.iphoneLab.text = @"13382050875";
-        cell.nameLab.text = @"武新义";
+        cell.iphoneLab.text = self.m_CustDict[@"custMobile"];
+        cell.nameLab.text = self.m_CustDict[@"custName"];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -134,6 +134,7 @@
             DLog(@"预售");
             
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            
             if (indexPath.row == 0) {
                 PresellGoodsView.orderSaletype = SaleTypeSellingGoods;
             }
@@ -147,7 +148,7 @@
         case 2:
         {
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            OrderManagementView.strCustId =[ConfigManager sharedInstance].strCustId ;
+            
             OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             break;

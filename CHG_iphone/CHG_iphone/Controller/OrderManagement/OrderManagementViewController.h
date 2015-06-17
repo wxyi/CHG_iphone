@@ -18,6 +18,5 @@
 @property (nonatomic, strong) CompleteOrderViewController *CompleteOrderView;
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property (nonatomic, strong) BaseViewController *vcAll;
-@property (nonatomic, strong) NSString* strCustId;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @end

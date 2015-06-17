@@ -49,6 +49,7 @@
         cell = (RegisteredMembersCell*)[[self.RegisteredMembersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
+    cell.iphoneField.text = self.strIphone;
     cell.didshowInfo = ^(NSString* info){
         [SGInfoAlert showInfo:info
                       bgColor:[[UIColor darkGrayColor] CGColor]

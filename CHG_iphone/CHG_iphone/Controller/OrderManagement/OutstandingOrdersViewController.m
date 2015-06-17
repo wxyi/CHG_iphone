@@ -102,7 +102,16 @@
     orderstatus.font = FONT(13);
     orderstatus.textColor = UIColorFromRGB(0x878787);
     
-    orderstatus.text = [NSString stringWithFormat:@"%@ ",dict[@"orderType"]];
+    NSString* orderType;
+    if ([dict[@"orderType"] isEqualToString:@"ShopSale"]) {
+        orderType = @"卖货订单";
+    }
+    else if([dict[@"orderType"] isEqualToString:@"ShopEngage"])
+    {
+        orderType = @"预订订单";
+    }
+
+    orderstatus.text = [NSString stringWithFormat:@"%@ ",orderType];
     [v_header addSubview:orderstatus];
 
     return v_header;
@@ -137,7 +146,7 @@
 
     
     UIButton* orderDetailsbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    orderDetailsbtn.tag = 101;
+    orderDetailsbtn.tag = [[NSString stringWithFormat:@"10%d",section] intValue];
     [orderDetailsbtn.layer setMasksToBounds:YES];
     [orderDetailsbtn.layer setCornerRadius:4.0]; //设置矩形四个圆角半径
     [orderDetailsbtn.layer setBorderWidth:1.0]; //边框
@@ -152,7 +161,7 @@
     
     if (self.ManagementTyep != OrderManagementTypeAll) {
         UIButton* Terminationbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        Terminationbtn.tag = 102;
+        Terminationbtn.tag = [[NSString stringWithFormat:@"11%d",section] intValue];
         [Terminationbtn.layer setMasksToBounds:YES];
         [Terminationbtn.layer setCornerRadius:4.0]; //设置矩形四个圆角半径
         [Terminationbtn.layer setBorderWidth:1.0]; //边框
@@ -176,17 +185,39 @@
 }
 -(void)goskipdetails:(UIButton*)sender
 {
-    if (self.didSkipSubItem) {
-        self.didSkipSubItem(sender.tag);
-    }
+    NSString* tag = [NSString stringWithFormat:@"%d",sender.tag];
+    NSInteger section = [[tag substringFromIndex:2] intValue];
+    NSInteger ntag = [[tag substringToIndex:2] intValue];
+    NSDictionary* dict = [self.items objectAtIndex:section];
     
+    if (ntag == 11) {
+        DLog(@"终止定单")
+        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+            DLog(@"否");
+            
+            
+        } otherButtonBlock:^{
+            DLog(@"是");
+            [self httpCancelOrder :dict];
+        }];
+        
+        [self.stAlertView show];
+        
+    }
+    else
+    {
+        if (self.BtnSkipSelect) {
+            self.BtnSkipSelect(sender.tag,dict);
+        }
+    }
     
 }
 
 -(IBAction)Returngoods:(UIButton*)sender
 {
-    if (self.didSkipSubItem) {
-        self.didSkipSubItem(sender.tag);
+    
+    if (self.BtnSkipSelect) {
+        self.BtnSkipSelect(sender.tag,nil);
     }
     
 }
@@ -195,7 +226,13 @@
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [parameter setObject:self.strCustId forKey:@"custId"];
+    if (self.ManagementTyep == OrderManagementTypeAll) {
+        [parameter setObject:@""  forKey:@"custId"];
+    }
+    else
+    {
+        [parameter setObject:[ConfigManager sharedInstance].strCustId  forKey:@"custId"];
+    }
     [parameter setObject:@"0" forKey:@"orderStatus"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];
     
@@ -205,6 +242,39 @@
         self.items = [data objectForKey:@"datas"];
         [self.tableview reloadData];
         
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
+
+
+-(void)httpCancelOrder:(NSDictionary*)dict
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCancelOrder] parameters:parameter];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObject:dict[@"orderId"] forKey:@"orderId"];
+    [param setObject:dict[@"orderFactAmount"] forKey:@"factAmount"];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
+            
+            [self httpGetOutstandingOrderList];
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
     } failureBlock:^(NSString *description) {
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {

@@ -13,6 +13,7 @@
 @property(nonatomic,weak)IBOutlet UIButton* button;
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,strong)NSDictionary* dict;
+@property(nonatomic,strong)NSDictionary* priceDict;
 @property(nonatomic,assign)SaleType orderSaletype;
 @property(nonatomic,strong)STAlertView* stAlertView;
 -(IBAction)OrderCounterView:(id)sender;

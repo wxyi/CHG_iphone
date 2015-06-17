@@ -279,7 +279,7 @@
         {
 
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            OrderManagementView.strCustId =@"" ;
+//            OrderManagementView.strCustId =@"" ;
             OrderManagementView.ManagementTyep = OrderManagementTypeAll;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             

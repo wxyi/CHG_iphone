@@ -364,11 +364,11 @@
 }
 
 /**
- *    待提货退货
+ *    终止订单
  */
-+(NSString*) ApiCreateReturnEngageOrder
++(NSString*) ApiCancelOrder
 {
-    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"createReturnEngageOrder"];
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"cancelOrder"];
 }
 
 /**

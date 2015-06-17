@@ -325,7 +325,7 @@
             
             [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKey:@"datas"] objectForKey:@"Cust"] objectForKey:@"custId"] intValue]];
             DLog(@"识别成功");
-            if (self.isScan) {
+            if (self.isScan){
                 self.dict = [[data objectForKey:@"datas"] objectForKey:@"Cust"];
                 [self.tableview reloadData];
                 return ;
@@ -335,7 +335,7 @@
 
             }
         }
-        else if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==5002)
+        else if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==47001)
         {
             DLog(@"识别失败");
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
@@ -347,7 +347,9 @@
                 DLog(@"是");
                 self.isScan = NO;
                 [self.ZBarReader stop];
+                UITextField* texield = (UITextField*)[self.view viewWithTag:100];
                 RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
+                RegisteredMembersView.strIphone = texield.text;
                 [self.navigationController pushViewController:RegisteredMembersView animated:YES];
             }];
             
@@ -368,9 +370,9 @@
     switch (self.m_MenuType) {
         case MenuTypeMemberCenter:
         {
-            DLog(@"会员管理")
+            DLog(@"注册成功")
             successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
-            
+            successfulIdentifyView.m_CustDict = self.dict;
             [self.navigationController pushViewController:successfulIdentifyView animated:YES];
             break;
         }
@@ -378,7 +380,7 @@
         {
             DLog(@"订单管理")
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            OrderManagementView.strCustId =[NSString stringWithFormat:@"%d",[self.dict[@"custId"] intValue]] ;
+            
             OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             break;
@@ -389,6 +391,8 @@
             
             DLog(@"预售");
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            
+
             if (self.m_MenuType == MenuTypePresell)
             {
                 PresellGoodsView.orderSaletype = SaleTypePresell;

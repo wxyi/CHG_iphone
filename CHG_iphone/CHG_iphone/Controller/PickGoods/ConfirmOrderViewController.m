@@ -9,6 +9,8 @@
 #import "ConfirmOrderViewController.h"
 #import "ConfirmOrderCell.h"
 #import "PickGoodsViewController.h"
+#import "PresellGoodsViewController.h"
+#import "CompletedOrderDetailsViewController.h"
 @interface ConfirmOrderViewController ()
 @property UINib* ConfirmOrderNib;
 @end
@@ -75,7 +77,9 @@
     titlelab.textAlignment = NSTextAlignmentCenter;
     [v_footer addSubview:titlelab];
     
-    if (self.Confirmsaletype == SaleTypeSellingGoods) {
+    if (self.Confirmsaletype == SaleTypeSellingGoods
+        ||self.Confirmsaletype == SaleTypePickingGoods
+        ||self.Confirmsaletype == SaleTypeReturnGoods) {
         UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         detailsbtn.tag = 100;
         detailsbtn.frame = CGRectMake(6, 65, CGRectGetWidth(self.view.bounds)-12, 40);
@@ -120,16 +124,35 @@
 {
     if (sender.tag == 100) {
         DLog(@"订单详情");
-        PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-        [self.navigationController pushViewController:PickGoodsView animated:YES];
+        if (self.Confirmsaletype == SaleTypePresell) {
+            DLog(@"未完成订单")
+            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+            PickGoodsView.strOrderId = self.strOrderId;
+            PickGoodsView.ManagementTyep = OrderManagementTypeSingle;
+            [self.navigationController pushViewController:PickGoodsView animated:YES];
+        }
+        else
+        {
+            DLog(@"已完成订单");
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = self.strOrderId;
+            CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeSingle;
+            [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            
+        }
+    
+
     }
     else if(sender.tag == 101)
     {
         DLog(@"提货");
-        
+
+        PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+        PresellGoodsView.orderSaletype = SaleTypePickingGoods;
+        [self.navigationController pushViewController:PresellGoodsView animated:YES];
     }
-    
-    
+
+
 }
 /*
 #pragma mark - Navigation

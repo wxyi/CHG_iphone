@@ -37,8 +37,8 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
-    if (self.didSkipSubItem) {
-        self.didSkipSubItem(sender.tag);
+    if (self.BtnSkipSelect) {
+        self.BtnSkipSelect(sender.tag,self.items);
     }
 }
 -(void)setupView

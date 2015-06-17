@@ -17,4 +17,5 @@
 @property (nonatomic, strong) BaseViewController *vcAll;
 @property (nonatomic, strong) NSString *strOrderId;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
+@property(nonatomic,strong)STAlertView* stAlertView;
 @end

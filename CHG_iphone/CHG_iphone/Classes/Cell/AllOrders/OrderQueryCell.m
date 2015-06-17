@@ -27,7 +27,7 @@
         
         radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:[NSString stringWithFormat:@"groupId%D",1]];
         radio1.isButton = YES;
-        
+        radio1.tag = [[NSString stringWithFormat:@"11%d",i] intValue];
         radio1.frame = CGRectMake(70+i*62, 0, 62, 35);
         [radio1 setTitle:[items objectAtIndex:i] forState:UIControlStateNormal];
         radio1.titleLabel.font = FONT(14);
@@ -43,10 +43,16 @@
 }
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     NSLog(@"did selected radio:%@ groupId:%@", radio.titleLabel.text, groupId);
+    if (self.selectQradio) {
+        self.selectQradio(radio.titleLabel.text);
+    }
     
 }
 -(IBAction)QueryOrderBtn:(UIButton*)sender
 {
     DLog(@"查询")
+    if (self.queryOrder) {
+        self.queryOrder(sender.tag);
+    }
 }
 @end

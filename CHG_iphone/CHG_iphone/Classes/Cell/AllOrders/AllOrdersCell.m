@@ -120,16 +120,32 @@
     UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
-    datelab.textColor = UIColorFromRGB(0x878787);;
-    datelab.text = @"未提商品";
+    datelab.textColor = UIColorFromRGB(0x878787);
+    if (self.picktype == PickUpTypeFinish) {
+        datelab.text = @"商品";
+    }
+    else if(self.picktype == PickUpTypeDidNot)
+    {
+        datelab.text = @"未提商品";
+    }
+    else
+    {
+        datelab.text = @"已提商品";
+    }
+    
     [v_header addSubview:datelab];
     
     
-    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.bounds)-20, 30)];
+    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
     orderstatus.textAlignment = NSTextAlignmentRight;
     orderstatus.font = FONT(13);
-    orderstatus.textColor = UIColorFromRGB(0x878787);;
-    orderstatus.text = @"制单人:武新义(导购)";
+    orderstatus.textColor = UIColorFromRGB(0x878787);
+    if (self.picktype != PickUpTypeFinish)
+    {
+        orderstatus.text = [NSString stringWithFormat:@"制单人:%@",self.allitems[@"orderCreator"]];;
+    }
+    
+    
     [v_header addSubview:orderstatus];
     
     return v_header;

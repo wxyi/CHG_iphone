@@ -230,9 +230,9 @@
 +(NSString*) ApiCreateReturnOrder;
 
 /**
- *    待提货退货
+ *    终止订单
  */
-+(NSString*) ApiCreateReturnEngageOrder;
++(NSString*) ApiCancelOrder;
 
 /**
  *    APP缓存是否需要更新

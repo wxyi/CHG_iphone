@@ -10,5 +10,6 @@
 
 @interface successfulIdentifyViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,strong)NSString* strcustId;
+@property(nonatomic,strong)NSDictionary* m_CustDict;
+
 @end

@@ -12,10 +12,13 @@
 #import "NimbusAttributedLabel.h"
 #import "NSMutableAttributedString+NimbusAttributedLabel.h"
 #import "AllOrdersCell.h"
+#import "amountCell.h"
 @interface CompletedOrderDetailsViewController ()
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderAmountNib;
 @property UINib* AllOrdersNib;
+@property UINib* amountNib;
+
 @end
 
 @implementation CompletedOrderDetailsViewController
@@ -50,6 +53,13 @@
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
     
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
+    self.amountNib = [UINib nibWithNibName:@"amountCell" bundle:nil];
+    if (self.ManagementTyep == OrderManagementTypeAll) {
+        CGRect rect = self.tableview.frame;
+        rect.size.height = rect.size.height + 40;
+        self.tableview.frame = rect;
+        self.returnBtn.hidden = YES;
+    }
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -65,26 +75,33 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        static NSString *cellIdentifier = @"Cell";
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        amountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"amountCell"];
+        if(cell==nil){
+            cell = (amountCell*)[[self.amountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            
         }
-        cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
-        UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
-        title.textColor = UIColorFromRGB(0x323232);
-        title.font = FONT(15);
-        title.text = @"制单人:武新义(店长)";
-        [cell.contentView addSubview:title];
-        
-        UILabel* membertitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
-        membertitle.textColor = UIColorFromRGB(0x323232);
-        membertitle.font = FONT(15);
-        membertitle.text = @"会员:*义";
-        membertitle.textAlignment = NSTextAlignmentRight;
-        [cell.contentView addSubview:membertitle];
+        cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",self.items[@"orderCreator"]];
+        cell.priceLab.text = [NSString stringWithFormat:@"会员:%@",self.items[@"custName"]];
+//        static NSString *cellIdentifier = @"Cell";
+//        
+//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//        
+//        if (cell == nil) {
+//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+//        }
+//        cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//        UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+//        title.textColor = UIColorFromRGB(0x323232);
+//        title.font = FONT(15);
+//        title.text = [NSString stringWithFormat:@"制单人:%@",self.items[@"orderCreator"]];
+//        [cell.contentView addSubview:title];
+//        
+//        UILabel* membertitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+//        membertitle.textColor = UIColorFromRGB(0x323232);
+//        membertitle.font = FONT(15);
+//        membertitle.text = [NSString stringWithFormat:@"会员:%@",self.items[@"custName"]];
+//        membertitle.textAlignment = NSTextAlignmentRight;
+//        [cell.contentView addSubview:membertitle];
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;

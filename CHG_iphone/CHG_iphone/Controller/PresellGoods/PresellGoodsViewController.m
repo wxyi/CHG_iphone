@@ -294,29 +294,34 @@
 -(IBAction)ConfirmInfo:(id)sender
 {
     DLog(@"确认信息");
-    OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
-    OrderCounterView.orderSaletype = self.orderSaletype;
-    
-    if (self.orderSaletype == SaleTypeSellingGoods) {
-        OrderCounterView.items = self.items;
+    if (self.orderSaletype == SaleTypePickingGoods|| self.orderSaletype == SaleTypeReturnGoods) {
+        [self httpValidateOrderProduct];
     }
-    else if(self.orderSaletype == SaleTypePresell)
+    else
     {
-        for (int i = 0; i < self.items.count; i++) {
-            NSInteger tag  = [[NSString stringWithFormat:@"101%d",i] intValue];
-            TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
-            DLog(@"textstepper = %.f",TextStepper.Current);
-            NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
-            anotherDict = [self.items objectAtIndex:i];
-            [anotherDict setObject:[NSString stringWithFormat:@"%.f", TextStepper.Current ] forKey:@"quantity"];
-            [self.items replaceObjectAtIndex:i withObject:anotherDict];
+        OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
+        OrderCounterView.orderSaletype = self.orderSaletype;
+        
+        if (self.orderSaletype == SaleTypeSellingGoods ) {
+            OrderCounterView.items = self.items;
         }
-        OrderCounterView.items = self.items;
+        else if(self.orderSaletype == SaleTypePresell)
+        {
+            for (int i = 0; i < self.items.count; i++) {
+                NSInteger tag  = [[NSString stringWithFormat:@"101%d",i] intValue];
+                TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
+                DLog(@"textstepper = %.f",TextStepper.Current);
+                NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
+                anotherDict = [self.items objectAtIndex:i];
+                [anotherDict setObject:[NSString stringWithFormat:@"%.f", TextStepper.Current ] forKey:@"quantity"];
+                [self.items replaceObjectAtIndex:i withObject:anotherDict];
+            }
+            OrderCounterView.items = self.items;
+        }
+
+        [self.navigationController pushViewController:OrderCounterView animated:YES];
     }
     
-//    OrderCounterView.strcustId = self.strCustId;
-    
-    [self.navigationController pushViewController:OrderCounterView animated:YES];
 }
 
 -(void)httpQrCode:(NSString*)parame
@@ -325,7 +330,7 @@
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:parame forKey:@"productCode"];
-    [parameter setObject:self.strCustId forKey:@"custId"];
+    [parameter setObject:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
     
     NSString* type;
     if (self.orderSaletype == SaleTypeSellingGoods) {
@@ -335,6 +340,14 @@
     {
         type = @"1";
     }
+    else if(self.orderSaletype == SaleTypePickingGoods)
+    {
+        type = @"2";
+    }
+    else if(self.orderSaletype == SaleTypeReturnEngageGoods||self.orderSaletype == SaleTypeReturnGoods)
+    {
+        type = @"3";
+    }
     [parameter setObject:type forKey:@"type"];
 //    NSMutableDictionary *productpar = [NSMutableDictionary dictionary];
 //    [productpar setObject:parame forKey:@"productCode"];
@@ -343,7 +356,7 @@
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
-        if (self.orderSaletype == SaleTypeSellingGoods) {
+        if (self.orderSaletype == SaleTypeSellingGoods || self.orderSaletype == SaleTypePickingGoods ||self.orderSaletype == SaleTypeReturnEngageGoods ||self.orderSaletype == SaleTypeReturnGoods) {
             [self addProductforSingleHair:[data objectForKey:@"datas"]];
         }
         else if(self.orderSaletype == SaleTypePresell)
@@ -498,6 +511,56 @@
         return nil;
     }
     
+}
+//提货时点击“确认信息”调用本接口
+-(void)httpValidateOrderProduct
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    //post 参数
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    NSString *strurl ;
+    //验证订单商品
+    if (self.orderSaletype == SaleTypePickingGoods) {
+        strurl = [APIAddress ApiValidateOrderProduct];
+    }
+    else
+    {
+        strurl = [APIAddress ApiValidateProductReturn];
+    }
+    NSString* url = [NSObject URLWithBaseString:strurl parameters:parameter];
+    
+    
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObject:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
+
+
+    NSString* productCode = @"";
+    for (int i = 0; i < [self.items count]; i++) {
+        
+        productCode = [productCode stringByAppendingString:[self.items[i][@"QrcList"] componentsJoinedByString:@","]]  ;
+        productCode = [productCode stringByAppendingString:@","]  ;
+    }
+    DLog(@"productCode = %@",productCode)
+    
+    [param setObject:productCode forKey:@"productCodeStr"];
+    __weak typeof(self) weakSelf = self;
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",data,msg);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        
+            OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
+            OrderCounterView.orderSaletype = weakSelf.orderSaletype;
+            OrderCounterView.items = weakSelf.items;
+            OrderCounterView.priceDict = [data objectForKey:@"datas"];
+            [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
+            
+        }
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

@@ -41,6 +41,9 @@
 }
 -(void)setupView
 {
+    if (self.ManagementTyep == OrderManagementTypeAll) {
+        [ConfigManager sharedInstance].strCustId = @"";
+    }
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     //    self.slideSwitchView.frame = self.view.bounds;
     
@@ -62,18 +65,18 @@
      :returns: <#return value description#>
      */
     self.AllOrdersView = [[AllOrdersViewController alloc] initWithNibName:@"AllOrdersViewController" bundle:nil];
-    self.AllOrdersView.strCustId = self.strCustId;
     self.AllOrdersView.ManagementTyep = self.ManagementTyep;
     self.AllOrdersView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
         NSString* strtag = [NSString stringWithFormat:@"%d",tag];
         NSInteger ntag = [[strtag substringToIndex:2] intValue];
-        
+         DLog(@"dictionary = %@",dictionary);
         if (ntag == 10) {
             DLog(@"详情");
             if ([dictionary[@"orderStatus"] intValue] == 0) {
                 DLog(@"未完成订单")
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
                 PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
             }
             else
@@ -81,16 +84,12 @@
                 DLog(@"已完成订单");
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
                 CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
             }
         }
-        else
-        {
-            DLog(@"终止定单")
-        }
-        
-        
+
     };
     self.AllOrdersView.CellSkipSelect=^(NSDictionary* dictionary){
         GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
@@ -103,50 +102,38 @@
      :returns: <#return value description#>
      */
     self.OutstandingOrdersView = [[OutstandingOrdersViewController alloc] initWithNibName:@"OutstandingOrdersViewController" bundle:nil];
-    self.OutstandingOrdersView.strCustId = self.strCustId;
+    
     self.OutstandingOrdersView.ManagementTyep = self.ManagementTyep;
     self.OutstandingOrdersView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
-        DLog(@"row = %ld",(long)tag);
+        DLog(@"dictionary = %@",dictionary);
         NSString* strtag = [NSString stringWithFormat:@"%d",tag];
         NSInteger ntag = [[strtag substringToIndex:2] intValue];
-        if (ntag == 10) {
+        if (ntag == 10 ) {
             if ([dictionary[@"orderStatus"] intValue] == 0) {
                 DLog(@"未完成订单")
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
                 PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
             }
             else
             {
                 DLog(@"已完成订单");
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
             }
 
         }
-        else if(tag == 102)
-        {
-            DLog(@"终止订单");
-            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-                DLog(@"否");
-                
-                
-            } otherButtonBlock:^{
-                DLog(@"是");
-                
-            }];
-            
-            [weakSelf.stAlertView show];
-        }
         else
         {
             SaleType satype;
-            if (tag == 103) {
+            if (tag == 1313) {
                 DLog(@" 退货");
                 satype = SaleTypeReturnGoods;
             }
-            else if(tag == 104)
+            else if(tag == 1314)
             {
                 DLog(@"提货");
                 satype = SaleTypePickingGoods;
@@ -173,18 +160,20 @@
      :returns: <#return value description#>
      */
     self.CompleteOrderView = [[CompleteOrderViewController alloc] initWithNibName:@"CompleteOrderViewController" bundle:nil];
-    self.CompleteOrderView.strCustId = self.strCustId;
     self.CompleteOrderView.ManagementTyep = self.ManagementTyep;
     self.CompleteOrderView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
-        if (tag == 101) {
+        NSString* strtag = [NSString stringWithFormat:@"%d",tag];
+        NSInteger ntag = [[strtag substringToIndex:2] intValue];
+        if (ntag == 10) {
             DLog(@"订单详情");
             DLog(@"已完成订单");
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
 
         }
-        else if(tag == 102)
+        else if(tag == 1312)
         {
             SaleType satype = SaleTypeReturnGoods;
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];

@@ -104,9 +104,9 @@
     if (passfield1.text.length == 0) {
         info = @"请输入密码";
     }
-    else if (passfield1.text.length < 16 )
+    else if (passfield1.text.length > 16 )
     {
-        info = @"密码必须大于6位";
+        info = @"密码必须小于16位";
     }
     else if(passfield2.text.length == 0)
     {

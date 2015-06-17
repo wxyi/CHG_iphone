@@ -48,8 +48,23 @@
     self.DidNotPickGoodsView = [[DidNotPickGoodsViewController alloc] initWithNibName:@"DidNotPickGoodsViewController" bundle:nil];
     self.DidNotPickGoodsView.strOrderId = self.strOrderId;
     self.DidNotPickGoodsView.ManagementTyep = self.ManagementTyep;
-    self.DidNotPickGoodsView.didSkipSubItem =^(NSInteger tag){
-        if (tag == 101)
+    self.DidNotPickGoodsView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
+        
+        if (tag == 100)
+        {
+            DLog(@"终止定单")
+            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                [weakSelf httpCancelOrder :dictionary];
+            }];
+            
+            [weakSelf.stAlertView show];
+        }
+        else
         {
             SaleType satype = SaleTypePickingGoods;
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
@@ -65,8 +80,7 @@
     self.DidPickGoodsView = [[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
     self.DidPickGoodsView.strOrderId = self.strOrderId;
     self.DidPickGoodsView.ManagementTyep = self.ManagementTyep;
-    self.DidPickGoodsView.didSkipSubItem =^(NSInteger tag){
-//        if (tag == 101)
+    self.DidPickGoodsView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
         {
             SaleType satype = SaleTypeReturnGoods;
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
@@ -108,6 +122,36 @@
         self.vcAll = self.DidPickGoodsView;
     }
     [self.vcAll viewDidCurrentView];
+}
+-(void)httpCancelOrder:(NSDictionary*)dict
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCancelOrder] parameters:parameter];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObject:dict[@"orderId"] forKey:@"orderId"];
+    [param setObject:dict[@"orderFactAmount"] forKey:@"factAmount"];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
+            
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 
 /*

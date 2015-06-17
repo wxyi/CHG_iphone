@@ -59,26 +59,11 @@
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
-    if (sender.tag == 100) {
-        DLog(@"终止订单");
-        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-            DLog(@"否");
-            
-            
-        } otherButtonBlock:^{
-            DLog(@"是");
-            
-        }];
-        
-        [self.stAlertView show];
+    
+    if (self.BtnSkipSelect) {
+        self.BtnSkipSelect(sender.tag,self.items);
     }
-    else if(sender.tag == 101)
-    {
-        DLog(@"提货");
-        if (self.didSkipSubItem) {
-            self.didSkipSubItem(sender.tag);
-        }
-    }
+    
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

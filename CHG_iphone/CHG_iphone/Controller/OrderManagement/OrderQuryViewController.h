@@ -12,4 +12,8 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)UUDatePicker *startdatePicker;
 @property(nonatomic,strong)UUDatePicker *enddatePicker;
+@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,assign)CGFloat m_height;
+@property(nonatomic,strong)NSString* strOrderType;
+@property (nonatomic,assign)OrderManagementType ManagementTyep;
 @end
