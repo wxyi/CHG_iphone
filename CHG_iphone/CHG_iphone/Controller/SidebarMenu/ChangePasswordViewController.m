@@ -142,25 +142,25 @@
     if (passfield0.text.length == 0) {
         info = @"请输入密码";
     }
-    else if (passfield0.text.length < 6)
+    else if (passfield0.text.length > 16)
     {
-        info = @"密码必须大于6位";
+        info = @"密码必须大于16位";
     }
     else if(passfield1.text.length == 0)
     {
         info = @"请确认密码";
     }
-    else if (passfield1.text.length < 6)
+    else if (passfield1.text.length > 16)
     {
-        info = @"密码必须大于6位";
+        info = @"密码必须小于16位";
     }
     else if(passfield2.text.length == 0)
     {
         info = @"请确认密码";
     }
-    else if (passfield2.text.length < 6)
+    else if (passfield2.text.length > 16)
     {
-        info = @"密码必须大于6位";
+        info = @"密码必须小于16位";
     }
     else if (![passfield1.text isEqualToString:passfield2.text])
     {
@@ -184,27 +184,38 @@
 }
 -(void)httpResetPassWord
 {
-    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1012];
+    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1010];
+    UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"924051" forKey:@"checkCode"];
-    [parameter setObject:[NSObject md5:passfield1.text] forKey:@"newpwd"];
+
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:@"100861" forKey:@"checkCode"];
-    [param setObject:passfield1.text forKey:@"newpwd"];
-    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
+    [param setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"pwd"];
+    [param setObject:[[NSObject md5:passfield2.text] uppercaseString] forKey:@"newpwd"];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiUpdatePassword] parameters:parameter];
     
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
         {
-            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-            [delegate setupHomePageViewController];
+            [MMProgressHUD dismiss];
+            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+//            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+//            [delegate setupHomePageViewController];
+            
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
         }
         
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

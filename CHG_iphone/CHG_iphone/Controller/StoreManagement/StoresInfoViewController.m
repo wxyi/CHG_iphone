@@ -60,11 +60,14 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1 + self.items.count;
+    return  self.items.count;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
+        if (self.items.count == 0) {
+            return 1;
+        }
         return 2;
     }
     return 1;
@@ -99,8 +102,9 @@
                 cell = (StoreManagementCell*)[[self.StoreManagementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                 
             }
+            NSDictionary* dict = [self.items objectAtIndex:indexPath.section ];
             cell.positionlab.text = @"门店老板";
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",self.shopinfo[@"owerName"],self.shopinfo[@"owerMobile"]];
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
             cell.didSkipSubItem =^(NSInteger tag){
                 
                 [self showQrCode:@"神仙小武子"];
@@ -120,18 +124,17 @@
         }
 
         
-        NSDictionary* dict = [self.items objectAtIndex:indexPath.section - 1];
-        if ([[dict allKeys] containsObject:@"managerId"]) {
+        NSDictionary* dict = [self.items objectAtIndex:indexPath.section ];
+        if ([dict[@"positionId"] intValue] == 2) {
             cell.positionlab.text = @"店长";
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"managerName"],dict[@"managerMobile"]];
+            
             cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
         }
         else{
             cell.positionlab.text = @"导购";
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             cell.icon.image = [UIImage imageNamed:@"icon_shopping_guide.png"];
         }
+        cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
         cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%d",indexPath.section] intValue];
         cell.IndexPath = indexPath;
         cell.didselectDisable = ^(NSIndexPath* indexPath){
@@ -177,21 +180,29 @@
     
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        self.shopinfo = [data objectForKey:@"shop"];
-        [self.items removeAllObjects];
-        if ([self.shopinfo [@"managerId"] intValue] != 0) {
-            NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-            [dict setObject:self.shopinfo [@"managerId"] forKey:@"managerId"];
-            [dict setObject:self.shopinfo [@"managerName"] forKey:@"managerName"];
-            [dict setObject:self.shopinfo [@"managerMobile"] forKey:@"managerMobile"];
-            [dict setObject:self.shopinfo [@"qrcUrl"] forKey:@"qrcUrl"];
-            [self.items addObject:dict];
+        if (success) {
+            [MMProgressHUD dismiss];
+            self.shopinfo = [data objectForKey:@"shop"];
+            [self.items removeAllObjects];
+            
+            [self httpGetSellerList];
         }
-        [self httpGetSellerList];
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
+        
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismiss];
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -204,19 +215,60 @@
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetSellerList] parameters:parameter];
     
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        [MMProgressHUD dismiss];
+//        [MMProgressHUD dismiss];
 //        self.shopinfo = [data objectForKey:@"shop"];
 //        self.items = data;
-        NSArray* datas = [data objectForKey:@"datas"];
-        
-        for (int i = 0; i< datas.count; i++) {
-            [self.items addObject:[datas objectAtIndex:i]];
+        if (success) {
+            [MMProgressHUD dismiss];
+            NSArray* datas = [data objectForKey:@"datas"];
+            
+            NSDictionary* boss;
+            NSDictionary* manager;
+            for (int i = 0; i < datas.count; i ++) {
+                DLog(@"%d",[[datas[i] objectForKey:@"positionId"] intValue]);
+                if ([[datas[i] objectForKey:@"positionId"] intValue] == 0) {
+                    boss = datas[i];
+                }
+                else if ([[datas[i] objectForKey:@"positionId"] intValue] == 2)
+                {
+                    manager = datas[i];
+                }
+                else
+                {
+                    [self.items addObject:datas[i]];
+                }
+                
+            }
+            if ([boss count] != 0) {
+                [self.items insertObject:boss atIndex:0];
+            }
+            
+            if ([manager count] != 0) {
+                [self.items insertObject:manager atIndex:1];
+                
+                self.addbtn.userInteractionEnabled=NO;
+                self.addbtn.alpha=0.4;
+            }
+            
+            
+            DLog(@"self.items = %@",self.items);
+            [self.tableview reloadData];
         }
-        [self.tableview reloadData];
-    } failureBlock:^(NSString *description) {
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
         
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -243,6 +295,7 @@
 {
     if (indexPath.section == 0&& indexPath.row == 0) {
         StoresDetailsViewController* StoresDetailsView = [[StoresDetailsViewController alloc] initWithNibName:@"StoresDetailsViewController" bundle:nil];
+        StoresDetailsView.storesDict = self.shopinfo;
         [self.navigationController pushViewController:StoresDetailsView animated:YES];
     }
     
@@ -272,17 +325,11 @@
     
     [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
-    NSDictionary* dict = [self.items objectAtIndex:indexpath.section -1];
-    NSString* sellerId;
+    NSDictionary* dict = [self.items objectAtIndex:indexpath.section ];
     
-    if ([[dict allKeys] containsObject:@"managerId"])  {
-        sellerId = dict[@"managerId"];
-    }
-    else
-    {
-        sellerId = dict[@"sellerId"];
-    }
-    [param setObject:sellerId forKey:@"sellerId"];
+    
+    
+    [param setObject:dict[@"sellerId"] forKey:@"sellerId"];
     
     NSInteger tag = [[NSString stringWithFormat:@"101%d",indexpath.section] intValue];
     UIButton* btn = (UIButton*)[self.view viewWithTag:tag];
@@ -297,17 +344,23 @@
     [param setObject:status forKey:@"status"];
     
     DLog(@"url = %@",url);
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
         {
-            NSInteger tag = [[NSString stringWithFormat:@"101%d",indexpath.section] intValue];
-            UIButton* btn = (UIButton*)[self.view viewWithTag:tag];
-            [btn setEnabled:NO];
-            [btn setAlpha:0.4];
+            
+            [MMProgressHUD dismiss];
+            [self.items removeAllObjects];
+            [self httpGetSellerList];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
         }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

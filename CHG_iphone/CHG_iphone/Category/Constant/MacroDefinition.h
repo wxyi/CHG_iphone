@@ -16,8 +16,15 @@
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
 #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 
+//路径
+#define APPDocumentsDirectory [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+//分页每页条数
+#define PAGESIZE @"20"
 //-------------------获取设备大小-------------------------
 
+
+// block self
+#define WEAKSELF typeof(self) __weak weakSelf = self;
 
 //-------------------打印日志-------------------------
 //DEBUG  模式下打印日志,当前行
@@ -287,6 +294,7 @@ typedef void(^AccountBriefSelect)(NSIndexPath* indexPath);
 typedef void(^TableViewBtnSkipSelect)(NSInteger tag,NSDictionary* dictionary);
 typedef void(^TableViewCellSkipSelect)(NSDictionary* dictionary);
 typedef void(^ShowInfoAlert)(NSString* info);
+typedef void(^GetCheckCode)(NSString* checkcode);
 #define ZbarRead_With 170
 
 

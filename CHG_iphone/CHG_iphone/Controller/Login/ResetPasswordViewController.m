@@ -9,6 +9,11 @@
 #import "ResetPasswordViewController.h"
 #import "ResetPasswordCell.h"
 #import "StoreManagementViewController.h"
+
+#import "HomePageViewController.h"
+#import "CHGNavigationController.h"
+#import "SidebarMenuTableViewController.h"
+#import "REFrostedViewController.h"
 @interface ResetPasswordViewController ()
 @property UINib* ResetPasswordNib;
 @end
@@ -73,9 +78,9 @@
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
     
-    imageview.image = [UIImage imageNamed:@"logo.png"];
+    imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
     return v_header;
@@ -103,13 +108,17 @@
     if (passfield1.text.length == 0) {
         info = @"请输入密码";
     }
-    else if (passfield1.text.length < 6)
+    else if (passfield1.text.length > 16)
     {
-        info = @"密码必须大于6位";
+        info = @"密码必须小于16位";
     }
     else if(passfield2.text.length == 0)
     {
         info = @"请确认密码";
+    }
+    else if (passfield2.text.length > 16)
+    {
+        info = @"密码必须小于16位";
     }
     else if (![passfield1.text isEqualToString:passfield2.text])
     {
@@ -135,18 +144,21 @@
 {
     UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"924051" forKey:@"checkCode"];
-    [parameter setObject:[NSObject md5:passfield1.text] forKey:@"newpwd"];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:self.strmobile forKey:@"userName"];
+    [parameter setObject:self.strcheckCode forKey:@"checkCode"];
+    [parameter setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newpwd"];
     
-    NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:@"100861" forKey:@"checkCode"];
-    [param setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newpwd"];
-    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
+   
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiForgetPassword] parameters:nil];
     
-    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:parameter successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            
+            [MMProgressHUD dismiss];
+            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
                 
@@ -158,18 +170,38 @@
             }
             else
             {
-
-                AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-                [delegate setupHomePageViewController];
+                [self setupHomePageViewController];
             }
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
         }
         
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
 }
+-(void)setupHomePageViewController
+{
+    CHGNavigationController *navigationController = [[CHGNavigationController alloc] initWithRootViewController:[[HomePageViewController alloc] init]];
+    
+    SidebarMenuTableViewController *SidebarMenu = [[SidebarMenuTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    // Create frosted view controller
+    //
+    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
+    frostedViewController.direction = REFrostedViewControllerDirectionLeft;
+    frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    
+    
+    [self presentViewController:frostedViewController animated:YES completion:^{
+        [MMProgressHUD dismiss];
+    }];
+}
+
 /*
 #pragma mark - Navigation
 

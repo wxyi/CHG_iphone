@@ -11,6 +11,7 @@
 #import "SidebarMenuTableViewController.h"
 
 #import "OrderQuryViewController.h"
+#import "SuccessRegisterViewController.h"
 @interface CHGNavigationController ()
 @property (strong, readwrite, nonatomic) SidebarMenuTableViewController *SidebarMenuController;
 @end
@@ -37,6 +38,7 @@
 -(void)skipPage
 {
     DLog(@"搜索");
+    
     OrderQuryViewController* OrderQueryView = [[OrderQuryViewController alloc] initWithNibName:@"OrderQuryViewController" bundle:nil];
     [self pushViewController:OrderQueryView animated:YES];
 }
@@ -64,5 +66,55 @@
     // Pass the selected object to the new view controller.
 }
 */
+-(void)RegisteSuccessful
+{
+    [self httpCreateCustomer ];
+    
+}
+-(void)httpCreateCustomer
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomer] parameters:parameter];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:[ConfigManager sharedInstance].strcustMobile forKey:@"custMobile"];
+    [param setObject:[ConfigManager sharedInstance].strcheckCode forKey:@"checkCode"];
+    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObject:[ConfigManager sharedInstance].strcustName forKey:@"custName"];
+
+    [param setObject:@"" forKey:@"babyBirthday"];
+    [param setObject:@"" forKey:@"babyRelation"];
+    [param setObject:@"" forKey:@"babyGender"];
+
+    
+    DLog(@"param = %@",param);
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@",data);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            [MMProgressHUD dismiss];
+            
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"custId"] intValue]];
+            SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
+            
+            [self pushViewController:SuccessRegisterView animated:YES];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+        }
+        
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
 
 @end

@@ -246,7 +246,7 @@
 
 
 /**
- *    获取地址列表
+ *    获取银行卡列表
  */
 +(NSString*) ApiBankCode;
 
@@ -259,4 +259,25 @@
  *    订单详情
  */
 +(NSString*) ApiGetOrder;
+
+/**
+ *    删除银行卡
+ */
++(NSString*) ApiDeleteBankCard;
+
+/**
+ *    会员中心
+ */
++(NSString*) ApiGetCustCenter;
+
+/**
+ *   忘记密码-获取手机号
+ */
++(NSString*) ApiGetMobileByUserName;
+
+
+/**
+ *   忘记密码（登陆页面，还未登陆）
+ */
++(NSString*) ApiForgetPassword;
 @end

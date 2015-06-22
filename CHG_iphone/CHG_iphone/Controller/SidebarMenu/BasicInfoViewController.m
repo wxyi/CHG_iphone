@@ -59,24 +59,52 @@
     title.text = [self.items objectAtIndex:indexPath.row];
     [cell.contentView addSubview:title];
     
-    UILabel* infolab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
-    infolab.textColor = UIColorFromRGB(0x323232);
-    infolab.font = FONT(15);
-    infolab.textAlignment = NSTextAlignmentRight;
-    NSString* info;
-    if (indexPath.row == 0) {
-        info = self.BasicInfo[@"userName"];
+    if (indexPath.row != 2) {
+        UILabel* infolab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+        infolab.textColor = UIColorFromRGB(0x323232);
+        infolab.font = FONT(15);
+        infolab.textAlignment = NSTextAlignmentRight;
+        NSString* info;
+        if (indexPath.row == 0) {
+            info = self.BasicInfo[@"userName"];
+        }
+        else if (indexPath.row == 1)
+        {
+
+            if ([self.BasicInfo[@"mobile"] length] != 0) {
+                NSString* idcard = self.BasicInfo[@"mobile"];
+                idcard = [NSString stringWithFormat:@"*******%@",[idcard substringFromIndex:7]];
+                info = idcard;
+            }
+            else
+            {
+                info = @"";
+            }
+        }
+        
+        else if (indexPath.row == 3)
+        {
+            if ([self.BasicInfo[@"idcardNumber"] length] != 0) {
+                NSString* idcard = self.BasicInfo[@"idcardNumber"];
+                idcard = [NSString stringWithFormat:@"**************%@",[idcard substringFromIndex:14]];
+                info = idcard;
+            }
+            else
+            {
+                info = @"";
+            }
+            
+        }
+        infolab.text = info;
+        [cell.contentView addSubview:infolab];
     }
-    else if (indexPath.row == 1)
+    else
     {
-        info = self.BasicInfo[@"mobile"];
+        UIImageView * scanImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH -50, 2, 40, 40)];
+        scanImage.image = [QRCodeGenerator qrImageForString:self.BasicInfo[@"dimensionalCodeUrl"] imageSize:40];
+        [cell.contentView addSubview:scanImage];
     }
-    else if (indexPath.row == 3)
-    {
-        info = self.BasicInfo[@"idcardNumber"];
-    }
-    infolab.text = info;
-    [cell.contentView addSubview:infolab];
+    
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -113,13 +141,28 @@
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyProfile] parameters:parameter];
+    
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@,msg = %@",data,msg);
-        self.BasicInfo = data;
-        [self.tableview reloadData];
-    } failureBlock:^(NSString *description) {
+        if (success) {
+//            [MMProgressHUD dismiss];
+            self.BasicInfo = data;
+            [self.tableview reloadData];
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
         
+    } failureBlock:^(NSString *description) {
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

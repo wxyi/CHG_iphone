@@ -10,4 +10,5 @@
 
 @interface SuccessRegisterViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,strong)NSDictionary* m_CustDict;
 @end

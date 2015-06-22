@@ -135,20 +135,24 @@
     [param setObject:dict[@"orderId"] forKey:@"orderId"];
     [param setObject:dict[@"orderFactAmount"] forKey:@"factAmount"];
     
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
-            
+            [MMProgressHUD dismiss];
         }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
-                           inView:self.view
-                         vertical:0.7];
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

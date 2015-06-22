@@ -12,6 +12,7 @@
 #import "MembersSexCell.h"
 #import "SuccessRegisterViewController.h"
 #import "CHGNavigationController.h"
+
 @interface MemberInfoViewController ()<UUDatePickerDelegate>
 @property UINib* MembersRelationNib;
 @property UINib* MembersBirthdayNib;
@@ -26,7 +27,10 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
+    
+    
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(UINavigationController*)self.navigationController action:@selector(RegisteSuccessful)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -35,12 +39,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)skipPage
-{
-    DLog(@"跳过");
-    SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
-    [self.navigationController pushViewController:SuccessRegisterView animated:YES];
-}
+
 -(void)setupView
 {
     self.tableview.dataSource = self;
@@ -87,7 +86,7 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     if (indexPath.section == 0) {
         MembersRelationCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MembersRelationCell"];
         if(cell==nil){
@@ -145,10 +144,44 @@
 -(IBAction)SubmitCompleted:(id)sender
 {
     DLog(@"提交完成");
+    
+    NSIndexPath* indexpath = [NSIndexPath indexPathForItem:0 inSection:0];
+    MembersRelationCell *cell = (MembersRelationCell*)[self.tableview cellForRowAtIndexPath:indexpath];
+    
+    
+    self.strBabyRelation = @"";
+    NSArray *radioGroup = cell.radioButton.groupButtons;
+    for (int i = 0; i < radioGroup.count; i ++) {
+        RadioButton* btn = radioGroup[i];
+        if (btn.selected) {
+            self.strBabyRelation = btn.titleLabel.text;
+        }
+    }
+    
+    self.strBabyRelation = [self.strBabyRelation stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    indexpath = [NSIndexPath indexPathForItem:0 inSection:2];
+    MembersSexCell *cell1 = (MembersSexCell*)[self.tableview cellForRowAtIndexPath:indexpath];
+    
+    radioGroup = cell1.radioButton.groupButtons;
+    for (int i = 0; i < radioGroup.count; i ++) {
+        RadioButton* btn = radioGroup[i];
+        if (btn.selected) {
+            self.strBabyGender = btn.titleLabel.text;
+        }
+    }
+    self.strBabyGender = [self.strBabyGender stringByReplacingOccurrencesOfString:@" " withString:@""];
     UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
     NSString* info;
-    if (textfield.text.length == 0) {
+    
+     if (self.strBabyRelation.length == 0) {
+        info = @"请选择与宝宝关系";
+    }
+    else if (textfield.text.length == 0) {
         info = @"请输入宝宝生日";
+    }
+    else if (self.strBabyGender.length == 0) {
+        info = @"请选择宝宝性别";
     }
     if (info.length != 0) {
         
@@ -158,27 +191,28 @@
                      vertical:0.7];
         return ;
     }
-    NSIndexPath* indexpath = [NSIndexPath indexPathForItem:0 inSection:0];
-    MembersRelationCell *cell = (MembersRelationCell*)[self.tableview cellForRowAtIndexPath:indexpath];
-    
-    self.strBabyRelation = cell.radioButton.titleLabel.text;
     
     
-    indexpath = [NSIndexPath indexPathForItem:0 inSection:2];
-    MembersSexCell *cell1 = (MembersSexCell*)[self.tableview cellForRowAtIndexPath:indexpath];
-    NSString* sex = cell1.radioButton.titleLabel.text;
-    sex = [sex stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([sex isEqualToString:@"女宝宝"]) {
-        sex = @"F";
+    if ([self.strBabyRelation isEqualToString:@"母亲"]) {
+        self.strBabyRelation = @"FATHER";
+    }
+    else if ([self.strBabyRelation isEqualToString:@"父亲"])
+    {
+        self.strBabyRelation = @"MONTHER";
     }
     else
     {
-        sex = @"M";
+        self.strBabyRelation = @"OTHER";
     }
-    self.strBabyGender = sex;
     
-    
-    
+    if ([self.strBabyGender isEqualToString:@"女宝宝"]) {
+        self.strBabyGender = @"F";
+    }
+    else
+    {
+        self.strBabyGender = @"M";
+    }
+
     [self httpCreateCustomer];
     
 }
@@ -206,26 +240,37 @@
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomer] parameters:parameter];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:self.strCustMobile forKey:@"custMobile"];
+    [param setObject:[ConfigManager sharedInstance].strcustMobile forKey:@"custMobile"];
+    [param setObject:[ConfigManager sharedInstance].strcheckCode forKey:@"checkCode"];
     [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:self.strCustName forKey:@"custName"];
+    [param setObject:[ConfigManager sharedInstance].strcustName forKey:@"custName"];
     [param setObject:self.strBabyBirthday forKey:@"babyBirthday"];
     [param setObject:self.strBabyRelation forKey:@"babyRelation"];
     [param setObject:self.strBabyGender forKey:@"babyGender"];
-    [param setObject:self.strCheckCode forKey:@"checkCode"];
+    
     
     DLog(@"param = %@",param);
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@",data);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            [MMProgressHUD dismiss];
+            
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"custId"] intValue]];
             SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
+
             [self.navigationController pushViewController:SuccessRegisterView animated:YES];
         }
-        
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+        }
         
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

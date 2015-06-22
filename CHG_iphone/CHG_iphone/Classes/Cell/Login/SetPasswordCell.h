@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JKCountDownButton.h"
-typedef void(^GetCheckCode)(NSString* checkcode);
+
 
 @interface SetPasswordCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UIView* bgView;

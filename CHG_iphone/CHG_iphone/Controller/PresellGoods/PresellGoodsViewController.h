@@ -7,15 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+@interface PresellGoodsViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,AVCaptureMetadataOutputObjectsDelegate>
+{
+    int num;
+    BOOL upOrdown;
+    NSTimer * timer;
+    NSTimer * timer1;
+}
+@property (strong,nonatomic)AVCaptureDevice * device;
+@property (strong,nonatomic)AVCaptureDeviceInput * input;
+@property (strong,nonatomic)AVCaptureMetadataOutput * output;
+@property (strong,nonatomic)AVCaptureSession * session;
+@property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
+@property (nonatomic, retain) UIImageView * line;
 
-@interface PresellGoodsViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,ZBarReaderViewDelegate,ZBarReaderDelegate>
-@property(nonatomic,weak)IBOutlet ZBarReaderView* ZBarReader;
+@property(nonatomic,assign)BOOL isfinish;
+
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,strong)UIImageView* lineImage;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)SaleType orderSaletype;
-@property (assign)BOOL is_have;
-@property (assign)BOOL is_Anmotion;
 
 -(IBAction)ConfirmInfo:(id)sender;
 

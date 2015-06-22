@@ -28,13 +28,14 @@
 
     // Configure the view for the selected state
 }
--(void)setStatistics:(NSString*)date number:(NSInteger)number
+-(void)setStatistics:(NSString*)date number:(NSInteger)number baseData:(NSInteger)baseData;
 {
     CGRect frame = self.bgview.frame;
-    frame.size.width = 160;
+    
+    CGFloat scale = [self getShowData:baseData CurrentData:number];
+    frame.size.width = self.bottomview.frame.size.width * scale;
     frame.origin.x = 0;
     frame.size.height = 30;
-    frame.size.width += number;
     self.bgview.frame = frame;
     self.bgview.backgroundColor = [UIColor grayColor];
     
@@ -51,5 +52,33 @@
     self.numlab.text = [NSString stringWithFormat:@"%d",number];
     [self.bgview addSubview:self.numlab];
     
+}
+-(CGFloat)getShowData:(NSInteger)baseData CurrentData:(NSInteger)CurrentData
+{
+    CGFloat mMin = 0.4f;     // 最小的显示比例
+    CGFloat mNormal = 0.6f;  // 正常的现实比例
+    NSInteger mNormalData = baseData;  // 正常的值
+    NSInteger mMaxData = baseData * 3;     // 最大值
+    NSInteger mData = CurrentData;             // 当前值
+    
+    CGFloat result = 0.0f;
+    if(mData < mNormalData) {
+        result = mMin + (mNormal - mMin)/(mNormalData - mData);
+    }
+    else if(mData == mNormalData) {
+        return mNormal;
+    }
+    else {
+        if (mMaxData - mData <= 0) {
+            result = 1;
+        }
+        else
+        {
+            result = mNormal + (1-mNormal)/(mMaxData - mData);
+        }
+        
+    }
+    
+    return result;
 }
 @end

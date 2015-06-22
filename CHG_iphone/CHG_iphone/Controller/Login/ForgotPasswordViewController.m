@@ -8,7 +8,7 @@
 
 #import "ForgotPasswordViewController.h"
 #import "ForgotPasswordCell.h"
-#import "SetPasswordViewController.h"
+#import "ResetPasswordViewController.h"
 @interface ForgotPasswordViewController ()
 @property UINib* ForgotPasswordNib;
 @end
@@ -50,13 +50,16 @@
         cell = (ForgotPasswordCell*)[[self.ForgotPasswordNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
-    
+    cell.userField.text = self.strmobile;
     
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
     };
-    
+    cell.didGetCode = ^(NSString* checkcode)
+    {
+        weakSelf.strCheckCode = checkcode;
+    };
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -72,9 +75,9 @@
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
     
-    imageview.image = [UIImage imageNamed:@"logo.png"];
+    imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
     return v_header;
@@ -89,18 +92,19 @@
     else if(tag == 101)
     {
         DLog(@"下一步");
-        SetPasswordViewController *SetPasswordView = [[SetPasswordViewController alloc] initWithNibName:@"SetPasswordViewController" bundle:nil];
-        
-        [self presentViewController:SetPasswordView animated:YES completion:^{
-            
-        }];
+//        SetPasswordViewController *SetPasswordView = [[SetPasswordViewController alloc] initWithNibName:@"SetPasswordViewController" bundle:nil];
+//        
+//        [self presentViewController:SetPasswordView animated:YES completion:^{
+//            
+//        }];
+        [self LoginAccount];
     }
     
 }
 -(void)LoginAccount
 {
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
-    UITextField* passfield = (UITextField*)[self.view viewWithTag:1012];
+    UITextField* checkcodefield = (UITextField*)[self.view viewWithTag:1012];
     NSString* info ;
     if (namefield.text.length == 0) {
         info = @"请输入手机号码";
@@ -109,15 +113,19 @@
     {
         info = @"手机格式不正确";
     }
-    else if(passfield.text.length == 0)
+    else if(checkcodefield.text.length == 0)
     {
         info = @"请输入验证码";
     }
-    else if (passfield.text.length > 6)
+    else if (checkcodefield.text.length > 6)
     {
         info = @"验证码不能大于6位";
     }
-    
+    else if ([checkcodefield.text intValue] != [self.strCheckCode intValue])
+    {
+        info = @"验证码不正确";
+    }
+
     if (info.length != 0) {
         
         [SGInfoAlert showInfo:info
@@ -126,21 +134,16 @@
                      vertical:0.7];
         return ;
     }
+
+    ResetPasswordViewController *ResetPassword = [[ResetPasswordViewController alloc] initWithNibName:@"ResetPasswordViewController" bundle:nil];
+    ResetPassword.strmobile = namefield.text;
+    ResetPassword.strcheckCode = checkcodefield.text;
+    [self presentViewController:ResetPassword animated:YES completion:^{
+        
+    }];
     
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"password" forKey:@"grant_type"];
-    [parameter setObject:@"admin" forKey:@"username"];
-    [parameter setObject:[[NSObject md5:@"admin"] uppercaseString] forKey:@"password"];
-    [parameter setObject:@"app" forKey:@"client_id"];
-    [parameter setObject:@"appSecret" forKey:@"client_secret"];
     
-    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOauthToken] parameters:parameter];
-    
-    //    url = @"https://27.115.74.138:8443/chg/oauth/token?grant_type=password&username=admin&password=21232F297A57A5A743894A0E4A801FC3&client_id=app&client_secret=appSecret";
-    DLog(@"url = %@",url);
-//    [self httpLoadData:url];
-    
-    return ;
+
     
 }
 

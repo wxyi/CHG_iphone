@@ -99,9 +99,9 @@
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 230)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-135)/2, 60, 180, 112)];
     
-    imageview.image = [UIImage imageNamed:@"logo.png"];
+    imageview.image = [UIImage imageNamed:@"icon_logo_big"];
     [v_header addSubview:imageview];
     
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 175, SCREEN_WIDTH, 20)];
@@ -120,7 +120,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [ConfigManager sharedInstance].shopId = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopId"];
-    
+    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndex:indexPath.row] objectForKey:@"dimensionalCodeUrl"] ;
+    [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopName"] ;
     DLog(@"shopId= %@",[ConfigManager sharedInstance].shopId);
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     [delegate setupHomePageViewController];

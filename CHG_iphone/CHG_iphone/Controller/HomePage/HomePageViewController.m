@@ -55,7 +55,7 @@
     
     self.menuArr = [[NSMutableArray alloc] init];
     self.menuArr = [self GetMenuArr];
-    [self httpGetPromoList];
+    
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -67,12 +67,14 @@
     
     self.MenuNib = [UINib nibWithNibName:@"MenuCell" bundle:nil];
     
+    [self setupRefresh];
     
     self.pagearray = [NSMutableArray arrayWithCapacity:5];
     for (int i = 1 ; i <= 5; i++) {
         [self.pagearray addObject:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"image%d",i] ofType:@"jpg"]];
     }
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -311,21 +313,32 @@
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
 //    UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
 //    [NSString stringWithFormat:@"%d"]
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObject:@"1"forKey:@"type"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetPromoList] parameters:parameter];
     
     
-    
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-        
-        
-        self.pagearray = data;
+        if (success) {
+//            [MMProgressHUD dismiss];
+            self.pagearray = data;
+            
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
         [self httpGetAccountBrief];
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -338,21 +351,35 @@
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetAccountBrief] parameters:parameter];
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-    [MMProgressHUD showWithTitle:@"" status:@""];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         self.AccountBriefDict = data;
 
-        for (int i = 1; i < 4; i ++ ) {
-            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:i inSection:0];
-            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        if (success) {
+//            [MMProgressHUD dismiss];
+            for (int i = 1; i < 4; i ++ ) {
+                NSIndexPath *indexPath=[NSIndexPath indexPathForRow:i inSection:0];
+                [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            
+
+            DLog(@"self.AccountBriefDict = %@",self.AccountBriefDict);
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         
-        [MMProgressHUD dismiss];
-        DLog(@"self.AccountBriefDict = %@",self.AccountBriefDict);
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -391,5 +418,35 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+- (void)setupRefresh
+{
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
+    
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self httpGetPromoList];
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        [self.tableview reloadData];
+        [self.tableview.header endRefreshing];
+    });
+}
 @end

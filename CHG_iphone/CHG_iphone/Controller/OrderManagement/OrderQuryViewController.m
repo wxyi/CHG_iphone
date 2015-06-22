@@ -41,9 +41,14 @@
 */
 -(void)setupView
 {
+ 
+    [self setupQRadioButton];
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    [self.tableview addGestureRecognizer:tapGestureRecognizer];
     self.OrderQueryNib = [UINib nibWithNibName:@"OrderQueryCell" bundle:nil];
     
     
@@ -61,10 +66,45 @@
                                                  PickerStyle:UUDateStyle_YearMonthDay];
 //    NSDate *now = [NSDate date];
     self.enddatePicker.ScrollToDate = now;
+    
+    self.starttime.inputView = self.startdatePicker;
+    self.endtime.inputView = self.enddatePicker;
+}
+-(void)setupQRadioButton
+{
+    QRadioButton *radio1;
+    NSArray* items = [NSArray arrayWithObjects:@"全部订单",@"卖货订单",@"预定订单", nil];
+    for (int i = 0 ; i < items.count; i++) {
+        
+        radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:[NSString stringWithFormat:@"groupId%D",1]];
+        radio1.isButton = YES;
+        radio1.tag = [[NSString stringWithFormat:@"11%d",i] intValue];
+        radio1.frame = CGRectMake(70+i*62, 0, 62, 35);
+        [radio1 setTitle:[items objectAtIndex:i] forState:UIControlStateNormal];
+        radio1.titleLabel.font = FONT(14);
+        radio1.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [radio1 setTitleColor:[UIColor blackColor]  forState:UIControlStateNormal];
+        
+        if (i == 0) {
+            [radio1 setChecked:YES];
+        }
+        [self.bg_view addSubview:radio1];
+        
+    }
+}
+- (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
+    NSLog(@"did selected radio:%@ groupId:%@", radio.titleLabel.text, groupId);
+    
+    
+}
+-(void)keyboardHide:(UITapGestureRecognizer*)tap{
+    
+    [self.starttime resignFirstResponder];
+    [self.endtime resignFirstResponder];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.items.count + 1;
+    return self.items.count;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -73,28 +113,28 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     __weak typeof(self) weakSelf = self;
-    if (indexPath.section == 0) {
-        OrderQueryCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderQueryCell"];
-        if(cell==nil){
-            cell = (OrderQueryCell*)[[self.OrderQueryNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        [cell setupCell];
-        cell.selectQradio =^(NSString* strtitle){
-            DLog(@"strtitle = %@",strtitle);
-            weakSelf.strOrderType = strtitle;
-        };
-        cell.queryOrder =^(NSInteger tag){
-            
-            [self checkDatas];
-            
-        };
-        cell.starttime.inputView = self.startdatePicker;
-        cell.endtime.inputView = self.enddatePicker;
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
-    }
-    else
+//    if (indexPath.section == 0) {
+//        OrderQueryCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderQueryCell"];
+//        if(cell==nil){
+//            cell = (OrderQueryCell*)[[self.OrderQueryNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        [cell setupCell];
+//        cell.selectQradio =^(NSString* strtitle){
+//            DLog(@"strtitle = %@",strtitle);
+//            weakSelf.strOrderType = strtitle;
+//        };
+//        cell.queryOrder =^(NSInteger tag){
+//            
+//            [self checkDatas];
+//            
+//        };
+//        cell.starttime.inputView = self.startdatePicker;
+//        cell.endtime.inputView = self.enddatePicker;
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//    }
+//    else
     {
         OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
         if(cell==nil){
@@ -104,10 +144,10 @@
         //    NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
         
         //    cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
-        NSArray* array = [[self.items objectAtIndex:indexPath.section- 1] objectForKey:@"productList"];
+        NSArray* array = [[self.items objectAtIndex:indexPath.section] objectForKey:@"productList"];
         NSDictionary* dict = [array objectAtIndex:indexPath.row];
         
-        [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+        [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = dict[@"productName"];
         cell.pricelab.text = dict[@"productPrice"];;
         cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKey:@"quantity"] intValue] ];
@@ -122,23 +162,23 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 70;
-    }
+//    if (indexPath.section == 0) {
+//        return 70;
+//    }
     return 65;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
+//    if (section == 0) {
+//        return 1;
+//    }
     return 35;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return nil;
-    }
+//    if (section == 0) {
+//        return nil;
+//    }
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
     //    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
     v_header.backgroundColor = [UIColor clearColor];
@@ -147,7 +187,7 @@
     line.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_header addSubview:line];
     
-    NSDictionary* dict = [self.items objectAtIndex:section - 1] ;
+    NSDictionary* dict = [self.items objectAtIndex:section ] ;
     UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
@@ -181,19 +221,19 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
+//    if (section == 0) {
+//        return 1;
+//    }
     return 65;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return nil;
-    }
+//    if (section == 0) {
+//        return nil;
+//    }
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 65)];
     v_footer.backgroundColor = [UIColor clearColor];
-    NSDictionary* dict = [self.items objectAtIndex:section -1] ;
+    NSDictionary* dict = [self.items objectAtIndex:section ] ;
     NSString* string = [NSString stringWithFormat:@"共%d件商品",[dict[@"productList"] count]];
     NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[dict[@"productList"] count]]];
     NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
@@ -277,26 +317,24 @@
              weekDay:(NSString *)weekDay
 {
     
-    UITextField* textfield;
+
     if (datePicker == self.startdatePicker) {
-        textfield = (UITextField*)[self.view viewWithTag:100];
+        self.starttime.text = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
         
     }
     else
     {
-        textfield = (UITextField*)[self.view viewWithTag:101];
+        self.endtime.text = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
     }
     
-    textfield.text = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
     
 }
 
 -(void)checkDatas
 {
-    UITextField* startData = (UITextField*)[self.view viewWithTag:100];
-    UITextField* endData = (UITextField*)[self.view viewWithTag:101];
+   
     NSString* info;
-    if (startData.text.length == 0 || endData.text.length == 0) {
+    if (self.starttime.text.length == 0 || self.endtime.text.length == 0) {
         info = @"请输入时间";
     }
     if (info.length != 0) {
@@ -336,9 +374,9 @@
     [parameter setObject:[ConfigManager sharedInstance].strCustId  forKey:@"custId"];
     [parameter setObject:@"1" forKey:@"pageNumber"];
     [parameter setObject:@"20" forKey:@"pageSize"];
-    [parameter setObject:startData.text forKey:@"startDate"];
+    [parameter setObject:self.starttime.text forKey:@"startDate"];
     
-    [parameter setObject:endData.text forKey:@"endDate"];
+    [parameter setObject:self.endtime.text forKey:@"endDate"];
     [parameter setObject:self.strOrderType forKey:@"orderType"];
     
     [self httpQueryOrderList:parameter];
@@ -349,18 +387,35 @@
  
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parame];
     
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
-        self.items = [data objectForKey:@"datas"];
-        [self.tableview reloadData];
+        if (success) {
+            [MMProgressHUD dismiss];
+            self.items = [data objectForKey:@"datas"];
+            [self.tableview reloadData];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
+        
         
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
 }
 
-
+-(IBAction)QueryOrderBtn:(UIButton*)sender
+{
+    [self checkDatas];
+}
 @end

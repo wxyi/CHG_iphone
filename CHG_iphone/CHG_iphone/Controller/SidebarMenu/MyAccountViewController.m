@@ -111,6 +111,7 @@
             cell.statelab.text = @"收入";
             cell.namelab.text = @"动销奖励";
             cell.iphonelab.text = [NSString stringWithFormat:@"%.0f",[self.dictionary[@"awardSaleAmount"] doubleValue]];
+            cell.skipbtn.tag = 101;
         }
         else
         {
@@ -118,12 +119,13 @@
             cell.statelab.text = @"收入";
             cell.namelab.text = @"销费分账奖励";
             cell.iphonelab.text = [NSString stringWithFormat:@"%.0f",[self.dictionary[@"awardPartnerAmount"] doubleValue]];
+            cell.skipbtn.tag = 102;
         }
         
         cell.iphonelab.textColor = UIColorFromRGB(0xf5a541);
         cell.didSkipSubItem = ^(NSInteger tag){
             
-            [weakSelf goskipdetails];
+            [weakSelf goskipdetails:tag];
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -171,14 +173,21 @@
     }
     return nil;
 }
--(void)goskipdetails
+-(void)goskipdetails:(NSInteger)tag
 {
     
     DLog(@"详情");
-   
+    StatisticalType statType;
+    if (tag == 101) {
+        statType = StatisticalTypePinRewards;
+    }
+    else
+    {
+        statType = StatisticalTypePartnersRewards;
+    }
     
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
-    StoreSalesView.statisticalType = StatisticalTypePinRewards;
+    StoreSalesView.statisticalType = statType;
     [self.navigationController pushViewController:StoreSalesView animated:YES];
     
 }
@@ -195,9 +204,27 @@
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
-        [MMProgressHUD dismiss];
-        self.dictionary = data;
-        [self.tableview reloadData];
+//        [MMProgressHUD dismiss];
+        if (success) {
+            [MMProgressHUD dismiss];
+//            for (int i = 1; i < 4; i ++ ) {
+//                NSIndexPath *indexPath=[NSIndexPath indexPathForRow:i inSection:0];
+//                [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+//            }
+//            
+
+            self.dictionary = data;
+            [self.tableview reloadData];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
+        
     } failureBlock:^(NSString *description) {
         [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {

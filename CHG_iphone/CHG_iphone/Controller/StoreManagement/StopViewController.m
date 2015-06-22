@@ -29,11 +29,12 @@
 -(void)setupView
 {
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    if ([config.Roles isEqualToString:@"SHOP_OWNER"])
+    if ([config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count > 1)
     {
         self.items = [NSArray arrayWithObjects:@"门店切换",@"店员管理", nil];
     }
-    else if ([config.Roles isEqualToString:@"SHOPLEADER"])
+    else if ([config.Roles isEqualToString:@"SHOPLEADER"]||(
+             [config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count == 1))
     {
         self.items = [NSArray arrayWithObjects:@"店员管理", nil];
     }
@@ -77,17 +78,28 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        DLog(@"门店切换");
-        StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
-        [self.navigationController pushViewController:StoreManagementView animated:YES];
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    if ([config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count > 1)
+    {
+        if (indexPath.row == 0) {
+            DLog(@"门店切换");
+            StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+            [self.navigationController pushViewController:StoreManagementView animated:YES];
+        }
+        else if(indexPath.row == 1)
+        {
+            DLog(@"店员管理");
+            StoresInfoViewController* StoresInfoView = [[StoresInfoViewController alloc] initWithNibName:@"StoresInfoViewController" bundle:nil];
+            [self.navigationController pushViewController:StoresInfoView animated:YES];
+        }
     }
-    else if(indexPath.row == 1)
+    else
     {
         DLog(@"店员管理");
         StoresInfoViewController* StoresInfoView = [[StoresInfoViewController alloc] initWithNibName:@"StoresInfoViewController" bundle:nil];
         [self.navigationController pushViewController:StoresInfoView animated:YES];
     }
+    
 }
 /*
 #pragma mark - Navigation

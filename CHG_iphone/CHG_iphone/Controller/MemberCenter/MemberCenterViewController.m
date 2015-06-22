@@ -39,6 +39,8 @@
     self.MemberRewardsNib = [UINib nibWithNibName:@"MemberRewardsCell" bundle:nil];
     self.MemberMenuNib = [UINib nibWithNibName:@"MemberMenuCell" bundle:nil];
 
+//    self.items = [[NSMutableArray alloc] init];
+    [self setupRefresh];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -61,12 +63,13 @@
             cell = (MemberRewardsCell*)[[self.MemberRewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+        NSMutableArray* item = [[NSMutableArray alloc] init];
+        [item addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[self.items[@"newCustMonth"] intValue]],@"count", nil]];
+         [item addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员消费(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.items[@"newCustMonthMoney"] doubleValue]],@"count", nil]];
+         
         
-        NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",@"18",@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员消费(元)",@"title",@"1354.80",@"count", nil], nil];
         
-        [cell setupView:itme];
+        [cell setupView:item];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
             
@@ -85,7 +88,7 @@
         cell.contentView.backgroundColor = UIColorFromRGB(0x171c61);
         cell.nameLab.text = @"本月会员总消费(元)";
         cell.nameLab.textColor = UIColorFromRGB(0xf0f0f0);
-        cell.amountLab.text = @"5795.53";
+        cell.amountLab.text =[NSString stringWithFormat:@"%.2f",[self.items[@"custMonthMoneyAll"] doubleValue]];
         cell.amountLab.font = FONT(40);
         cell.amountLab.textColor = [UIColor whiteColor];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -137,6 +140,30 @@
     IdentificationView.m_MenuType = MenuTypeMemberCenter;
     [self.navigationController pushViewController:IdentificationView animated:YES];
 }
+-(void)httpGetCustCenter
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCustCenter] parameters:parameter];
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:parameter successBlock:^(BOOL success, id data, NSString *msg) {
+        if (success) {
+            self.items = data;
+            [self.tableview reloadData];
+            [self.tableview.header endRefreshing];
+        }
+        else
+        {
+            [self.tableview.header endRefreshing];
+        }
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
 /*
 #pragma mark - Navigation
 
@@ -146,5 +173,40 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)setupRefresh
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
 
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        [self httpGetCustCenter];
+
+        
+//        [self.tableview.header endRefreshing];
+    });
+}
 @end

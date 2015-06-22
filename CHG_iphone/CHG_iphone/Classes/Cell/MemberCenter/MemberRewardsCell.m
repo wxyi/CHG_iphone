@@ -19,7 +19,7 @@
 
     // Configure the view for the selected state
 }
--(void)setupView:(NSArray*)items
+-(void)setupView:(NSMutableArray*)items
 {
     self.items = items;
     [self modifyCollectionView:NO];

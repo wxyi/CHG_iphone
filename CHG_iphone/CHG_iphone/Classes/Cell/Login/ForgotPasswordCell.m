@@ -31,6 +31,20 @@
     if (self.userField.text.length == 0) {
         return;
     }
+    
+    
+    
+    NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.userField.text substringFromIndex:7]];
+    
+    self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
+        DLog(@"否");
+        
+        
+        
+    } otherButtonBlock:^{
+        
+    }];
+    [self.stAlertView show];
     [self httpGetCheckCode];
     
     sender.enabled = NO;
@@ -59,13 +73,27 @@
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
     
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
         
-//        AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-//        [delegate setupHomePageViewController];
+        if (success) {
+            [MMProgressHUD dismiss];
+            if (self.didGetCode) {
+                self.didGetCode([data objectForKey:@"checkCode"]);
+            }
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self
+//                         vertical:0.7];
+        }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

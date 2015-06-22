@@ -33,6 +33,7 @@
 
 -(void)setupView
 {
+    
     self.items = [[NSMutableArray alloc] init];
     [self httpGetBankCardList];
     self.title = @"银行卡";
@@ -76,7 +77,7 @@
     }
     
     NSDictionary* dict = [self.items objectAtIndex:indexPath.row];
-    [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+    [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
     cell.BankNameLab.text = dict[@"bankCode"];
     cell.CardTypeLab.text = dict[@"cardType"];
     
@@ -103,7 +104,7 @@
     switch (index) {
         case 0:
         {
-            [cell hideUtilityButtonsAnimated:YES];
+//            [cell hideUtilityButtonsAnimated:YES];
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此银行卡" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
                 DLog(@"否");
                 
@@ -112,13 +113,7 @@
                 DLog(@"是");
                 
                 // Delete button was pressed
-                NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];
-                
-                [self.items removeObjectAtIndex:cellIndexPath.row];
-                [self.tableview deleteRowsAtIndexPaths:@[cellIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
-                
-                self.tableview.hidden = YES;
-                self.addbtn.hidden = NO;
+                [self httpDeleteBankCard];
                 
             }];
             
@@ -158,30 +153,73 @@
 -(void)httpGetBankCardList
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    
-    [ConfigManager sharedInstance].access_token = @"5cc21d49-67a0-40c4-9e92-abfd1cf015da";
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetBankCardList] parameters:parameter];
+    
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@,msg = %@",data,msg);
         
-        
-        if (data == nil) {
-            self.tableview.hidden = YES;
-            self.addbtn.hidden = NO;
+        if (success) {
+//            [MMProgressHUD dismiss];
+            if ([[data allKeys] count] == 0) {
+                self.tableview.hidden = YES;
+                self.addbtn.hidden = NO;
+            }
+            else
+            {
+                [self.items addObject:data];
+                self.tableview.hidden = NO;
+                self.addbtn.hidden = YES;
+                [self.tableview reloadData];
+            }
         }
         else
         {
-            [self.items addObject:data];
-            self.tableview.hidden = NO;
-            self.addbtn.hidden = YES;
-            [self.tableview reloadData];
+//            [MMProgressHUD dismissWithError:msg];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
+        
 
     } failureBlock:^(NSString *description) {
+//        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    }];
+}
+
+-(void)httpDeleteBankCard
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[NSString stringWithFormat:@"%d",[self.items[0][@"bankId"] intValue]] forKey:@"bankId"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiDeleteBankCard] parameters:parameter];
+    
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        if (success) {
+//            [MMProgressHUD dismiss];
+            [self httpGetBankCardList];
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

@@ -12,8 +12,9 @@
 @property(nonatomic,weak)IBOutlet UITextField* iphoneField;
 @property(nonatomic,weak)IBOutlet UITextField* nameField;
 @property(nonatomic,weak)IBOutlet UITextField* codeField;
-
+@property(nonatomic,strong)STAlertView* stAlertView;
 @property (nonatomic, copy) ShowInfoAlert didshowInfo;
+@property (nonatomic, copy) GetCheckCode didGetCode;
 @property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender;
 @end

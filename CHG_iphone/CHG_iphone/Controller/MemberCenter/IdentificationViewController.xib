@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IdentificationViewController">
             <connections>
-                <outlet property="ZBarReader" destination="s1p-xz-9PD" id="k6g-eK-5BI"/>
                 <outlet property="tableview" destination="Qqw-yF-0bq" id="ph3-cp-mH3"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,9 +16,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s1p-xz-9PD" customClass="ZBarReaderView">
-                    <color key="backgroundColor" white="0.99294354839999999" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
                 <button opaque="NO" tag="1010" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUN-dQ-ebe">
                     <rect key="frame" x="0.0" y="464" width="320" height="40"/>
                     <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -31,9 +27,6 @@
                         <action selector="IdentificationMember:" destination="-1" eventType="touchDown" id="Xoz-3w-Bpw"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="scan.png" translatesAutoresizingMaskIntoConstraints="NO" id="LM0-HI-KWp">
-                    <rect key="frame" x="75" y="15" width="170" height="170"/>
-                </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_tips_small.png" translatesAutoresizingMaskIntoConstraints="NO" id="JLn-gx-GK0">
                     <rect key="frame" x="90" y="192" width="20" height="20"/>
                 </imageView>
@@ -54,7 +47,6 @@
     </objects>
     <resources>
         <image name="icon_tips_small.png" width="15" height="15"/>
-        <image name="scan.png" width="170" height="170"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

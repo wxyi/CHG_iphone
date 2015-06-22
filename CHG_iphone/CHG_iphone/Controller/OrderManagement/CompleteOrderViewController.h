@@ -10,7 +10,8 @@
 
 @interface CompleteOrderViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSMutableArray* items;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
+@property(nonatomic,assign)NSInteger m_nPageNumber;
 -(IBAction)returnGoods:(UIButton*)sender;
 @end

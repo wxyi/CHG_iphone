@@ -29,7 +29,7 @@ extern NSString * const MMProgressHUDAnimationWindowFadeOut;
 extern NSString * const MMProgressHUDAnimationKeyShowAnimation;
 extern NSString * const MMProgressHUDAnimationKeyDismissAnimation;
 
-extern float const MMProgressHUDStandardDismissDelay;
+extern CGFloat const MMProgressHUDStandardDismissDelay;
 
 @class MMProgressHUDWindow;
 @class MMProgressHUDOverlayView;

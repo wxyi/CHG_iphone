@@ -12,6 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    self.GoodImage.layer.borderColor = [UIColorFromRGB(0xdddddd) CGColor];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

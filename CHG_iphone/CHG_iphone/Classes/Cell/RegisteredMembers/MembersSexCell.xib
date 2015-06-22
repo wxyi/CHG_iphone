@@ -35,7 +35,7 @@
                                     <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="PBx-tG-3u7"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdC-DX-ljn" customClass="RadioButton">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdC-DX-ljn" customClass="RadioButton">
                                 <rect key="frame" x="53" y="110" width="79" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="   女宝宝" image="unchecked.png">

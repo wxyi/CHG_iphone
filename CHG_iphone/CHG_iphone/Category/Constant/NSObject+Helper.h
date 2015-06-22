@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MacroDefinition.h"
-
+#import "NSDate+Helper.h"
 @interface NSObject(common) 
 
 
@@ -21,6 +21,25 @@
 + (NSString *)md5:(NSString *)str;
 
 + (NSMutableString *)URLWithBaseString:(NSString *)baseString parameters:(NSDictionary *)parameters;
+
+//获取以前的日期(N天前)
++(NSDate *)getPriousDateFromDate:(NSDate *)date withDay:(int)day;
+
+//获取以前的日期(N月前)
++(NSDate *)getPriousDateFromDate:(NSDate *)date withMonth:(int)month;
+
+//根据指定格式获取日期字符串
++(NSString*)getDateTitleWithFormat:(NSDate* )ddatadate withFormat:(NSString*) strformatter;
+
+//获取当前时间
++(NSString*)currentTime;
+
+/*!
+ * @brief 把格式化的JSON格式的字符串转换成字典
+ * @param jsonString JSON格式的字符串
+ * @return 返回字典
+ */
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 /*
 //转千分位
 -(NSString*)toThousand:(NSString*) strnormal;
@@ -46,8 +65,7 @@
 //根据16进制获取颜色
 -(UIColor*)colorWithHexString:(NSString*) hexstring;
 
-//获取当前时间
--(NSString*)currentTime;
+
 
 //寻找最大值索引值
 -(int)findMaxIndex:(NSMutableArray*) arorig;

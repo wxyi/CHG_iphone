@@ -9,14 +9,33 @@
 #import "AddressInfo.h"
 
 @implementation AddressInfo
+@synthesize strAddress; //地址
+@synthesize strCityName; //市
+@synthesize strCityCode;
+@synthesize strProvinceName;//省
+@synthesize strprovinceCode;
+@synthesize strDistrictName;//区
+@synthesize strdistrictCode;
 -(id) initWithDictionary:(NSDictionary*)jsonData{
     self=[super init];
     if(self){
         [jsonData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if([key isEqualToString:@"userId"] || [key isEqualToString:@"id"]){
-//                self.userId=[NSNumber numberWithInt:[obj intValue]];
+            if([key isEqualToString:@"address"] ){
+                self.strAddress=obj;
+            }else if([key isEqualToString:@"cityName"]){
+                self.strCityName=obj;
+            } else if([key isEqualToString:@"cityCode"]){
+                self.strCityCode=obj;
+            } else if([key isEqualToString:@"provinceName"]){
+                self.strProvinceName=obj;
+            } else if([key isEqualToString:@"provinceCode"]){
+                self.strprovinceCode=obj;
+            } else if([key isEqualToString:@"districtName"]){
+                self.strDistrictName=obj;
+            } else if([key isEqualToString:@"districtCode"]){
+                self.strdistrictCode=obj;
             }
-            
+
         }];
         
     }

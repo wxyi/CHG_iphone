@@ -59,6 +59,7 @@
         cell.nametext.textAlignment = NSTextAlignmentLeft;
         if (indexPath.row == 1) {
             cell.nametext.keyboardType = UIKeyboardTypeNumberPad;
+            cell.nametext.delegate = self;
         }
         
         cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
@@ -160,17 +161,26 @@
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiAddBankCard] parameters:parameter];
     NSMutableDictionary *bankpar = [NSMutableDictionary dictionary];
     
-    [bankpar setObject:@"CCB" forKey:@"bankCode"];
+    BanKCode* code = [[BanKCode alloc] init];
+    DLog(@"[textField.text substringToIndex:6] = %@",[Card.text substringToIndex:6]);
+    code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[Card.text substringToIndex:6]];
+    
+    [bankpar setObject:code.bankCode forKey:@"bankCode"];
     [bankpar setObject:Card.text forKey:@"cardNumber"];
     [bankpar setObject:name.text forKey:@"accountName"];
-    [bankpar setObject:@"建设银卡" forKey:@"bankCard"];
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:bankpar successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             [self.navigationController popViewControllerAnimated:YES];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            
         }
     } failureBlock:^(NSString *description) {
         [MMProgressHUD dismissWithError:description];
@@ -187,5 +197,27 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length >=16 &&textField.text.length <=19) {
+        BanKCode* code = [[BanKCode alloc] init];
+        DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
+        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[textField.text substringToIndex:6]];
+        DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
+        UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
+        
+        if (code.bankName.length != 0) {
+            textlab.text = code.bankName;
+        }
+        
+    }
+    else
+    {
+        [SGInfoAlert showInfo:@"银行卡错误"
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    }
+    
+}
 @end

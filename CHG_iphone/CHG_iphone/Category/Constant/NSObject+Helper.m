@@ -76,6 +76,70 @@
     return urlString;
 }
 
+
+//获取以前的日期(N天前)
++(NSDate *)getPriousDateFromDate:(NSDate *)date withDay:(int)day
+{
+    NSDateComponents* comps = [[NSDateComponents alloc] init];
+    [comps setDay:day];
+    NSCalendar* calender = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDate* mDate = [calender dateByAddingComponents:comps toDate:date options:0];
+    [comps release];
+    [calender release];
+    return mDate;
+}
+
+//获取以前的日期(N月前)
++(NSDate*)getPriousDateFromDate:(NSDate *)date withMonth:(int)month
+{
+    NSDateComponents* comps = [[NSDateComponents alloc] init];
+    [comps setMonth:month];
+    NSCalendar* calender = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDate* mDate = [calender dateByAddingComponents:comps toDate:date options:0];
+    [comps release];
+    [calender release];
+    return mDate;
+}
+
+//根据指定格式获取日期字符串
++(NSString*)getDateTitleWithFormat:(NSDate* )ddatadate withFormat:(NSString*) strformatter
+{
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:strformatter];
+    NSString* strDateTitle = [dateFormatter stringFromDate:ddatadate];
+    [dateFormatter release];
+    return strDateTitle;
+}
+
+//获取当前时间
++(NSString*)currentTime
+{
+    NSString* strCurrentTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyyMMddhhmmss"];
+    return strCurrentTime;
+}
+
+/*!
+ * @brief 把格式化的JSON格式的字符串转换成字典
+ * @param jsonString JSON格式的字符串
+ * @return 返回字典
+ */
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err = nil;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    if(err) {
+        NSLog(@"json解析失败：%@",err);
+        return nil;
+    }
+    return dic;
+}
+
 /*
 //转千分位
 -(NSString*) toThousand:(NSString*) strnormal
@@ -103,40 +167,6 @@
 		}
 	}
 	return strThousand;
-}
-
-//获取以前的日期(N天前)
--(NSDate *)getPriousDateFromDate:(NSDate *)date withDay:(int)day 
-{ 
-    NSDateComponents* comps = [[NSDateComponents alloc] init]; 
-    [comps setDay:day]; 
-    NSCalendar* calender = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]; 
-    NSDate* mDate = [calender dateByAddingComponents:comps toDate:date options:0]; 
-    [comps release]; 
-    [calender release]; 
-    return mDate; 
-} 
-
-//获取以前的日期(N月前)
--(NSDate*)getPriousDateFromDate:(NSDate *)date withMonth:(int)month 
-{ 
-    NSDateComponents* comps = [[NSDateComponents alloc] init]; 
-    [comps setMonth:month]; 
-    NSCalendar* calender = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]; 
-    NSDate* mDate = [calender dateByAddingComponents:comps toDate:date options:0]; 
-    [comps release]; 
-    [calender release]; 
-    return mDate; 
-}
-
-//根据指定格式获取日期字符串
--(NSString*)getDateTitleWithFormat:(NSDate* )ddatadate withFormat:(NSString*) strformatter
-{
-	NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateFormat:strformatter];
-	NSString* strDateTitle = [dateFormatter stringFromDate:ddatadate];
-	[dateFormatter release];
-	return strDateTitle;
 }
 
 -(int)getRandNumber:(int)imaxnumber
@@ -218,12 +248,7 @@
 						   alpha:1.0f];
 }
 
-//获取当前时间
--(NSString*)currentTime
-{
-	NSString* strCurrentTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyyMMddhhmmss"];
-	return strCurrentTime;
-}
+
 
 //寻找最大值索引值
 -(int)findMaxIndex:(NSMutableArray*) arorig

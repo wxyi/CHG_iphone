@@ -12,6 +12,7 @@
 #import "BankCardViewController.h"
 #import "MyAccountViewController.h"
 #import "SettingViewController.h"
+#import "KGModal.h"
 @interface SidebarMenuTableViewController ()
 
 @end
@@ -37,31 +38,51 @@
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 184.0f)];
         
         view.backgroundColor = UIColorFromRGB(0x171c61);
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 40, 100, 100)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 30, 100, 60)];
         imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        imageView.image = [UIImage imageNamed:@"avatar.jpg"];
-        imageView.layer.masksToBounds = YES;
-        imageView.layer.cornerRadius = 50.0;
-        imageView.layer.borderColor = [UIColor whiteColor].CGColor;
-        imageView.layer.borderWidth = 3.0f;
+        imageView.image = [UIImage imageNamed:@"icon_chg_logo.png"];
         imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         imageView.layer.shouldRasterize = YES;
         imageView.clipsToBounds = YES;
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
-        label.text = @"神仙小武子";
-        label.font = FONT(14);
-        label.backgroundColor = [UIColor clearColor];
-        label.textColor = [UIColor whiteColor];
-        [label sizeToFit];
-        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         
+        
+        UIButton *Scanbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 95, 72, 72)];
+        Scanbtn.backgroundColor = [UIColor whiteColor];
+        Scanbtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        
+        [Scanbtn setImage:[QRCodeGenerator qrImageForString:[ConfigManager sharedInstance].strdimensionalCodeUrl imageSize:72] forState:UIControlStateNormal];
+        Scanbtn.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        Scanbtn.layer.shouldRasterize = YES;
+        Scanbtn.clipsToBounds = YES;
+        [Scanbtn addTarget:self action:@selector(showQrCode)
+         forControlEvents:UIControlEventTouchUpInside];
+//        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
+//        UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
+//        label.text = cfg.strUsername;
+//        label.font = FONT(14);
+//        label.backgroundColor = [UIColor clearColor];
+//        label.textColor = [UIColor whiteColor];
+//        [label sizeToFit];
+//        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+//        
         [view addSubview:imageView];
-        [view addSubview:label];
+        [view addSubview:Scanbtn];
         view;
     });
 }
-
+-(void)showQrCode
+{
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
+    contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
+    UIImageView* image = [[UIImageView alloc] initWithFrame:contentView.frame];
+    
+    image.image = [QRCodeGenerator qrImageForString:[ConfigManager sharedInstance].strdimensionalCodeUrl  imageSize:contentView.bounds.size.width];
+    [contentView addSubview:image];
+    KGModal *modal = [KGModal sharedInstance];
+    modal.showCloseButton = NO;
+    [modal showWithContentView:contentView andAnimated:YES];
+}
 #pragma mark -
 #pragma mark UITableView Delegate
 
@@ -97,15 +118,6 @@
         [navigationController pushViewController:SettingView animated:YES];
     }
 
-    
-//    if (indexPath.section == 0 && indexPath.row == 0) {
-//        DEMOHomeViewController *homeViewController = [[DEMOHomeViewController alloc] init];
-//        navigationController.viewControllers = @[homeViewController];
-//    } else {
-//        DEMOSecondViewController *secondViewController = [[DEMOSecondViewController alloc] init];
-//        navigationController.viewControllers = @[secondViewController];
-//    }
-    
     [self.frostedViewController hideMenuViewController];
 }
 
@@ -137,7 +149,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    NSArray *titles = @[@"基本信息", @"银行卡", @"我的账户", @"设置"];
+    NSArray *titles = @[@"我的信息", @"银行卡", @"我的账户", @"设置"];
     cell.textLabel.text = titles[indexPath.row];
     cell.textLabel.textColor = UIColorFromRGB(0x646464);
     cell.textLabel.font = FONT(16);

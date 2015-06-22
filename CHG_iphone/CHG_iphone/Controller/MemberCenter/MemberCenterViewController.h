@@ -10,5 +10,5 @@
 
 @interface MemberCenterViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-
+@property(nonatomic,strong)NSDictionary* items;
 @end

@@ -9,6 +9,8 @@
 #import "RegisteredMembersViewController.h"
 #import "RegisteredMembersCell.h"
 #import "MemberInfoViewController.h"
+
+#import "UIViewController+REFrostedViewController.h"
 @interface RegisteredMembersViewController ()
 @property UINib* RegisteredMembersNib;
 @end
@@ -44,6 +46,7 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    __weak typeof(self) weakSelf = self;
     RegisteredMembersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RegisteredMembersCell.h"];
     if(cell==nil){
         cell = (RegisteredMembersCell*)[[self.RegisteredMembersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
@@ -55,6 +58,10 @@
                       bgColor:[[UIColor darkGrayColor] CGColor]
                        inView:self.view
                      vertical:0.7];
+    };
+    cell.didGetCode = ^(NSString* checkcode)
+    {
+        weakSelf.strCheckCode = checkcode;
     };
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -112,7 +119,11 @@
     }
     else if (checkfield.text.length > 6)
     {
-        info = @"验证码不能大于六位";
+        info = @"验证码不能大于6位";
+    }
+    else if(![checkfield.text isEqualToString:self.strCheckCode])
+    {
+        info = @"验证码错误";
     }
     if (info.length != 0) {
         
@@ -123,10 +134,14 @@
         return ;
     }
     
+    
+    
     MemberInfoViewController* MemberInfoView= [[MemberInfoViewController alloc] initWithNibName:@"MemberInfoViewController" bundle:nil];
-    MemberInfoView.strCustMobile = iphonefield.text;
-    MemberInfoView.strCustName = namefield.text;
-    MemberInfoView.strCheckCode = checkfield.text;
+    [ConfigManager sharedInstance].strcustMobile = iphonefield.text;
+    [ConfigManager sharedInstance].strcustName = namefield.text;
+    [ConfigManager sharedInstance].strcheckCode = checkfield.text;
+    
+    
     [self.navigationController pushViewController:MemberInfoView animated:YES];
 }
 

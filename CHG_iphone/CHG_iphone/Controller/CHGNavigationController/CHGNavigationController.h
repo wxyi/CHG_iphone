@@ -12,4 +12,5 @@
 - (void)showMenu;
 - (void)goback;
 -(void)skipPage;
+-(void)RegisteSuccessful;
 @end

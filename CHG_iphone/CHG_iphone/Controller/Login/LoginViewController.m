@@ -13,6 +13,16 @@
 #import "ForgotPasswordViewController.h"
 #import "StoreManagementViewController.h"
 #import "SetPasswordViewController.h"
+
+#import "HomePageViewController.h"
+#import "CHGNavigationController.h"
+#import "SidebarMenuTableViewController.h"
+#import "REFrostedViewController.h"
+
+#import "ProvinceInfo.h"
+#import "AreaInfo.h"
+#import "CityInfo.h"
+
 @interface LoginViewController ()
 @property UINib* LoginNib;
 @end
@@ -78,9 +88,9 @@
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
 
-    imageview.image = [UIImage imageNamed:@"logo.png"];
+    imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
     return v_header;
@@ -114,11 +124,8 @@
                          vertical:0.7];
             return ;
         }
-        ForgotPasswordViewController *ForgotPasswordView = [[ForgotPasswordViewController alloc] initWithNibName:@"ForgotPasswordViewController" bundle:nil];
+        [self httpGetMobileByUserName];
         
-        [self presentViewController:ForgotPasswordView animated:YES completion:^{
-            
-        }];
         
     }
     
@@ -147,6 +154,7 @@
     
     if (info.length != 0) {
     
+//        [MMProgressHUD dismissWithError:@"错误"];
         [SGInfoAlert showInfo:info
                       bgColor:[[UIColor darkGrayColor] CGColor]
                        inView:self.view
@@ -179,6 +187,8 @@
 {
 //    strurl = @"https://www.baidu.com";
     
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -190,16 +200,26 @@
 //            self.isfrist = YES;
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
         {
-            
+
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
             
             DLog(@"access_token = %@",[ConfigManager sharedInstance].access_token);
+//            if (![ConfigManager sharedInstance].strAddressCode)
+//            {
+//                [self httpAddressCode];
+//                [self httpBankCode];
+//            }
             
+            [self httpBankCode];
             [self httpGetUserConfig];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
         }
     } failureBlock:^(NSString *description) {
         DLog(@"description = %@",description);
-//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -212,49 +232,71 @@
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetUserConfig] parameters:parameter];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-    [MMProgressHUD showWithTitle:@"" status:@""];
+
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-        [MMProgressHUD dismiss];
+//        [MMProgressHUD dismiss];
         if (success) {
             DLog(@"data = %@",data);
+
+//            [MMProgressHUD dismiss];
             [ConfigManager sharedInstance].usercfg = [data JSONString];
             
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-            [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
+            
             
             
             if ([[data objectForKey:@"loginFirst"] intValue] != 0)
             {
                 SetPasswordViewController* ResetPasswordView = [[SetPasswordViewController alloc] initWithNibName:@"SetPasswordViewController" bundle:nil];
                 [self presentViewController:ResetPasswordView animated:YES completion:^{
-                    
+                    [MMProgressHUD dismiss];
                 }];
             }
             else
             {
                 
-                if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
+                
+                if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] !=1) {
                     
                     
                     StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
                     [self presentViewController:StoreManagementView animated:YES completion:^{
-                        
+                        [MMProgressHUD dismiss];
                     }];
                 }
                 else
                 {
                     
                     
-                    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-                    [delegate setupHomePageViewController];
+                    if ([config.Roles isEqualToString:@"PARTNER"]) {
+                        [ConfigManager sharedInstance].shopId = @"";
+                        [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
+                    }
+                    else
+                    {
+                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
+                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                        
+                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+                    }
+                    
+                    
+                    
+                    
+                    
+//                    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+                    [self setupHomePageViewController];
                 }
             }
             
         }
         else
         {
-            DLog(@"fail");
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
         DLog(@"description = n%@",description);
@@ -263,6 +305,50 @@
         
     }];
 }
+
+-(void)httpBankCode
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiBankCode] parameters:parameter];
+    
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        if (success) {
+            DLog(@"data = %@",data);
+//            [MMProgressHUD dismiss];
+            NSArray* datas = [data objectForKey:@"datas"] ;
+            NSMutableArray* bankArr = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [datas count]; i++) {
+                BanKCode* code = [[BanKCode alloc] init];
+                code.bankName = datas[i][@"bankName"];
+                code.bankCode = datas[i][@"bankCode"];
+                NSString* list = datas[i][@"cardCodeList"];
+                list = [list stringByReplacingOccurrencesOfString:@"[" withString:@""];
+                list = [list stringByReplacingOccurrencesOfString:@"]" withString:@""];
+                code.cardCodeList = list;
+                [bankArr addObject:code];
+            }
+            [[SQLiteManager sharedInstance] saveOrUpdateBankCodeData:bankArr];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
+
+
 
 
 
@@ -275,5 +361,62 @@
     // Pass the selected object to the new view controller.
 }
 */
+-(void)setupHomePageViewController
+{
+    CHGNavigationController *navigationController = [[CHGNavigationController alloc] initWithRootViewController:[[HomePageViewController alloc] init]];
+    
+    SidebarMenuTableViewController *SidebarMenu = [[SidebarMenuTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    // Create frosted view controller
+    //
+    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
+    frostedViewController.direction = REFrostedViewControllerDirectionLeft;
+    frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    
+    
+    [self presentViewController:frostedViewController animated:YES completion:^{
+        [MMProgressHUD dismiss];
+    }];
+}
 
+-(void)httpGetMobileByUserName
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
+    [parameter setObject:textfield.text forKey:@"userName"];
+    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiGetMobileByUserName] parameters:parameter];
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        if (success) {
+            
+            NSString* mobile = [data objectForKey:@"mobile"];
+            if (mobile.length) {
+                [MMProgressHUD dismiss];
+                ForgotPasswordViewController *ForgotPasswordView = [[ForgotPasswordViewController alloc] initWithNibName:@"ForgotPasswordViewController" bundle:nil];
+                ForgotPasswordView.strmobile = mobile;
+                [self presentViewController:ForgotPasswordView animated:YES completion:^{
+                    
+                }];
+            }
+            else
+            {
+                [MMProgressHUD dismissWithError:@"手机号为空"];
+            }
+            
+            
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+        }
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
 @end

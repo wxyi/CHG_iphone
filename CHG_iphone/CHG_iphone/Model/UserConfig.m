@@ -53,6 +53,9 @@
             } else if([key isEqualToString:@"shops"]){
                 self.shopList=obj;
             }
+            else if([key isEqualToString:@"dimensionalCodeUrl"]){
+                self.strdimensionalCodeUrl=obj;
+            }
             
         }];
         

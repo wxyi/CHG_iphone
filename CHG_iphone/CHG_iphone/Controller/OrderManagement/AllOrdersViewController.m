@@ -28,6 +28,11 @@
     // Do any additional setup after loading the view from its nib.
 //    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
+    // 1.注册cell
+
+    self.items = [[NSMutableArray alloc] init];
+    
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,7 +42,7 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
-    [self httpGetAllOrderList];
+    [self setupRefresh];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -58,7 +63,8 @@
     NSArray* array = [[self.items objectAtIndex:indexPath.section] objectForKey:@"productList"];
     NSDictionary* dict = [array objectAtIndex:indexPath.row];
     
-    [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+//    NSString* strurl = @"http://111.202.33.27:9080/chg/pic/qrc/wx/100790.jpg";
+    [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
     cell.titlelab.text = dict[@"productName"];
     cell.pricelab.text = dict[@"productPrice"];;
     cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKey:@"quantity"] intValue] ];
@@ -140,8 +146,14 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 65)];
     v_footer.backgroundColor = [UIColor clearColor];
     NSDictionary* dict = [self.items objectAtIndex:section] ;
-    NSString* string = [NSString stringWithFormat:@"共%d件商品",[dict[@"productList"] count]];
-    NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[dict[@"productList"] count]]];
+    
+    NSArray* productList = dict[@"productList"];
+    NSInteger count = 0;
+    for (int i = 0; i< [productList count]; i++) {
+        count += [productList[i][@"quantity"] intValue];
+    }
+    NSString* string = [NSString stringWithFormat:@"共%d件商品",count];
+    NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",count]];
     NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -193,7 +205,9 @@
     [detailsbtn addTarget:self action:@selector(goskipdetails:) forControlEvents:UIControlEventTouchUpInside];
     [v_footer addSubview:detailsbtn];
     
-
+    UILabel* line1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 64.5, SCREEN_WIDTH, 0.5)];
+    line1.backgroundColor = [UIColor lightGrayColor];
+    [v_footer addSubview:line1];
     if ([dict[@"orderStatus"] intValue] == 0 && self.ManagementTyep != OrderManagementTypeAll)
     {
         UIButton* Terminationbtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -266,18 +280,41 @@
     }
     
     [parameter setObject:@"2" forKey:@"orderStatus"];
-    
+    [parameter setObject:PAGESIZE forKey:@"pageSize"];
+    [parameter setObject:[NSString stringWithFormat:@"%d",self.m_nPageNumber] forKey:@"pageNumber"];
     DLog(@"parameter = %@",parameter);
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];
     
     DLog(@"url = %@",url);
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
-        self.items = [data objectForKey:@"datas"];
-        [self.tableview reloadData];
-    } failureBlock:^(NSString *description) {
+        if (success) {
+//            [MMProgressHUD dismiss];
+            NSArray* dataArr = [data objectForKey:@"datas"];
+            for (int i = 0; i< dataArr.count; i++) {
+                [self.items addObject:dataArr[i]];
+            }
+            
+            [self.tableview reloadData];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
+        }
         
+    } failureBlock:^(NSString *description) {
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -299,7 +336,10 @@
         DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
             
+            self.m_nPageNumber = 1;
+            [self.items removeAllObjects];
             [self httpGetAllOrderList];
+
         }
         else
         {
@@ -323,5 +363,64 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)setupRefresh
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
+    
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [weakSelf loadMoreData];
+    }];
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+//        [self.tableView reloadData];
+        
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        
+        self.m_nPageNumber = 1;
+        [self.items removeAllObjects];
+        [self httpGetAllOrderList];
+        
+        
+    });
+}
+
+#pragma mark 上拉加载更多数据
+- (void)loadMoreData
+{
+
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+//        [self.tableView reloadData];
+        self.m_nPageNumber ++;
+        [self httpGetAllOrderList];
+        // 拿到当前的上拉刷新控件，结束刷新状态
+//        [self.tableview.footer endRefreshing];
+    });
+}
+
+
 
 @end

@@ -14,6 +14,6 @@
 @property(nonatomic, strong) NSString *strNickname;//昵称
 @property(nonatomic, strong) NSString *Roles;//角色
 @property(nonatomic, strong) NSArray  *shopList;//角色
-
+@property(nonatomic, strong) NSString  *strdimensionalCodeUrl;//二维码
 -(id) initWithDictionary:(NSDictionary*)jsonData;
 @end

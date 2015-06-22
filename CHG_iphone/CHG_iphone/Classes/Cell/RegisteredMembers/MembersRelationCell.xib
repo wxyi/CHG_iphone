@@ -38,7 +38,7 @@
                                     <action selector="onRadioBtn:" destination="KGk-i7-Jjw" eventType="touchDown" id="xdr-aS-Mtl"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="44g-iq-YOO" customClass="RadioButton">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="44g-iq-YOO" customClass="RadioButton">
                                 <rect key="frame" x="25" y="110" width="79" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="  母亲" image="unchecked.png">

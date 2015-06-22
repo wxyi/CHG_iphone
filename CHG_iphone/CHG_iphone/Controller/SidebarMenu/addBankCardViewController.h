@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface addBankCardViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface addBankCardViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
 @end

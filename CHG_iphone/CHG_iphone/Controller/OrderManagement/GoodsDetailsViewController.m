@@ -61,7 +61,7 @@
             cell = (DetailsCell*)[[self.DetailsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.imageview.image = [UIImage imageNamed:@"image1.jpg"];
+        cell.imageview.image = [UIImage imageNamed:@"default_small.png"];
         cell.titlelab.text = @"Hikid聪乐壮 金装复合益生元益生菌婴儿配方奶粉1段";
         cell.describelab.text = @"新西兰进口奶源，厂家直送";
         cell.pricelab.text = @"￥265";
@@ -215,11 +215,25 @@
     DLog(@"parameter = %@",parameter);
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];
     
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
+        if (success) {
+            [MMProgressHUD dismiss];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
     
     }];

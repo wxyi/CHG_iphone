@@ -175,21 +175,23 @@
         [param setObject:textfield.text forKey:[array objectAtIndex:i]];
     }
     DLog(@"param = %@",param);
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
         {
+            [MMProgressHUD dismiss];
             [self.navigationController popViewControllerAnimated:YES];
         }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
-                           inView:self.view
-                         vertical:0.7];
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            
         }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

@@ -72,9 +72,19 @@
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
-        if (self.didGetCode) {
-            self.didGetCode([data objectForKey:@"checkCode"]);
+        if (success) {
+            if (self.didGetCode) {
+                self.didGetCode([data objectForKey:@"checkCode"]);
+            }
         }
+        else
+        {
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self
+                         vertical:0.7];
+        }
+
         
     } failureBlock:^(NSString *description) {
         

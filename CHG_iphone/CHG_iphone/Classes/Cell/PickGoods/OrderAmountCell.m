@@ -24,7 +24,22 @@
 {
     DLog(@"textFieldDidEndEditing");
     NSString* price = textField.text;
+    DLog(@"price = %.1f Receivedlab = %.1f",[price doubleValue],[self.Receivedlab.text doubleValue]);
     
-    self.favorablelab.text = [NSString stringWithFormat:@"%.1f",self.allprice - [price doubleValue]];
+    if ([self.receivablelab.text intValue] > [price intValue]) {
+        self.favorablelab.text = [NSString stringWithFormat:@"%.2f",[self.receivablelab.text doubleValue] - [price doubleValue]];
+        self.Receivedlab.text = [NSString stringWithFormat:@"%.2f",[price doubleValue] ];
+    }
+    else
+    {
+        textField.text = @"";
+        [SGInfoAlert showInfo:@"实退金额大于应退金额"
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self
+                     vertical:0.7];
+    }
+
+   
+    
 }
 @end

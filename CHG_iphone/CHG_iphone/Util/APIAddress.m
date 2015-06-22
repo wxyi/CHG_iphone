@@ -391,7 +391,7 @@
 
 
 /**
- *    获取地址列表
+ *    获取银行卡对照表
  */
 +(NSString*) ApiBankCode
 {
@@ -411,5 +411,37 @@
 +(NSString*) ApiGetOrder;
 {
     return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getOrder"];
+}
+
+
+/**
+ *    删除银行卡
+ */
++(NSString*) ApiDeleteBankCard
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"deleteBankCard"];
+}
+
+/**
+ *    会员中心
+ */
++(NSString*) ApiGetCustCenter
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getCustCenter"];
+}
+
+/**
+ *   忘记密码-获取手机号
+ */
++(NSString*) ApiGetMobileByUserName
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"getMobileByUserName"];
+}
+/**
+ *   忘记密码（登陆页面，还未登陆）
+ */
++(NSString*) ApiForgetPassword
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"forgetPassword"];
 }
 @end

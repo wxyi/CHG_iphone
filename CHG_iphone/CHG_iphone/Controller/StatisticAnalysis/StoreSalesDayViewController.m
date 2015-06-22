@@ -25,14 +25,16 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    [self PageInfo];
+    
     self.title = @"日";
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    [self PageInfo];
     // Do any additional setup after loading the view from its nib.
-    self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
+//    self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StoresInfoNib = [UINib nibWithNibName:self.strNibName bundle:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,14 +44,14 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
-    
+    [self setupRefresh];
     
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     DLog(@"self.items.count = %d",self.items.count);
-    return self.items.count + 1;
+    return self.items.count ;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -57,107 +59,100 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        StatisticAnalysisTopCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticAnalysisTopCell"];
-        if(cell==nil){
-            cell = (StatisticAnalysisTopCell*)[[self.StatisticAnalysisTopNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        cell.nameLab.text = self.strtitle;
-        cell.pricelab.text = [NSString stringWithFormat:@"%d",self.custCount];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
-    }
-    else
-    {
-
-        switch (self.statisticalType) {
-            case StatisticalTypeStoreSales:
-            {
-                StoresInfoCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
-                if(cell==nil){
-                    cell = (StoresInfoCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-                    
-                }
-                NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section - 1];
-                DLog(@"%@",dictionary);
-                cell.datelab.text = dictionary[@"orderDate"];
-                cell.statelab.text = [NSString stringWithFormat:@"订单编号:%d",[dictionary[@"orderCode"] intValue]];
-                cell.namelab.text = [NSString stringWithFormat:@"%d",[dictionary[@"custName"] intValue]];
-                cell.producerlab.text = [NSString stringWithFormat:@"订单制作:%d",[dictionary[@"orderCreater"] intValue]];
-                cell.pricelab.text = [NSString stringWithFormat:@"￥%d",[dictionary[@"orderAmount"] intValue]];
-                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-                return cell;
-                break;
-            }
-            case StatisticalTypeMembershipGrowth:
-            {
-                MembegrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
-                if(cell==nil){
-                    cell = (MembegrowthCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-                    
-                }
-                cell.datelab.text = @"2015年05月19日 10:10:10";
-                cell.statelab.text = @"门店APP";
+    switch (self.statisticalType) {
+        case StatisticalTypeStoreSales:
+        {
+            StoresInfoCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
+            if(cell==nil){
+                cell = (StoresInfoCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                 
-                cell.namelab.text = @"王俊";
-                cell.iphonelab.text = @"13382050875";
-                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-                return cell;
-                break;
             }
-            case StatisticalTypePinRewards:
-            {
-                pinCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
-                if(cell==nil){
-                    cell = (pinCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-                    
-                }
-                cell.datelab.text = @"2015年05月19日 10:10:10";;
-                cell.statelab.text = @"订单编号:952712345";
-                cell.pricelab.text = @"$100";
-                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-                return cell;
-                break;
-            }
-            case StatisticalTypePartnersRewards:
-            {
-                PartnersCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
-                if(cell==nil){
-                    cell = (PartnersCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-                    
-                }
-                cell.datelab.text = @"2015年05月19日 10:10:10";
-                cell.statelab.text = @"订单编号:952712345";
-                cell.namelab.text = @"王俊";
-                cell.pricelab.text = @"$100";
-                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-                return cell;
-                break;
-            }
-            default:
-                break;
+            NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section ];
+            DLog(@"%@",dictionary);
+            cell.datelab.text = dictionary[@"orderDate"];
+            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%d",[dictionary[@"orderCode"] intValue]];
+            cell.namelab.text = dictionary[@"custName"];
+            cell.producerlab.text = dictionary[@"orderCreater"];
+            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[dictionary[@"orderAmount"] doubleValue]];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+            break;
         }
-
+        case StatisticalTypeMembershipGrowth:
+        {
+            MembegrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
+            if(cell==nil){
+                cell = (MembegrowthCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
+            cell.datelab.text = self.items[indexPath.section][@"joinDate"];
+            cell.statelab.text = self.items[indexPath.section][@"joinType"];
+            
+            cell.namelab.text = self.items[indexPath.section][@"name"];
+            cell.iphonelab.text = [NSString stringWithFormat:@"%d",[[self.items[indexPath.section] objectForKey:@"mobile"] intValue]];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+            break;
+        }
+        case StatisticalTypePinRewards:
+        {
+            pinCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
+            if(cell==nil){
+                cell = (pinCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
+            cell.datelab.text =  self.items[indexPath.section][@"awardSalerDate"];
+            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%@", self.items[indexPath.section][@"orderCode"]];;
+            cell.pricelab.text = [NSString stringWithFormat:@"%.2f",[[self.items[indexPath.section]objectForKey:@"awardSalerMoney"] doubleValue]];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+            break;
+        }
+        case StatisticalTypePartnersRewards:
+        {
+            PartnersCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
+            if(cell==nil){
+                cell = (PartnersCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
+            cell.datelab.text = self.items[indexPath.section][@"awardSalerDate"];
+            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%@", self.items[indexPath.section][@"orderCode"]];
+            cell.namelab.text = self.items[indexPath.section][@"partnerName"];
+            cell.pricelab.text = [NSString stringWithFormat:@"%.2f",[[self.items[indexPath.section]objectForKey:@"awardSalerMoney"] doubleValue]];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+            break;
+        }
+        default:
+            break;
     }
+
+//    if (indexPath.section == 0) {
+//        StatisticAnalysisTopCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticAnalysisTopCell"];
+//        if(cell==nil){
+//            cell = (StatisticAnalysisTopCell*)[[self.StatisticAnalysisTopNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        cell.nameLab.text = self.strtitle;
+//        cell.pricelab.text = [NSString stringWithFormat:@"%d",self.custCount];
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//    }
+//    else
+//    {
+//
+//        
+//    }
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 70;
-    }
+   
     return self.width;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
-    else
-    {
-        return 5;
-    }
+    return 5;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -175,12 +170,12 @@
 }
 -(void)PageInfo
 {
-    NSString* strUrl;
+    
    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setObject:@"2015" forKey:@"year"];
-    [parameter setObject:@"5" forKey:@"month"];
-    [parameter setObject:@"18" forKey:@"day"];
+    [parameter setObject:@"6" forKey:@"month"];
+    [parameter setObject:@"17" forKey:@"day"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     switch (self.statisticalType) {
@@ -190,7 +185,7 @@
             self.width = 120;
             self.strNibName = @"StoresInfoCell";
             
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfDay] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfDay] parameters:parameter];
             break;
         }
         case StatisticalTypeMembershipGrowth:
@@ -199,7 +194,7 @@
             self.width = 75;
             self.strNibName = @"MembegrowthCell";
             
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfDay] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfDay] parameters:parameter];
             break;
         }
         case StatisticalTypePinRewards:
@@ -207,7 +202,7 @@
             self.strtitle = @"今日动销奖励(元)";
             self.width = 100;
             self.strNibName = @"pinCell";
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfDay] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfDay] parameters:parameter];
             break;
         }
         case StatisticalTypePartnersRewards:
@@ -215,30 +210,80 @@
             self.strtitle = @"今日合作商消费账奖励(元)";
             self.width = 120;
             self.strNibName = @"PartnersCell";
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfDay] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfDay] parameters:parameter];
             break;
         }
         default:
             break;
     }
 
-    [self httpGetStatisticAnalysis:strUrl];
+    
+    [self setupRefresh];
 }
 
--(void)httpGetStatisticAnalysis:(NSString*)strurl
+-(void)httpGetStatisticAnalysis
 {
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-    [MMProgressHUD showWithTitle:@"" status:@""];
-    [HttpClient asynchronousRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-        [MMProgressHUD dismiss];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:self.strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+//        [MMProgressHUD dismiss];
         DLog(@"data = %@",data);
-        self.custCount = [data[@"custCount"] intValue];
-        self.items = [data objectForKey:@"custList"];
-        [self.tableview reloadData];
+        if (success) {
+//            [MMProgressHUD dismiss];
+
+            self.nameLab.text = self.strtitle;
+//            self.pricelab.text = [NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
+//            self.items = [data objectForKey:@"custList"];
+            
+            switch (self.statisticalType) {
+                case StatisticalTypeStoreSales:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
+                    self.items = [data objectForKey:@"custList"];
+                    break;
+                }
+                case StatisticalTypeMembershipGrowth:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
+                    self.items = [data objectForKey:@"custList"];
+                    break;
+                }
+                case StatisticalTypePinRewards:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardSalerCount"] intValue]];
+                    self.items = [data objectForKey:@"awardSalerList"];
+                    break;
+                }
+                case StatisticalTypePartnersRewards:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardPartnerCount"] intValue]];
+                    self.items = [data objectForKey:@"awardPartnerList"];
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+            [self.tableview reloadData];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+        
         
     } failureBlock:^(NSString *description) {
-        
-        [MMProgressHUD dismissWithError:description];
+        [self.tableview.header endRefreshing];
+        [self.tableview.footer endRefreshing];
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -252,5 +297,57 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)setupRefresh
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
+    
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [weakSelf loadMoreData];
+    }];
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        
+        [self httpGetStatisticAnalysis];
+//        [self.tableview.header endRefreshing];
+    });
+}
 
+#pragma mark 上拉加载更多数据
+- (void)loadMoreData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        [self httpGetStatisticAnalysis];
+        // 拿到当前的上拉刷新控件，结束刷新状态
+//        [self.tableview.footer endRefreshing];
+    });
+}
 @end

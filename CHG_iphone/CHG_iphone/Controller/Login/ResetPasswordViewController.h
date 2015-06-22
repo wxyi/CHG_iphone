@@ -10,5 +10,6 @@
 
 @interface ResetPasswordViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-
+@property(nonatomic,strong)NSString* strmobile;
+@property(nonatomic,strong)NSString* strcheckCode;
 @end

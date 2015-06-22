@@ -90,28 +90,102 @@ static SUHelper *sSharedInstance;
 }
 
 
-//-(void)httpRequestDate:(NSString*)strUrl parameter:(NSDictionary*)parameter success:(SuccessBlock)SuccessBlock
-//{
-//   
-//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleFade];
-//    [MMProgressHUD showDeterminateProgressWithTitle:nil status:@""];
-//    [HttpClient asynchronousRequestWithProgress:strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-//        
-//        if (success) {
-//            SuccessBlock(data,msg);
-//            [MMProgressHUD dismiss];
-//        }
-//        else
-//        {
-//            [MMProgressHUD dismissWithError:msg];
-//        }
-//        
-//  
-//       
-//    } failureBlock:^(NSString *description) {
-//        [MMProgressHUD dismissWithError:description];
-//    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-//        
-//    }];
-//}
+-(void)httpAddressCode
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiAddressCode] parameters:parameter];
+    
+    //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    //    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        if (success) {
+            //            DLog(@"data = %@",data);
+            //            if (![ConfigManager sharedInstance].strAddressCode) {
+            //                [ConfigManager sharedInstance].strAddressCode = [data objectForKey:@"datas"];
+            //            }
+            
+            [[SQLiteManager sharedInstance] deleteAreaCodeData];
+            [[SQLiteManager sharedInstance] deleteCityCodeData];
+            [[SQLiteManager sharedInstance] deleteProvinceCodeData];
+            NSDictionary* datas = [data objectForKey:@"datas"] ;
+            //            NSMutableArray* bankArr = [[NSMutableArray alloc] init];
+            //            NSArray *components = [datas allKeys];
+            
+            NSArray *sortedArray = [self AddressIDSort:datas];
+            
+            NSMutableArray *provinceList = [NSMutableArray array];
+            
+            for (int i=0; i<[sortedArray count]; i++) {
+                NSString *index = [sortedArray objectAtIndex:i];
+                NSString *ProvinceName = [[datas objectForKey: index] objectForKey:@"addressName"];
+                
+                ProvinceInfo* Province = [[ProvinceInfo alloc] init];
+                Province.strProvinceID = index;
+                Province.strProvince = ProvinceName;
+                [provinceList addObject:Province];
+                
+                NSDictionary* cityDict = [[datas objectForKey: index] objectForKey:@"addressDatas"];
+                NSArray* cityArray = [self AddressIDSort:cityDict];
+                NSMutableArray *CityList = [NSMutableArray array];
+                for (int i=0; i<[cityArray count]; i++) {
+                    CityInfo* cityinfo = [[CityInfo alloc] init];
+                    cityinfo.strCityID = [cityArray objectAtIndex:i];
+                    cityinfo.strCityName = [[cityDict objectForKey: cityinfo.strCityID] objectForKey:@"addressName"];
+                    cityinfo.strFatherID = index;
+                    
+                    [CityList addObject:cityinfo];
+                    
+                    
+                    NSDictionary* AreaDict = [[cityDict objectForKey: cityinfo.strCityID] objectForKey:@"addressDatas"];;
+                    NSArray* AreaArray = [self AddressIDSort:AreaDict];
+                    NSMutableArray *AreaList = [NSMutableArray array];
+                    for (int i=0; i<[AreaArray count]; i++) {
+                        AreaInfo* areainfo = [[AreaInfo alloc] init];
+                        areainfo.strAreaID = [AreaArray objectAtIndex:i];
+                        areainfo.strAreaName = [[AreaDict objectForKey: areainfo.strAreaID] objectForKey:@"addressName"];
+                        areainfo.strFatherID = cityinfo.strCityID;
+                        
+                        [AreaList addObject:areainfo];
+                        DLog(@"cityid = %@ cityname = %@ strFatherID = %@",areainfo.strAreaID,areainfo.strAreaName,areainfo.strFatherID)
+                    }
+                    [[SQLiteManager sharedInstance] saveOrUpdateAreaCodeData:AreaList];
+                }
+                [[SQLiteManager sharedInstance] saveOrUpdateCityCodeData:CityList];
+                
+            }
+            [[SQLiteManager sharedInstance] saveOrUpdateProvinceCodeData:provinceList];
+            
+        }
+        
+        
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+
+        }
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
+-(NSArray*)AddressIDSort:(NSDictionary*)IdList
+{
+    NSArray *components = [IdList allKeys];
+    NSArray *sortedArray = [components sortedArrayUsingComparator: ^(id obj1, id obj2) {
+        
+        if ([obj1 integerValue] > [obj2 integerValue]) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        if ([obj1 integerValue] < [obj2 integerValue]) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+    
+    return sortedArray;
+}
 @end

@@ -21,26 +21,33 @@
 }
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender
 {
+    NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
+    
+    self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
+        DLog(@"否");
+        
+        
+        
+    } otherButtonBlock:^{
+        
+    }];
+    [self.stAlertView show];
 
-    if ([self isCorrect ]) {
+    [self httpValidateCustMobile];
+    sender.enabled = NO;
+    //button type要 设置成custom 否则会闪动
+    [sender startWithSecond:60];
+    sender.backgroundColor = UIColorFromRGB(0xdddddd);
+    
+    [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
+        NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+        return title;
+    }];
+    [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+        countDownButton.enabled = YES;
+        return @"点击重新获取";
         
-        
-        [self httpValidateCustMobile];
-        sender.enabled = NO;
-        //button type要 设置成custom 否则会闪动
-        [sender startWithSecond:60];
-        sender.backgroundColor = UIColorFromRGB(0xdddddd);
-        
-        [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-            NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
-            return title;
-        }];
-        [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
-            countDownButton.enabled = YES;
-            return @"点击重新获取";
-            
-        }];
-    }
+    }];
     
 }
 -(BOOL)isCorrect
@@ -71,23 +78,28 @@
 }
 -(void)httpValidateCustMobile
 {
-   
-    
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:self.iphoneField.text forKey:@"mobile"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
     
     
-    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateMobile] parameters:parameter];
-    
-    NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:self.iphoneField.text forKey:@"custMobile"];
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:self.nameField.text forKey:@"custName"];
-    
-    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
-        DLog(@"daata = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,msg);
+        if (success) {
+            if (self.didGetCode) {
+                self.didGetCode([data objectForKey:@"checkCode"]);
+            }
         }
+        else
+        {
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self
+                         vertical:0.7];
+        }
+        
         
     } failureBlock:^(NSString *description) {
         

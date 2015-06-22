@@ -13,6 +13,6 @@
 @property(nonatomic,weak)IBOutlet UILabel* statelab;
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
 @property(nonatomic,weak)IBOutlet UILabel* iphonelab;
-
+@property(nonatomic,weak)IBOutlet UIButton* skipbtn;
 -(IBAction)skipdetails:(UIButton*)sender;
 @end

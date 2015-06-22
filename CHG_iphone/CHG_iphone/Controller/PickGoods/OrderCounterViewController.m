@@ -15,7 +15,8 @@
 #import "PresellCell.h"
 #import "PickAndReturnCell.h"
 #import "ConfirmOrderViewController.h"
-@interface OrderCounterViewController ()<SWTableViewCellDelegate>
+#import "OrderManagementViewController.h"
+@interface OrderCounterViewController ()<SWTableViewCellDelegate,UITextFieldDelegate>
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderGiftNib;
 @property UINib* OrderAmountNib;
@@ -101,7 +102,7 @@
             NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
             
             
-            [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+            [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
             cell.titlelab.text = dict[@"productName"] ;
             cell.pricelab.text = dict[@"productPrice"];
             cell.countlab.text = [NSString stringWithFormat:@"%d",[dict[@"QrcList"] count]];
@@ -130,36 +131,21 @@
            [cell setupCell];
             NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
             
+            cell.showCount =^(NSInteger count){
+                UILabel* label = (UILabel*)[self.view viewWithTag:1010];
+                label.text = [NSString stringWithFormat:@"%.2f",count*[dict[@"productPrice"] doubleValue]];
+            };
             
-            [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+            [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
             cell.titlelab.text = dict[@"productName"] ;
             cell.pricelab.text = dict[@"productPrice"];
             cell.TextStepper.Current = [dict[@"quantity"] doubleValue];
+            cell.counter =  [dict[@"quantity"] intValue];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
         
     }
-//    else if(indexPath.section == 1)
-//    {
-//        OrderGiftCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderGiftCell"];
-//        if(cell==nil){
-//            cell = (OrderGiftCell*)[[self.OrderGiftNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-//            
-//        }
-//        if (self.orderSaletype == SaleTypeReturnGoods
-//            ||self.orderSaletype == SaleTypePickingGoods)
-//        {
-//            cell.TextStepper.enabled = NO;
-//        }
-//        [cell setupCell];
-//        
-//        
-//        cell.GoodImage.image = [UIImage imageNamed:[self.dict objectForKey:@"image"]];
-//        cell.titlelab.text = [self.dict objectForKey:@"title"];
-//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-//        return cell;
-//    }
     else
     {
         if (self.orderSaletype == SaleTypePickingGoods ||self.orderSaletype == SaleTypeReturnGoods) {
@@ -180,17 +166,8 @@
                 cell.actualNameLab.text = @"实退金额";
                 
             }
-//            double allPrice;
-//            for (int i = 0; i< self.items.count; i++) {
-//                double price = [[self.items[i] objectForKey:@"productPrice"] doubleValue];
-//                int count = [[self.items[i] objectForKey:@"QrcList"] count];
-//                allPrice += price * count;
-//                
-//            }
             cell.receivableLab.text =[NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] doubleValue]] ;
-            
-//            cell.receivablelab.text = @"$336";
-//            cell.favorablelab.text = @"16";
+
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
@@ -217,10 +194,9 @@
                 allPrice += price * count;
                 
             }
-//            cell.receivableLab.text = [NSString stringWithFormat:@"%.1f",allPrice];
+
             cell.allprice = allPrice;
-            cell.receivablelab.text = [NSString stringWithFormat:@"%.1f",allPrice];
-//            cell.favorablelab.text = @"16";
+            cell.receivablelab.text = [NSString stringWithFormat:@"%.2f",allPrice];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
 
@@ -246,18 +222,11 @@
     if (section == 0) {
         return @"商品";
     }
-//    else if(section == 1)
-//    {
-//        return @"赠品";
-//    }
     else
         return @"";
     
 }
-//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-////    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)]
-//}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0 /*|| indexPath.section == 1*/) {
@@ -283,63 +252,51 @@
     }
     else if(sender.tag == 105)
     {
-        if (self.orderSaletype == SaleTypeReturnGoods ) {
+        if (self.orderSaletype == SaleTypeReturnGoods ||self.orderSaletype == SaleTypePresell||self.orderSaletype == SaleTypeSellingGoods) {
             DLog(@"提货退货");
 
             UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
+            UILabel* label = (UILabel*)[self.view viewWithTag:1010];
+            NSString *info;
             if (textField.text.length == 0) {
-                [SGInfoAlert showInfo:@"请输入实退金额"
+                info = @"请输入金额";
+            }
+            
+            if (info.length != 0) {
+                [SGInfoAlert showInfo:info
                               bgColor:[[UIColor darkGrayColor] CGColor]
                                inView:self.view
                              vertical:0.7];
                 return;
+
             }
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-                DLog(@"否");
-          
-                
-                
-            } otherButtonBlock:^{
-                DLog(@"是");
-           
-                [self httpOrderCounter];
             
-            }];
-            [self.stAlertView show];
+            if (self.orderSaletype == SaleTypeReturnGoods) {
+                self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                    DLog(@"否");
+                    
+                    
+                    
+                } otherButtonBlock:^{
+                    DLog(@"是");
+                    
+                    [self httpOrderCounter];
+                    
+                }];
+                [self.stAlertView show];
+            }
+            else
+            {
+                [self httpOrderCounter];
+            }
+            
         }
-        else if(self.orderSaletype == SaleTypePickingGoods)
+        else
         {
             DLog(@"确认提货");
             
             [self httpOrderCounter];
-//            SaleType satype = SaleTypePickingGoods;
-//            
-//            
-//            PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
-//            PresellGoodsView.orderSaletype = satype;
-//            [self.navigationController pushViewController:PresellGoodsView animated:YES];
-
         }
-        else
-        {
-            DLog(@"确认订单");
-            [self httpOrderCounter];
-//            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否需要添加赠品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-//                DLog(@"否");
-//                ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-//                ConfirmOrderView.Confirmsaletype = self.orderSaletype;
-//                [self.navigationController pushViewController:ConfirmOrderView animated:YES];
-//                
-//                
-//            } otherButtonBlock:^{
-//                DLog(@"是");
-//                
-//                [self.navigationController popViewControllerAnimated:YES];
-//            }];
-            
-            [self.stAlertView show];
-        }
-        
         
     }
 }
@@ -410,10 +367,6 @@
                 strurl = [APIAddress ApiCreateEngageOrder];
             }
             
-//            [param setObject:@"1" forKey:@"orderAmount"];
-//            [param setObject:@"2" forKey:@"orderFactAmount"];
-//            [param setObject:@"3" forKey:@"orderDiscount"];
-            
             NSArray* Amount = @[@"orderAmount",@"orderFactAmount",@"orderDiscount"];
             for (int i = 0; i < Amount.count; i++) {
                 UITextField* textField = (UITextField*)[self.view viewWithTag:[[NSString stringWithFormat:@"101%d",i] intValue]];
@@ -425,7 +378,6 @@
             break;
         }
         case SaleTypeReturnGoods://卖货退货
-//        case SaleTypeReturnEngageGoods://待提货退货
         {
             strurl = [APIAddress ApiCreateReturnOrder];
             UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
@@ -485,29 +437,42 @@
     
 
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     NSString* url = [NSObject URLWithBaseString:strurl parameters:parameter];
     
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
             
-            ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
-            ConfirmOrderView.Confirmsaletype = self.orderSaletype;
-            ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"orderId"] intValue]];
-            [self.navigationController pushViewController:ConfirmOrderView animated:YES];
+            [MMProgressHUD dismiss];
+            if (self.orderSaletype == SaleTypePickingGoods || self.orderSaletype == SaleTypeReturnGoods) {
+                OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+                
+                OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
+                [self.navigationController pushViewController:OrderManagementView animated:YES];
             }
+            else
+            {
+                ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
+                ConfirmOrderView.Confirmsaletype = self.orderSaletype;
+                ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"orderId"] intValue]];
+                [self.navigationController pushViewController:ConfirmOrderView animated:YES];
+            }
+            
+        }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
-                           inView:self.view
-                         vertical:0.7];
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

@@ -75,6 +75,7 @@
                 <outlet property="datelab" destination="vXJ-bQ-W5y" id="FC4-Zr-V6V"/>
                 <outlet property="iphonelab" destination="4gb-0U-hH8" id="ds7-jU-LBA"/>
                 <outlet property="namelab" destination="exi-hq-qBD" id="6RB-o6-Y0R"/>
+                <outlet property="skipbtn" destination="m63-Ue-Mr1" id="Bog-rG-MyU"/>
                 <outlet property="statelab" destination="6br-Uh-LLF" id="p6l-bZ-klC"/>
             </connections>
             <point key="canvasLocation" x="325" y="185.5"/>

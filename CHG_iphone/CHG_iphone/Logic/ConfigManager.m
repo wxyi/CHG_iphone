@@ -19,4 +19,13 @@
 @dynamic usercfg;
 @dynamic shopId;
 @dynamic strCustId;
+@dynamic strdimensionalCodeUrl;
+@dynamic lastClientVersion;
+@dynamic strStoreName;
+//会员注册
+@dynamic strcustMobile;
+@dynamic strcustName;
+@dynamic strcheckCode;
+
+@dynamic strAddressCode;
 @end

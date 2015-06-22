@@ -27,6 +27,7 @@
     self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StatisticsNib = [UINib nibWithNibName:@"StatisticsCell" bundle:nil];
 
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,11 +37,12 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.items count]+1;
+    return [self.items count];
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -48,48 +50,49 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        StatisticAnalysisTopCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticAnalysisTopCell"];
-        if(cell==nil){
-            cell = (StatisticAnalysisTopCell*)[[self.StatisticAnalysisTopNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        cell.nameLab.text = self.strtitle;
-        cell.pricelab.text =  [NSString stringWithFormat:@"%d",self.custCount];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
-    }
-    else
-    {
-        StatisticsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticsCell"];
-        if(cell==nil){
-            cell = (StatisticsCell*)[[self.StatisticsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-        NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section - 1];
-        [cell setStatistics:dictionary[@"day"] number:[dictionary[@"sellAmount"] intValue]];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+    StatisticsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticsCell"];
+    if(cell==nil){
+        cell = (StatisticsCell*)[[self.StatisticsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
+    NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section ];
+    [cell setStatistics:dictionary[@"day"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    return cell;
+//    if (indexPath.section == 0) {
+//        StatisticAnalysisTopCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticAnalysisTopCell"];
+//        if(cell==nil){
+//            cell = (StatisticAnalysisTopCell*)[[self.StatisticAnalysisTopNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        cell.nameLab.text = self.strtitle;
+//        cell.pricelab.text =  [NSString stringWithFormat:@"%d",self.custCount];
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//    }
+//    else
+//    {
+//        StatisticsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticsCell"];
+//        if(cell==nil){
+//            cell = (StatisticsCell*)[[self.StatisticsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section - 1];
+//        [cell setStatistics:dictionary[@"day"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//        
+//    }
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 70;
-    }
+
     return 30;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
-    else
-    {
-        return 10;
-    }
+    return 10;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -104,7 +107,6 @@
 }
 -(void)PageInfo
 {
-    NSString* strUrl;
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setObject:@"2015" forKey:@"year"];
@@ -114,49 +116,97 @@
         case StatisticalTypeStoreSales:
         {
             self.strtitle = @"本年销售额(元)";
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfYear] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfYear] parameters:parameter];
             break;
         }
         case StatisticalTypeMembershipGrowth:
         {
             self.strtitle = @"本年新增会员(人)";
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfYear] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfYear] parameters:parameter];
             
             break;
         }
         case StatisticalTypePinRewards:
         {
             self.strtitle = @"本年动销奖励(元)";
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfYear] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfYear] parameters:parameter];
             
             break;
         }
         case StatisticalTypePartnersRewards:
         {
             self.strtitle = @"本年合作商消费账奖励(元)";
-            strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfMonth] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfMonth] parameters:parameter];
             
             break;
         }
         default:
             break;
     }
-    [self httpGetStatisticAnalysis:strUrl];
+    [self setupRefresh];
+    
 }
--(void)httpGetStatisticAnalysis:(NSString*)strurl
+-(void)httpGetStatisticAnalysis
 {
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-    [MMProgressHUD showWithTitle:@"" status:@""];
-    [HttpClient asynchronousRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-        [MMProgressHUD dismiss];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:self.strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+//        [MMProgressHUD dismiss];
         DLog(@"data = %@",data);
-        self.custCount = [data[@"sellCount"] intValue];
-        self.items = [data objectForKey:@"sellList"];
-        [self.tableview reloadData];
+        if (success) {
+//            [MMProgressHUD dismiss];
+            self.nameLab.text = self.strtitle;
+
+            self.nbaseData = [data[@"baseData"] intValue];
+            
+            switch (self.statisticalType) {
+                case StatisticalTypeStoreSales:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"sellCount"] intValue]];
+                    self.items = [data objectForKey:@"sellList"];
+                    break;
+                }
+                case StatisticalTypeMembershipGrowth:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
+                    self.items = [data objectForKey:@"custList"];
+                    break;
+                }
+                case StatisticalTypePinRewards:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardSalerCount"] intValue]];
+                    self.items = [data objectForKey:@"custList"];
+                    break;
+                }
+                case StatisticalTypePartnersRewards:
+                {
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardPartnerCount"] intValue]];
+                    self.items = [data objectForKey:@"custList"];
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            [self.tableview reloadData];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
         
     } failureBlock:^(NSString *description) {
-        
-        [MMProgressHUD dismissWithError:description];
+        [self.tableview.header endRefreshing];
+        [self.tableview.footer endRefreshing];
+//        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -170,5 +220,58 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)setupRefresh
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
+    
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [weakSelf loadMoreData];
+    }];
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        
+        [self httpGetStatisticAnalysis];
+        
+//        [self.tableview.header endRefreshing];
+    });
+}
 
+#pragma mark 上拉加载更多数据
+- (void)loadMoreData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        [self httpGetStatisticAnalysis];
+        // 拿到当前的上拉刷新控件，结束刷新状态
+//        [self.tableview.footer endRefreshing];
+    });
+}
 @end

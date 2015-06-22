@@ -14,6 +14,8 @@
 @property(nonatomic,weak)IBOutlet UITextField* Verificationfield;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 @property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
+@property(nonatomic,strong)STAlertView* stAlertView;
+@property (nonatomic, copy) GetCheckCode didGetCode;
 -(IBAction)ForgotPassword:(UIButton*)sender;
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender;
 @end

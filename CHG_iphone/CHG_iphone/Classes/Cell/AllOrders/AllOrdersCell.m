@@ -56,7 +56,7 @@
         }
         NSDictionary* dict =  [[self.allitems objectForKey:@"productList"] objectAtIndex:indexPath.row] ;
         
-        [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"image1.jpg"]];
+        [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = dict[@"productName"];
         cell.pricelab.text = dict[@"productPrice"];
     
@@ -155,7 +155,13 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
     v_footer.backgroundColor = [UIColor clearColor];
     UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
-    goodscountlab.text = @" 共3件商品";
+    NSArray* productList = self.allitems[@"productList"];
+    NSInteger count = 0;
+    for (int i = 0; i< [productList count]; i++) {
+        count += [productList[i][@"quantity"] intValue];
+    }
+    NSString* string = [NSString stringWithFormat:@"共%d件商品",count];
+    goodscountlab.text =string;
     goodscountlab.font = FONT(13);
     goodscountlab.textAlignment = NSTextAlignmentLeft;
     [v_footer addSubview:goodscountlab];

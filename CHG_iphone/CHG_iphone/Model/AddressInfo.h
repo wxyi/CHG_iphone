@@ -9,5 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface AddressInfo : NSObject
+@property(nonatomic, strong) NSString *strAddress; //地址
+@property(nonatomic, strong) NSString *strCityName; //市
+@property(nonatomic, strong) NSString *strCityCode; //市代码
+@property(nonatomic, strong) NSString *strProvinceName;//省
+@property(nonatomic, strong) NSString *strprovinceCode;//省代码
+@property(nonatomic, strong) NSString *strDistrictName;//区
+@property(nonatomic, strong) NSString *strdistrictCode;//区代码
 -(id) initWithDictionary:(NSDictionary*)jsonData;
 @end

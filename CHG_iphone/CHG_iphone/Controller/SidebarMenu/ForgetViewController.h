@@ -10,4 +10,7 @@
 
 @interface ForgetViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,strong)STAlertView* stAlertView;
+@property(nonatomic,strong)NSString* strCheckCode;
 @end
+

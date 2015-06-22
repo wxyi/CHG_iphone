@@ -29,7 +29,7 @@
     
     self.title = @"订单详情";
     [self setupView];
-    [self httpGetOrder];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,6 +60,8 @@
         self.tableview.frame = rect;
         self.returnBtn.hidden = YES;
     }
+    
+    [self setupRefresh];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -227,11 +229,27 @@
     DLog(@"parameter = %@",parameter);
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrder] parameters:parameter];
     
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@,msg = %@",data,msg);
-        self.items = [data objectForKey:@"order"] ;
-        self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5;
-        [self.tableview reloadData];
+        if (success) {
+//            [MMProgressHUD dismiss];
+            self.items = [data objectForKey:@"order"] ;
+            self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5;
+            [self.tableview reloadData];
+            [self.tableview.header endRefreshing];
+
+        }
+        else
+        {
+            [self.tableview.header endRefreshing];
+//            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
     } failureBlock:^(NSString *description) {
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
@@ -247,5 +265,42 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void)setupRefresh
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
+    
+    
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        
+        [self httpGetOrder];
+        
+        //        [self.tableview.header endRefreshing];
+    });
+}
 
 @end

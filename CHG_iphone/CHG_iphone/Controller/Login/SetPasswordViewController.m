@@ -76,9 +76,9 @@
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 70)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
     
-    imageview.image = [UIImage imageNamed:@"logo.png"];
+    imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
     return v_header;
@@ -156,9 +156,15 @@
     [param setObject:self.strCheckCode forKey:@"checkCode"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
     
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+            [MMProgressHUD dismiss];
+            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+            
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
                 
@@ -174,6 +180,10 @@
                 AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
                 [delegate setupHomePageViewController];
             }
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
         }
         
     } failureBlock:^(NSString *description) {

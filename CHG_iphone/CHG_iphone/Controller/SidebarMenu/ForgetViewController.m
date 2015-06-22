@@ -8,6 +8,7 @@
 
 #import "ForgetViewController.h"
 #import "JKCountDownButton.h"
+#import "ResetViewController.h"
 @interface ForgetViewController ()
 
 @end
@@ -51,11 +52,10 @@
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 200, 44)];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
-    textField.textColor = [UIColor clearColor];
+    textField.textColor = UIColorFromRGB(0x646464);
     textField.placeholder = @"动态验证码"; //默认显示的字
-    
-    textField.secureTextEntry = YES; //密码
-    
+    textField.keyboardType = UIKeyboardTypeNumberPad;
+    textField.tag = 101;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.returnKeyType = UIReturnKeyDone;
@@ -68,14 +68,35 @@
     
     JKCountDownButton* countDownCode = [JKCountDownButton buttonWithType:UIButtonTypeCustom];
     countDownCode.backgroundColor = [UIColor clearColor];
+    countDownCode.titleLabel.font = FONT(13);
+    countDownCode.titleLabel.textColor = UIColorFromRGB(0x646464);
     countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
     [countDownCode setTitle:@"再次发送" forState:UIControlStateNormal];
+    
     [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 //    countDownCode.backgroundColor = [UIColor whiteColor];
 
     
     [cell.contentView addSubview:countDownCode];
     [countDownCode addToucheHandler:^(JKCountDownButton*sender, NSInteger tag) {
+        
+        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        
+        NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[config.strMobile substringFromIndex:7]];
+        
+        self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
+            DLog(@"否");
+            
+            
+            
+        } otherButtonBlock:^{
+            
+        }];
+        [self.stAlertView show];
+        DLog(@"是");
+        
+        [self httpGetCheckCode];
+        
         sender.enabled = NO;
         
         [sender startWithSecond:60];
@@ -142,7 +163,61 @@
 -(void)confirm:(UIButton*)sender
 {
     DLog(@"确认");
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:101];
+    NSString* info;
+    if (textfield.text.length == 0) {
+        info = @"请输入验证码";
+    }
+    else if(![textfield.text isEqualToString:self.strCheckCode])
+    {
+        info = @"验证码不正确,请重新输入";
+    }
+    if (info.length != 0) {
+        
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+    }
+    ResetViewController* ResetView = [[ResetViewController alloc] initWithNibName:@"ResetViewController" bundle:nil];
+    ResetView.strCheckCode = self.strCheckCode;
+    [self.navigationController pushViewController:ResetView animated:YES];
+}
+
+
+-(void)httpGetCheckCode
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    [parameter setObject:config.strMobile forKey:@"mobile"];
     
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@ msg = %@",data,msg);
+        if (success) {
+            [MMProgressHUD dismiss];
+            self.strCheckCode = [data objectForKey:@"checkCode"];
+        }
+        else
+        {
+            [MMProgressHUD dismissWithError:msg];
+//            [SGInfoAlert showInfo:msg
+//                          bgColor:[[UIColor darkGrayColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+        }
+        
+        
+    } failureBlock:^(NSString *description) {
+        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

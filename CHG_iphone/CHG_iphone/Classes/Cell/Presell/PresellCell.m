@@ -27,7 +27,7 @@
     _TextStepper.Current = 1;
     _TextStepper.Step = 1;
     _TextStepper.Minimum=1;
-    _TextStepper.Maximum = 10;
+    _TextStepper.Maximum = 60;
     _TextStepper.NumDecimals =0;
     _TextStepper.IsEditableTextField=YES;
 }
@@ -38,6 +38,15 @@
     else {
         _counter++;
     }
-    
+    if (_counter > 60) {
+        _counter = 60;
+    }
+    else if(_counter < 0)
+    {
+        _counter = 0;
+    }
+    if (self.showCount) {
+        self.showCount(_counter);
+    }
 }
 @end

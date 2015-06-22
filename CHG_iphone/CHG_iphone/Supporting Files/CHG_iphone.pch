@@ -28,7 +28,6 @@
     #import "MImageFile.h"
     #import "UIImage+ResizeMagick.h"
     #import "MyTableViewCell.h"
-    #import "ZBarSDK.h"
     #import "NSObject+Helper.h"
     #import "AppDelegate.h"
     #import "BaseCell.h"
@@ -40,5 +39,8 @@
     #import "CHGNavigationController.h"
     #import "JSONKit.h"
     #import "MMProgressHUD.h"
+    #import "MJRefresh.h"
+    #import "SQLiteManager.h"
+    #import "NSDate+Helper.h"
 #define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_
 #endif

@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PresellGoodsViewController">
             <connections>
-                <outlet property="ZBarReader" destination="x9b-oE-rx3" id="oHE-09-5co"/>
                 <outlet property="tableview" destination="3fe-fq-hzt" id="Axc-pN-L4o"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,10 +16,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x9b-oE-rx3" customClass="ZBarReaderView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="220"/>
-                    <color key="backgroundColor" white="0.99294354839999999" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="扫描二维码识别商品信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6fA-lv-Zfi">
                     <rect key="frame" x="116" y="187" width="126" height="35"/>
                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -42,21 +37,11 @@
                     <rect key="frame" x="0.0" y="220" width="320" height="244"/>
                     <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="scan.png" translatesAutoresizingMaskIntoConstraints="NO" id="751-hk-A63">
-                    <rect key="frame" x="75" y="15" width="170" height="170"/>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_tips_small.png" translatesAutoresizingMaskIntoConstraints="NO" id="4PA-v9-eNk">
-                    <rect key="frame" x="90" y="193" width="20" height="20"/>
-                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <point key="canvasLocation" x="305" y="237"/>
         </view>
     </objects>
-    <resources>
-        <image name="icon_tips_small.png" width="15" height="15"/>
-        <image name="scan.png" width="170" height="170"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

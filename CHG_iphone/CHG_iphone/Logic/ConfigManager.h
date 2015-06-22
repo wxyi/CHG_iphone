@@ -26,6 +26,11 @@
 @property(nonatomic,assign) NSString *sysVersion;
 
 /**
+ *  最后日期
+ */
+@property(nonatomic,assign) NSString *lastClientVersion;
+
+/**
  *  设备名称
  */
 @property(nonatomic,assign) NSString *deviceName;
@@ -53,4 +58,18 @@
 
 //用户手机号
 @property(nonatomic,assign) NSString * strIphone;
+
+
+//门店二维码
+@property(nonatomic,assign) NSString * strdimensionalCodeUrl;
+
+//门店名称
+@property(nonatomic,assign) NSString * strStoreName;
+
+//会员注册信息，由于nav统一从CHGNavigationController中调用，所以需要记录会员手机号，会员姓名，手机验证码
+@property(nonatomic,assign) NSString * strcustMobile;
+@property(nonatomic,assign) NSString * strcustName;
+@property(nonatomic,assign) NSString * strcheckCode;
+
+@property(nonatomic,assign) NSString * strAddressCode;
 @end
