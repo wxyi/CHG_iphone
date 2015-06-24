@@ -25,7 +25,18 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    //导航
+    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+    leftbtn.titleColor = [UIColor whiteColor];
+    
+    leftbtn.iconColor = [UIColor whiteColor];
+    leftbtn.padding = JTImageButtonPaddingSmall;
+    leftbtn.borderColor = [UIColor clearColor];
+    leftbtn.iconSide = JTImageButtonIconSideLeft;
+    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.items = [[NSMutableArray alloc] init];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
@@ -74,22 +85,26 @@
     _line.image = [UIImage imageNamed:@"scan_laser.png"];
     [self.view addSubview:_line];
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
-    timer1 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
+    
     
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_session stopRunning];
-    [_preview removeFromSuperlayer];
     [timer invalidate];
     [timer1 invalidate];
+    [_session stopRunning];
+    [_session removeInput:self.input];
+    [_session removeOutput:self.output];
+    [self.preview removeFromSuperlayer];
+    
     
 }
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
+    timer1 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
     [self setupCamera];
 }
 

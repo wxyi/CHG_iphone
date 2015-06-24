@@ -21,6 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"订单查询";
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     [self setupView ];
     // Do any additional setup after loading the view from its nib.
 }
@@ -44,6 +47,7 @@
  
     [self setupQRadioButton];
     
+    self.items = [[NSMutableArray alloc] init];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -69,6 +73,8 @@
     
     self.starttime.inputView = self.startdatePicker;
     self.endtime.inputView = self.enddatePicker;
+    
+    [self setupRefresh];
 }
 -(void)setupQRadioButton
 {
@@ -333,18 +339,18 @@
 -(void)checkDatas
 {
    
-    NSString* info;
-    if (self.starttime.text.length == 0 || self.endtime.text.length == 0) {
-        info = @"请输入时间";
-    }
-    if (info.length != 0) {
-        
-        [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
-        return ;
-    }
+//    NSString* info;
+//    if (self.starttime.text.length == 0 || self.endtime.text.length == 0) {
+//        info = @"请输入时间";
+//    }
+//    if (info.length != 0) {
+//        
+//        [SGInfoAlert showInfo:info
+//                      bgColor:[[UIColor darkGrayColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.7];
+//        return ;
+//    }
     
     if (self.strOrderType.length == 0) {
         for (int i = 0 ; i < 3 ; i++) {
@@ -372,7 +378,7 @@
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].strCustId  forKey:@"custId"];
-    [parameter setObject:@"1" forKey:@"pageNumber"];
+    [parameter setObject:[NSString stringWithFormat:@"%d",self.m_nPageNumber] forKey:@"pageNumber"];
     [parameter setObject:@"20" forKey:@"pageSize"];
     [parameter setObject:self.starttime.text forKey:@"startDate"];
     
@@ -387,8 +393,8 @@
  
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parame];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-    [MMProgressHUD showWithTitle:@"" status:@""];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@ msg = %@",data,msg);
@@ -396,10 +402,14 @@
             [MMProgressHUD dismiss];
             self.items = [data objectForKey:@"datas"];
             [self.tableview reloadData];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
         }
         else
         {
             [MMProgressHUD dismissWithError:msg];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
 //            [SGInfoAlert showInfo:msg
 //                          bgColor:[[UIColor darkGrayColor] CGColor]
 //                           inView:self.view
@@ -409,6 +419,8 @@
         
     } failureBlock:^(NSString *description) {
         [MMProgressHUD dismissWithError:description];
+        [self.tableview.header endRefreshing];
+        [self.tableview.footer endRefreshing];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -418,4 +430,62 @@
 {
     [self checkDatas];
 }
+- (void)setupRefresh
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    
+    // 设置自动切换透明度(在导航栏下面自动隐藏)
+    header.autoChangeAlpha = YES;
+    
+    // 隐藏时间
+    header.lastUpdatedTimeLabel.hidden = YES;
+    
+    // 马上进入刷新状态
+    [header beginRefreshing];
+    
+    // 设置header
+    self.tableview.header = header;
+    
+    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [weakSelf loadMoreData];
+    }];
+}
+#pragma mark - 数据处理相关
+#pragma mark 下拉刷新数据
+- (void)loadNewData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        
+        // 拿到当前的下拉刷新控件，结束刷新状态
+        
+        self.m_nPageNumber = 1;
+        [self.items removeAllObjects];
+        [self checkDatas];
+        
+        
+    });
+}
+
+#pragma mark 上拉加载更多数据
+- (void)loadMoreData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        self.m_nPageNumber ++;
+        [self checkDatas];
+        // 拿到当前的上拉刷新控件，结束刷新状态
+        //        [self.tableview.footer endRefreshing];
+    });
+}
+
 @end

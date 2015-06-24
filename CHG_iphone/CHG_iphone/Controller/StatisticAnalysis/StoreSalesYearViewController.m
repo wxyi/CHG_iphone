@@ -19,7 +19,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"年";
-    [self PageInfo];
+    self.isSkip = NO;
+    switch (self.statisticalType) {
+        case StatisticalTypeStoreSales:
+        {
+            self.strtitle = @"本年销售额(元)";
+            break;
+        }
+        case StatisticalTypeMembershipGrowth:
+        {
+            self.strtitle = @"本年新增会员(人)";
+            break;
+        }
+        case StatisticalTypePinRewards:
+        {
+            self.strtitle = @"本年动销奖励(元)";
+            break;
+        }
+        case StatisticalTypePartnersRewards:
+        {
+            self.strtitle = @"本年合作商消费账奖励(元)";
+            break;
+        }
+        default:
+            break;
+    }
+    self.nameLab.text = self.strtitle;
+    self.pricelab.text = @"0.00";
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -27,7 +53,7 @@
     self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StatisticsNib = [UINib nibWithNibName:@"StatisticsCell" bundle:nil];
 
-
+    [self setupRefreshPage];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,6 +63,12 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
+//    [self setupRefreshPage];
+    if ([self.items count] == 0|| self.isSkip) {
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD showWithTitle:@"" status:@""];
+        [self httpGetStatisticAnalysis];
+    }
     
 }
 
@@ -100,42 +132,44 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.didSelectedSubItemAction) {
-        self.didSelectedSubItemAction(indexPath);
+    if (self.CellSkipSelect) {
+        self.CellSkipSelect([self.items objectAtIndex:indexPath.section ]);
     }
     
 }
--(void)PageInfo
+-(void)setupRefreshPage
 {
     
+    
+    [self setupRefresh];
+    
+}
+-(void)httpGetStatisticAnalysis
+{
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"2015" forKey:@"year"];
+    [parameter setObject:self.strYear forKey:@"year"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            self.strtitle = @"本年销售额(元)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfYear] parameters:parameter];
             break;
         }
         case StatisticalTypeMembershipGrowth:
         {
-            self.strtitle = @"本年新增会员(人)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfYear] parameters:parameter];
             
             break;
         }
         case StatisticalTypePinRewards:
         {
-            self.strtitle = @"本年动销奖励(元)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfYear] parameters:parameter];
             
             break;
         }
         case StatisticalTypePartnersRewards:
         {
-            self.strtitle = @"本年合作商消费账奖励(元)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfMonth] parameters:parameter];
             
             break;
@@ -143,21 +177,17 @@
         default:
             break;
     }
-    [self setupRefresh];
-    
-}
--(void)httpGetStatisticAnalysis
-{
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:self.strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
 //        [MMProgressHUD dismiss];
         DLog(@"data = %@",data);
         if (success) {
-//            [MMProgressHUD dismiss];
+            [MMProgressHUD dismiss];
             self.nameLab.text = self.strtitle;
 
             self.nbaseData = [data[@"baseData"] intValue];
+            
             
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
@@ -175,26 +205,41 @@
                 case StatisticalTypePinRewards:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardSalerCount"] intValue]];
-                    self.items = [data objectForKey:@"custList"];
+                    self.items = [data objectForKey:@"awardSalerList"];
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardPartnerCount"] intValue]];
-                    self.items = [data objectForKey:@"custList"];
+                    self.items = [data objectForKey:@"awardPartnerList"];
                     break;
                 }
                 default:
                     break;
             }
 
+            NSDate *now = [NSDate date];
+            NSLog(@"now date is: %@", now);
+            
+            NSCalendar *calendar = [NSCalendar currentCalendar];
+            NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+            NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+            
+            int year = [dateComponent year];
+            if ([self.strYear intValue] != year) {
+                self.nameLab.text = [NSString stringWithFormat:@"%@年%@",self.strYear,[self GetCurrentTitle]];
+            }
+            else
+            {
+                self.nameLab.text = self.strtitle;
+            }
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
         }
         else
         {
-//            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismissWithError:msg];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
             [SGInfoAlert showInfo:msg
@@ -206,7 +251,7 @@
     } failureBlock:^(NSString *description) {
         [self.tableview.header endRefreshing];
         [self.tableview.footer endRefreshing];
-//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -233,7 +278,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-    [header beginRefreshing];
+//    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;
@@ -254,7 +299,8 @@
         //        [self.tableView reloadData];
         
         // 拿到当前的下拉刷新控件，结束刷新状态
-        
+        NSString* lastYear =[NSString stringWithFormat:@"%d",[self.strYear intValue] - 1];
+        self.strYear = lastYear;
         [self httpGetStatisticAnalysis];
         
 //        [self.tableview.header endRefreshing];
@@ -269,9 +315,53 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         //        [self.tableView reloadData];
+        NSDate *now = [NSDate date];
+        NSLog(@"now date is: %@", now);
+        
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+        
+        
+        int year = [dateComponent year];
+        
+        NSString* nextYear =[NSString stringWithFormat:@"%d",[self.strYear intValue] + 1];
+        if ([nextYear intValue] >= year) {
+            nextYear = [NSString stringWithFormat:@"%d",year];
+        }
+        self.strYear = nextYear;
         [self httpGetStatisticAnalysis];
         // 拿到当前的上拉刷新控件，结束刷新状态
 //        [self.tableview.footer endRefreshing];
     });
+}
+-(NSString*)GetCurrentTitle
+{
+    NSString* title;
+    switch (self.statisticalType) {
+        case StatisticalTypeStoreSales:
+        {
+            title = @"销售额(元)";
+            break;
+        }
+        case StatisticalTypeMembershipGrowth:
+        {
+            title = @"新增会员(人)";
+            break;
+        }
+        case StatisticalTypePinRewards:
+        {
+            title = @"动销奖励(元)";
+            break;
+        }
+        case StatisticalTypePartnersRewards:
+        {
+            title = @"合作商消费账奖励(元)";
+            break;
+        }
+        default:
+            break;
+    }
+    return title;
 }
 @end

@@ -10,7 +10,7 @@
 
 @interface BankCardViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,SWTableViewCellDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,weak)IBOutlet UIButton* addbtn;
+@property(nonatomic,weak)IBOutlet JTImageButton* addbtn;
 @property(nonatomic,assign)BOOL isEmpty;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,strong)STAlertView* stAlertView;

@@ -28,7 +28,18 @@
 
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:@"门店销售",@"会员增长",@"动销奖励",@"合作商消费分账奖励", nil];
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    if ([config.Roles isEqualToString:@"SHOP_OWNER"]){
+        self.items = [NSArray arrayWithObjects:@"门店销售",@"会员增长",@"动销奖励",@"合作商消费分账奖励", nil];
+    }
+    else if ([config.Roles isEqualToString:@"SHOPLEADER"])
+    {
+        self.items = [NSArray arrayWithObjects:@"门店销售",@"会员增长", nil];
+    }
+    else if ([config.Roles isEqualToString:@"PARTNER"])
+    {
+        self.items = [NSArray arrayWithObjects:@"会员增长",@"合作商消费分账奖励", nil];
+    }
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -67,7 +78,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     StatisticalType type ;
-    
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     switch (indexPath.row) {
         case 0:
             type = StatisticalTypeStoreSales;
@@ -85,6 +96,17 @@
             break;
     }
     
+    if ([config.Roles isEqualToString:@"PARTNER"])
+    {
+        if (indexPath.row == 0) {
+            type = StatisticalTypeMembershipGrowth;
+        }
+        else
+        {
+            type = StatisticalTypePartnersRewards;
+        }
+        
+    }
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
     StoreSalesView.statisticalType = type;
     [self.navigationController pushViewController:StoreSalesView animated:YES];

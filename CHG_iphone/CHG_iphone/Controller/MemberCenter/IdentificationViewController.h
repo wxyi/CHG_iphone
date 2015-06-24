@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-@interface IdentificationViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,AVCaptureMetadataOutputObjectsDelegate>
+@interface IdentificationViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,AVCaptureMetadataOutputObjectsDelegate,UITextFieldDelegate>
 {
     int num;
     BOOL upOrdown;
@@ -22,7 +22,7 @@
 @property (strong,nonatomic)AVCaptureMetadataOutput * output;
 @property (strong,nonatomic)AVCaptureSession * session;
 @property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
-@property (nonatomic, retain) UIImageView * line;
+@property (nonatomic, strong) UIImageView * line;
 
 
 @property(nonatomic,weak)IBOutlet UITableView* tableview;

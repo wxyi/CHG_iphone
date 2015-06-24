@@ -33,7 +33,13 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
-    [self setupRefresh];
+    
+    if ([self.items allKeys] == 0) {
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD showWithTitle:@"" status:@""];
+        [self httpGetOrder];
+    }
+    
 }
 
 -(void)setupView
@@ -56,6 +62,8 @@
         self.Terminationbtn.hidden = YES;
         self.line.hidden = YES;
     }
+    
+    [self setupRefresh];
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
@@ -96,6 +104,7 @@
             
         }
         cell.picktype = PickUpTypeDidNot;
+       
         cell.height = self.m_height;
         [cell setupAllOrderView:self.items];
         cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
@@ -251,7 +260,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-    [header beginRefreshing];
+//    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;

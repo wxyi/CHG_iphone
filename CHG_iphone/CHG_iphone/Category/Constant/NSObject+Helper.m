@@ -114,7 +114,7 @@
 //获取当前时间
 +(NSString*)currentTime
 {
-    NSString* strCurrentTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyyMMddhhmmss"];
+    NSString* strCurrentTime = [NSDate stringFromDate:[NSDate date] withFormat:@"yyyyMMdd"];
     return strCurrentTime;
 }
 

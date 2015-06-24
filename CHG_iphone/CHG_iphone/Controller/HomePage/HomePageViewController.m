@@ -23,6 +23,7 @@
 #import "StatisticAnalysisViewController.h"
 #import "StopViewController.h"
 #import "IdentificationViewController.h"
+#import "StoreSalesViewController.h"
 @interface HomePageViewController ()
 @property UINib* PromoListNib;
 @property UINib* AccountBriefNib;
@@ -69,10 +70,10 @@
     
     [self setupRefresh];
     
-    self.pagearray = [NSMutableArray arrayWithCapacity:5];
-    for (int i = 1 ; i <= 5; i++) {
-        [self.pagearray addObject:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"image%d",i] ofType:@"jpg"]];
-    }
+    self.pagearray = [NSMutableArray array];
+//    for (int i = 1 ; i <= 5; i++) {
+//        [self.pagearray addObject:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"image%d",i] ofType:@"jpg"]];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -91,17 +92,18 @@
     __weak typeof(self) weakSelf = self;
     if (indexPath.row == 0) {
 
-        if (self.listcell == nil) {
-            CGRect rect= CGRectMake(0, -10, SCREEN_WIDTH, 128);
-            self.listcell=[[PromoListCell  alloc]initWithFrame:rect homeNews:self.pagearray];
+        static NSString *CellIdentifier = @"UITableViewCell";
+        
+        UITableViewCell *cell1 = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell1 == nil)
+        {
+            cell1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        //测试
-       
-        
-        
-        [self.listcell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return self.listcell;
+        self.page = [[LKPageView alloc]initWithURLStringArray:self.pagearray andFrame:CGRectMake(0, -10, SCREEN_WIDTH, 128)];
+        //        self.page.delegate = self;
+        [cell1.contentView addSubview:self.page];        //测试
+        return cell1;
     }
     else if (indexPath.row == 1)
     {
@@ -204,6 +206,7 @@
         case 0:
         {
             DLog(@"会员总数");
+            
             break;
         }
         case 1:
@@ -222,24 +225,32 @@
 }
 -(void)didSelectRewardsCell:(NSIndexPath*)indexPath
 {
+    StatisticalType Type;
     switch (indexPath.row) {
         case 0:
         {
             DLog(@"卖货奖励");
+            Type = StatisticalTypePinRewards;
             break;
         }
         case 1:
         {
             DLog(@"合作商分账");
+            Type = StatisticalTypePartnersRewards;
             break;
         }
         default:
             break;
     }
+    
+    StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
+    StoreSalesView.statisticalType = Type;
+    [self.navigationController pushViewController:StoreSalesView animated:YES];
 }
 -(void)didSelectMenuCell:(NSIndexPath*)indexPath
 {
-    switch (indexPath.row) {
+    NSInteger selectType = [[[self.menuArr objectAtIndex:indexPath.row] objectForKey:@"type"] intValue];
+    switch (selectType) {
         case 0:
         {
             DLog(@"会员中心");
@@ -261,10 +272,10 @@
             DLog(@"订单管理");
             
             IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
-            if (indexPath.row == 2) {
+            if (selectType == 2) {
                 IdentificationView.m_MenuType = MenuTypePresell;
             }
-            else if(indexPath.row == 3)
+            else if(selectType == 3)
             {
                 IdentificationView.m_MenuType = MenuTypeSellingGoods;
             }
@@ -324,8 +335,16 @@
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         if (success) {
 //            [MMProgressHUD dismiss];
-            self.pagearray = data;
+            NSArray* datas = [data objectForKey:@"datas"];
+            [self.pagearray removeAllObjects];
+            for (int i = 0; i < datas.count; i ++) {
+                [self.pagearray addObject:[datas[i]objectForKey:@"promoPath"]];
+            }
+            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+//            self.pagearray = data;
             
+            [self httpGetAccountBrief];
         }
         else
         {
@@ -335,7 +354,7 @@
                            inView:self.view
                          vertical:0.7];
         }
-        [self httpGetAccountBrief];
+        
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
@@ -392,8 +411,25 @@
     
     UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
     
-    if ([cfg.Roles isEqualToString:@"SHOP_OWNER"]) {
-        [menuArr addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"store_management.png",@"icon",@"门店管理",@"title", nil]];
+    if ([cfg.Roles isEqualToString:@"SHOPSELLER"]) {
+        
+        NSMutableArray* SellerArr = [NSMutableArray array];
+        for (int i = 0 ; i < menuArr.count; i++) {
+            if ([[menuArr[i] objectForKey:@"level"] intValue]== 1) {
+                [SellerArr addObject:menuArr[i]];
+            }
+        }
+        menuArr = SellerArr;
+    }
+    else if ([cfg.Roles isEqualToString:@"PARTNER"])
+    {
+        NSMutableArray* PartnerArr = [NSMutableArray array];
+        for (int i = 0 ; i < menuArr.count; i++) {
+            if ([[menuArr[i] objectForKey:@"level"] intValue]== 3) {
+                [PartnerArr addObject:menuArr[i]];
+            }
+        }
+        menuArr = PartnerArr;
     }
     
     
@@ -445,7 +481,7 @@
         
         [self httpGetPromoList];
         // 拿到当前的下拉刷新控件，结束刷新状态
-        [self.tableview reloadData];
+//        [self.tableview reloadData];
         [self.tableview.header endRefreshing];
     });
 }

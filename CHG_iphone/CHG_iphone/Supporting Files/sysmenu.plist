@@ -7,36 +7,70 @@
 		<string>member_center.png</string>
 		<key>title</key>
 		<string>会员中心</string>
+		<key>level</key>
+		<string>1</string>
+		<key>type</key>
+		<string>0</string>
 	</dict>
 	<dict>
 		<key>icon</key>
 		<string>member_registration.png</string>
 		<key>title</key>
 		<string>会员注册</string>
+		<key>level</key>
+		<string>1</string>
+		<key>type</key>
+		<string>1</string>
 	</dict>
 	<dict>
 		<key>icon</key>
 		<string>presell.png</string>
 		<key>title</key>
 		<string>预售</string>
+		<key>level</key>
+		<string>1</string>
+		<key>type</key>
+		<string>2</string>
 	</dict>
 	<dict>
 		<key>icon</key>
 		<string>selling_goods.png</string>
 		<key>title</key>
 		<string>卖货</string>
+		<key>level</key>
+		<string>1</string>
+		<key>type</key>
+		<string>3</string>
 	</dict>
 	<dict>
 		<key>icon</key>
 		<string>order_management.png</string>
 		<key>title</key>
 		<string>门店订单</string>
+		<key>level</key>
+		<string>1</string>
+		<key>type</key>
+		<string>4</string>
 	</dict>
 	<dict>
 		<key>icon</key>
 		<string>statistical_analysis.png</string>
 		<key>title</key>
 		<string>统计分析</string>
+		<key>level</key>
+		<string>3</string>
+		<key>type</key>
+		<string>5</string>
+	</dict>
+	<dict>
+		<key>icon</key>
+		<string>store_management.png</string>
+		<key>title</key>
+		<string>门店管理</string>
+		<key>level</key>
+		<string>2</string>
+		<key>type</key>
+		<string>6</string>
 	</dict>
 </array>
 </plist>

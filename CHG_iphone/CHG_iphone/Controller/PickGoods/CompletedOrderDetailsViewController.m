@@ -13,6 +13,7 @@
 #import "NSMutableAttributedString+NimbusAttributedLabel.h"
 #import "AllOrdersCell.h"
 #import "amountCell.h"
+#import "PresellGoodsViewController.h"
 @interface CompletedOrderDetailsViewController ()
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderAmountNib;
@@ -27,6 +28,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     self.title = @"订单详情";
     [self setupView];
     
@@ -39,9 +43,10 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
-    if (self.didSkipSubItem) {
-        self.didSkipSubItem(sender.tag);
-    }
+    SaleType satype = SaleTypeReturnGoods;
+    PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+    PresellGoodsView.orderSaletype = SaleTypeReturnGoods;
+    [self.navigationController pushViewController:PresellGoodsView animated:YES];
 }
 -(void)setupView
 {
@@ -245,10 +250,10 @@
         {
             [self.tableview.header endRefreshing];
 //            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
         

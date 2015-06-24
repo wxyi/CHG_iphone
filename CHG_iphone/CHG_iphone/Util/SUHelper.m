@@ -90,11 +90,10 @@ static SUHelper *sSharedInstance;
 }
 
 
--(void)httpAddressCode
+-(void)GetAddressInfo
 {
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiAddressCode] parameters:parameter];
+
+    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiAddressCode] parameters:nil];
     
     //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
     //    [MMProgressHUD showWithTitle:@"" status:@""];
@@ -187,5 +186,110 @@ static SUHelper *sSharedInstance;
     }];
     
     return sortedArray;
+}
+
+-(void)GetBankCodeInfo
+{
+
+    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiBankCode] parameters:nil];
+    
+   
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        if (success) {
+            DLog(@"data = %@",data);
+            //            [MMProgressHUD dismiss];
+            NSArray* datas = [data objectForKey:@"datas"] ;
+            NSMutableArray* bankArr = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [datas count]; i++) {
+                BanKCode* code = [[BanKCode alloc] init];
+                code.bankName = datas[i][@"bankName"];
+                code.bankCode = datas[i][@"bankCode"];
+                NSString* list = datas[i][@"cardCodeList"];
+                list = [list stringByReplacingOccurrencesOfString:@"[" withString:@""];
+                list = [list stringByReplacingOccurrencesOfString:@"]" withString:@""];
+                code.cardCodeList = list;
+                [bankArr addObject:code];
+            }
+            [[SQLiteManager sharedInstance] saveOrUpdateBankCodeData:bankArr];
+        }
+        else
+        {
+//            [MMProgressHUD dismissWithError:msg];
+        }
+    } failureBlock:^(NSString *description) {
+//        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
+-(void)GetPromoList
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:@"1"forKey:@"type"];
+    
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetPromoList] parameters:parameter];
+
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        if (success) {
+            //            [MMProgressHUD dismiss];
+            NSArray* datas = [data objectForKey:@"datas"];
+     
+        }
+        else
+        {
+            
+         }
+        
+        
+    } failureBlock:^(NSString *description) {
+        //        [MMProgressHUD dismissWithError:description];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+    
+}
+-(void)GetRefreshCache:(BOOL)isFirst
+{
+    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiRefreshCache] parameters:nil];
+    
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil
+            successBlock:^(BOOL success, id data, NSString *msg) {
+                DLog(@"data = %@",data);
+                                       
+                if (isFirst) {
+                    [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"];
+                    [ConfigManager sharedInstance].bankCodeUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"bankCodeUpdateTime" ];
+                    [ConfigManager sharedInstance].promoListUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"promoListUpdateTime"];
+                    }
+                    else
+                    {
+                        if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"]]) {
+                            
+                            [self GetAddressInfo];
+                            [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"];
+                        }
+                        if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"bankCodeUpdateTime"]]) {
+                            
+                            [self GetBankCodeInfo];
+                            [ConfigManager sharedInstance].bankCodeUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"bankCodeUpdateTime"];
+                        }
+                        if ([[ConfigManager sharedInstance].promoListUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"promoListUpdateTime"]]) {
+                            
+//                            [self GetBankCodeInfo];
+                            [self GetPromoList];
+                            
+                            [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"promoListUpdateTime"];
+                        }
+                        
+                    }
+        } failureBlock:^(NSString *description) {
+                                       
+        } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+                                       
+    }];
 }
 @end

@@ -11,6 +11,7 @@
 @interface BaseViewController : UIViewController
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 @property (nonatomic, copy) AccountBriefSelect didSelectedSubItemAction;
+@property (nonatomic, copy) skipDetailsPage skipdetails;
 @property (nonatomic, copy) TableViewBtnSkipSelect BtnSkipSelect;
 @property (nonatomic, copy) TableViewCellSkipSelect CellSkipSelect;
 - (void)viewDidCurrentView;

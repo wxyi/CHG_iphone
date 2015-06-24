@@ -26,7 +26,7 @@
     NSString* price = textField.text;
     DLog(@"price = %.1f Receivedlab = %.1f",[price doubleValue],[self.Receivedlab.text doubleValue]);
     
-    if ([self.receivablelab.text intValue] > [price intValue]) {
+    if ([self.receivablelab.text intValue] >= [price intValue]) {
         self.favorablelab.text = [NSString stringWithFormat:@"%.2f",[self.receivablelab.text doubleValue] - [price doubleValue]];
         self.Receivedlab.text = [NSString stringWithFormat:@"%.2f",[price doubleValue] ];
     }

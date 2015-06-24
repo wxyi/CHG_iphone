@@ -21,8 +21,8 @@
 }
 -(IBAction)skipdetails:(UIButton*)sender
 {
-    if (self.didSkipSubItem) {
-        self.didSkipSubItem(sender.tag);
+    if (self.skipdetails) {
+        self.skipdetails(self.strOrderId);
     }
 }
 @end

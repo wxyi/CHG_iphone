@@ -27,6 +27,7 @@
 -(void)setupAllOrderView:(NSDictionary *)items
 {
     self.allitems = items;
+    
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.scrollEnabled = NO;
@@ -178,9 +179,9 @@
 {
     [super layoutSubviews];
     
-    CGRect rect = self.frame;
+    CGRect rect = self.tableview.frame;
     rect.size.height = self.height;
-    self.frame = rect;
+    self.tableview.frame = rect;
     //    self.contentView.frame = rect;
     DLog(@"self.frame = %@",NSStringFromCGRect(self.frame) );
 }

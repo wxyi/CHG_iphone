@@ -9,6 +9,12 @@
 #import "StoreManagementViewController.h"
 #import "DropDownListView.h"
 #import "StoresInfoViewController.h"
+
+#import "HomePageViewController.h"
+#import "CHGNavigationController.h"
+#import "SidebarMenuTableViewController.h"
+#import "REFrostedViewController.h"
+
 @interface StoreManagementViewController (){
     NSMutableArray *chooseArray ;
 }
@@ -123,8 +129,8 @@
     [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndex:indexPath.row] objectForKey:@"dimensionalCodeUrl"] ;
     [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopName"] ;
     DLog(@"shopId= %@",[ConfigManager sharedInstance].shopId);
-    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-    [delegate setupHomePageViewController];
+//    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    [self setupHomePageViewController];
 }
 
 /*
@@ -136,5 +142,21 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+-(void)setupHomePageViewController
+{
+    CHGNavigationController *navigationController = [[CHGNavigationController alloc] initWithRootViewController:[[HomePageViewController alloc] init]];
+    
+    SidebarMenuTableViewController *SidebarMenu = [[SidebarMenuTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    // Create frosted view controller
+    //
+    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
+    frostedViewController.direction = REFrostedViewControllerDirectionLeft;
+    frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    
+    
+    [self presentViewController:frostedViewController animated:YES completion:^{
+        [MMProgressHUD dismiss];
+    }];
+}
 @end

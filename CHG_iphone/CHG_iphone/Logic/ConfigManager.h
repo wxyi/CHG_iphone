@@ -71,5 +71,11 @@
 @property(nonatomic,assign) NSString * strcustName;
 @property(nonatomic,assign) NSString * strcheckCode;
 
-@property(nonatomic,assign) NSString * strAddressCode;
+//地址更新时间
+@property(nonatomic,assign) NSString * adressUpdateTime;
+//银行卡更新时间
+@property(nonatomic,assign) NSString * bankCodeUpdateTime;
+//银行卡更新时间
+@property(nonatomic,assign) NSString * promoListUpdateTime;
+
 @end

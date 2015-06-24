@@ -8,6 +8,7 @@
 
 #import "StoreSalesViewController.h"
 #import "PickGoodsViewController.h"
+#import "CompletedOrderDetailsViewController.h"
 @interface StoreSalesViewController ()
 
 @end
@@ -28,6 +29,10 @@
 -(void)setupView
 {
     self.title = [self pagetitle];
+    
+    self.isSkip = NO;
+    [self getCurrentData];
+    
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     self.slideSwitchView.backgroundColor = UIColorFromRGB(0x171c61);
     //    self.slideSwitchView.frame = self.view.bounds;
@@ -46,36 +51,53 @@
     __weak typeof(self) weakSelf = self;
  
     self.StoreSalesDay = [[StoreSalesDayViewController alloc] initWithNibName:@"StoreSalesDayViewController" bundle:nil];
+    self.StoreSalesDay.strYear = self.strYear;
+    self.StoreSalesDay.strMonth = self.strMonth;
+    self.StoreSalesDay.strDay = self.strDay;
     self.StoreSalesDay.statisticalType = self.statisticalType;
-    self.StoreSalesDay.didSkipSubItem =^(NSInteger tag){
-        
+    self.StoreSalesDay.skipdetails=^(NSString* orderID){
         DLog(@"跳转详情");
-        PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-        [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+        CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+        CompletedOrderDetailsView.strOrderId = orderID;
+        CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeAll;
+        [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
     };
+    
+
     
     
 
     self.StoreSalesMonth = [[StoreSalesMonthViewController alloc] initWithNibName:@"StoreSalesMonthViewController" bundle:nil];
-    
+    self.StoreSalesMonth.strYear = self.strYear;
+    self.StoreSalesMonth.strMonth = self.strMonth;
     self.StoreSalesMonth.statisticalType = self.statisticalType;
     self.StoreSalesMonth.didSkipSubItem =^(NSInteger tag){
 
     };
-    self.StoreSalesMonth.didSelectedSubItemAction =^(NSIndexPath* indexPath){
+    self.StoreSalesMonth.CellSkipSelect =^(NSDictionary* dictionary){
         UIButton* button = (UIButton*)[weakSelf.view viewWithTag:100];
 
+        weakSelf.isSkip = YES;
+        NSString* data = dictionary[@"day"];
+        weakSelf.strYear = [data substringToIndex:4];
+        weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
+        weakSelf.strDay = [data substringFromIndex:6];
         [weakSelf.slideSwitchView selectNameButton:button];
     };
    
     self.StoreSalesYear = [[StoreSalesYearViewController alloc] initWithNibName:@"StoreSalesYearViewController" bundle:nil];
+    self.StoreSalesYear.strYear = self.strYear;
     self.StoreSalesYear.statisticalType = self.statisticalType;
     self.StoreSalesYear.didSkipSubItem =^(NSInteger tag){
 
     };
-    self.StoreSalesYear.didSelectedSubItemAction =^(NSIndexPath* indexPath){
+    self.StoreSalesYear.CellSkipSelect =^(NSDictionary* dictionary){
         UIButton* button = (UIButton*)[weakSelf.view viewWithTag:101];
         
+        weakSelf.isSkip = YES;
+        NSString* data = dictionary[@"day"];
+        weakSelf.strYear = [data substringToIndex:4];
+        weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
         [weakSelf.slideSwitchView selectNameButton:button];
     };
     [self.slideSwitchView buildUI];
@@ -109,13 +131,23 @@
 {
     
     if (number == 0) {
+        self.StoreSalesDay.strYear= self.strYear;
+        self.StoreSalesDay.strMonth= self.strMonth;
+        self.StoreSalesDay.strDay= self.strDay;
+        self.StoreSalesDay.isSkip= self.isSkip;
         self.vcAll = self.StoreSalesDay;
     } else if (number == 1) {
+        self.StoreSalesMonth.strYear= self.strYear;
+        self.StoreSalesMonth.strMonth= self.strMonth;
+        self.StoreSalesMonth.isSkip= self.isSkip;
         self.vcAll = self.StoreSalesMonth;
     } else if (number == 2) {
+        self.StoreSalesYear.strYear= self.strYear;
+        self.StoreSalesYear.isSkip= self.isSkip;
         self.vcAll = self.StoreSalesYear;
     }
     [self.vcAll viewDidCurrentView];
+    self.isSkip = NO;
 }
 
 -(NSString*)pagetitle
@@ -148,5 +180,20 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+-(void)getCurrentData
+{
+    NSDate *now = [NSDate date];
+    NSLog(@"now date is: %@", now);
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+    
+    
+    self.strYear = [NSString stringWithFormat:@"%d",[dateComponent year]];
+    self.strMonth = [NSString stringWithFormat:@"%d",[dateComponent month]];
+    self.strDay = [NSString stringWithFormat:@"%d",[dateComponent day]];
+    
+    
+}
 @end

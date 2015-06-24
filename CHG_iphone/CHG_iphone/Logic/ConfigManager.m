@@ -27,5 +27,10 @@
 @dynamic strcustName;
 @dynamic strcheckCode;
 
-@dynamic strAddressCode;
+//地址更新时间
+@dynamic adressUpdateTime;
+//银行卡更新时间
+@dynamic bankCodeUpdateTime;
+//银行卡更新时间
+@dynamic promoListUpdateTime;
 @end

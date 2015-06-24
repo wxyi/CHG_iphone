@@ -11,6 +11,7 @@
 #import "AccountAndSecurityViewController.h"
 #import "VersionUpdateViewController.h"
 #import "AboutViewController.h"
+#import "LoginViewController.h"
 @interface SettingViewController ()
 
 @end
@@ -96,7 +97,7 @@
     [loginout.layer setCornerRadius:4]; //设置矩形四个圆角半径
 //    [loginout.layer setBorderWidth:1.0]; //边框
     loginout.frame = CGRectMake(5, 40, SCREEN_WIDTH-10 , 40);
-    [loginout setTitle:@"退出账号" forState:UIControlStateNormal];
+    [loginout setTitle:@"退出" forState:UIControlStateNormal];
     [loginout setTitleColor:UIColorFromRGB(0xf0f0f0) forState:UIControlStateNormal];
     [loginout addTarget:self action:@selector(loginout) forControlEvents:UIControlEventTouchUpInside];
     [v_footer addSubview:loginout];
@@ -122,6 +123,12 @@
 -(void)loginout
 {
     DLog(@"退出账号");
+    [ConfigManager sharedInstance].access_token = @"";
+    LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+    
+    [self presentViewController:loginview animated:YES completion:^{
+       
+    }];
 }
 /*
 #pragma mark - Navigation

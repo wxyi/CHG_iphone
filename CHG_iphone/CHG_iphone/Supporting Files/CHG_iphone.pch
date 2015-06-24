@@ -42,5 +42,6 @@
     #import "MJRefresh.h"
     #import "SQLiteManager.h"
     #import "NSDate+Helper.h"
+    #import "JTImageButton.h"
 #define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_
 #endif

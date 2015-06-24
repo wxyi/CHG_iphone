@@ -12,5 +12,7 @@
 @property(nonatomic,weak)IBOutlet UILabel* datelab;
 @property(nonatomic,weak)IBOutlet UILabel* statelab;
 @property(nonatomic,weak)IBOutlet UILabel* pricelab;
+@property(nonatomic,strong)NSString* strOrderId;
+@property (nonatomic, copy) skipDetailsPage skipdetails;
 -(IBAction)skipdetails:(UIButton*)sender;
 @end

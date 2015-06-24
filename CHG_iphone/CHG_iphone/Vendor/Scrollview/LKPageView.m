@@ -40,8 +40,8 @@
         else
         {
             self.isfinsh =NO;
-            self.dataSource = [array objectAtIndex:0];
-            self.dataURL = [array objectAtIndex:1];
+            self.dataSource = array;
+//            self.dataURL = [array objectAtIndex:1];
         }
             [self loadView];
     }
@@ -160,7 +160,7 @@
     {
         //如果传进来的是URL 就调用 SDWebImage   有需要的同学可以自己把SDWebImage 包含进来
 //        imageview.contentMode =  UIViewContentModeCenter;
-        [imageview setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"moren.png"]];
+        [imageview setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         
 
     }

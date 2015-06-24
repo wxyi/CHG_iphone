@@ -25,4 +25,5 @@ pod 'libqrencode', '~> 3.4.2'
 pod 'Masonry', '~> 0.6.1'
 pod 'FBSnapshotTestCase', '~> 1.8.1'
 pod 'MLPAccessoryBadge', '~> 1.0'
+#pod 'JTImageButton', '~> 1.0.2'
 

@@ -74,8 +74,8 @@
         
     };
     self.DidNotPickGoodsView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
-        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+//        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+//        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
     self.DidPickGoodsView = [[DidPickGoodsViewController alloc] initWithNibName:@"DidPickGoodsViewController" bundle:nil];
     self.DidPickGoodsView.strOrderId = self.strOrderId;
@@ -89,8 +89,8 @@
         }
     };
     self.DidPickGoodsView.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
-        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+//        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+//        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
     [self.slideSwitchView buildUI];
     [self.view addSubview:self.slideSwitchView];

@@ -37,7 +37,12 @@
     frame.origin.x = 0;
     frame.size.height = 30;
     self.bgview.frame = frame;
-    self.bgview.backgroundColor = [UIColor grayColor];
+    
+//    NSString * currentData = [NSObject currentTime];
+    if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
+        self.bgview.backgroundColor = UIColorFromRGB(0xf5a541);
+    else
+        self.bgview.backgroundColor = [UIColor grayColor];
     
     self.dateLab = [[UILabel alloc] initWithFrame:frame];
     self.dateLab.textAlignment = NSTextAlignmentLeft;

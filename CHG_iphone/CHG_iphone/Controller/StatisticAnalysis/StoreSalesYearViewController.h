@@ -18,4 +18,6 @@
 @property(nonatomic,strong)NSString* strtitle;
 @property(nonatomic,assign)NSInteger nbaseData;
 @property(nonatomic,strong)NSString* strUrl;
+@property (nonatomic, assign) BOOL isSkip;
+@property(nonatomic,strong)NSString* strYear;
 @end

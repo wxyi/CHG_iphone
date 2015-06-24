@@ -42,6 +42,16 @@
     self.tableview.scrollEnabled= NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.BanKCardNib = [UINib nibWithNibName:@"BanKCardCell" bundle:nil];
+    
+    
+    // Example four
+    [self.addbtn createTitle:@"添加银行卡" withIcon:[UIImage imageNamed:@"btn_add.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:JTImageButtonIconOffsetYNone];
+    self.addbtn.titleColor = [UIColor whiteColor];
+    self.addbtn.iconColor = [UIColor whiteColor];
+    self.addbtn.padding = JTImageButtonPaddingSmall;
+    self.addbtn.bgColor = UIColorFromRGB(0x171c61);
+    self.addbtn.borderWidth = 0;
+    self.addbtn.iconSide = JTImageButtonIconSideLeft;
 }
 -(IBAction)addBankCard:(id)sender{
     DLog(@"填加银行卡");

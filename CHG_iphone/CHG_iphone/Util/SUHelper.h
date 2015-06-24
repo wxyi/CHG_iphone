@@ -21,7 +21,13 @@ typedef void(^FailBlock)(NSString *msg);
 //获取当前用户配置
 -(UserConfig *) currentUserConfig;
 
+-(void)GetAddressInfo;
 
+-(void)GetBankCodeInfo;
+
+-(void)GetPromoList;
+
+-(void)GetRefreshCache:(BOOL)isFirst;
 //提示
 
 @end

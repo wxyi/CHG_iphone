@@ -295,6 +295,7 @@ typedef void(^TableViewBtnSkipSelect)(NSInteger tag,NSDictionary* dictionary);
 typedef void(^TableViewCellSkipSelect)(NSDictionary* dictionary);
 typedef void(^ShowInfoAlert)(NSString* info);
 typedef void(^GetCheckCode)(NSString* checkcode);
+typedef void(^skipDetailsPage)(NSString* orderID);
 #define ZbarRead_With 170
 
 

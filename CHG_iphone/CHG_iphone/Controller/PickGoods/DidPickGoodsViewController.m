@@ -32,7 +32,12 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
-    [self setupRefresh];
+    
+    if ([self.items allKeys] == 0) {
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD showWithTitle:@"" status:@""];
+        [self httpGetOrder];
+    }
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
@@ -57,6 +62,7 @@
         self.returnbtn.hidden = YES;
         self.line.hidden = YES;
     }
+    [self setupRefresh];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -106,6 +112,8 @@
             cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+        
+        
         cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", [self.items[@"orderAmount"] doubleValue]];
         cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", [self.items[@"orderFactAmount"] doubleValue]];
         [cell.Receivedlab setEnabled:NO];
@@ -244,7 +252,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-    [header beginRefreshing];
+//    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;

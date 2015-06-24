@@ -22,6 +22,9 @@
                     </textField>
                 </subviews>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="iphoneTextfiel" destination="3Ke-J1-QO2" id="O4R-AZ-gss"/>
+            </connections>
             <point key="canvasLocation" x="325" y="165"/>
         </tableViewCell>
     </objects>

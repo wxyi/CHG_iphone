@@ -22,8 +22,9 @@
 }
 - (id)initWithFrame:(CGRect)frame homeNews:(NSMutableArray*) news{
     self = [super initWithFrame:frame];
-    if (self) {
-        self.pageview = [[LKPageView alloc] initWithPathStringArray:news andFrame:frame];
+    if (self)
+    {
+        self.pageview = [[LKPageView alloc] initWithURLStringArray:news andFrame:frame];
         [self addSubview:self.pageview];
     }
     return self;

@@ -33,6 +33,7 @@ BMKMapManager* _mapManager;
     if (!ret) {
         NSLog(@"manager start failed!");
     }
+    
 
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -56,16 +57,35 @@ BMKMapManager* _mapManager;
         [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
        
     }
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+    }
+    
+    
+    
     [[SUHelper sharedInstance] sysInit:^(BOOL success) {
         
         if(success) {
             
             DLog(@"success");
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
+                // 这里判断是否第一次
+                [[SUHelper sharedInstance] GetAddressInfo];
+                [[SUHelper sharedInstance] GetBankCodeInfo];
+//                [[SUHelper sharedInstance] GetPromoList];
+                
+                [[SUHelper sharedInstance] GetRefreshCache:YES];
+            }
             
         }
     }];
 
-    
+//    [[SUHelper sharedInstance] GetPromoList];
     [self setupLoginViewController];
     
     self.window.backgroundColor = [UIColor whiteColor];

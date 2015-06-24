@@ -14,6 +14,7 @@
 @property(nonatomic,weak)IBOutlet UILabel* pricelab;
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,assign)int custCount;
+@property (nonatomic, assign) BOOL isSkip;
 @property (nonatomic, assign) StatisticalType statisticalType;
 
 
@@ -21,4 +22,9 @@
 @property(nonatomic,assign)CGFloat width;
 @property(nonatomic,strong)NSString* strNibName;
 @property(nonatomic,strong)NSString* strUrl;
+
+
+@property(nonatomic,strong)NSString* strYear;
+@property(nonatomic,strong)NSString* strMonth;
+@property(nonatomic,strong)NSString* strDay;
 @end

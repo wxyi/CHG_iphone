@@ -29,7 +29,7 @@
 {
     [self httpGetMyProfile];
     self.title = @"基本信息";
-    self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"二维码名片",@"身份证号", nil];
+    self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"身份证号", nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
@@ -59,7 +59,8 @@
     title.text = [self.items objectAtIndex:indexPath.row];
     [cell.contentView addSubview:title];
     
-    if (indexPath.row != 2) {
+    //if (indexPath.row != 2)
+    {
         UILabel* infolab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
         infolab.textColor = UIColorFromRGB(0x323232);
         infolab.font = FONT(15);
@@ -82,7 +83,7 @@
             }
         }
         
-        else if (indexPath.row == 3)
+        else if (indexPath.row == 2)
         {
             if ([self.BasicInfo[@"idcardNumber"] length] != 0) {
                 NSString* idcard = self.BasicInfo[@"idcardNumber"];
@@ -98,13 +99,13 @@
         infolab.text = info;
         [cell.contentView addSubview:infolab];
     }
-    else
+/*    else
     {
         UIImageView * scanImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH -50, 2, 40, 40)];
         scanImage.image = [QRCodeGenerator qrImageForString:self.BasicInfo[@"dimensionalCodeUrl"] imageSize:40];
         [cell.contentView addSubview:scanImage];
     }
-    
+*/
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }

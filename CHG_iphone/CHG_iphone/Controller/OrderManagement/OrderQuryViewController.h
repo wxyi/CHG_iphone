@@ -15,12 +15,12 @@
 @property(nonatomic,weak)IBOutlet UITextField* starttime;
 @property(nonatomic,weak)IBOutlet UITextField* endtime;
 
-
+@property(nonatomic,assign)NSInteger m_nPageNumber;
 
 
 @property(nonatomic,strong)UUDatePicker *startdatePicker;
 @property(nonatomic,strong)UUDatePicker *enddatePicker;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)CGFloat m_height;
 @property(nonatomic,strong)NSString* strOrderType;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;

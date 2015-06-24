@@ -19,7 +19,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"月";
-    [self PageInfo];
+    self.isSkip = NO;
+    switch (self.statisticalType) {
+        case StatisticalTypeStoreSales:
+        {
+            self.strtitle = @"本月销售额(元)";
+            break;
+        }
+        case StatisticalTypeMembershipGrowth:
+        {
+            self.strtitle = @"本月新增会员(人)";
+            break;
+        }
+        case StatisticalTypePinRewards:
+        {
+            self.strtitle = @"本月动销奖励(元)";
+            break;
+        }
+        case StatisticalTypePartnersRewards:
+        {
+            self.strtitle = @"本月合作商消费账奖励(元)";
+            break;
+        }
+        default:
+            break;
+    }
+    self.nameLab.text = self.strtitle;
+    self.pricelab.text = @"0.00";
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     
@@ -28,6 +54,8 @@
     self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StatisticsNib = [UINib nibWithNibName:@"StatisticsCell" bundle:nil];
     
+    
+    [self setupRefreshPage];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,7 +65,12 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
-    [self setupRefresh];
+    if ([self.items count] == 0 || self.isSkip) {
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD showWithTitle:@"" status:@""];
+        [self httpGetStatisticAnalysis];
+    }
+    
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -128,8 +161,8 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.didSelectedSubItemAction) {
-        self.didSelectedSubItemAction(indexPath);
+    if (self.CellSkipSelect) {
+        self.CellSkipSelect([self.items objectAtIndex:indexPath.section ]);
     }
 
 }
@@ -138,54 +171,49 @@
     return 1;
 }
 
--(void)PageInfo
+-(void)setupRefreshPage
+{
+    [self setupRefresh];
+}
+-(void)httpGetStatisticAnalysis
 {
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"2015" forKey:@"year"];
-    [parameter setObject:@"6" forKey:@"month"];
+    [parameter setObject:self.strYear forKey:@"year"];
+    [parameter setObject:self.strMonth forKey:@"month"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            self.strtitle = @"本月销售额(元)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetShopSellStatOfMonth] parameters:parameter];
             break;
         }
         case StatisticalTypeMembershipGrowth:
         {
-            self.strtitle = @"本月新增会员(人)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetMyNewCustCountStatOfMonth] parameters:parameter];
             break;
         }
         case StatisticalTypePinRewards:
         {
-            self.strtitle = @"本月动销奖励(元)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardSalerStatOfMonth] parameters:parameter];
             break;
         }
         case StatisticalTypePartnersRewards:
         {
-            self.strtitle = @"本月合作商消费账奖励(元)";
             self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfMonth] parameters:parameter];
             break;
         }
         default:
             break;
     }
-    
-    [self setupRefresh];
-}
--(void)httpGetStatisticAnalysis
-{
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:self.strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
 //        [MMProgressHUD dismiss];
         DLog(@"data = %@",data);
         if (success) {
-//            [MMProgressHUD dismiss];
+            [MMProgressHUD dismiss];
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
@@ -202,20 +230,44 @@
                 case StatisticalTypePinRewards:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardSalerCount"] intValue]];
-                    self.items = [data objectForKey:@"custList"];
+                    self.items = [data objectForKey:@"awardSalerList"];
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardPartnerCount"] intValue]];
-                    self.items = [data objectForKey:@"custList"];
+                    self.items = [data objectForKey:@"awardPartnerList"];
                     break;
                 }
                 default:
                     break;
             }
             self.nbaseData = [data[@"baseData"] intValue];
-            self.nameLab.text = self.strtitle;
+            
+            NSDate *now = [NSDate date];
+            NSLog(@"now date is: %@", now);
+            
+            NSCalendar *calendar = [NSCalendar currentCalendar];
+            NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+            NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+
+            int month = [dateComponent month];
+            if ([self.strMonth intValue] != month) {
+                self.nameLab.text = [NSString stringWithFormat:@"%@年%@月%@",self.strYear,self.strMonth,[self GetCurrentTitle]];
+            }
+            else
+            {
+                self.nameLab.text = self.strtitle;
+            }
+            
+            
+//            if ([self.items count] == 0) {
+//                [SGInfoAlert showInfo:[NSString stringWithFormat:@"%@-%@数据为空",self.strYear,self.strMonth]
+//                              bgColor:[[UIColor darkGrayColor] CGColor]
+//                               inView:self.view
+//                             vertical:0.7];
+//            }
+            
             
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
@@ -223,7 +275,7 @@
         }
         else
         {
-//            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismissWithError:msg];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
             [SGInfoAlert showInfo:msg
@@ -235,7 +287,7 @@
     } failureBlock:^(NSString *description) {
         [self.tableview.header endRefreshing];
         [self.tableview.footer endRefreshing];
-//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -262,7 +314,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-    [header beginRefreshing];
+//    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;
@@ -284,7 +336,17 @@
         
         // 拿到当前的下拉刷新控件，结束刷新状态
         
+        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue]- 1];
+        
+        NSString* lastYear =[NSString stringWithFormat:@"%d",[self.strYear intValue]];
+        if ([lastMonth intValue] == 0) {
+            lastMonth = @"12";
+            lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]- 1];
+        }
+        self.strYear = lastYear;
+        self.strMonth = lastMonth;
         [self httpGetStatisticAnalysis];
+//        [self.tableview.header endRefreshing];
         
 //        [self.tableview.header endRefreshing];
     });
@@ -298,9 +360,72 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         //        [self.tableView reloadData];
+        
+        
+        
+        
+        NSDate *now = [NSDate date];
+        NSLog(@"now date is: %@", now);
+        
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+        
+        
+        int year = [dateComponent year];
+        int month = [dateComponent month];
+        NSString *nextMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] + 1];
+        NSString* nextYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]];
+        if ([nextMonth intValue] >= month ) {
+            if ([nextYear intValue] >= year) {
+                nextMonth = [NSString stringWithFormat:@"%d",month];
+                nextYear = [NSString stringWithFormat:@"%d",year];
+            }
+            else
+            {
+                if ([nextMonth intValue] == 13) {
+                    nextMonth = @"1";
+                    nextYear = [NSString stringWithFormat:@"%d",[self.strYear intValue] + 1];
+                }
+            }
+        }
+        
+
+        self.strYear = nextYear;
+        self.strMonth = nextMonth;
         [self httpGetStatisticAnalysis];
         // 拿到当前的上拉刷新控件，结束刷新状态
 //        [self.tableview.footer endRefreshing];
     });
 }
+-(NSString*)GetCurrentTitle
+{
+    NSString* title;
+    switch (self.statisticalType) {
+        case StatisticalTypeStoreSales:
+        {
+            title = @"销售额(元)";
+            break;
+        }
+        case StatisticalTypeMembershipGrowth:
+        {
+            title = @"新增会员(人)";
+            break;
+        }
+        case StatisticalTypePinRewards:
+        {
+            title = @"动销奖励(元)";
+            break;
+        }
+        case StatisticalTypePartnersRewards:
+        {
+            title = @"合作商消费账奖励(元)";
+            break;
+        }
+        default:
+            break;
+    }
+    return title;
+}
+
 @end

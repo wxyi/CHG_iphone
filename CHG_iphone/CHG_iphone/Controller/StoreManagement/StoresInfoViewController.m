@@ -57,6 +57,15 @@
     [self httpGetShop];
     
     [self becomeFirstResponder];
+    
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    if ([config.Roles isEqualToString:@"SHOPLEADER"])
+    {
+        self.addbtn.userInteractionEnabled=NO;
+        self.addbtn.alpha=0.4;
+    }
+    
+    
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -87,7 +96,7 @@
             cell.didSkipSubItem =^(NSInteger tag){
                 
                 
-                [self showQrCode:self.shopinfo[@"qrcUrl"]];
+                [self showQrCode:self.shopinfo[@"dimensionalCodeUrl"]];
             };
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
@@ -107,7 +116,7 @@
             cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
             cell.didSkipSubItem =^(NSInteger tag){
                 
-                [self showQrCode:@"神仙小武子"];
+                [self showQrCode:self.shopinfo[@"dimensionalCodeUrl"]];
             };
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
@@ -215,8 +224,8 @@
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetSellerList] parameters:parameter];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-    [MMProgressHUD showWithTitle:@"" status:@""];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
 //        [MMProgressHUD dismiss];
@@ -332,16 +341,7 @@
     [param setObject:dict[@"sellerId"] forKey:@"sellerId"];
     
     NSInteger tag = [[NSString stringWithFormat:@"101%d",indexpath.section] intValue];
-    UIButton* btn = (UIButton*)[self.view viewWithTag:tag];
-    NSString* status ;
-    if (btn.selected) {
-        status = @"0";
-    }
-    else
-    {
-        status = @"1";
-    }
-    [param setObject:status forKey:@"status"];
+    
     
     DLog(@"url = %@",url);
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];

@@ -36,7 +36,9 @@
     
     [_session stopRunning];
     [_preview removeFromSuperlayer];
-//    [timer invalidate];
+    [timer invalidate];
+    [_session removeOutput:self.output];
+    [_session removeInput:self.input];
 //    [self.ZBarReader stop];
 //    self.is_have = NO;
 //    self.is_Anmotion = NO;
@@ -261,7 +263,7 @@
             cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        
+        cell.iphoneTextfiel.delegate = self;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -365,44 +367,58 @@
         DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             self.isfinish = NO;
+            
             [MMProgressHUD dismiss];
             [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKey:@"datas"] objectForKey:@"Cust"] objectForKey:@"custId"] intValue]];
             DLog(@"识别成功");
             self.dict = [[data objectForKey:@"datas"] objectForKey:@"Cust"];
-            if (self.isScan){
-                
-                [self.tableview reloadData];
-                return ;
-            }
-            else  {
-                [self skipVariousPages];
-
-            }
+            self.isScan = YES;
+            [self.tableview reloadData];
+//            if (self.isScan){
+//                
+//                [self.tableview reloadData];
+//                return ;
+//            }
+//            else  {
+//                [self skipVariousPages];
+//
+//            }
         }
         else if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==47001)
         {
             DLog(@"识别失败");
-            [MMProgressHUD dismiss];
-            self.isfinish = YES;
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-                DLog(@"否");
-                //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
-                //                textfield.text = @"";
-//                [_session stopRunning];
-//                [_session startRunning];
-                self.isfinish = NO;
-            } otherButtonBlock:^{
-                DLog(@"是");
-                self.isScan = NO;
-//                [self.ZBarReader stop];
-                self.isfinish = YES;
-                UITextField* texield = (UITextField*)[self.view viewWithTag:100];
-                RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
-                RegisteredMembersView.strIphone = texield.text;
-                [self.navigationController pushViewController:RegisteredMembersView animated:YES];
-            }];
             
-            [self.stAlertView show];
+            self.isfinish = NO;
+            
+            if ([IdentifierValidator isValid:IdentifierTypePhone value:custMobile])
+            {
+                [MMProgressHUD dismiss];
+                self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                    DLog(@"否");
+                    //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
+                    //                textfield.text = @"";
+                    //                [_session stopRunning];
+                    //                [_session startRunning];
+                    self.isfinish = NO;
+                } otherButtonBlock:^{
+                    DLog(@"是");
+                    self.isScan = NO;
+                    //                [self.ZBarReader stop];
+                    
+                    self.isfinish = YES;
+                    UITextField* texield = (UITextField*)[self.view viewWithTag:100];
+                    RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
+                    RegisteredMembersView.strIphone = texield.text;
+                    [self.navigationController pushViewController:RegisteredMembersView animated:YES];
+                }];
+                
+                [self.stAlertView show];
+            }
+            else
+            {
+                [MMProgressHUD dismissWithError:@"手机号码不正确"];
+            }
+            
         }
         else
         {
@@ -562,7 +578,7 @@
             //判断是否为纯数字'
             NSString * number        = @"^-?\\d+$";
             NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", number];
-            
+            self.isScan = YES;
             
             if ([predicate evaluateWithObject:stringValue]) {
                 
@@ -576,7 +592,7 @@
                 //            if ([IdentifierValidator isValid:IdentifierTypePhone value:stringValue])
                 {
                     DLog(@"手机号");
-                    self.isScan = YES;
+                    
                     //               [_session stopRunning];
                     [self httpValidateMobile:stringValue];
                 }
@@ -605,6 +621,10 @@
         }
     }
     
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.isScan = NO;
 }
 //-(void)httpScanInfo
 //{

@@ -41,7 +41,9 @@
 {
     NSLog(@"加载为当前视图 = %@",self.title);
 
-    [self setupRefresh];
+    if ([self.items count] == 0) {
+        [self setupRefresh];
+    }
     
 
 }

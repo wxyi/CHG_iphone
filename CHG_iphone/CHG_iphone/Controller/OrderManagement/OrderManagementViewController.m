@@ -27,7 +27,17 @@
 //    btn_serch_hl@2x.png
 //    btn_serch@2x.png
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+    leftbtn.titleColor = [UIColor whiteColor];
+    
+    leftbtn.iconColor = [UIColor whiteColor];
+    leftbtn.padding = JTImageButtonPaddingSmall;
+    leftbtn.borderColor = [UIColor clearColor];
+    leftbtn.iconSide = JTImageButtonIconSideLeft;
+    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
@@ -92,9 +102,9 @@
 
     };
     self.AllOrdersView.CellSkipSelect=^(NSDictionary* dictionary){
-        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
-        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
-        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+//        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+//        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
+//        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
     /**
      未完成订单
@@ -146,9 +156,9 @@
         
     };
     self.OutstandingOrdersView.CellSkipSelect=^(NSDictionary* dictionary){
-        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
-        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
-        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+//        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+//        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
+//        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
 
     
@@ -182,9 +192,9 @@
         }
     };
     self.CompleteOrderView.CellSkipSelect=^(NSDictionary* dictionary){
-        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
-        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
-        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
+//        GoodsDetailsViewController* GoodsDetailsView =[[GoodsDetailsViewController alloc] initWithNibName:@"GoodsDetailsViewController" bundle:nil];
+//        GoodsDetailsView.strProductId = [NSString stringWithFormat:@"%d",[dictionary[@"productId"] intValue]];
+//        [weakSelf.navigationController pushViewController:GoodsDetailsView animated:YES];
     };
 
     [self.slideSwitchView buildUI];

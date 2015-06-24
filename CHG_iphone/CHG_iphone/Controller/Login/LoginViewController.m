@@ -210,7 +210,7 @@
 //                [self httpBankCode];
 //            }
             
-            [self httpBankCode];
+//            [self httpBankCode];
             [self httpGetUserConfig];
         }
         else
@@ -306,47 +306,7 @@
     }];
 }
 
--(void)httpBankCode
-{
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    NSString *url = [NSObject URLWithBaseString:[APIAddress ApiBankCode] parameters:parameter];
-    
-//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
-//    [MMProgressHUD showWithTitle:@"" status:@""];
-    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-        
-        if (success) {
-            DLog(@"data = %@",data);
-//            [MMProgressHUD dismiss];
-            NSArray* datas = [data objectForKey:@"datas"] ;
-            NSMutableArray* bankArr = [[NSMutableArray alloc] init];
-            for (int i = 0; i < [datas count]; i++) {
-                BanKCode* code = [[BanKCode alloc] init];
-                code.bankName = datas[i][@"bankName"];
-                code.bankCode = datas[i][@"bankCode"];
-                NSString* list = datas[i][@"cardCodeList"];
-                list = [list stringByReplacingOccurrencesOfString:@"[" withString:@""];
-                list = [list stringByReplacingOccurrencesOfString:@"]" withString:@""];
-                code.cardCodeList = list;
-                [bankArr addObject:code];
-            }
-            [[SQLiteManager sharedInstance] saveOrUpdateBankCodeData:bankArr];
-        }
-        else
-        {
-            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
-        }
-    } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
-    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        
-    }];
-}
+
 
 
 
