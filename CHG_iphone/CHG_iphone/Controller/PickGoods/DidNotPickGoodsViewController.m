@@ -35,7 +35,7 @@
     NSLog(@"加载为当前视图 = %@",self.title);
     
     if ([self.items allKeys] == 0) {
-        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
         [MMProgressHUD showWithTitle:@"" status:@""];
         [self httpGetOrder];
     }
@@ -45,23 +45,36 @@
 -(void)setupView
 {
 
-    
-    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 80;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
 //    self.amountNib = [UINib nibWithNibName:@"amountCell" bundle:nil];
-    
+    self.Pickupbtn.frame = CGRectMake(0, SCREEN_WIDTH -80, SCREEN_WIDTH/2, 40);
+    self.Terminationbtn.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_WIDTH -80, SCREEN_WIDTH/2, 40);
     if (self.ManagementTyep == OrderManagementTypeAll) {
-        CGRect rect = self.tableview.frame;
-        rect.size.height = rect.size.height + 40;
-        self.tableview.frame = rect;
+//        CGRect rect = self.tableview.frame;
+//        rect.size.height = rect.size.height + 40;
+//        self.tableview.frame = rect;
         self.Pickupbtn.hidden = YES;
         self.Terminationbtn.hidden = YES;
         self.line.hidden = YES;
     }
+//    rect = self.Pickupbtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 80;
+//    rect.size.width = SCREEN_WIDTH/2;
+//    self.Pickupbtn.frame = rect;
+//    
+//    rect = self.Terminationbtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 80;
+//    rect.size.width = SCREEN_WIDTH/2;
+//    self.Terminationbtn.frame = rect;
     
     [self setupRefresh];
 }
@@ -226,6 +239,7 @@
         {
             [self.tableview.header endRefreshing];
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
@@ -234,6 +248,11 @@
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

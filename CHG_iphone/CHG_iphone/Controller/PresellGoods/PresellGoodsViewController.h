@@ -25,6 +25,7 @@
 @property(nonatomic,assign)BOOL isfinish;
 
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,weak)IBOutlet UIButton* confirmbtn;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)SaleType orderSaletype;
 

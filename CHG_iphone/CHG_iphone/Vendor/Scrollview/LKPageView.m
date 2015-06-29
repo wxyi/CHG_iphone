@@ -160,12 +160,18 @@
     {
         //如果传进来的是URL 就调用 SDWebImage   有需要的同学可以自己把SDWebImage 包含进来
 //        imageview.contentMode =  UIViewContentModeCenter;
+        
+        
         [imageview setImageWithURL:[NSURL URLWithString:str] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         
 
     }
     else {
-        imageview.image = [UIImage imageWithContentsOfFile:str];
+//        imageview.image = [UIImage imageWithContentsOfFile:str];
+        NSString *newstr =[NSString stringWithFormat:@"%@/%@",[APPDocumentsDirectory stringByAppendingString:@"/image"],str] ;
+         NSLog(@"完整路径是:%@",newstr);
+        [imageview setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:newstr]]];
+
     }
 }
 

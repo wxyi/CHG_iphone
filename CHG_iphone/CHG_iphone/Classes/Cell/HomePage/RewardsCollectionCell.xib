@@ -13,13 +13,16 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="160" height="85"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25F-4q-kgb">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25F-4q-kgb">
                         <rect key="frame" x="10" y="12" width="140" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="H2s-Mb-cAX"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hds-DV-aBZ">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hds-DV-aBZ">
                         <rect key="frame" x="10" y="36" width="110" height="29"/>
                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -29,6 +32,15 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="25F-4q-kgb" firstAttribute="leading" secondItem="Hds-DV-aBZ" secondAttribute="leading" id="35l-DG-ZRT"/>
+                <constraint firstAttribute="centerX" secondItem="Hds-DV-aBZ" secondAttribute="centerX" constant="15" id="7We-k3-Bds"/>
+                <constraint firstItem="Hds-DV-aBZ" firstAttribute="top" secondItem="25F-4q-kgb" secondAttribute="bottom" constant="3" id="FlM-1i-wvQ"/>
+                <constraint firstItem="25F-4q-kgb" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="12" id="JmN-T6-ucb"/>
+                <constraint firstItem="25F-4q-kgb" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="jRw-Ao-GFK"/>
+                <constraint firstAttribute="centerY" secondItem="Hds-DV-aBZ" secondAttribute="centerY" constant="-8" id="t46-O3-Azj"/>
+                <constraint firstItem="25F-4q-kgb" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="uIx-az-fYH"/>
+            </constraints>
             <size key="customSize" width="160" height="84"/>
             <connections>
                 <outlet property="RewardsAmountLab" destination="Hds-DV-aBZ" id="pdL-PL-Odt"/>

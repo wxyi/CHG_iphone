@@ -16,12 +16,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="4cu-aI-3yC">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="4cu-aI-3yC">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="4cu-aI-3yC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="5YN-uC-WtN"/>
+                <constraint firstAttribute="centerX" secondItem="4cu-aI-3yC" secondAttribute="centerX" id="BOD-dn-cgr"/>
+                <constraint firstAttribute="centerY" secondItem="4cu-aI-3yC" secondAttribute="centerY" id="ObY-9E-hCC"/>
+                <constraint firstItem="4cu-aI-3yC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="QGK-b9-mdh"/>
+                <constraint firstAttribute="centerX" secondItem="4cu-aI-3yC" secondAttribute="centerX" id="cOw-6K-c46"/>
+                <constraint firstAttribute="centerY" secondItem="4cu-aI-3yC" secondAttribute="centerY" id="zDi-Ae-1qO"/>
+            </constraints>
             <point key="canvasLocation" x="325" y="167"/>
         </view>
     </objects>

@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,13 +15,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rHh-OE-Eoq">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rHh-OE-Eoq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BDp-Ie-jgo">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BDp-Ie-jgo">
                         <rect key="frame" x="0.0" y="25" width="320" height="35"/>
                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
                         <color key="textColor" red="0.96078431372549022" green="0.6470588235294118" blue="0.25490196078431371" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -28,6 +29,16 @@
                     </label>
                 </subviews>
                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="rHh-OE-Eoq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="6GE-Jg-da1"/>
+                    <constraint firstItem="BDp-Ie-jgo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="A7m-zq-HWf"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="BDp-Ie-jgo" secondAttribute="bottom" constant="1" id="OF5-jP-bud"/>
+                    <constraint firstItem="rHh-OE-Eoq" firstAttribute="leading" secondItem="BDp-Ie-jgo" secondAttribute="leading" id="bhM-9c-gjr"/>
+                    <constraint firstItem="rHh-OE-Eoq" firstAttribute="trailing" secondItem="BDp-Ie-jgo" secondAttribute="trailing" id="cKr-wQ-Og1"/>
+                    <constraint firstAttribute="trailing" secondItem="rHh-OE-Eoq" secondAttribute="trailing" id="k6b-NS-RgV"/>
+                    <constraint firstItem="BDp-Ie-jgo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="17" id="m3Z-kH-yMP"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="rHh-OE-Eoq" secondAttribute="bottom" constant="26" id="xjA-Md-311"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="nameLab" destination="rHh-OE-Eoq" id="2gl-jo-trQ"/>

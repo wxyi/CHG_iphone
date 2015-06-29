@@ -14,4 +14,5 @@
 @property (nonatomic, strong) IBOutlet RadioButton* radioButton;
 
 //-(void)setupCell;
+-(IBAction)selectRadio:(UIButton*)sender;
 @end

@@ -27,6 +27,10 @@
 }
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.items = [NSArray arrayWithObjects:@"新密码",@"重复密码" ,nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -105,8 +109,9 @@
 {
 //   [self ConfirmTheChange];
     UITextField* textfield1 = (UITextField*)[self.view viewWithTag:1010];
+    [textfield1 resignFirstResponder];
     UITextField* textfield2 = (UITextField*)[self.view viewWithTag:1011];
-    
+    [textfield2 resignFirstResponder];
     NSString* info;
     if (textfield1.text.length == 0 || textfield2.text.length == 0) {
         info= @"请输入密码";
@@ -136,7 +141,7 @@
     
     NSString *url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -149,14 +154,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

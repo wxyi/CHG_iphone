@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="dO9-cW-XGd">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="dO9-cW-XGd">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="85"/>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="CVJ-yw-x5D">
@@ -24,11 +25,27 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                     </collectionView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vbL-V2-kxj">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vbL-V2-kxj">
                         <rect key="frame" x="160" y="12" width="1" height="60"/>
                         <color key="backgroundColor" red="0.78431372549019607" green="0.7803921568627451" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="X06-uI-E8S"/>
+                        </constraints>
                     </imageView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="dO9-cW-XGd" firstAttribute="centerX" secondItem="vbL-V2-kxj" secondAttribute="centerX" id="2Rv-9B-hRB"/>
+                    <constraint firstItem="dO9-cW-XGd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="7Ng-9p-1XO"/>
+                    <constraint firstItem="vbL-V2-kxj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="BEO-av-BCZ"/>
+                    <constraint firstAttribute="centerX" secondItem="dO9-cW-XGd" secondAttribute="centerX" id="F9D-zy-pYN"/>
+                    <constraint firstAttribute="centerY" secondItem="dO9-cW-XGd" secondAttribute="centerY" id="S3c-SO-M9s"/>
+                    <constraint firstAttribute="centerY" secondItem="vbL-V2-kxj" secondAttribute="centerY" id="WLg-Lb-Czg"/>
+                    <constraint firstAttribute="centerX" secondItem="dO9-cW-XGd" secondAttribute="centerX" id="YeI-tZ-txK"/>
+                    <constraint firstAttribute="centerY" secondItem="dO9-cW-XGd" secondAttribute="centerY" id="a8P-MK-n2o"/>
+                    <constraint firstItem="dO9-cW-XGd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="mTP-ne-1au"/>
+                    <constraint firstAttribute="centerX" secondItem="vbL-V2-kxj" secondAttribute="centerX" id="o9o-SZ-qFy"/>
+                    <constraint firstItem="dO9-cW-XGd" firstAttribute="centerY" secondItem="vbL-V2-kxj" secondAttribute="centerY" id="oxr-0E-nrs"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="RewardsView" destination="dO9-cW-XGd" id="2Lo-dL-z6Z"/>

@@ -29,6 +29,10 @@
 
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -85,7 +89,7 @@
             cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.contentView.backgroundColor = UIColorFromRGB(0x171c61);
+        cell.contentView.backgroundColor = UIColorFromRGB(0xF5A541);
         cell.nameLab.text = @"本月会员总消费(元)";
         cell.nameLab.textColor = UIColorFromRGB(0xf0f0f0);
         cell.amountLab.text =[NSString stringWithFormat:@"%.2f",[self.items[@"custMonthMoneyAll"] doubleValue]];
@@ -106,7 +110,7 @@
                           [NSDictionary dictionaryWithObjectsAndKeys:@"member_management.png",@"icon",@"会员管理",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],nil];
-        cell.height = 106;
+        cell.height = (SCREEN_WIDTH-2)/3;
         [cell setupView:[items mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
@@ -175,7 +179,7 @@
 */
 - (void)setupRefresh
 {
-    __weak __typeof(self) weakSelf = self;
+//    __weak __typeof(self) weakSelf = self;
     
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
     

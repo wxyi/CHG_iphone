@@ -92,7 +92,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect,
                    constrainedToSize:kMax_ConstrainedSize];
     CGRect frame = CGRectMake(0, 0, size.width, size.height);
     SGInfoAlert *alert = [[SGInfoAlert alloc] initWithFrame:frame bgColor:color info:info];
-    alert.center = CGPointMake(view.center.x, view.frame.size.height*height);
+    alert.center = CGPointMake(SCREEN_WIDTH/2, view.frame.size.height*height );
     alert.alpha = 0;
     [view addSubview:alert];
     [alert release];

@@ -8,8 +8,12 @@
 	<string>晨冠珍爱宝贝</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIcons</key>
+	<dict/>
+	<key>CFBundleIcons~ipad</key>
+	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>com.SecondaryMarket.wxy</string>
+	<string>com.chengguan.test</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,7 +30,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.SecondaryMarket.wxy</string>
+			<string>com.chengguan.test</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>baidumapsdk</string>

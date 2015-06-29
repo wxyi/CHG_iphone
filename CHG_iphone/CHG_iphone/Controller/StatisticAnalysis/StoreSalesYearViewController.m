@@ -45,7 +45,22 @@
             break;
     }
     self.nameLab.text = self.strtitle;
-    self.pricelab.text = @"0.00";
+//    self.pricelab.text = @"0.00";
+    self.bgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70);
+    self.nameLab.frame = CGRectMake(0, 0, SCREEN_WIDTH, 35 );
+    self.pricelab.frame = CGRectMake(0, 35, SCREEN_WIDTH, 35 );
+    if (self.statisticalType == StatisticalTypeMembershipGrowth) {
+        self.pricelab.text = @"0";
+    }
+    else
+    {
+        self.pricelab.text = @"0.00";
+    }
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 70 - 40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -65,7 +80,7 @@
     NSLog(@"加载为当前视图 = %@",self.title);
 //    [self setupRefreshPage];
     if ([self.items count] == 0|| self.isSkip) {
-        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
         [MMProgressHUD showWithTitle:@"" status:@""];
         [self httpGetStatisticAnalysis];
     }
@@ -88,7 +103,31 @@
         
     }
     NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section ];
-    [cell setStatistics:dictionary[@"day"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+//    [cell setStatistics:dictionary[@"day"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+    switch (self.statisticalType) {
+        case StatisticalTypeStoreSales:
+        {
+            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+            break;
+        }
+        case StatisticalTypeMembershipGrowth:
+        {
+            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"count"] intValue] baseData:self.nbaseData];
+            break;
+        }
+        case StatisticalTypePinRewards:
+        {
+            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"awardSalerAmount"] intValue] baseData:self.nbaseData];
+            break;
+        }
+        case StatisticalTypePartnersRewards:
+        {
+            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"awardPartnerAmount"] intValue] baseData:self.nbaseData];
+            break;
+        }
+        default:
+            break;
+    }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 //    if (indexPath.section == 0) {
@@ -239,9 +278,10 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
+//            [MMProgressHUD dismissWithError:msg];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
@@ -251,7 +291,12 @@
     } failureBlock:^(NSString *description) {
         [self.tableview.header endRefreshing];
         [self.tableview.footer endRefreshing];
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

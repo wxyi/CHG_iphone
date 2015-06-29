@@ -32,6 +32,12 @@
     self.items = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"武新义",@"name",@" 开户名",@"title", nil],
                                            [NSDictionary dictionaryWithObjectsAndKeys:@"6222222222222222",@"name",@"银行卡号",@"title" ,nil],
                                             [NSDictionary dictionaryWithObjectsAndKeys:@"工商银行",@"name",@"开户银行",@"title" ,nil], nil];
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;

@@ -10,6 +10,7 @@
 #import "PresellCell.h"
 #import "OrdersGoodsCell.h"
 #import "OrderCounterViewController.h"
+#import "JTImageLabel.h"
 @interface PresellGoodsViewController ()
 @property UINib* PresellNib;
 @property UINib* OrdersGoodsNib;
@@ -35,8 +36,8 @@
     leftbtn.borderColor = [UIColor clearColor];
     leftbtn.iconSide = JTImageButtonIconSideLeft;
     [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.items = [[NSMutableArray alloc] init];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
@@ -66,6 +67,12 @@
         self.title = @"提货扫描";
     }
     
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT -220 - 40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     
@@ -75,17 +82,28 @@
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     
    
-    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(75, 15, 170, 170)];
+//    rect = self.confirmbtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    self.confirmbtn.frame = rect;
+    
+    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 170)];
     imageView.image = [UIImage imageNamed:@"scan.png"];
     [self.view addSubview:imageView];
     
     upOrdown = NO;
     num =0;
-    _line = [[UIImageView alloc] initWithFrame:CGRectMake(75, 15, 170, 2)];
+    _line = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 2)];
     _line.image = [UIImage imageNamed:@"scan_laser.png"];
     [self.view addSubview:_line];
     
-    
+    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
+    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
+    promptlabel.textLabel.text = @"扫描二维码识别商品信息";
+    promptlabel.textLabel.font = FONT(12);
+    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+    promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+    //    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+    [self.view addSubview:promptlabel];
     
 }
 -(void)viewWillDisappear:(BOOL)animated
@@ -317,16 +335,97 @@
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    v_header.backgroundColor = [UIColor clearColor];
-    UILabel* titlelab = [[UILabel alloc] initWithFrame:v_header.frame];
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
+    
+//    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(75, 15, 170, 170)];
+//    imageView.image = [UIImage imageNamed:@"scan.png"];
+//    [v_header addSubview:imageView];
+//    
+//    upOrdown = NO;
+//    num =0;
+//    _line = [[UIImageView alloc] initWithFrame:CGRectMake(75, 15, 170, 2)];
+//    _line.image = [UIImage imageNamed:@"scan_laser.png"];
+//    [v_header addSubview:_line];
+//    
+//    
+//    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
+//    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
+//    promptlabel.textLabel.text = @"扫描二维码识别商品信息";
+//    promptlabel.textLabel.font = FONT(12);
+//    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+//    promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+//    //    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+//    [v_header addSubview:promptlabel];
+//
+//    
+//    timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
+//    // Device
+//    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//    
+//    // Input
+//    _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
+//    
+//    // Output
+//    _output = [[AVCaptureMetadataOutput alloc]init];
+//    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+//    
+//    // Session
+//    _session = [[AVCaptureSession alloc]init];
+//    [_session setSessionPreset:AVCaptureSessionPresetHigh];
+//    if ([_session canAddInput:self.input])
+//    {
+//        [_session addInput:self.input];
+//    }
+//    
+//    if ([_session canAddOutput:self.output])
+//    {
+//        [_session addOutput:self.output];
+//    }
+//    
+//    // 条码类型 AVMetadataObjectTypeQRCode
+//    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
+//    
+//    // Preview
+//    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
+//    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+//    [v_header.layer insertSublayer:self.preview atIndex:0];
+//    
+//    //    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+//    
+//    //将触摸事件添加到当前view
+//    [_session startRunning];
+//    UIImageView *topeview=[[UIImageView alloc] init];
+//    topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
+//    //    [topeview addGestureRecognizer:tapGestureRecognizer];
+//    UIImageView *lefteview=[[UIImageView alloc] init];
+//    lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+//    //    [lefteview addGestureRecognizer:tapGestureRecognizer];
+//    UIImageView *righteview=[[UIImageView alloc] init];
+//    righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+//    //    [righteview addGestureRecognizer:tapGestureRecognizer];
+//    UIImageView *bottomview=[[UIImageView alloc] init];
+//    bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
+//    //    [bottomview addGestureRecognizer:tapGestureRecognizer];
+//    [v_header addSubview:topeview];
+//    [v_header addSubview:lefteview];
+//    [v_header addSubview:righteview];
+//    [v_header addSubview:bottomview];
+//    v_header.backgroundColor = [UIColor clearColor];
+    UILabel* titlelab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
+    titlelab.backgroundColor = UIColorFromRGB(0xdddddd);
     titlelab.textAlignment = NSTextAlignmentCenter;
     titlelab.text = @"扫描结果";
-    titlelab.font = FONT(13);
     titlelab.textColor = UIColorFromRGB(0x323232);
+    titlelab.font = FONT(14);
     [v_header addSubview:titlelab];
     return v_header;
 }
+
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -395,7 +494,7 @@
 //    DLog(@"parameter = %@",productpar);
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetProductBrief] parameters:parameter];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -412,16 +511,22 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+//            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -547,6 +652,7 @@
            
         }
     }
+    
     [self.tableview reloadData];
 }
 -(NSMutableDictionary*)productInfo:(NSArray*)datas
@@ -609,7 +715,7 @@
     [param setObject:productCode forKey:@"productCodeStr"];
     __weak typeof(self) weakSelf = self;
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
@@ -625,10 +731,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

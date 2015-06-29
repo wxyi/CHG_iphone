@@ -482,14 +482,19 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
-            //            [SGInfoAlert showInfo:msg
-            //                          bgColor:[[UIColor darkGrayColor] CGColor]
-            //                           inView:self.view
-            //                         vertical:0.7];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

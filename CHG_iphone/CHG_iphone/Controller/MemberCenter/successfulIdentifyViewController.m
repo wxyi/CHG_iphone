@@ -34,7 +34,7 @@
     [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
     
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -45,6 +45,10 @@
 }
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
 //    self.view.backgroundColor = UIColorFromRGB(0xdddddd);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;

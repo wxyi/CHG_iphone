@@ -28,6 +28,10 @@
 
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -103,7 +107,9 @@
 -(void)ConfirmTheChange
 {
     UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
+    [passfield1 resignFirstResponder];
     UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1012];
+    [passfield2 resignFirstResponder];
     NSString* info ;
     if (passfield1.text.length == 0) {
         info = @"请输入密码";
@@ -151,7 +157,7 @@
    
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiForgetPassword] parameters:nil];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:parameter successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
@@ -175,11 +181,21 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

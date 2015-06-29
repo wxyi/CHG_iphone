@@ -13,6 +13,7 @@
 #import "OrderManagementViewController.h"
 #import "IdentUserInfoCell.h"
 #import "PresellGoodsViewController.h"
+#import "JTImageLabel.h"
 @interface IdentificationViewController ()
 @property UINib* IdentificationNib;
 @property UINib* IdentUserInfoNib;
@@ -64,31 +65,30 @@
 }
 -(void)setupView
 {
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     
 //    self.tableview.tableHeaderView = v_header;
     self.IdentificationNib = [UINib nibWithNibName:@"IdentificationCell" bundle:nil];
     self.IdentUserInfoNib = [UINib nibWithNibName:@"IdentUserInfoCell" bundle:nil];
-    [self setBtnTitle];
     
+    
+//    rect = self.nextbtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    self.nextbtn.frame = rect;
 //    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
 //    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
 //    tapGestureRecognizer.cancelsTouchesInView = NO;
 //    //将触摸事件添加到当前view
 //    [self.ZBarReader addGestureRecognizer:tapGestureRecognizer];
     
-    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(75, 15, 170, 170)];
-    imageView.image = [UIImage imageNamed:@"scan.png"];
-    [self.view addSubview:imageView];
     
-    upOrdown = NO;
-    num =0;
-    _line = [[UIImageView alloc] initWithFrame:CGRectMake(75, 15, 170, 2)];
-    _line.image = [UIImage imageNamed:@"scan_laser.png"];
-    [self.view addSubview:_line];
-    
-    timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
 }
 
 
@@ -220,10 +220,10 @@
 //    }
 //    [self.view addSubview:self.lineImage];
 //}
--(void)keyboardHide:(UITapGestureRecognizer*)tap{
-    UITextField* textfiled = (UITextField*)[self.view viewWithTag:100];
-    [textfiled resignFirstResponder];
-}
+//-(void)keyboardHide:(UITapGestureRecognizer*)tap{
+//    UITextField* textfiled = (UITextField*)[self.view viewWithTag:100];
+//    [textfiled resignFirstResponder];
+//}
 //- (CGRect)getScanCrop:(CGRect)rect readerViewBounds:(CGRect)readerViewBounds
 //{
 //    CGFloat x,y,width,height;
@@ -278,7 +278,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 35;
+    return 255;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -286,9 +286,89 @@
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 255)];
+    
+    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 170)];
+    imageView.image = [UIImage imageNamed:@"scan.png"];
+    [v_header addSubview:imageView];
+    
+    upOrdown = NO;
+    num =0;
+    _line = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 2)];
+    _line.image = [UIImage imageNamed:@"scan_laser.png"];
+    [v_header addSubview:_line];
+    
+    
+    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
+    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
+    promptlabel.textLabel.text = @"扫描二维码识别商品信息";
+    promptlabel.textLabel.font = FONT(12);
+    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+    promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+    //    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+    [v_header addSubview:promptlabel];
+
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
+    // Device
+    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    // Input
+    _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
+    
+    // Output
+    _output = [[AVCaptureMetadataOutput alloc]init];
+    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+    
+    // Session
+    _session = [[AVCaptureSession alloc]init];
+    [_session setSessionPreset:AVCaptureSessionPresetHigh];
+    if ([_session canAddInput:self.input])
+    {
+        [_session addInput:self.input];
+    }
+    
+    if ([_session canAddOutput:self.output])
+    {
+        [_session addOutput:self.output];
+    }
+    
+    // 条码类型 AVMetadataObjectTypeQRCode
+    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
+    
+    // Preview
+    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
+    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+    [v_header.layer insertSublayer:self.preview atIndex:0];
+    
+//    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    
+    //将触摸事件添加到当前view
+    [_session startRunning];
+    UIImageView *topeview=[[UIImageView alloc] init];
+    topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
+//    [topeview addGestureRecognizer:tapGestureRecognizer];
+    UIImageView *lefteview=[[UIImageView alloc] init];
+    lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+//    [lefteview addGestureRecognizer:tapGestureRecognizer];
+    UIImageView *righteview=[[UIImageView alloc] init];
+    righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+//    [righteview addGestureRecognizer:tapGestureRecognizer];
+    UIImageView *bottomview=[[UIImageView alloc] init];
+    bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
+//    [bottomview addGestureRecognizer:tapGestureRecognizer];
+    [v_header addSubview:topeview];
+    [v_header addSubview:lefteview];
+    [v_header addSubview:righteview];
+    [v_header addSubview:bottomview];
     v_header.backgroundColor = [UIColor clearColor];
-    UILabel* titlelab = [[UILabel alloc] initWithFrame:v_header.frame];
+    UILabel* titlelab = [[UILabel alloc] initWithFrame:CGRectMake(0, 220, SCREEN_WIDTH, 35)];
+    titlelab.backgroundColor = UIColorFromRGB(0xdddddd);
     titlelab.textAlignment = NSTextAlignmentCenter;
     titlelab.text = @"用户信息";
     titlelab.textColor = UIColorFromRGB(0x323232);
@@ -330,22 +410,26 @@
 }
 -(void)setBtnTitle
 {
-    UIButton* button = (UIButton*)[self.view viewWithTag:1010];
+//    UIButton* button = (UIButton*)[self.view viewWithTag:1010];
     if (self.m_MenuType == MenuTypeMemberCenter) {
         
-        button.titleLabel.text = @"下一步";
+//        self.nextbtn.titleLabel.text = @"下一步";
+        [self.nextbtn setTitle:@"下一步" forState:UIControlStateNormal];
     }
     else if (self.m_MenuType == MenuTypeOrderManagement)
     {
-        button.titleLabel.text = @"订单管理";
+//        button.titleLabel.text = @"订单管理";
+        [self.nextbtn setTitle:@"订单管理" forState:UIControlStateNormal];
     }
     else if (self.m_MenuType == MenuTypeSellingGoods)
     {
-        button.titleLabel.text = @"卖货";
+//        button.titleLabel.text = @"卖货";
+        [self.nextbtn setTitle:@"卖货" forState:UIControlStateNormal];
     }
     else if (self.m_MenuType == MenuTypePresell)
     {
-        button.titleLabel.text = @"预售";
+//        button.titleLabel.text = @"预售";
+        [self.nextbtn setTitle:@"预售" forState:UIControlStateNormal];
     }
 }
 
@@ -360,7 +444,7 @@
     [param setObject:custMobile forKey:@"mobile"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateMobile] parameters:parameter];
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -373,7 +457,11 @@
             DLog(@"识别成功");
             self.dict = [[data objectForKey:@"datas"] objectForKey:@"Cust"];
             self.isScan = YES;
-            [self.tableview reloadData];
+//            [self.tableview reloadData];
+            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+            
+            [self setBtnTitle];
 //            if (self.isScan){
 //                
 //                [self.tableview reloadData];
@@ -416,17 +504,32 @@
             }
             else
             {
-                [MMProgressHUD dismissWithError:@"手机号码不正确"];
+//                [MMProgressHUD dismissWithError:@"手机号码不正确"];
+                [MMProgressHUD dismiss];
+                [SGInfoAlert showInfo:@"手机号码不正确"
+                              bgColor:[[UIColor darkGrayColor] CGColor]
+                               inView:self.view
+                             vertical:0.5];
             }
             
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
+//            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
         }
 
     } failureBlock:^(NSString *description) {
-         [MMProgressHUD dismissWithError:description];
+//         [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -492,62 +595,62 @@
 */
 - (void)setupCamera
 {
-    // Device
-    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
-    // Input
-    _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
-    
-    // Output
-    _output = [[AVCaptureMetadataOutput alloc]init];
-    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-    
-    // Session
-    _session = [[AVCaptureSession alloc]init];
-    [_session setSessionPreset:AVCaptureSessionPresetHigh];
-    if ([_session canAddInput:self.input])
-    {
-        [_session addInput:self.input];
-    }
-    
-    if ([_session canAddOutput:self.output])
-    {
-        [_session addOutput:self.output];
-    }
-    
-    // 条码类型 AVMetadataObjectTypeQRCode
-    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
-    
-    // Preview
-    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
-    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
-    [self.view.layer insertSublayer:self.preview atIndex:0];
-    
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-    
-    //将触摸事件添加到当前view
-    
-    UIImageView *topeview=[[UIImageView alloc] init];
-    topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
-    [topeview addGestureRecognizer:tapGestureRecognizer];
-    UIImageView *lefteview=[[UIImageView alloc] init];
-    lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
-    [lefteview addGestureRecognizer:tapGestureRecognizer];
-    UIImageView *righteview=[[UIImageView alloc] init];
-    righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
-    [righteview addGestureRecognizer:tapGestureRecognizer];
-    UIImageView *bottomview=[[UIImageView alloc] init];
-    bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
-    [bottomview addGestureRecognizer:tapGestureRecognizer];
-    [self.view addSubview:topeview];
-    [self.view addSubview:lefteview];
-    [self.view addSubview:righteview];
-    [self.view addSubview:bottomview];
+//    // Device
+//    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//    
+//    // Input
+//    _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
+//    
+//    // Output
+//    _output = [[AVCaptureMetadataOutput alloc]init];
+//    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+//    
+//    // Session
+//    _session = [[AVCaptureSession alloc]init];
+//    [_session setSessionPreset:AVCaptureSessionPresetHigh];
+//    if ([_session canAddInput:self.input])
+//    {
+//        [_session addInput:self.input];
+//    }
+//    
+//    if ([_session canAddOutput:self.output])
+//    {
+//        [_session addOutput:self.output];
+//    }
+//    
+//    // 条码类型 AVMetadataObjectTypeQRCode
+//    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
+//    
+//    // Preview
+//    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
+//    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+//    [self.view.layer insertSublayer:self.preview atIndex:0];
+//    
+//    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+//    
+//    //将触摸事件添加到当前view
+//    
+//    UIImageView *topeview=[[UIImageView alloc] init];
+//    topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
+//    [topeview addGestureRecognizer:tapGestureRecognizer];
+//    UIImageView *lefteview=[[UIImageView alloc] init];
+//    lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+//    [lefteview addGestureRecognizer:tapGestureRecognizer];
+//    UIImageView *righteview=[[UIImageView alloc] init];
+//    righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+//    [righteview addGestureRecognizer:tapGestureRecognizer];
+//    UIImageView *bottomview=[[UIImageView alloc] init];
+//    bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
+//    bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
+//    [bottomview addGestureRecognizer:tapGestureRecognizer];
+//    [self.view addSubview:topeview];
+//    [self.view addSubview:lefteview];
+//    [self.view addSubview:righteview];
+//    [self.view addSubview:bottomview];
     // Start
     
 }
@@ -572,9 +675,9 @@
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
             
             //判断是否包含 头'ssid:'
-            NSString *ssid = @"ssid+:[^\\s]*";;
-            NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
-            
+//            NSString *ssid = @"ssid+:[^\\s]*";;
+//            NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+//            
             //判断是否为纯数字'
             NSString * number        = @"^-?\\d+$";
             NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", number];

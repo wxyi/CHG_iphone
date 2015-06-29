@@ -48,6 +48,12 @@
     [self setupQRadioButton];
     
     self.items = [[NSMutableArray alloc] init];
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT  - 70;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT-70);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -85,7 +91,7 @@
         radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:[NSString stringWithFormat:@"groupId%D",1]];
         radio1.isButton = YES;
         radio1.tag = [[NSString stringWithFormat:@"11%d",i] intValue];
-        radio1.frame = CGRectMake(70+i*62, 0, 62, 35);
+        radio1.frame = CGRectMake(70+i*62, 2, 62, 30);
         [radio1 setTitle:[items objectAtIndex:i] forState:UIControlStateNormal];
         radio1.titleLabel.font = FONT(14);
         radio1.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -101,7 +107,13 @@
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     NSLog(@"did selected radio:%@ groupId:%@", radio.titleLabel.text, groupId);
     
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
+        [MMProgressHUD showWithTitle:@"" status:@""];
+    [self.items removeAllObjects];
     
+    self.strOrderType = radio.titleLabel.text;
+    self.m_nPageNumber = 1;
+    [self checkDatas];
 }
 -(void)keyboardHide:(UITapGestureRecognizer*)tap{
     
@@ -378,7 +390,7 @@
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].strCustId  forKey:@"custId"];
-    [parameter setObject:[NSString stringWithFormat:@"%d",self.m_nPageNumber] forKey:@"pageNumber"];
+    [parameter setObject:[NSString stringWithFormat:@"%ld",(long)self.m_nPageNumber] forKey:@"pageNumber"];
     [parameter setObject:@"20" forKey:@"pageSize"];
     [parameter setObject:self.starttime.text forKey:@"startDate"];
     
@@ -400,27 +412,38 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if (success) {
             [MMProgressHUD dismiss];
-            self.items = [data objectForKey:@"datas"];
+//            self.items = [data objectForKey:@"datas"];
+            
+            NSArray* dataArr = [data objectForKey:@"datas"];
+            for (int i = 0; i< dataArr.count; i++) {
+                [self.items addObject:dataArr[i]];
+            }
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
+//            [MMProgressHUD dismissWithError:msg];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
         [self.tableview.header endRefreshing];
         [self.tableview.footer endRefreshing];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -428,6 +451,7 @@
 
 -(IBAction)QueryOrderBtn:(UIButton*)sender
 {
+    self.m_nPageNumber = 1;
     [self checkDatas];
 }
 - (void)setupRefresh
@@ -443,7 +467,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-    [header beginRefreshing];
+//    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;

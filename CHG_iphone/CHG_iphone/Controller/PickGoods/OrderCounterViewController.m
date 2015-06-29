@@ -41,7 +41,9 @@
     leftbtn.borderColor = [UIColor clearColor];
     leftbtn.iconSide = JTImageButtonIconSideLeft;
     [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.title = @"订单柜台";
     [self setupView];
 
@@ -59,6 +61,11 @@
     
     
 //    self.items = [NSArray arrayWithObjects:[NSArray arrayWithObjects:dict,dict,dict, nil],[NSArray arrayWithObjects:dict,dict, nil], nil];
+    CGRect rect = self.tableview.frame;
+    rect.size.height = SCREEN_HEIGHT - 40;
+    rect.size.width = SCREEN_WIDTH;
+    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
 //    self.tableview.scrollEnabled = NO;
@@ -72,6 +79,16 @@
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
     
     self.PickAndReturnNib = [UINib nibWithNibName:@"PickAndReturnCell" bundle:nil];
+    
+//    rect = self.button.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    rect.size.width = SCREEN_WIDTH/2;
+//    self.button.frame = rect;
+//    
+//    rect = self.continuebtn.frame;
+//    rect.size.width = SCREEN_WIDTH/2;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    self.continuebtn.frame = rect;
     
     if (self.orderSaletype == SaleTypeReturnGoods) {
         [self.button setTitle:@"确认退货" forState:UIControlStateNormal];
@@ -163,6 +180,7 @@
                 cell = (PickAndReturnCell*)[[self.PickAndReturnNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                 
             }
+            
             if (self.orderSaletype == SaleTypePickingGoods) {
                 cell.receivableNameLab.text =@"应收金额";
                 cell.actualNameLab.text = @"实收金额";
@@ -188,7 +206,7 @@
                 
             }
             double allPrice;
-            
+            cell.orderSaletype = self.orderSaletype;
             for (int i = 0; i< self.items.count; i++) {
                 double price = [[self.items[i] objectForKey:@"productPrice"] doubleValue];
                 int count;
@@ -449,7 +467,7 @@
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     NSString* url = [NSObject URLWithBaseString:strurl parameters:parameter];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -474,14 +492,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
-//            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

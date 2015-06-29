@@ -27,7 +27,25 @@
 //    btn_serch_hl@2x.png
 //    btn_serch@2x.png
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
-    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+//    UIButton* left = [UIButton buttonWithType:UIButtonTypeCustom];
+//    left.backgroundColor = UIColorFromRGB(0x171c61);
+//    [left.layer setMasksToBounds:YES];
+//    [left.layer setCornerRadius:4]; //设置矩形四个圆角半径
+//    //    [loginout.layer setBorderWidth:1.0]; //边框
+//    left.frame = CGRectMake(0, 0, 50, 44);
+//    [left setTitle:@"返回" forState:UIControlStateNormal];
+//    [left setImage:[UIImage imageNamed:@"btn_back.png"]  forState:UIControlStateNormal];
+//    [left setTitleEdgeInsets:UIEdgeInsetsMake(0, 20, 0, 50)];
+//    [left setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 20)];
+//    [left setTitleColor:UIColorFromRGB(0xf0f0f0) forState:UIControlStateNormal];
+//    [left addTarget:self action:@selector(skipPage) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
+    
+    
+    
+    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 7, 50, 30)];
     [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
     leftbtn.titleColor = [UIColor whiteColor];
     
@@ -36,7 +54,8 @@
     leftbtn.borderColor = [UIColor clearColor];
     leftbtn.iconSide = JTImageButtonIconSideLeft;
     [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.

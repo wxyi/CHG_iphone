@@ -33,4 +33,6 @@
 @dynamic bankCodeUpdateTime;
 //银行卡更新时间
 @dynamic promoListUpdateTime;
+
+@dynamic strImagePath;
 @end

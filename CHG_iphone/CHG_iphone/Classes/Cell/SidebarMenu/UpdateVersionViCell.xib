@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BMM-ie-Lnd">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BMM-ie-Lnd">
                         <rect key="frame" x="10" y="10" width="40" height="40"/>
                         <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
                         <userDefinedRuntimeAttributes>
@@ -24,15 +25,18 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOw-Nv-p5f">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOw-Nv-p5f">
                         <rect key="frame" x="60" y="10" width="150" height="40"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttq-wp-Vws">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttq-wp-Vws">
                         <rect key="frame" x="230" y="15" width="80" height="30"/>
                         <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="80" id="LfI-UE-GIV"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="下载">
                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -49,6 +53,19 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="2iE-kk-0a6"/>
+                    <constraint firstItem="Ttq-wp-Vws" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="9TA-D8-bvY"/>
+                    <constraint firstItem="Ttq-wp-Vws" firstAttribute="leading" secondItem="sOw-Nv-p5f" secondAttribute="trailing" constant="20" id="Fyw-pD-eT1"/>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="top" secondItem="sOw-Nv-p5f" secondAttribute="top" id="NKU-bM-UTH"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Ttq-wp-Vws" secondAttribute="trailing" constant="2" id="U4v-c7-4do"/>
+                    <constraint firstAttribute="centerY" secondItem="BMM-ie-Lnd" secondAttribute="centerY" constant="-1" id="aTG-tT-XX1"/>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="centerY" secondItem="Ttq-wp-Vws" secondAttribute="centerY" id="gAd-Pl-VLZ"/>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="mud-oU-m6H"/>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="bottom" secondItem="sOw-Nv-p5f" secondAttribute="bottom" id="smh-X9-xhF"/>
+                    <constraint firstItem="sOw-Nv-p5f" firstAttribute="leading" secondItem="BMM-ie-Lnd" secondAttribute="trailing" constant="10" id="vGo-w1-adQ"/>
+                    <constraint firstAttribute="centerX" secondItem="BMM-ie-Lnd" secondAttribute="centerX" constant="130" id="yt4-oY-ee7"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

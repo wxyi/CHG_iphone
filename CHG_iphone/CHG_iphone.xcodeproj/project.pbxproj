@@ -89,9 +89,9 @@
 		2E7EB5FC1B25879E00D386C2 /* MMRadialProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7EB5F21B25879E00D386C2 /* MMRadialProgressView.m */; };
 		2E7EB5FD1B25879E00D386C2 /* MMVectorImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7EB5F41B25879E00D386C2 /* MMVectorImage.m */; };
 		2E7EB6031B27D2BA00D386C2 /* AddressInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7EB6021B27D2BA00D386C2 /* AddressInfo.m */; };
+		2E81FF6A1B3C2907006189A9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E81FF681B3C2907006189A9 /* LaunchScreen.xib */; };
 		2E93B1271B32E63D00B282FF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E93B1261B32E63D00B282FF /* MapKit.framework */; };
 		2E93B1291B32F60300B282FF /* default_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E93B1281B32F60300B282FF /* default_small.png */; };
-		2E93B14E1B343C4300B282FF /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E93B14D1B343C4300B282FF /* BaiduMapAPI.framework */; };
 		2E93B1501B343E1800B282FF /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E93B14F1B343E1800B282FF /* mapapi.bundle */; };
 		2E93B1531B37E9F900B282FF /* ProvinceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E93B1521B37E9F900B282FF /* ProvinceInfo.m */; };
 		2E93B1561B37EA0B00B282FF /* CityInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E93B1551B37EA0B00B282FF /* CityInfo.m */; };
@@ -307,6 +307,7 @@
 		2EDC3A911B3A5A680080E9E5 /* btn_back_hl.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC3A8D1B3A5A680080E9E5 /* btn_back_hl.png */; };
 		2EDC3A921B3A5A680080E9E5 /* btn_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC3A8E1B3A5A680080E9E5 /* btn_back.png */; };
 		2EDC3A931B3A90E90080E9E5 /* IdentificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED84C2E1B15DD4C0086992D /* IdentificationViewController.m */; };
+		2EDC3A951B3AC7930080E9E5 /* orderquary_sel.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC3A941B3AC7930080E9E5 /* orderquary_sel.png */; };
 		2EDCEDBD1B22331B00EFE12C /* OrderQuryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDCEDBB1B22331B00EFE12C /* OrderQuryViewController.m */; };
 		2EDCEDBE1B22331B00EFE12C /* OrderQuryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EDCEDBC1B22331B00EFE12C /* OrderQuryViewController.xib */; };
 		2EDCEDC21B2235DB00EFE12C /* OrderQueryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDCEDC01B2235DB00EFE12C /* OrderQueryCell.m */; };
@@ -322,6 +323,8 @@
 		2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDD3D791B1F61C400D19EA0 /* CoreGraphics.framework */; };
 		2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDD3D7B1B1F61CC00D19EA0 /* Security.framework */; };
 		2EE089301B39833500A1B02B /* NSDownNetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0892F1B39833500A1B02B /* NSDownNetImage.m */; };
+		2EE7E01A1B3E9706006C5B70 /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EE7E0191B3E9706006C5B70 /* BaiduMapAPI.framework */; };
+		2EE7E01D1B3EE86B006C5B70 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE7E01C1B3EE86B006C5B70 /* Utils.m */; };
 		2EE9F2481B214C89006EB46B /* registeredMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F2461B214C89006EB46B /* registeredMenuCell.m */; };
 		2EE9F2491B214C89006EB46B /* registeredMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EE9F2471B214C89006EB46B /* registeredMenuCell.xib */; };
 		2EE9F24D1B214D55006EB46B /* registeredMenuColCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F24B1B214D55006EB46B /* registeredMenuColCell.m */; };
@@ -495,9 +498,9 @@
 		2E7EB5F41B25879E00D386C2 /* MMVectorImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMVectorImage.m; sourceTree = "<group>"; };
 		2E7EB6011B27D2BA00D386C2 /* AddressInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressInfo.h; sourceTree = "<group>"; };
 		2E7EB6021B27D2BA00D386C2 /* AddressInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressInfo.m; sourceTree = "<group>"; };
+		2E81FF691B3C2907006189A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2E93B1261B32E63D00B282FF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2E93B1281B32F60300B282FF /* default_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_small.png; sourceTree = "<group>"; };
-		2E93B14D1B343C4300B282FF /* BaiduMapAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BaiduMapAPI.framework; path = CHG_iphone/Vendor/BaiduMapAPI.framework; sourceTree = "<group>"; };
 		2E93B14F1B343E1800B282FF /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		2E93B1511B37E9F900B282FF /* ProvinceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProvinceInfo.h; sourceTree = "<group>"; };
 		2E93B1521B37E9F900B282FF /* ProvinceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProvinceInfo.m; sourceTree = "<group>"; };
@@ -830,6 +833,7 @@
 		2EDC3A8C1B3A5A680080E9E5 /* btn_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_add.png; sourceTree = "<group>"; };
 		2EDC3A8D1B3A5A680080E9E5 /* btn_back_hl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_back_hl.png; sourceTree = "<group>"; };
 		2EDC3A8E1B3A5A680080E9E5 /* btn_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_back.png; sourceTree = "<group>"; };
+		2EDC3A941B3AC7930080E9E5 /* orderquary_sel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orderquary_sel.png; sourceTree = "<group>"; };
 		2EDCEDBA1B22331B00EFE12C /* OrderQuryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrderQuryViewController.h; path = OrderManagement/OrderQuryViewController.h; sourceTree = "<group>"; };
 		2EDCEDBB1B22331B00EFE12C /* OrderQuryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrderQuryViewController.m; path = OrderManagement/OrderQuryViewController.m; sourceTree = "<group>"; };
 		2EDCEDBC1B22331B00EFE12C /* OrderQuryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OrderQuryViewController.xib; path = OrderManagement/OrderQuryViewController.xib; sourceTree = "<group>"; };
@@ -850,6 +854,9 @@
 		2EDD3D7B1B1F61CC00D19EA0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		2EE0892E1B39833500A1B02B /* NSDownNetImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDownNetImage.h; sourceTree = "<group>"; };
 		2EE0892F1B39833500A1B02B /* NSDownNetImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDownNetImage.m; sourceTree = "<group>"; };
+		2EE7E0191B3E9706006C5B70 /* BaiduMapAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BaiduMapAPI.framework; path = CHG_iphone/Vendor/BaiduMapAPI.framework; sourceTree = "<group>"; };
+		2EE7E01B1B3EE86B006C5B70 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		2EE7E01C1B3EE86B006C5B70 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		2EE9F2451B214C89006EB46B /* registeredMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = registeredMenuCell.h; path = Cell/RegisteredMembers/registeredMenuCell.h; sourceTree = "<group>"; };
 		2EE9F2461B214C89006EB46B /* registeredMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = registeredMenuCell.m; path = Cell/RegisteredMembers/registeredMenuCell.m; sourceTree = "<group>"; };
 		2EE9F2471B214C89006EB46B /* registeredMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = registeredMenuCell.xib; path = Cell/RegisteredMembers/registeredMenuCell.xib; sourceTree = "<group>"; };
@@ -895,13 +902,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */,
+				2EE7E01A1B3E9706006C5B70 /* BaiduMapAPI.framework in Frameworks */,
 				2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */,
 				2EDD3D781B1F61B800D19EA0 /* SystemConfiguration.framework in Frameworks */,
 				2EDD3D761B1F61AC00D19EA0 /* OpenGLES.framework in Frameworks */,
 				2EDD3D741B1F619D00D19EA0 /* QuartzCore.framework in Frameworks */,
 				2EDD3D721B1F619500D19EA0 /* CoreLocation.framework in Frameworks */,
 				2E93B1271B32E63D00B282FF /* MapKit.framework in Frameworks */,
-				2E93B14E1B343C4300B282FF /* BaiduMapAPI.framework in Frameworks */,
 				2E547D381B1FF8A400E148C2 /* libiconv.dylib in Frameworks */,
 				2E547D361B1FF89500E148C2 /* CoreVideo.framework in Frameworks */,
 				2E547D341B1FF88D00E148C2 /* CoreMedia.framework in Frameworks */,
@@ -916,7 +923,7 @@
 		190B73523040FED61E1E3449 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2E93B14D1B343C4300B282FF /* BaiduMapAPI.framework */,
+				2EE7E0191B3E9706006C5B70 /* BaiduMapAPI.framework */,
 				2E93B1261B32E63D00B282FF /* MapKit.framework */,
 				2E547D371B1FF8A400E148C2 /* libiconv.dylib */,
 				2E547D351B1FF89500E148C2 /* CoreVideo.framework */,
@@ -1063,6 +1070,8 @@
 				2E7D76BA1B097CDB00222C1E /* UIImage+ResizeMagick.m */,
 				2EE0892E1B39833500A1B02B /* NSDownNetImage.h */,
 				2EE0892F1B39833500A1B02B /* NSDownNetImage.m */,
+				2EE7E01B1B3EE86B006C5B70 /* Utils.h */,
+				2EE7E01C1B3EE86B006C5B70 /* Utils.m */,
 			);
 			path = Constant;
 			sourceTree = "<group>";
@@ -1161,6 +1170,7 @@
 				2ED84AA41B12BFE80086992D /* Resource */,
 				2E7D76D41B097CDB00222C1E /* Main.storyboard */,
 				2E7D76D61B097CDB00222C1E /* Images.xcassets */,
+				2E81FF681B3C2907006189A9 /* LaunchScreen.xib */,
 				2E7D76D71B097CDB00222C1E /* Info.plist */,
 				2E7D76D81B097CDB00222C1E /* main.m */,
 				2E7D776F1B097CDC00222C1E /* sysconfig.plist */,
@@ -1617,6 +1627,7 @@
 		2ED84AA41B12BFE80086992D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2EDC3A941B3AC7930080E9E5 /* orderquary_sel.png */,
 				2EDC3A8B1B3A5A680080E9E5 /* btn_add_hl.png */,
 				2EDC3A8C1B3A5A680080E9E5 /* btn_add.png */,
 				2EDC3A8D1B3A5A680080E9E5 /* btn_back_hl.png */,
@@ -2052,7 +2063,7 @@
 				TargetAttributes = {
 					2E7D768A1B097B3B00222C1E = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = UW38KXK46E;
+						DevelopmentTeam = LX2KSR4FFP;
 					};
 				};
 			};
@@ -2157,6 +2168,7 @@
 				2ED17EED1B31739F00F96595 /* icon_logo_ small.png in Resources */,
 				2ED4747D1B184011005543AC /* StatisticAnalysisTopCell.xib in Resources */,
 				2ED474EB1B1C4753005543AC /* SettingViewController.xib in Resources */,
+				2EDC3A951B3AC7930080E9E5 /* orderquary_sel.png in Resources */,
 				2ED84C0E1B15BD170086992D /* LoginCell.xib in Resources */,
 				2E7D78131B097CDC00222C1E /* sysconfig.plist in Resources */,
 				2ED475091B1C7FE1005543AC /* AboutViewController.xib in Resources */,
@@ -2186,6 +2198,7 @@
 				2ED84B301B1438BB0086992D /* OrdersGoodsCell.xib in Resources */,
 				2E3D11991B1ECED300180782 /* OrderCounterViewController.xib in Resources */,
 				2ED475191B1CA0FB005543AC /* StoresDetailsViewController.xib in Resources */,
+				2E81FF6A1B3C2907006189A9 /* LaunchScreen.xib in Resources */,
 				2ED17EE61B300EEB00F96595 /* icon_register_boy.png in Resources */,
 				2ED474961B186C69005543AC /* GrowthCell.xib in Resources */,
 				2ED84ACF1B12DF2B0086992D /* RewardsCell.xib in Resources */,
@@ -2318,6 +2331,7 @@
 				2E7D777F1B097CDC00222C1E /* ConfigManager.m in Sources */,
 				2ED84C5D1B16E3730086992D /* MembersSexCell.m in Sources */,
 				2E7D78141B097CDC00222C1E /* APIAddress.m in Sources */,
+				2EE7E01D1B3EE86B006C5B70 /* Utils.m in Sources */,
 				2EE9F2581B21CA88006EB46B /* MembegrowthCell.m in Sources */,
 				2ED17ECF1B299BD000F96595 /* CompletedOrderDetailsViewController.m in Sources */,
 				2ED17F1E1B3192B400F96595 /* MJRefreshComponent.m in Sources */,
@@ -2460,6 +2474,14 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
+		2E81FF681B3C2907006189A9 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2E81FF691B3C2907006189A9 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -2544,23 +2566,23 @@
 			baseConfigurationReference = 932D04A1EEA2EAAF8BB96950 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CHG_iphone/Vendor",
+					"$(PROJECT_DIR)/CHG_iphone",
+					"$(PROJECT_DIR)",
+					"/Users/wuxinyi/Downloads/BaiduMap_IOSSDK_v2/BaiduMap_IOSSDK_v2.8.0_Lib/Release-iphonesimulator",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "CHG_iphone/Supporting Files/CHG_iphone.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/CHG_iphone/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CHG_iphone/Vendor/ZbarSDK",
-					"$(PROJECT_DIR)/CHG_iphone/Vendor/ZBarSDK",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-l\"Pods-AFNetworking\"",
@@ -2582,7 +2604,6 @@
 					"-l\"Pods-SWTableViewCell\"",
 					"-l\"Pods-TPKeyboardAvoiding\"",
 					"-l\"Pods-UIImageBlurEffectCategory\"",
-					"-l\"Pods-ZBarSDK\"",
 					"-l\"Pods-iVersion\"",
 					"-l\"Pods-libqrencode\"",
 					"-l\"iconv\"",
@@ -2634,23 +2655,23 @@
 			baseConfigurationReference = 0CB982631FF3B74918494AE3 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CHG_iphone/Vendor",
+					"$(PROJECT_DIR)/CHG_iphone",
+					"$(PROJECT_DIR)",
+					"/Users/wuxinyi/Downloads/BaiduMap_IOSSDK_v2/BaiduMap_IOSSDK_v2.8.0_Lib/Release-iphonesimulator",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PREFIX_HEADER = "CHG_iphone/Supporting Files/CHG_iphone.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/CHG_iphone/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CHG_iphone/Vendor/ZbarSDK",
-					"$(PROJECT_DIR)/CHG_iphone/Vendor/ZBarSDK",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-l\"Pods-AFNetworking\"",
@@ -2672,7 +2693,6 @@
 					"-l\"Pods-SWTableViewCell\"",
 					"-l\"Pods-TPKeyboardAvoiding\"",
 					"-l\"Pods-UIImageBlurEffectCategory\"",
-					"-l\"Pods-ZBarSDK\"",
 					"-l\"Pods-iVersion\"",
 					"-l\"Pods-libqrencode\"",
 					"-l\"iconv\"",

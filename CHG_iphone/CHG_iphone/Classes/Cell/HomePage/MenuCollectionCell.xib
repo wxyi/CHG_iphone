@@ -13,29 +13,47 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="106" height="105"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9cj-Zr-67f">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9cj-Zr-67f">
                         <rect key="frame" x="35" y="24" width="35" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="35" id="e8m-tG-JKN"/>
+                        </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oFy-SP-iX2">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oFy-SP-iX2">
                         <rect key="frame" x="0.0" y="63" width="106" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TnZ-qz-M1b">
-                        <rect key="frame" x="0.0" y="105" width="107" height="1"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TnZ-qz-M1b">
+                        <rect key="frame" x="0.0" y="104" width="107" height="1"/>
                         <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="3KR-DY-7sQ"/>
+                        </constraints>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="9cj-Zr-67f" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="35" id="5vD-wR-t6O"/>
+                <constraint firstItem="TnZ-qz-M1b" firstAttribute="top" secondItem="oFy-SP-iX2" secondAttribute="bottom" constant="20" id="Dpn-Ff-0hF"/>
+                <constraint firstAttribute="trailing" secondItem="9cj-Zr-67f" secondAttribute="trailing" constant="36" id="EEU-iR-RZO"/>
+                <constraint firstItem="TnZ-qz-M1b" firstAttribute="centerX" secondItem="oFy-SP-iX2" secondAttribute="centerX" id="SIL-dT-Ra7"/>
+                <constraint firstAttribute="bottom" secondItem="TnZ-qz-M1b" secondAttribute="bottom" id="ZFZ-dB-4mX"/>
+                <constraint firstAttribute="trailing" secondItem="oFy-SP-iX2" secondAttribute="trailing" id="fjS-PP-He2"/>
+                <constraint firstItem="9cj-Zr-67f" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="24" id="nP5-Ha-TNj"/>
+                <constraint firstItem="TnZ-qz-M1b" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="sEN-jm-a7k"/>
+                <constraint firstItem="oFy-SP-iX2" firstAttribute="top" secondItem="9cj-Zr-67f" secondAttribute="bottom" constant="4" id="thW-r9-VY6"/>
+                <constraint firstItem="TnZ-qz-M1b" firstAttribute="leading" secondItem="oFy-SP-iX2" secondAttribute="leading" id="ut7-UA-3Uo"/>
+            </constraints>
             <size key="customSize" width="106" height="106"/>
             <connections>
                 <outlet property="imageName" destination="oFy-SP-iX2" id="0um-d5-zVg"/>
                 <outlet property="imageView" destination="9cj-Zr-67f" id="LNQ-4Q-TqM"/>
             </connections>
-            <point key="canvasLocation" x="305" y="278"/>
+            <point key="canvasLocation" x="305" y="277.5"/>
         </collectionViewCell>
     </objects>
 </document>

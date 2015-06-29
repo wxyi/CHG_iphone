@@ -35,8 +35,14 @@
 {
     
     self.items = [[NSMutableArray alloc] init];
-    [self httpGetBankCardList];
+    
     self.title = @"银行卡";
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled= NO;
@@ -52,6 +58,8 @@
     self.addbtn.bgColor = UIColorFromRGB(0x171c61);
     self.addbtn.borderWidth = 0;
     self.addbtn.iconSide = JTImageButtonIconSideLeft;
+    
+    [self httpGetBankCardList];
 }
 -(IBAction)addBankCard:(id)sender{
     DLog(@"填加银行卡");
@@ -190,15 +198,21 @@
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
-                         vertical:0.7];
+                         vertical:0.5];
         }
         
 
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -223,13 +237,19 @@
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
-                         vertical:0.7];
+                         vertical:0.5];
         }
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

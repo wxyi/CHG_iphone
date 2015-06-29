@@ -50,7 +50,11 @@
 }
 -(void)setupView
 {
-    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -40);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     //    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
@@ -59,6 +63,8 @@
     
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.amountNib = [UINib nibWithNibName:@"amountCell" bundle:nil];
+    self.returnBtn.frame = CGRectMake(0, SCREEN_HEIGHT-40, SCREEN_WIDTH, 40);
+//    self.ManagementTyep = OrderManagementTypeSingle;
     if (self.ManagementTyep == OrderManagementTypeAll) {
         CGRect rect = self.tableview.frame;
         rect.size.height = rect.size.height + 40;
@@ -66,6 +72,9 @@
         self.returnBtn.hidden = YES;
     }
     
+//    rect = self.returnBtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    rect.size.width = SCREEN_WIDTH;
     [self setupRefresh];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -88,7 +97,12 @@
             
         }
         cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",self.items[@"orderCreator"]];
-        cell.priceLab.text = [NSString stringWithFormat:@"会员:%@",self.items[@"custName"]];
+        
+        NSString* custName= self.items[@"custName"];
+        if (custName.length != 0) {
+            custName = [custName substringFromIndex:custName.length - 1];
+        }
+        cell.priceLab.text = [NSString stringWithFormat:@"会员:*%@",custName];
 //        static NSString *cellIdentifier = @"Cell";
 //        
 //        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -250,13 +264,18 @@
         {
             [self.tableview.header endRefreshing];
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
                          vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

@@ -31,15 +31,15 @@ static NSMutableDictionary *_groupRadioDic = nil;
         if (self.isButton) {
             [self setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
             [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [self setImage:[UIImage imageNamed:@""] forState:UIControlStateSelected];
-            [self setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+            [self setImage:[UIImage imageNamed:@"orderquary_sel.png"] forState:UIControlStateSelected];
+            [self setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
         }
         else
         {
-            [self setImage:[UIImage imageNamed:@"register_select_normal.png"] forState:UIControlStateNormal];
+            [self setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
             [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [self setImage:[UIImage imageNamed:@"register_select_click.png"] forState:UIControlStateSelected];
-            [self setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+            [self setImage:[UIImage imageNamed:@"orderquary_sel.png"] forState:UIControlStateSelected];
+            [self setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
             
         }
         [self addTarget:self action:@selector(radioBtnChecked) forControlEvents:UIControlEventTouchUpInside];

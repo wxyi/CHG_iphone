@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="新用户注册成功！" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7A-Ll-Ixv">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="新用户注册成功！" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7A-Ll-Ixv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -22,6 +23,12 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="E7A-Ll-Ixv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="MBE-IH-7lp"/>
+                    <constraint firstAttribute="trailing" secondItem="E7A-Ll-Ixv" secondAttribute="trailing" id="RD3-fq-71j"/>
+                    <constraint firstItem="E7A-Ll-Ixv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="awa-2U-cuW"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="E7A-Ll-Ixv" secondAttribute="bottom" constant="-9" id="dD5-LT-muc"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="325" y="200"/>

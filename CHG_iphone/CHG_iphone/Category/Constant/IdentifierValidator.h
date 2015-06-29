@@ -25,4 +25,6 @@ typedef enum
 
 @interface IdentifierValidator : NSObject
 + (BOOL) isValid:(IdentifierType) type value:(NSString*) value;
+
+
 @end

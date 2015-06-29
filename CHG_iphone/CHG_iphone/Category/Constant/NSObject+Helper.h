@@ -40,6 +40,9 @@
  * @return 返回字典
  */
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
+
+//创建文件夹
++(NSString*)CreateDocumentsfileManager:(NSString*)fileName;
 /*
 //转千分位
 -(NSString*)toThousand:(NSString*) strnormal;

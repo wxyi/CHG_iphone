@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,27 +15,33 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_boss.png" translatesAutoresizingMaskIntoConstraints="NO" id="frx-H1-uv7">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_boss.png" translatesAutoresizingMaskIntoConstraints="NO" id="frx-H1-uv7">
                         <rect key="frame" x="10" y="15" width="18" height="25"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q2D-ej-A39">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q2D-ej-A39">
                         <rect key="frame" x="35" y="0.0" width="200" height="45"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mt-hM-loA">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mt-hM-loA">
                         <rect key="frame" x="36" y="38" width="200" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BSR-00-e66">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BSR-00-e66">
                         <rect key="frame" x="0.0" y="80" width="320" height="1"/>
                         <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="Fyl-Gy-ltM"/>
+                        </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eed-3e-MwF">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eed-3e-MwF">
                         <rect key="frame" x="240" y="83" width="70" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="RUR-Df-u5Z"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="停用">
                             <color key="titleColor" red="0.090196078430000007" green="0.10980392160000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -54,6 +61,25 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="eed-3e-MwF" secondAttribute="trailing" constant="2" id="7JX-ig-krk"/>
+                    <constraint firstItem="BSR-00-e66" firstAttribute="top" secondItem="1mt-hM-loA" secondAttribute="bottom" constant="12" id="B5D-EG-FZD"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="1mt-hM-loA" secondAttribute="trailing" constant="76" id="FEs-3V-Lfy"/>
+                    <constraint firstItem="q2D-ej-A39" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="LL9-hs-7fZ"/>
+                    <constraint firstItem="BSR-00-e66" firstAttribute="top" secondItem="frx-H1-uv7" secondAttribute="bottom" constant="40" id="LdF-wS-iS2"/>
+                    <constraint firstItem="q2D-ej-A39" firstAttribute="leading" secondItem="frx-H1-uv7" secondAttribute="trailing" constant="7" id="LiN-Jd-MJC"/>
+                    <constraint firstItem="1mt-hM-loA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="30" id="TJz-tn-I3s"/>
+                    <constraint firstItem="eed-3e-MwF" firstAttribute="top" secondItem="BSR-00-e66" secondAttribute="bottom" constant="2" id="bSb-vE-IRX"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="q2D-ej-A39" secondAttribute="trailing" constant="77" id="bjm-0A-laD"/>
+                    <constraint firstItem="BSR-00-e66" firstAttribute="top" secondItem="q2D-ej-A39" secondAttribute="bottom" constant="35" id="ccT-xP-HC0"/>
+                    <constraint firstItem="frx-H1-uv7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="ggO-6b-vdP"/>
+                    <constraint firstAttribute="centerX" secondItem="BSR-00-e66" secondAttribute="centerX" id="mFy-1K-624"/>
+                    <constraint firstItem="1mt-hM-loA" firstAttribute="leading" secondItem="frx-H1-uv7" secondAttribute="trailing" constant="8" symbolic="YES" id="mZL-Gv-QNO"/>
+                    <constraint firstAttribute="centerY" secondItem="BSR-00-e66" secondAttribute="centerY" constant="-23.5" id="qbZ-37-akH"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="eed-3e-MwF" secondAttribute="bottom" constant="-7" id="qd4-aN-VHf"/>
+                    <constraint firstItem="1mt-hM-loA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="28" id="qrs-c1-arI"/>
+                    <constraint firstItem="BSR-00-e66" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="uSg-h8-T3s"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

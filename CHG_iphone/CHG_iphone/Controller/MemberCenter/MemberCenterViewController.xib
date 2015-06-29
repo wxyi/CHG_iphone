@@ -16,12 +16,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="W3N-oI-qnd">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="W3N-oI-qnd">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="W3N-oI-qnd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cJO-UH-2XC"/>
+                <constraint firstAttribute="centerX" secondItem="W3N-oI-qnd" secondAttribute="centerX" id="nRd-JF-AFf"/>
+                <constraint firstItem="W3N-oI-qnd" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="uvF-5a-6Xb"/>
+                <constraint firstAttribute="centerY" secondItem="W3N-oI-qnd" secondAttribute="centerY" id="xg3-R2-NbQ"/>
+            </constraints>
             <point key="canvasLocation" x="305" y="237"/>
         </view>
     </objects>

@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define kSGInfoAlert_fontSize       14
+#define kSGInfoAlert_fontSize       20
 #define kSGInfoAlert_width          200
 #define kMax_ConstrainedSize        CGSizeMake(200, 100)
 

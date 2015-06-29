@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="66h-eK-NoX">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="66h-eK-NoX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="105"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Uf2-SZ-00C">
                             <size key="itemSize" width="160" height="105"/>
@@ -23,12 +23,24 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                     </collectionView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fwZ-Zc-yeY">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fwZ-Zc-yeY">
                         <rect key="frame" x="160" y="0.0" width="1" height="105"/>
                         <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="TTZ-VZ-R90"/>
+                        </constraints>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstAttribute="centerY" secondItem="66h-eK-NoX" secondAttribute="centerY" id="577-Za-uP6"/>
+                    <constraint firstItem="66h-eK-NoX" firstAttribute="centerX" secondItem="fwZ-Zc-yeY" secondAttribute="centerX" id="Kcx-Em-LhM"/>
+                    <constraint firstItem="66h-eK-NoX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Xe8-6F-MFQ"/>
+                    <constraint firstItem="66h-eK-NoX" firstAttribute="bottom" secondItem="fwZ-Zc-yeY" secondAttribute="bottom" id="hBU-aM-zVo"/>
+                    <constraint firstItem="66h-eK-NoX" firstAttribute="top" secondItem="fwZ-Zc-yeY" secondAttribute="top" id="pwu-9d-8dy"/>
+                    <constraint firstAttribute="centerX" secondItem="66h-eK-NoX" secondAttribute="centerX" id="qAX-UU-Bnh"/>
+                    <constraint firstItem="66h-eK-NoX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="sd1-Hy-okS"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="RewardsView" destination="66h-eK-NoX" id="EPR-Gn-HX2"/>

@@ -22,6 +22,24 @@
 
 -(IBAction)onRadioBtn:(RadioButton*)sender
 {
+    DLog(@"%d",sender.tag);
     DLog(@"%@",[NSString stringWithFormat:@"Selected: %@", sender.titleLabel.text]) ;
+}
+
+-(IBAction)selectRadio:(UIButton*)sender
+{
+    if (sender.tag == 100) {
+        RadioButton* radio = (RadioButton*)[self viewWithTag:1000];
+        radio.selected = YES;
+    }
+    else if (sender.tag == 101) {
+        RadioButton* radio = (RadioButton*)[self viewWithTag:1001];
+        radio.selected = YES;
+    }
+    else if (sender.tag == 102) {
+        RadioButton* radio = (RadioButton*)[self viewWithTag:1002];
+        radio.selected = YES;
+    }
+        
 }
 @end

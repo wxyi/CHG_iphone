@@ -37,7 +37,11 @@
 }
 -(void)setupView
 {
-    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    DLog(@"frame = %@  width = %f height = %f",NSStringFromCGRect(self.tableview.frame),SCREEN_WIDTH,SCREEN_HEIGHT);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -133,7 +137,9 @@
 -(void)LoginAccount
 {
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    [namefield resignFirstResponder];
     UITextField* passfield = (UITextField*)[self.view viewWithTag:1012];
+    [passfield resignFirstResponder];
     NSString* info ;
     if (namefield.text.length == 0) {
         info = @"请输入手机号码";
@@ -155,21 +161,22 @@
     if (info.length != 0) {
     
 //        [MMProgressHUD dismissWithError:@"错误"];
+        
         [SGInfoAlert showInfo:info
                       bgColor:[[UIColor darkGrayColor] CGColor]
                        inView:self.view
-                     vertical:0.7];
+                     vertical:.5];
         return ;
     }
      
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setObject:@"password" forKey:@"grant_type"];
     
-    UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
-    [parameter setObject:textfield.text forKey:@"username"];
     
-    textfield = (UITextField*)[self.view viewWithTag:1012];
-    [parameter setObject:[[NSObject md5:textfield.text] uppercaseString] forKey:@"password"];
+    [parameter setObject:namefield.text forKey:@"username"];
+    
+    
+    [parameter setObject:[[NSObject md5:passfield.text] uppercaseString] forKey:@"password"];
     [parameter setObject:@"app" forKey:@"client_id"];
     [parameter setObject:@"appSecret" forKey:@"client_secret"];
     
@@ -187,7 +194,7 @@
 {
 //    strurl = @"https://www.baidu.com";
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:strurl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
@@ -215,11 +222,21 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
         }
     } failureBlock:^(NSString *description) {
         DLog(@"description = %@",description);
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -292,15 +309,21 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+//            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
         DLog(@"description = n%@",description);
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -347,7 +370,7 @@
     [parameter setObject:textfield.text forKey:@"userName"];
     NSString *url = [NSObject URLWithBaseString:[APIAddress ApiGetMobileByUserName] parameters:parameter];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
 
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
@@ -364,17 +387,32 @@
             }
             else
             {
-                [MMProgressHUD dismissWithError:@"手机号为空"];
+//                [MMProgressHUD dismissWithError:@"手机号为空"];
+                [MMProgressHUD dismiss];
+                [SGInfoAlert showInfo:@"手机号为空"
+                              bgColor:[[UIColor darkGrayColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
             }
             
             
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
+//            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

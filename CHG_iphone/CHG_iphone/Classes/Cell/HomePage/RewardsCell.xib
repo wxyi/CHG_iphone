@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="O0D-Jc-h3x">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="O0D-Jc-h3x">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="1" maxY="0.0"/>
@@ -25,12 +26,26 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                     </collectionView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J72-jB-QIn">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J72-jB-QIn">
                         <rect key="frame" x="160" y="12" width="1" height="51"/>
                         <color key="backgroundColor" red="0.78431372549019607" green="0.7803921568627451" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="H5t-hO-aFI"/>
+                        </constraints>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
+                <constraints>
+                    <constraint firstItem="O0D-Jc-h3x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="B6b-rJ-vxG"/>
+                    <constraint firstAttribute="centerY" secondItem="J72-jB-QIn" secondAttribute="centerY" id="Bqw-SX-QOf"/>
+                    <constraint firstAttribute="centerY" secondItem="O0D-Jc-h3x" secondAttribute="centerY" id="CHL-ea-29X"/>
+                    <constraint firstAttribute="centerX" secondItem="O0D-Jc-h3x" secondAttribute="centerX" id="PB7-x3-g8e"/>
+                    <constraint firstAttribute="centerX" secondItem="J72-jB-QIn" secondAttribute="centerX" id="SG1-Tg-2fe"/>
+                    <constraint firstItem="J72-jB-QIn" firstAttribute="centerX" secondItem="O0D-Jc-h3x" secondAttribute="centerX" id="YJ6-zR-oMH"/>
+                    <constraint firstItem="O0D-Jc-h3x" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="cnw-cm-l9n"/>
+                    <constraint firstItem="J72-jB-QIn" firstAttribute="centerY" secondItem="O0D-Jc-h3x" secondAttribute="centerY" id="z8L-ib-5EH"/>
+                    <constraint firstItem="J72-jB-QIn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="zgc-oX-3pg"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

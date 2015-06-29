@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IdentificationViewController">
             <connections>
+                <outlet property="nextbtn" destination="DUN-dQ-ebe" id="4CW-8S-hax"/>
                 <outlet property="tableview" destination="Qqw-yF-0bq" id="ph3-cp-mH3"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -16,9 +17,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" tag="1010" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUN-dQ-ebe">
-                    <rect key="frame" x="0.0" y="464" width="320" height="40"/>
+                <button opaque="NO" tag="1010" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUN-dQ-ebe">
+                    <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                     <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="qfO-Wc-OD4"/>
+                    </constraints>
                     <state key="normal" title="下一步">
                         <color key="titleColor" white="0.99294354839999999" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -27,27 +31,25 @@
                         <action selector="IdentificationMember:" destination="-1" eventType="touchDown" id="Xoz-3w-Bpw"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_tips_small.png" translatesAutoresizingMaskIntoConstraints="NO" id="JLn-gx-GK0">
-                    <rect key="frame" x="90" y="192" width="20" height="20"/>
-                </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="扫描二维码识别商品信息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Wb-9z-Kpp">
-                    <rect key="frame" x="115" y="186" width="126" height="35"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qqw-yF-0bq" customClass="TPKeyboardAvoidingTableView">
-                    <rect key="frame" x="0.0" y="220" width="325" height="244"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Qqw-yF-0bq" customClass="TPKeyboardAvoidingTableView">
+                    <rect key="frame" x="0.0" y="0.0" width="325" height="528"/>
                     <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="sectionIndexBackgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="DUN-dQ-ebe" secondAttribute="bottom" id="3xb-qI-iFZ"/>
+                <constraint firstAttribute="trailing" secondItem="DUN-dQ-ebe" secondAttribute="trailing" id="Mhw-FO-Xuh"/>
+                <constraint firstItem="DUN-dQ-ebe" firstAttribute="top" secondItem="Qqw-yF-0bq" secondAttribute="bottom" id="W8I-gT-nu0"/>
+                <constraint firstAttribute="trailing" secondItem="Qqw-yF-0bq" secondAttribute="trailing" constant="-5" id="duF-WK-fcT"/>
+                <constraint firstItem="Qqw-yF-0bq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ebC-hO-VgR"/>
+                <constraint firstItem="Qqw-yF-0bq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="h7l-5e-t5w"/>
+                <constraint firstItem="DUN-dQ-ebe" firstAttribute="leading" secondItem="Qqw-yF-0bq" secondAttribute="leading" id="xCm-8Y-1Dr"/>
+            </constraints>
             <point key="canvasLocation" x="325" y="250"/>
         </view>
     </objects>
-    <resources>
-        <image name="icon_tips_small.png" width="15" height="15"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

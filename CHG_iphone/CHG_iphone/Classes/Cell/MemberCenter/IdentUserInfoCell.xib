@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,13 +15,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="06L-Eb-Uex">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="06L-Eb-Uex">
                         <rect key="frame" x="0.0" y="2" width="320" height="45"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ns-3l-HsQ">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ns-3l-HsQ">
                         <rect key="frame" x="0.0" y="39" width="320" height="45"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -28,6 +29,16 @@
                     </label>
                 </subviews>
                 <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="06L-Eb-Uex" secondAttribute="trailing" id="0ZD-8j-8f8"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="0ns-3l-HsQ" secondAttribute="bottom" constant="-3" id="0rY-gC-w8Z"/>
+                    <constraint firstItem="0ns-3l-HsQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="31" id="0u1-oq-Ucp"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="06L-Eb-Uex" secondAttribute="bottom" constant="34" id="4Zj-RJ-aGg"/>
+                    <constraint firstItem="0ns-3l-HsQ" firstAttribute="leading" secondItem="06L-Eb-Uex" secondAttribute="leading" id="SAI-ZV-yjz"/>
+                    <constraint firstItem="06L-Eb-Uex" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="h4j-id-3YN"/>
+                    <constraint firstItem="06L-Eb-Uex" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-6" id="p8e-UV-FeW"/>
+                    <constraint firstItem="0ns-3l-HsQ" firstAttribute="trailing" secondItem="06L-Eb-Uex" secondAttribute="trailing" id="qZf-ey-07l"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="iphonelab" destination="06L-Eb-Uex" id="nyd-3B-hNL"/>

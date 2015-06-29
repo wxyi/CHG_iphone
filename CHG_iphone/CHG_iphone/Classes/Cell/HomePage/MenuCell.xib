@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,10 +15,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" id="H4j-h4-lPK">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="H4j-h4-lPK">
                         <rect key="frame" x="1" y="0.0" width="318" height="315"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="315" id="8vW-t8-hqh"/>
+                        </constraints>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="7pR-5S-gyQ">
                             <size key="itemSize" width="106" height="105"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -27,6 +30,13 @@
                     </collectionView>
                 </subviews>
                 <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="H4j-h4-lPK" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="1DK-0p-BV5"/>
+                    <constraint firstItem="H4j-h4-lPK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-7" id="1OE-wX-0Aa"/>
+                    <constraint firstItem="H4j-h4-lPK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Ely-GI-UKL"/>
+                    <constraint firstAttribute="centerX" secondItem="H4j-h4-lPK" secondAttribute="centerX" id="oNy-vc-4cZ"/>
+                    <constraint firstAttribute="centerY" secondItem="H4j-h4-lPK" secondAttribute="centerY" constant="-105" id="vVK-bZ-KdD"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="MenuCollection" destination="H4j-h4-lPK" id="yhL-aC-tjx"/>

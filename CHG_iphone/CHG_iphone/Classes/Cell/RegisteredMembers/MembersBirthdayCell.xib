@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,10 +15,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x2b-cy-itb">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x2b-cy-itb">
                         <rect key="frame" x="5" y="20" width="310" height="65"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" tag="100" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="年   月   日" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nfb-dX-Flk">
+                            <textField opaque="NO" clipsSubviews="YES" tag="99" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="年   月   日" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nfb-dX-Flk">
                                 <rect key="frame" x="0.0" y="20" width="300" height="40"/>
                                 <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -25,6 +26,12 @@
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="nfb-dX-Flk" firstAttribute="top" secondItem="x2b-cy-itb" secondAttribute="top" constant="20" id="CV8-e9-rXa"/>
+                            <constraint firstItem="nfb-dX-Flk" firstAttribute="leading" secondItem="x2b-cy-itb" secondAttribute="leading" id="Ibr-L4-g5I"/>
+                            <constraint firstAttribute="bottom" secondItem="nfb-dX-Flk" secondAttribute="bottom" constant="5" id="Pxu-Ef-xs2"/>
+                            <constraint firstAttribute="trailing" secondItem="nfb-dX-Flk" secondAttribute="trailing" constant="10" id="lrU-qK-WDN"/>
+                        </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -32,10 +39,10 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="title_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="u3I-gj-o3h">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="u3I-gj-o3h">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="宝宝生日/预产期" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEm-S1-99g">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="宝宝生日/预产期" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEm-S1-99g">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -49,6 +56,18 @@
                     </label>
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="eEm-S1-99g" firstAttribute="bottom" secondItem="u3I-gj-o3h" secondAttribute="bottom" id="24j-cr-fIn"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="centerX" secondItem="eEm-S1-99g" secondAttribute="centerX" id="5Le-i4-O3t"/>
+                    <constraint firstItem="eEm-S1-99g" firstAttribute="top" secondItem="u3I-gj-o3h" secondAttribute="top" id="5RP-1X-F0p"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="x2b-cy-itb" secondAttribute="bottom" constant="-9" id="KkC-dB-Uqh"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="centerX" secondItem="u3I-gj-o3h" secondAttribute="centerX" id="RV6-DW-bHi"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="bYg-Hd-wbf"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="12" id="cY9-hF-rcm"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-3" id="h1g-gG-IuQ"/>
+                    <constraint firstItem="eEm-S1-99g" firstAttribute="leading" secondItem="u3I-gj-o3h" secondAttribute="leading" id="u3f-Cs-fWf"/>
+                    <constraint firstItem="eEm-S1-99g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="wlu-0m-SM4"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <connections>

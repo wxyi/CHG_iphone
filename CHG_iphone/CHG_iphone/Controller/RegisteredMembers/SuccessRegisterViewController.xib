@@ -16,12 +16,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="DJU-n3-ItK">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="DJU-n3-ItK">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="DJU-n3-ItK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="84g-gV-1KY"/>
+                <constraint firstAttribute="centerX" secondItem="DJU-n3-ItK" secondAttribute="centerX" id="ZZK-bf-Aee"/>
+                <constraint firstAttribute="centerY" secondItem="DJU-n3-ItK" secondAttribute="centerY" id="jfb-aQ-Ngt"/>
+                <constraint firstItem="DJU-n3-ItK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lFK-Hc-BEQ"/>
+            </constraints>
             <point key="canvasLocation" x="325" y="167"/>
         </view>
     </objects>

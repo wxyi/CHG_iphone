@@ -13,5 +13,5 @@
 @property (nonatomic, strong) IBOutlet UILabel* bglabel;
 @property (nonatomic, strong) IBOutlet RadioButton* radioButton;
 
-
+-(IBAction)selectRadio:(UIButton*)sender;
 @end

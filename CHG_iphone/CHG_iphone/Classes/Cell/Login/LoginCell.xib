@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nDm-V7-jud">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nDm-V7-jud">
                         <rect key="frame" x="40" y="0.0" width="240" height="80"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" tag="1011" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="alan" placeholder="账号" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Xy-KW-Hzs">
@@ -44,7 +45,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <button opaque="NO" tag="100" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iql-8E-htf">
+                    <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iql-8E-htf">
                         <rect key="frame" x="90" y="125" width="140" height="34"/>
                         <state key="normal" image="btn_register.png">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -53,8 +54,11 @@
                             <action selector="Login:" destination="KGk-i7-Jjw" eventType="touchDown" id="xDm-1k-P4U"/>
                         </connections>
                     </button>
-                    <button opaque="NO" tag="101" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Eo-vP-qyj">
+                    <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Eo-vP-qyj">
                         <rect key="frame" x="125" y="190" width="70" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="Du5-nj-ck8"/>
+                        </constraints>
                         <state key="normal" title="忘记密码">
                             <color key="titleColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,6 +69,17 @@
                     </button>
                 </subviews>
                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="nDm-V7-jud" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="32" id="Dcg-8K-a65"/>
+                    <constraint firstAttribute="centerY" secondItem="iql-8E-htf" secondAttribute="centerY" constant="-27.5" id="HRW-ao-q8b"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="3Eo-vP-qyj" secondAttribute="bottom" constant="-9" id="UXv-pA-LHB"/>
+                    <constraint firstItem="iql-8E-htf" firstAttribute="top" secondItem="nDm-V7-jud" secondAttribute="bottom" constant="45" id="Zii-r2-Z3I"/>
+                    <constraint firstItem="nDm-V7-jud" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="a0j-K1-42o"/>
+                    <constraint firstItem="nDm-V7-jud" firstAttribute="centerX" secondItem="iql-8E-htf" secondAttribute="centerX" id="dar-7L-qQk"/>
+                    <constraint firstItem="nDm-V7-jud" firstAttribute="centerX" secondItem="3Eo-vP-qyj" secondAttribute="centerX" id="jxp-Cx-Xd5"/>
+                    <constraint firstAttribute="centerX" secondItem="iql-8E-htf" secondAttribute="centerX" id="kkZ-0U-avC"/>
+                    <constraint firstItem="3Eo-vP-qyj" firstAttribute="top" secondItem="iql-8E-htf" secondAttribute="bottom" constant="31" id="vrC-2t-IUx"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

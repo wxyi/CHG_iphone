@@ -12,6 +12,7 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UILabel* nameLab;
 @property(nonatomic,weak)IBOutlet UILabel* pricelab;
+@property(nonatomic,weak)IBOutlet UIView* bgView;
 @property (nonatomic, assign) StatisticalType statisticalType;
 @property(nonatomic,assign)int custCount;
 @property(nonatomic,strong)NSArray* items;

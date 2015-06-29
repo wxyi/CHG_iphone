@@ -10,6 +10,8 @@
 
 @interface OutstandingOrdersViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,weak)IBOutlet UIButton* returnBtn;
+@property(nonatomic,weak)IBOutlet UIButton* PickupBtn;
 @property(nonatomic,strong)NSMutableArray* items;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property(nonatomic,strong)STAlertView* stAlertView;

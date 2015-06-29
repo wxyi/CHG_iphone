@@ -25,6 +25,10 @@
 }
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -99,8 +103,11 @@
 {
     DLog(@"下一步");
     UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+    [iphonefield resignFirstResponder];
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    [namefield resignFirstResponder];
     UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
+    [checkfield resignFirstResponder];
     NSString* info ;
     if (iphonefield.text.length == 0) {
         info = @"请输入手机号码";

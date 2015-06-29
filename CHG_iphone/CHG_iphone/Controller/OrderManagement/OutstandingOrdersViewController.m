@@ -20,17 +20,36 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"未完成订单";
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT  - 40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+//
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-80);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     // Do any additional setup after loading the view from its nib.
     self.items = [[NSMutableArray alloc] init];
+    self.returnBtn.frame = CGRectMake(0, SCREEN_HEIGHT -80, SCREEN_WIDTH/2, 40);
+    self.PickupBtn.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_HEIGHT -80, SCREEN_WIDTH/2, 40);
+//    self.ManagementTyep = OrderManagementTypeSingle;
     if (self.ManagementTyep == OrderManagementTypeAll) {
         CGRect rect = self.tableview.frame;
         rect.size.height = rect.size.height + 40;
         self.tableview.frame = rect;
     }
+    
+//    rect = self.returnBtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT -40;
+//    rect.size.width = SCREEN_WIDTH/2;
+//    self.returnBtn.frame = rect;
+    
+//    rect = self.PickupBtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT -40;
+//    rect.size.width = SCREEN_WIDTH/2;
+//    self.PickupBtn.frame = rect;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -270,6 +289,7 @@
 //            [MMProgressHUD dismissWithError:msg];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
@@ -279,6 +299,11 @@
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

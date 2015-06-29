@@ -23,6 +23,10 @@
 
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -104,7 +108,9 @@
 -(void)LoginAccount
 {
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    [namefield resignFirstResponder];
     UITextField* checkcodefield = (UITextField*)[self.view viewWithTag:1012];
+    [checkcodefield resignFirstResponder];
     NSString* info ;
     if (namefield.text.length == 0) {
         info = @"请输入手机号码";

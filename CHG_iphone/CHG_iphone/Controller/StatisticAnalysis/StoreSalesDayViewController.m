@@ -61,9 +61,25 @@
     }
     
     self.title = @"日";
+    self.bgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70);
+    self.nameLab.frame = CGRectMake(0, 0, SCREEN_WIDTH, 35 );
+    self.pricelab.frame = CGRectMake(0, 35, SCREEN_WIDTH, 35 );
     self.nameLab.text = self.strtitle;
-    self.pricelab.text = @"0.00";
+    if (self.statisticalType == StatisticalTypeMembershipGrowth) {
+        self.pricelab.text = @"0";
+    }
+    else
+    {
+        self.pricelab.text = @"0.00";
+    }
+    
     self.isSkip = NO;
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 70 -40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     
@@ -324,6 +340,7 @@
 //            [MMProgressHUD dismissWithError:msg];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
@@ -335,6 +352,11 @@
         [self.tableview.header endRefreshing];
         [self.tableview.footer endRefreshing];
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

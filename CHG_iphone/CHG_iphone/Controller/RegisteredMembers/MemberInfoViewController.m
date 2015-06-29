@@ -42,10 +42,15 @@
 
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableview.scrollEnabled = NO;
+//    self.tableview.scrollEnabled = NO;
 //    [NSObject setExtraCellLineHidden:self.tableview];
     self.MembersRelationNib = [UINib nibWithNibName:@"MembersRelationCell" bundle:nil];
     self.MembersBirthdayNib = [UINib nibWithNibName:@"MembersBirthdayCell" bundle:nil];
@@ -59,13 +64,29 @@
     self.datePicker.ScrollToDate = now;
 //    self.datePicker.maxLimitDate = now;
 //    self.datePicker.minLimitDate = [now dateByAddingTimeInterval:-111111111];
-    
+//    rect = self.promptlabel.frame;
+//    rect.origin.y = SCREEN_WIDTH -70;
+//    self.promptlabel.frame = rect;
+//    self.promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+//    self.promptlabel.textLabel.text = @"请仔细校对填写信息,确认之后不能修改";
+//    self.promptlabel.textLabel.font = FONT(12);
+//    self.promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+//    self.promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+//    self.promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+//    
+//    rect = self.submitbtn.frame;
+//    rect.origin.y = SCREEN_WIDTH -40;
+//    self.submitbtn.frame = rect;
+    self.promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT -70, SCREEN_WIDTH, 30)];
     self.promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     self.promptlabel.textLabel.text = @"请仔细校对填写信息,确认之后不能修改";
     self.promptlabel.textLabel.font = FONT(12);
     self.promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
     self.promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
     self.promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+
+    [self.view addSubview:self.promptlabel];
+
 }
 /*
 #pragma mark - Navigation
@@ -128,8 +149,38 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+//    if (section == 2) {
+//        return 70;
+//    }
     return 1;
 }
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    if (section == 2) {
+//        UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 70)];
+//        JTImageLabel * promptlabel= [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
+//        promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+//        promptlabel.textLabel.text = @"请仔细校对填写信息,确认之后不能修改";
+//        promptlabel.textLabel.font = FONT(12);
+//        promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+//        promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+//        promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
+//        [v_footer addSubview:promptlabel];
+//        
+//        UIButton* finishBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//        finishBtn.frame = CGRectMake(0, 30, SCREEN_WIDTH, 40);
+////        [finishBtn.layer setMasksToBounds:YES];
+////        [finishBtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
+//        [finishBtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+//        [finishBtn setTitle:@"提交完成" forState:UIControlStateNormal];
+//        [finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [finishBtn addTarget:self action:@selector(SubmitCompleted:) forControlEvents:UIControlEventTouchUpInside];
+//        [v_footer addSubview:finishBtn];
+//        return v_footer;
+//        
+//    }
+//    return nil;
+//}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1) {
@@ -171,7 +222,7 @@
         }
     }
     self.strBabyGender = [self.strBabyGender stringByReplacingOccurrencesOfString:@" " withString:@""];
-    UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:99];
     NSString* info;
     
      if (self.strBabyRelation.length == 0) {
@@ -225,7 +276,7 @@
               minute:(NSString *)minute
              weekDay:(NSString *)weekDay
 {
-    UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:99];
     textfield.text = [NSString stringWithFormat:@"%@年%@月%@日",year,month,day];
     
     
@@ -251,7 +302,7 @@
     
     DLog(@"param = %@",param);
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -266,11 +317,21 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
         }
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

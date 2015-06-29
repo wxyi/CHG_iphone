@@ -33,6 +33,12 @@
 -(void)setupView
 {
     self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"身份证号" ,nil];
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -127,16 +133,47 @@
 {
     DLog(@"确认添加");
     UITextField* textfield;
-    for (int i = 0; i < 3; i++) {
-        NSInteger tag = [[NSString stringWithFormat:@"101%d",i] intValue];
-        textfield = (UITextField*)[self.view viewWithTag:tag];
+//    for (int i = 0; i < 3; i++)
+    {
+//        NSInteger tag = 1010
+        textfield = (UITextField*)[self.view viewWithTag:1010];
+        NSString *name = textfield.text;
+        [textfield resignFirstResponder];
+        textfield = (UITextField*)[self.view viewWithTag:1011];
+        NSString *iphone = textfield.text;
+        [textfield resignFirstResponder];
+        textfield = (UITextField*)[self.view viewWithTag:1012];
+        NSString *cardNum = textfield.text;
+        [textfield resignFirstResponder];
         
-        if (textfield.text.length == 0) {
-            [SGInfoAlert showInfo:@"请完善信息"
+        
+        NSString * info = @"";
+        if (name.length == 0) {
+            info = @"请输入姓名";
+        }
+        else if (iphone.length == 0)
+        {
+            info = @"请输入手机号";
+        }
+        else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphone ])
+        {
+            info = @"手机格式不正确";
+        }
+        else if (cardNum.length == 0)
+        {
+            info = @"请输入身份证号";
+        }
+        else if([Utils checkUserIdCard:cardNum])
+        {
+            info = @"身份证格式不正确";
+        }
+        if (info.length != 0) {
+            [SGInfoAlert showInfo:info
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
-                         vertical:0.7];
+                         vertical:0.5];
             return;
+
         }
     }
     [self httpUpdateSeller];
@@ -176,22 +213,36 @@
     }
     DLog(@"param = %@",param);
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
         {
             [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
             [self.navigationController popViewControllerAnimated:YES];
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
             
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

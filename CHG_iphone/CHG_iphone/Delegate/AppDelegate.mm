@@ -80,6 +80,8 @@ BMKMapManager* _mapManager;
 //                [[SUHelper sharedInstance] GetPromoList];
                 
                 [[SUHelper sharedInstance] GetRefreshCache:YES];
+                
+                
             }
             
         }

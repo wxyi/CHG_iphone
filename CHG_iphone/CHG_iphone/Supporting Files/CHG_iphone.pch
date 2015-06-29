@@ -43,5 +43,6 @@
     #import "SQLiteManager.h"
     #import "NSDate+Helper.h"
     #import "JTImageButton.h"
+    #import "Utils.h"
 #define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_
 #endif

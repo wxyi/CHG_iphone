@@ -95,7 +95,7 @@
         UIButton* button = (UIButton*)[weakSelf.view viewWithTag:101];
         
         weakSelf.isSkip = YES;
-        NSString* data = dictionary[@"day"];
+        NSString* data = dictionary[@"year"];
         weakSelf.strYear = [data substringToIndex:4];
         weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
         [weakSelf.slideSwitchView selectNameButton:button];
@@ -190,7 +190,7 @@
     NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
     
     
-    self.strYear = [NSString stringWithFormat:@"%d",[dateComponent year]];
+    self.strYear = [NSString stringWithFormat:@"%ld",(long)[dateComponent year]];
     self.strMonth = [NSString stringWithFormat:@"%d",[dateComponent month]];
     self.strDay = [NSString stringWithFormat:@"%d",[dateComponent day]];
     

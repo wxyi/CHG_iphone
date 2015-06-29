@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StoresInfoViewController">
             <connections>
                 <outlet property="addbtn" destination="pRj-M3-A13" id="fxl-vZ-UTd"/>
+                <outlet property="addshopperbtn" destination="J1n-Fq-Yud" id="Zdy-ic-P2R"/>
                 <outlet property="tableview" destination="kox-fb-4AV" id="Kn8-g3-p7q"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,13 +18,17 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="kox-fb-4AV">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="464"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="kox-fb-4AV">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </tableView>
-                <button opaque="NO" tag="100" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pRj-M3-A13">
-                    <rect key="frame" x="10" y="464" width="145" height="40"/>
+                <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pRj-M3-A13">
+                    <rect key="frame" x="10" y="528" width="144" height="40"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="144" id="kHp-gC-cQS"/>
+                        <constraint firstAttribute="height" constant="40" id="thM-7d-fbr"/>
+                    </constraints>
                     <state key="normal" title="添加店长">
                         <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -38,9 +43,13 @@
                         <action selector="addStoresInfo:" destination="-1" eventType="touchDown" id="yVR-CQ-Sp1"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="101" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1n-Fq-Yud">
-                    <rect key="frame" x="165" y="464" width="145" height="40"/>
+                <button opaque="NO" tag="101" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1n-Fq-Yud">
+                    <rect key="frame" x="166" y="528" width="145" height="40"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="145" id="167-mA-q4g"/>
+                        <constraint firstAttribute="height" constant="40" id="RyD-9c-UMK"/>
+                    </constraints>
                     <state key="normal" title="添加导购">
                         <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -57,6 +66,17 @@
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="kox-fb-4AV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="CkZ-Sf-lP5"/>
+                <constraint firstAttribute="bottom" secondItem="J1n-Fq-Yud" secondAttribute="bottom" id="Qae-jc-NJx"/>
+                <constraint firstItem="kox-fb-4AV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="V75-Pg-ndo"/>
+                <constraint firstItem="pRj-M3-A13" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="WwJ-Mr-jvb"/>
+                <constraint firstAttribute="trailing" secondItem="J1n-Fq-Yud" secondAttribute="trailing" constant="9" id="Ygf-ww-2SQ"/>
+                <constraint firstItem="pRj-M3-A13" firstAttribute="width" secondItem="J1n-Fq-Yud" secondAttribute="width" constant="-1" id="aK0-Ch-fUW"/>
+                <constraint firstAttribute="trailing" secondItem="kox-fb-4AV" secondAttribute="trailing" id="hk6-fX-e7A"/>
+                <constraint firstAttribute="bottom" secondItem="pRj-M3-A13" secondAttribute="bottom" id="mRe-qX-ipE"/>
+                <constraint firstItem="J1n-Fq-Yud" firstAttribute="top" secondItem="kox-fb-4AV" secondAttribute="bottom" id="uUg-xK-yx4"/>
+            </constraints>
             <point key="canvasLocation" x="289" y="155"/>
         </view>
     </objects>

@@ -24,6 +24,8 @@
 #import "StopViewController.h"
 #import "IdentificationViewController.h"
 #import "StoreSalesViewController.h"
+
+#import "NSDownNetImage.h"
 @interface HomePageViewController ()
 @property UINib* PromoListNib;
 @property UINib* AccountBriefNib;
@@ -48,6 +50,10 @@
 //    self.navigationController.navigationBar.layer.contents = (id)[NSObject createImageWithColor:UIColorFromRGB(0x171c61)].CGImage;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_btn.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(showMenu)];
     
+    
+    
+    
+    
     [self setupView];
 }
 
@@ -57,6 +63,11 @@
     self.menuArr = [[NSMutableArray alloc] init];
     self.menuArr = [self GetMenuArr];
     
+//    CGRect rect = self.tableview.frame;
+//    
+//    rect.size.height = SCREEN_HEIGHT;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -74,6 +85,25 @@
 //    for (int i = 1 ; i <= 5; i++) {
 //        [self.pagearray addObject:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"image%d",i] ofType:@"jpg"]];
 //    }
+    
+    NSString *path = [NSObject CreateDocumentsfileManager:@"image"];
+    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:path];
+    
+    NSLog(@"%@",file);
+    //NSLog(@"%d",[file count]);
+    
+    if (file.count == 0) {
+        [self httpGetPromoList];
+        
+    }
+    else
+    {
+        self.pagearray = [file mutableCopy];
+        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -100,7 +130,7 @@
             cell1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        self.page = [[LKPageView alloc]initWithURLStringArray:self.pagearray andFrame:CGRectMake(0, -10, SCREEN_WIDTH, 128)];
+        self.page = [[LKPageView alloc]initWithPathStringArray:self.pagearray andFrame:CGRectMake(0, -10, SCREEN_WIDTH, 128)];
         //        self.page.delegate = self;
         [cell1.contentView addSubview:self.page];        //测试
         return cell1;
@@ -197,7 +227,7 @@
     else if (indexPath.row == 3)
         return 75;
     else
-        return self.menuArr.count/3 * 105;
+        return self.menuArr.count/3 * ((SCREEN_WIDTH-2)/3);
 }
 
 -(void)didSelectAccountBriefCell:(NSIndexPath*)indexPath
@@ -243,9 +273,9 @@
             break;
     }
     
-    StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
-    StoreSalesView.statisticalType = Type;
-    [self.navigationController pushViewController:StoreSalesView animated:YES];
+//    StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
+//    StoreSalesView.statisticalType = Type;
+//    [self.navigationController pushViewController:StoreSalesView animated:YES];
 }
 -(void)didSelectMenuCell:(NSIndexPath*)indexPath
 {
@@ -337,27 +367,72 @@
 //            [MMProgressHUD dismiss];
             NSArray* datas = [data objectForKey:@"datas"];
             [self.pagearray removeAllObjects];
+            
+
+            NSString *path = [NSObject CreateDocumentsfileManager:@"image"];
+
+
             for (int i = 0; i < datas.count; i ++) {
-                [self.pagearray addObject:[datas[i]objectForKey:@"promoPath"]];
+    
+//                UIImage * imageFromURL = [NSDownNetImage getImageFromURL:[datas[i]objectForKey:@"promoPath"]];
+                
+//                NSString* fileName = [NSString stringWithFormat:@"activilist_%d%@",i ,@".jpg"];
+                
+//                NSString *filePath = path;
+                //Save Image to Directory
+                [HttpClient asynchronousDownLoadFileWithProgress:[datas[i]objectForKey:@"promoPath"] parameters:nil successBlock:^(NSURL *filePath) {
+                    NSData *data = [NSData dataWithContentsOfURL:filePath];
+                    UIImage * imageFromURL = [UIImage imageWithData:data];
+                    [NSDownNetImage saveImage:imageFromURL withFileName:[NSString stringWithFormat:@"activilist_%d",i ] ofType:@"jpg" inDirectory:path];
+                    
+                    
+                    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:path];
+                    NSLog(@"%@",file);
+                    self.pagearray = [file mutableCopy];
+                    
+                    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+                    [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+                } failureBlock:^(NSString *description) {
+                    
+                } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+                    
+                }];
+                
+                
+                
+                
             }
-            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+            
+            //取得目录下所有文件名
+            
+            
+            
+            //NSLog(@"%d",[file count]);
+            
+            
+            
 //            self.pagearray = data;
             
-            [self httpGetAccountBrief];
+            
         }
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
-                         vertical:0.7];
+                         vertical:0.5];
         }
         
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -391,6 +466,7 @@
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
@@ -399,6 +475,11 @@
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -479,7 +560,8 @@
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        [self httpGetPromoList];
+//        [self httpGetPromoList];
+        [self httpGetAccountBrief];
         // 拿到当前的下拉刷新控件，结束刷新状态
 //        [self.tableview reloadData];
         [self.tableview.header endRefreshing];

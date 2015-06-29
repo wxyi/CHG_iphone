@@ -33,7 +33,16 @@
     else
     {
         textField.text = @"";
-        [SGInfoAlert showInfo:@"实退金额大于应退金额"
+        
+        NSString* info;
+        if (self.orderSaletype == SaleTypePickingGoods) {
+            info = @"实收金额大于应收金额";
+        }
+        else
+        {
+            info = @"实退金额大于应退金额";
+        }
+        [SGInfoAlert showInfo:info
                       bgColor:[[UIColor darkGrayColor] CGColor]
                        inView:self
                      vertical:0.7];

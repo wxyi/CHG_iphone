@@ -27,13 +27,19 @@
 
 -(void)setupView
 {
-    [self httpGetMyProfile];
+    
     self.title = @"基本信息";
     self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"身份证号", nil];
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    
+//    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
+    [self httpGetMyProfile];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -156,6 +162,7 @@
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor darkGrayColor] CGColor]
                            inView:self.view
@@ -164,6 +171,11 @@
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

@@ -31,6 +31,10 @@
 -(void)setupView
 {
     self.items = [NSArray arrayWithObjects:@"持卡人",@"银行卡号",@"开户银行", nil];
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -123,7 +127,9 @@
 -(void)Confirm
 {
     UITextField* name = (UITextField*)[self.view viewWithTag:1010];
+    [name resignFirstResponder];
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
+    [Card resignFirstResponder];
     NSString* info;
     if (name.text.length == 0) {
         info = @"请输入姓名";
@@ -169,7 +175,7 @@
     [bankpar setObject:Card.text forKey:@"cardNumber"];
     [bankpar setObject:name.text forKey:@"accountName"];
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:bankpar successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
@@ -179,11 +185,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -216,7 +231,7 @@
         [SGInfoAlert showInfo:@"银行卡错误"
                       bgColor:[[UIColor darkGrayColor] CGColor]
                        inView:self.view
-                     vertical:0.7];
+                     vertical:0.5];
     }
     
 }

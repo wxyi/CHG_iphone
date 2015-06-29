@@ -32,12 +32,19 @@
 }
 -(void)setupView
 {
-    [self httpGetMyAccount];
+    
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
     self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
     self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
+    
+    [self httpGetMyAccount];
 
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -200,7 +207,7 @@
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyAccount] parameters:parameter];
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
@@ -218,15 +225,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.5];
         }
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

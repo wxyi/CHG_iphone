@@ -23,6 +23,11 @@
     [super viewDidLoad];
     self.title = @"全部订单";
 
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     // Do any additional setup after loading the view from its nib.

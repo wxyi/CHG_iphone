@@ -12,8 +12,8 @@
 @interface MemberInfoViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)UUDatePicker *datePicker;
-@property (weak, nonatomic) IBOutlet JTImageLabel *promptlabel;
-
+@property (strong, nonatomic) JTImageLabel *promptlabel;
+@property (weak, nonatomic) IBOutlet UIButton *submitbtn;
 
 @property(nonatomic, strong) NSString *strCustMobile; //手机号码
 @property(nonatomic, strong) NSString *strCustName; //用户名

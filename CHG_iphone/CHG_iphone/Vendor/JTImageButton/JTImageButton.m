@@ -91,10 +91,13 @@
 - (void)initialize {
     [self defaultSetup];
     
+    
     // Basics
     [self setTitleColor:_titleColor forState:UIControlStateNormal];
     [self.titleLabel setFont:_titleFont];
     [self setBackgroundColor:_bgColor];
+    
+    
     [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
     [self setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
     

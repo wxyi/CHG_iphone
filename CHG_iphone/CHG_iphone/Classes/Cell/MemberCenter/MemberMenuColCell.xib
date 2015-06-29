@@ -13,10 +13,14 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="106" height="72"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o3b-nl-Tt6">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="o3b-nl-Tt6">
                         <rect key="frame" x="43" y="15" width="21" height="23"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="21" id="KKl-ja-emP"/>
+                            <constraint firstAttribute="height" constant="23" id="hEu-BR-48I"/>
+                        </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LyU-cV-7Ph">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LyU-cV-7Ph">
                         <rect key="frame" x="0.0" y="36" width="106" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -26,6 +30,16 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="LyU-cV-7Ph" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="6NJ-P8-VWn"/>
+                <constraint firstItem="o3b-nl-Tt6" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="43" id="8jw-4W-TTd"/>
+                <constraint firstAttribute="bottom" secondItem="LyU-cV-7Ph" secondAttribute="bottom" constant="6" id="DUX-vI-iek"/>
+                <constraint firstItem="LyU-cV-7Ph" firstAttribute="centerX" secondItem="o3b-nl-Tt6" secondAttribute="centerX" id="WfL-Fe-mUT"/>
+                <constraint firstItem="LyU-cV-7Ph" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="36" id="fKJ-L8-ETW"/>
+                <constraint firstItem="o3b-nl-Tt6" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="jaS-y9-3rk"/>
+                <constraint firstAttribute="bottom" secondItem="o3b-nl-Tt6" secondAttribute="bottom" constant="34" id="l5e-TO-w5I"/>
+                <constraint firstAttribute="trailing" secondItem="LyU-cV-7Ph" secondAttribute="trailing" id="v0c-8F-ASg"/>
+            </constraints>
             <size key="customSize" width="50" height="72"/>
             <connections>
                 <outlet property="imageName" destination="LyU-cV-7Ph" id="tPy-T3-BF9"/>

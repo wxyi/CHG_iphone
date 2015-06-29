@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,14 +15,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8v2-RO-EVL">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8v2-RO-EVL">
                         <rect key="frame" x="0.0" y="47" width="320" height="1"/>
                         <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="HiD-vF-72T">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="HiD-vF-72T">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="47"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="MBi-rb-VNc">
@@ -33,6 +34,16 @@
                     </collectionView>
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="8v2-RO-EVL" firstAttribute="leading" secondItem="HiD-vF-72T" secondAttribute="leading" id="4L0-Xb-Z7I"/>
+                    <constraint firstItem="8v2-RO-EVL" firstAttribute="trailing" secondItem="HiD-vF-72T" secondAttribute="trailing" id="9Aq-mw-g6b"/>
+                    <constraint firstItem="HiD-vF-72T" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="CEw-Ok-uPg"/>
+                    <constraint firstItem="8v2-RO-EVL" firstAttribute="top" secondItem="HiD-vF-72T" secondAttribute="bottom" id="Cpb-Li-NaK"/>
+                    <constraint firstAttribute="centerY" secondItem="HiD-vF-72T" secondAttribute="centerY" id="T5e-Co-oZc"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="8v2-RO-EVL" secondAttribute="bottom" constant="-9" id="Yio-Hi-g8P"/>
+                    <constraint firstAttribute="centerX" secondItem="HiD-vF-72T" secondAttribute="centerX" id="dkC-Ut-Egw"/>
+                    <constraint firstItem="HiD-vF-72T" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="tRr-GA-yaT"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

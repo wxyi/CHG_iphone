@@ -16,12 +16,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="mHr-0W-opI">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="mHr-0W-opI">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="centerX" secondItem="mHr-0W-opI" secondAttribute="centerX" id="8zD-z6-rNw"/>
+                <constraint firstItem="mHr-0W-opI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Esb-WC-ba0"/>
+                <constraint firstAttribute="centerY" secondItem="mHr-0W-opI" secondAttribute="centerY" id="S3Q-4d-Zc7"/>
+                <constraint firstItem="mHr-0W-opI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tkA-cM-kMA"/>
+            </constraints>
             <point key="canvasLocation" x="325" y="155"/>
         </view>
     </objects>

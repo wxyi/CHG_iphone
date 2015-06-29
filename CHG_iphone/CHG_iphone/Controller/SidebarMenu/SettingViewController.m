@@ -32,7 +32,12 @@
 }
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:@"账户与安全",@"检测新版本",@"关于我们", nil],
+    self.items = [NSArray arrayWithObjects:@"账户与安全",@"检测新版本",@"关于我们", nil];
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];

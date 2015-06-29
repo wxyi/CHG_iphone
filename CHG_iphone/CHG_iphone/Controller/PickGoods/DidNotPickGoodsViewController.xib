@@ -9,7 +9,6 @@
             <connections>
                 <outlet property="Pickupbtn" destination="LJA-95-b55" id="z5u-ZK-qzd"/>
                 <outlet property="Terminationbtn" destination="qYm-Qc-tbf" id="UEP-09-sxc"/>
-                <outlet property="line" destination="N5c-Vc-EAT" id="zX7-h3-rvB"/>
                 <outlet property="tableview" destination="rV4-9y-0dI" id="GXQ-gI-KNf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -20,7 +19,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qYm-Qc-tbf">
-                    <rect key="frame" x="0.0" y="420" width="160" height="40"/>
+                    <rect key="frame" x="0.0" y="468" width="160" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" title="终止订单">
@@ -32,7 +31,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LJA-95-b55">
-                    <rect key="frame" x="160" y="420" width="160" height="40"/>
+                    <rect key="frame" x="160" y="468" width="160" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" title="提货">
@@ -43,13 +42,8 @@
                         <action selector="orderProcessing:" destination="-1" eventType="touchDown" id="i9Y-Nc-kqJ"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="N5c-Vc-EAT">
-                    <rect key="frame" x="0.0" y="420" width="320" height="1"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="rV4-9y-0dI">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="420"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="468"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </tableView>

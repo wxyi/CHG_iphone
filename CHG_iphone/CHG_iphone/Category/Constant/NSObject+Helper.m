@@ -140,6 +140,23 @@
     return dic;
 }
 
+
++(NSString*)CreateDocumentsfileManager:(NSString*)fileName
+{
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *testDirectory = [APPDocumentsDirectory stringByAppendingPathComponent:fileName];
+    // 创建目录
+    
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:testDirectory])//判断createPath路径文件夹是否已存在，此处createPath为需要新建的文件夹的绝对路径
+    {
+        [fileManager createDirectoryAtPath:testDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    
+    return testDirectory;
+}
 /*
 //转千分位
 -(NSString*) toThousand:(NSString*) strnormal

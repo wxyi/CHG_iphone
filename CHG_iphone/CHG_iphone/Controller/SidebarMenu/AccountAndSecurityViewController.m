@@ -27,6 +27,11 @@
 }
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.items = [NSArray arrayWithObjects:@"登陆密码", nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;

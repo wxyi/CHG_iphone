@@ -30,7 +30,8 @@
     leftbtn.borderColor = [UIColor clearColor];
     leftbtn.iconSide = JTImageButtonIconSideLeft;
     [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -52,6 +53,11 @@
 */
 -(void)setupView
 {
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT ;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -95,7 +101,7 @@
                           [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                           nil];
-        [cell setupView:items];
+        [cell setupView:[items mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);
             [weakSelf didSelectMenuCell:indexPath];

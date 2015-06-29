@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wxP-CX-Azd">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wxP-CX-Azd">
                         <rect key="frame" x="1" y="0.0" width="318" height="72"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="KuV-ee-KDc">
                             <size key="itemSize" width="106" height="72"/>
@@ -24,6 +25,12 @@
                         </collectionViewFlowLayout>
                     </collectionView>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="centerX" secondItem="wxP-CX-Azd" secondAttribute="centerX" id="LuX-oC-uz3"/>
+                    <constraint firstItem="wxP-CX-Azd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-7" id="P6E-AE-xjt"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="wxP-CX-Azd" secondAttribute="bottom" constant="-9" id="qtH-Nq-VbO"/>
+                    <constraint firstItem="wxP-CX-Azd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="tEg-jA-96b"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

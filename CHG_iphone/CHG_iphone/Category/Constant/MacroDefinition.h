@@ -14,10 +14,12 @@
 #define NavigationBar_HEIGHT 44
 //获取屏幕 宽度、高度
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
-#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
+#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height) - 64
 
 //路径
 #define APPDocumentsDirectory [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+
+//#define APPImageDocumentsDirectory [[NSString stringWithFormat:@"%@//image",APPDocumentsDirectory]
 //分页每页条数
 #define PAGESIZE @"20"
 //-------------------获取设备大小-------------------------

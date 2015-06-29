@@ -11,6 +11,7 @@
 @interface OrderCounterViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UIButton* button;
+@property(nonatomic,weak)IBOutlet UIButton* continuebtn;
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,strong)NSDictionary* dict;
 @property(nonatomic,strong)NSDictionary* priceDict;

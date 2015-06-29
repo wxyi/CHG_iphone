@@ -78,4 +78,7 @@
 //银行卡更新时间
 @property(nonatomic,assign) NSString * promoListUpdateTime;
 
+
+//图片保存路径
+@property(nonatomic,assign) NSString* strImagePath;
 @end

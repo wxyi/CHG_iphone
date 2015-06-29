@@ -16,12 +16,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="8cL-gE-RGL" customClass="TPKeyboardAvoidingTableView">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="8cL-gE-RGL" customClass="TPKeyboardAvoidingTableView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="8cL-gE-RGL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="4Rf-Q7-ORt"/>
+                <constraint firstAttribute="centerY" secondItem="8cL-gE-RGL" secondAttribute="centerY" id="by1-hV-5ko"/>
+                <constraint firstAttribute="centerX" secondItem="8cL-gE-RGL" secondAttribute="centerX" id="jnJ-Ff-jhO"/>
+                <constraint firstItem="8cL-gE-RGL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="zKz-yy-eH1"/>
+            </constraints>
             <point key="canvasLocation" x="289" y="233"/>
         </view>
     </objects>

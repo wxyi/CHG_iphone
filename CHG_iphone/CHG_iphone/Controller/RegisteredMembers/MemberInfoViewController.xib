@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MemberInfoViewController">
             <connections>
-                <outlet property="promptlabel" destination="Dmb-GI-l6t" id="ikO-cf-xPg"/>
                 <outlet property="tableview" destination="Knv-uk-reF" id="Wxy-yH-9Qe"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,28 +16,43 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RDl-lg-xC6">
-                    <rect key="frame" x="0.0" y="464" width="320" height="40"/>
-                    <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" title="提交完成">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Knv-uk-reF" customClass="TPKeyboardAvoidingTableView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
+                    <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="528" id="Xx6-Hu-aAG"/>
+                        <constraint firstAttribute="width" constant="320" id="eUC-Cj-rib"/>
+                    </constraints>
+                    <color key="sectionIndexBackgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </tableView>
+                <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TbY-pZ-0mZ">
+                    <rect key="frame" x="0.0" y="528" width="320" height="40"/>
+                    <color key="backgroundColor" red="0.090196078430000007" green="0.10980392160000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="RbN-38-Mhh"/>
+                        <constraint firstAttribute="height" constant="40" id="Ujz-Ap-YTH"/>
+                    </constraints>
+                    <state key="normal" title="确认设置">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="SubmitCompleted:" destination="-1" eventType="touchDown" id="hI1-Xi-xTP"/>
+                        <action selector="SubmitCompleted:" destination="-1" eventType="touchDown" id="KxO-QR-rSt"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dmb-GI-l6t" customClass="JTImageLabel">
-                    <rect key="frame" x="0.0" y="434" width="320" height="30"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Knv-uk-reF" customClass="TPKeyboardAvoidingTableView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="434"/>
-                    <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <color key="sectionIndexBackgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </tableView>
             </subviews>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="TbY-pZ-0mZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="B6u-Kq-dxV"/>
+                <constraint firstAttribute="trailing" secondItem="TbY-pZ-0mZ" secondAttribute="trailing" id="Beg-Uf-YOz"/>
+                <constraint firstItem="Knv-uk-reF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="CPW-iK-ZWW"/>
+                <constraint firstItem="Knv-uk-reF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="J8A-VQ-sAi"/>
+                <constraint firstItem="Knv-uk-reF" firstAttribute="leading" secondItem="TbY-pZ-0mZ" secondAttribute="leading" id="KCD-Wm-PsS"/>
+                <constraint firstAttribute="trailing" secondItem="Knv-uk-reF" secondAttribute="trailing" id="b3w-gU-y6c"/>
+                <constraint firstItem="Knv-uk-reF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="u3o-ue-mid"/>
+                <constraint firstAttribute="bottom" secondItem="TbY-pZ-0mZ" secondAttribute="bottom" id="vXw-jg-OMU"/>
+                <constraint firstItem="TbY-pZ-0mZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="y3e-OX-yuy"/>
+            </constraints>
             <point key="canvasLocation" x="325" y="167"/>
         </view>
     </objects>

@@ -13,13 +13,13 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="159" height="85"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sjw-mb-brM">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sjw-mb-brM">
                         <rect key="frame" x="10" y="10" width="130" height="26"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oF3-eK-E48">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oF3-eK-E48">
                         <rect key="frame" x="10" y="35" width="130" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="35"/>
                         <color key="textColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -29,6 +29,16 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="oF3-eK-E48" secondAttribute="bottom" constant="6" id="6gX-FG-KEt"/>
+                <constraint firstItem="Sjw-mb-brM" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="8dK-gO-GQL"/>
+                <constraint firstAttribute="trailing" secondItem="oF3-eK-E48" secondAttribute="trailing" constant="19" id="9iB-0R-T4b"/>
+                <constraint firstItem="Sjw-mb-brM" firstAttribute="trailing" secondItem="oF3-eK-E48" secondAttribute="trailing" id="KeK-Of-yJH"/>
+                <constraint firstItem="oF3-eK-E48" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Nax-ud-258"/>
+                <constraint firstItem="Sjw-mb-brM" firstAttribute="leading" secondItem="oF3-eK-E48" secondAttribute="leading" id="Vqn-HP-IWZ"/>
+                <constraint firstItem="oF3-eK-E48" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="35" id="kfR-A8-tB2"/>
+                <constraint firstAttribute="bottom" secondItem="Sjw-mb-brM" secondAttribute="bottom" constant="49" id="qR1-EI-vWc"/>
+            </constraints>
             <size key="customSize" width="159" height="85"/>
             <connections>
                 <outlet property="RewardsAmountLab" destination="oF3-eK-E48" id="ojv-J9-EDD"/>

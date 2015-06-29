@@ -28,12 +28,16 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.title = @"门店信息";
-    
+    [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self setupView];
+//    if (self.items.count == 0)
+    {
+        [self httpGetShop];
+    }
+    
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -46,6 +50,12 @@
 -(void)setupView
 {
     self.items = [[NSMutableArray alloc] init];
+    
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 40;
+//    rect.size.width = SCREEN_WIDTH;
+//    self.tableview.frame = rect;
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -54,7 +64,17 @@
     self.StoreManageNib = [UINib nibWithNibName:@"StoreManageCell" bundle:nil];
     self.StoreNib = [UINib nibWithNibName:@"StoreCell" bundle:nil];
     
-    [self httpGetShop];
+//    rect = self.addbtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    rect.size.width = (SCREEN_WIDTH -30)/2;
+//    self.addbtn.frame = rect;
+    
+//    rect = self.addshopperbtn.frame;
+//    rect.origin.y = SCREEN_HEIGHT - 40;
+//    rect.size.width = (SCREEN_WIDTH -30)/2;
+//    self.addshopperbtn.frame = rect;
+    
+    
     
     [self becomeFirstResponder];
     
@@ -144,7 +164,7 @@
             cell.icon.image = [UIImage imageNamed:@"icon_shopping_guide.png"];
         }
         cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
-        cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%d",indexPath.section] intValue];
+        cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
         cell.IndexPath = indexPath;
         cell.didselectDisable = ^(NSIndexPath* indexPath){
         
@@ -189,7 +209,7 @@
     
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
@@ -202,16 +222,21 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismiss];
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -252,15 +277,21 @@
                 }
                 
             }
-            if ([boss count] != 0) {
+            if ([[boss allKeys] count] != 0) {
                 [self.items insertObject:boss atIndex:0];
             }
             
-            if ([manager count] != 0) {
-                [self.items insertObject:manager atIndex:1];
+            if ([[manager allKeys] count] != 0) {
                 
+                [self.items insertObject:manager atIndex:1];
                 self.addbtn.userInteractionEnabled=NO;
                 self.addbtn.alpha=0.4;
+            }
+            else
+            {
+                self.addbtn.userInteractionEnabled=YES;
+                self.addbtn.alpha=1;
+//                self.addbtn.alpha=0.4;
             }
             
             
@@ -269,15 +300,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:msg];
-//            [SGInfoAlert showInfo:msg
-//                          bgColor:[[UIColor darkGrayColor] CGColor]
-//                           inView:self.view
-//                         vertical:0.7];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -285,19 +321,32 @@
 -(IBAction)addStoresInfo:(UIButton*)sender
 {
     StorePersonnelType type;
+    NSString* info;
     if (sender.tag == 100) {
         DLog(@"添加店长");
+        info = @"添加店长";
         type = StorePersonnelTypeManager;
     }
     else if(sender.tag == 101)
     {
         DLog(@"添加导购");
+        info = @"添加导购";
         type = StorePersonnelTypeShoppers;
     }
     
-    AddShoppersViewController* AddShoppersView = [[AddShoppersViewController alloc] initWithNibName:@"AddShoppersViewController" bundle:nil];
-    AddShoppersView.PersonnerType = type;
-    [self.navigationController pushViewController:AddShoppersView animated:YES];
+    self.stAlertView = [[STAlertView alloc] initWithTitle:[NSString stringWithFormat:@"是否%@" ,info] message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+        DLog(@"否");
+        
+        
+    } otherButtonBlock:^{
+        DLog(@"是");
+        AddShoppersViewController* AddShoppersView = [[AddShoppersViewController alloc] initWithNibName:@"AddShoppersViewController" bundle:nil];
+        AddShoppersView.PersonnerType = type;
+        [self.navigationController pushViewController:AddShoppersView animated:YES];
+    }];
+    
+    [self.stAlertView show];
+   
     
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -344,7 +393,7 @@
     
     
     DLog(@"url = %@",url);
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
@@ -357,10 +406,20 @@
         }
         else
         {
-            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+//            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor darkGrayColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        [MMProgressHUD dismissWithError:description];
+//        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor darkGrayColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
