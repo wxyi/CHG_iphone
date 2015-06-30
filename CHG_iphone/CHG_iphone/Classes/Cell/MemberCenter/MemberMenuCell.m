@@ -21,7 +21,7 @@
 }
 -(void)setupView:(NSArray*)items
 {
-    self.items = items;
+    self.items = [items mutableCopy];
     [self modifyCollectionView:NO];
     
     [self.MenuCollection registerNib:[UINib nibWithNibName:@"MemberMenuColCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];

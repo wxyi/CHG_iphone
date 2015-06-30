@@ -34,7 +34,11 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSError *error;
-        NSDictionary *json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
+        
+        NSMutableDictionary* json =  [[NSMutableDictionary alloc] init];
+//        NSDictionary *
+        json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
+        
         DLog(@"json = %@",json);
         if(!error){
 //            successBlock(YES,json,@"");
@@ -80,7 +84,8 @@
     }];
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSLog(responseObject);
-        NSDictionary *json = nil;
+//        NSDictionary *json = nil;
+            NSMutableDictionary* json =  [[NSMutableDictionary alloc] init];
         NSError *nsError = nil;
         if([responseObject isKindOfClass:[NSDictionary class] ]){
             json = (NSDictionary *)responseObject;
@@ -132,7 +137,9 @@
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
 //        NSLog(responseObject);
         NSError *error;
-        NSDictionary *json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
+        NSMutableDictionary* json =  [[NSMutableDictionary alloc] init];
+//        NSDictionary *
+        json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
         if(!error){
             successBlock(YES,json,@"");
             

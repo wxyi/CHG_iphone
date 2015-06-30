@@ -123,7 +123,7 @@
         if (info.length != 0) {
             
             [SGInfoAlert showInfo:info
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
             return ;
@@ -142,7 +142,7 @@
     [passfield resignFirstResponder];
     NSString* info ;
     if (namefield.text.length == 0) {
-        info = @"请输入手机号码";
+        info = @"请输入账号";
     }
     
 //    else if (![IdentifierValidator isValid:IdentifierTypePhone value:namefield.text ])
@@ -163,7 +163,7 @@
 //        [MMProgressHUD dismissWithError:@"错误"];
         
         [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:.5];
         return ;
@@ -225,18 +225,18 @@
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
-                         vertical:0.5];
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
         DLog(@"description = %@",description);
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -291,18 +291,31 @@
                     }
                     else
                     {
-                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
-                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                        if ([config.shopList count] != 0) {
+                            [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
+                            [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                            
+                            [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+                        }
                         
-                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
                     }
                     
                     
                     
-                    
+                    if ([config.shopList count] != 0){
+                        [self setupHomePageViewController];
+                    }
+                    else
+                    {
+                        [MMProgressHUD dismiss];
+                        [SGInfoAlert showInfo:@"数据异常"
+                                      bgColor:[[UIColor blackColor] CGColor]
+                                       inView:self.view
+                                     vertical:0.7];
+                    }
                     
 //                    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-                    [self setupHomePageViewController];
+                    
                 }
             }
             
@@ -312,7 +325,7 @@
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
         }
@@ -321,7 +334,7 @@
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
@@ -390,7 +403,7 @@
 //                [MMProgressHUD dismissWithError:@"手机号为空"];
                 [MMProgressHUD dismiss];
                 [SGInfoAlert showInfo:@"手机号为空"
-                              bgColor:[[UIColor darkGrayColor] CGColor]
+                              bgColor:[[UIColor blackColor] CGColor]
                                inView:self.view
                              vertical:0.7];
             }
@@ -402,17 +415,17 @@
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
-                         vertical:0.5];
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

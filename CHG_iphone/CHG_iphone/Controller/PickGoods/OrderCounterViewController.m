@@ -61,10 +61,10 @@
     
     
 //    self.items = [NSArray arrayWithObjects:[NSArray arrayWithObjects:dict,dict,dict, nil],[NSArray arrayWithObjects:dict,dict, nil], nil];
-    CGRect rect = self.tableview.frame;
-    rect.size.height = SCREEN_HEIGHT - 40;
-    rect.size.width = SCREEN_WIDTH;
-    self.tableview.frame = rect;
+//    CGRect rect = self.tableview.frame;
+//    rect.size.height = SCREEN_HEIGHT - 40;
+//    rect.size.width = SCREEN_WIDTH;
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -40);
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -83,8 +83,10 @@
 //    rect = self.button.frame;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
 //    rect.size.width = SCREEN_WIDTH/2;
-//    self.button.frame = rect;
-//    
+    self.button.frame = CGRectMake(0, SCREEN_HEIGHT-40, SCREEN_WIDTH/2, 40);
+    
+    self.continuebtn.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_HEIGHT-40, SCREEN_WIDTH/2, 40);
+//
 //    rect = self.continuebtn.frame;
 //    rect.size.width = SCREEN_WIDTH/2;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
@@ -291,7 +293,7 @@
             
             if (info.length != 0) {
                 [SGInfoAlert showInfo:info
-                              bgColor:[[UIColor darkGrayColor] CGColor]
+                              bgColor:[[UIColor blackColor] CGColor]
                                inView:self.view
                              vertical:0.7];
                 return;
@@ -495,17 +497,17 @@
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
-                         vertical:0.5];
+                         vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

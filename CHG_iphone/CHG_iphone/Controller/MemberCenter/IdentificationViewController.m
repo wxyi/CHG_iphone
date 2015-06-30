@@ -263,6 +263,7 @@
             cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+        
         cell.iphoneTextfiel.delegate = self;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -271,10 +272,10 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isScan) {
-        return 90;
-    }
-    return 40;
+//    if (self.isScan) {
+//        return 90;
+//    }
+    return SCREEN_HEIGHT -255 -40 ;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -282,7 +283,21 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.1;
+    return 40;
+}
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
+    UIButton* nextBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    nextBtn.frame = v_footer.frame;
+    [nextBtn.layer setMasksToBounds:YES];
+    [nextBtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
+    [nextBtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+    [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [nextBtn addTarget:self action:@selector(IdentificationMember:) forControlEvents:UIControlEventTouchUpInside];
+    [v_footer addSubview:nextBtn];
+    return v_footer;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -396,7 +411,7 @@
         }
         if (info.length != 0) {
             [SGInfoAlert showInfo:info
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
             return ;
@@ -507,9 +522,9 @@
 //                [MMProgressHUD dismissWithError:@"手机号码不正确"];
                 [MMProgressHUD dismiss];
                 [SGInfoAlert showInfo:@"手机号码不正确"
-                              bgColor:[[UIColor darkGrayColor] CGColor]
+                              bgColor:[[UIColor blackColor] CGColor]
                                inView:self.view
-                             vertical:0.5];
+                             vertical:0.7];
             }
             
         }
@@ -518,18 +533,18 @@
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
-                         vertical:0.5];
+                         vertical:0.7];
         }
 
     } failureBlock:^(NSString *description) {
 //         [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

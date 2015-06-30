@@ -40,6 +40,16 @@
 		2E7B0A5B1B1F34E6007C78CA /* area.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E7B0A531B1F34E6007C78CA /* area.plist */; };
 		2E7B0A5F1B1F34E6007C78CA /* LMComBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7B0A581B1F34E6007C78CA /* LMComBoxView.m */; };
 		2E7B0A601B1F34E6007C78CA /* LMContainsLMComboxScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7B0A5A1B1F34E6007C78CA /* LMContainsLMComboxScrollView.m */; };
+		2E7CFF601B41724000AF8A98 /* NSArray+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF4B1B41724000AF8A98 /* NSArray+SafeKit.m */; };
+		2E7CFF611B41724000AF8A98 /* NSDictionary+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF4D1B41724000AF8A98 /* NSDictionary+SafeKit.m */; };
+		2E7CFF621B41724000AF8A98 /* NSMutableArray+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF4F1B41724000AF8A98 /* NSMutableArray+SafeKit.m */; };
+		2E7CFF631B41724000AF8A98 /* NSMutableDictionary+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF511B41724000AF8A98 /* NSMutableDictionary+SafeKit.m */; };
+		2E7CFF641B41724000AF8A98 /* NSMutableString+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF531B41724000AF8A98 /* NSMutableString+SafeKit.m */; };
+		2E7CFF651B41724000AF8A98 /* NSObject+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF551B41724000AF8A98 /* NSObject+SafeKit.m */; };
+		2E7CFF661B41724000AF8A98 /* NSString+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF571B41724000AF8A98 /* NSString+SafeKit.m */; };
+		2E7CFF671B41724000AF8A98 /* NSException+SafeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF5A1B41724000AF8A98 /* NSException+SafeKit.m */; };
+		2E7CFF681B41724000AF8A98 /* NSObject+Swizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF5C1B41724000AF8A98 /* NSObject+Swizzle.m */; };
+		2E7CFF691B41724000AF8A98 /* SafeKitLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7CFF5F1B41724000AF8A98 /* SafeKitLog.m */; };
 		2E7D77781B097CDC00222C1E /* IdentifierValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7D76B71B097CDB00222C1E /* IdentifierValidator.m */; };
 		2E7D77791B097CDC00222C1E /* UIImage+ResizeMagick.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7D76BA1B097CDB00222C1E /* UIImage+ResizeMagick.m */; };
 		2E7D777A1B097CDC00222C1E /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7D76BD1B097CDB00222C1E /* BaseViewController.m */; };
@@ -400,6 +410,29 @@
 		2E7B0A581B1F34E6007C78CA /* LMComBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMComBoxView.m; sourceTree = "<group>"; };
 		2E7B0A591B1F34E6007C78CA /* LMContainsLMComboxScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContainsLMComboxScrollView.h; sourceTree = "<group>"; };
 		2E7B0A5A1B1F34E6007C78CA /* LMContainsLMComboxScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContainsLMComboxScrollView.m; sourceTree = "<group>"; };
+		2E7CFF471B41724000AF8A98 /* DurexKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DurexKit.h; sourceTree = "<group>"; };
+		2E7CFF491B41724000AF8A98 /* Foundation+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Foundation+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF4A1B41724000AF8A98 /* NSArray+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF4B1B41724000AF8A98 /* NSArray+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF4C1B41724000AF8A98 /* NSDictionary+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF4D1B41724000AF8A98 /* NSDictionary+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF4E1B41724000AF8A98 /* NSMutableArray+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF4F1B41724000AF8A98 /* NSMutableArray+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF501B41724000AF8A98 /* NSMutableDictionary+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF511B41724000AF8A98 /* NSMutableDictionary+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF521B41724000AF8A98 /* NSMutableString+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF531B41724000AF8A98 /* NSMutableString+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF541B41724000AF8A98 /* NSObject+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF551B41724000AF8A98 /* NSObject+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF561B41724000AF8A98 /* NSString+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF571B41724000AF8A98 /* NSString+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF591B41724000AF8A98 /* NSException+SafeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSException+SafeKit.h"; sourceTree = "<group>"; };
+		2E7CFF5A1B41724000AF8A98 /* NSException+SafeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSException+SafeKit.m"; sourceTree = "<group>"; };
+		2E7CFF5B1B41724000AF8A98 /* NSObject+Swizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Swizzle.h"; sourceTree = "<group>"; };
+		2E7CFF5C1B41724000AF8A98 /* NSObject+Swizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Swizzle.m"; sourceTree = "<group>"; };
+		2E7CFF5D1B41724000AF8A98 /* SafeKitCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SafeKitCore.h; sourceTree = "<group>"; };
+		2E7CFF5E1B41724000AF8A98 /* SafeKitLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SafeKitLog.h; sourceTree = "<group>"; };
+		2E7CFF5F1B41724000AF8A98 /* SafeKitLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SafeKitLog.m; sourceTree = "<group>"; };
 		2E7D768B1B097B3B00222C1E /* CHG_iphone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CHG_iphone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7D76A91B097B3B00222C1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2E7D76AA1B097B3B00222C1E /* CHG_iphoneTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHG_iphoneTests.m; sourceTree = "<group>"; };
@@ -995,6 +1028,52 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		2E7CFF461B41724000AF8A98 /* DurexKit */ = {
+			isa = PBXGroup;
+			children = (
+				2E7CFF471B41724000AF8A98 /* DurexKit.h */,
+				2E7CFF481B41724000AF8A98 /* Foundation */,
+				2E7CFF581B41724000AF8A98 /* SafeCore */,
+			);
+			path = DurexKit;
+			sourceTree = "<group>";
+		};
+		2E7CFF481B41724000AF8A98 /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				2E7CFF491B41724000AF8A98 /* Foundation+SafeKit.h */,
+				2E7CFF4A1B41724000AF8A98 /* NSArray+SafeKit.h */,
+				2E7CFF4B1B41724000AF8A98 /* NSArray+SafeKit.m */,
+				2E7CFF4C1B41724000AF8A98 /* NSDictionary+SafeKit.h */,
+				2E7CFF4D1B41724000AF8A98 /* NSDictionary+SafeKit.m */,
+				2E7CFF4E1B41724000AF8A98 /* NSMutableArray+SafeKit.h */,
+				2E7CFF4F1B41724000AF8A98 /* NSMutableArray+SafeKit.m */,
+				2E7CFF501B41724000AF8A98 /* NSMutableDictionary+SafeKit.h */,
+				2E7CFF511B41724000AF8A98 /* NSMutableDictionary+SafeKit.m */,
+				2E7CFF521B41724000AF8A98 /* NSMutableString+SafeKit.h */,
+				2E7CFF531B41724000AF8A98 /* NSMutableString+SafeKit.m */,
+				2E7CFF541B41724000AF8A98 /* NSObject+SafeKit.h */,
+				2E7CFF551B41724000AF8A98 /* NSObject+SafeKit.m */,
+				2E7CFF561B41724000AF8A98 /* NSString+SafeKit.h */,
+				2E7CFF571B41724000AF8A98 /* NSString+SafeKit.m */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		2E7CFF581B41724000AF8A98 /* SafeCore */ = {
+			isa = PBXGroup;
+			children = (
+				2E7CFF591B41724000AF8A98 /* NSException+SafeKit.h */,
+				2E7CFF5A1B41724000AF8A98 /* NSException+SafeKit.m */,
+				2E7CFF5B1B41724000AF8A98 /* NSObject+Swizzle.h */,
+				2E7CFF5C1B41724000AF8A98 /* NSObject+Swizzle.m */,
+				2E7CFF5D1B41724000AF8A98 /* SafeKitCore.h */,
+				2E7CFF5E1B41724000AF8A98 /* SafeKitLog.h */,
+				2E7CFF5F1B41724000AF8A98 /* SafeKitLog.m */,
+			);
+			path = SafeCore;
+			sourceTree = "<group>";
+		};
 		2E7D76821B097B3B00222C1E = {
 			isa = PBXGroup;
 			children = (
@@ -1199,6 +1278,7 @@
 		2E7D77771B097CDC00222C1E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2E7CFF461B41724000AF8A98 /* DurexKit */,
 				2EDC3A871B3A57F20080E9E5 /* JTImageButton */,
 				2ED17EEF1B3192B400F96595 /* MJRefresh */,
 				2E7EB5E31B25879E00D386C2 /* MMProgressHUD */,
@@ -2277,17 +2357,20 @@
 				2ED84B191B1338580086992D /* QCSlideSwitchView.m in Sources */,
 				2E7EB6031B27D2BA00D386C2 /* AddressInfo.m in Sources */,
 				2E3B4C151B2228CF00D4C34F /* QRadioButton.m in Sources */,
+				2E7CFF601B41724000AF8A98 /* NSArray+SafeKit.m in Sources */,
 				2E7EB5D01B22F1C800D386C2 /* AFNetworkReachabilityManager.m in Sources */,
 				2ED84B4C1B148B250086992D /* StoreManagementViewController.m in Sources */,
 				2ED474861B1844CA005543AC /* StoresInfoCell.m in Sources */,
 				2ED17F401B3296C000F96595 /* SQLStatement.m in Sources */,
 				2E7B0A4A1B1F109C007C78CA /* StopViewController.m in Sources */,
 				2E73EA571B28182000A62558 /* IdentUserInfoCell.m in Sources */,
+				2E7CFF661B41724000AF8A98 /* NSString+SafeKit.m in Sources */,
 				2ED4749A1B186E9F005543AC /* PartnersCell.m in Sources */,
 				2ED84B661B1557960086992D /* DidPickGoodsViewController.m in Sources */,
 				2ED84AC41B12DC210086992D /* awardTotalAmountCell.m in Sources */,
 				2ED84C671B17F38C0086992D /* SuccessRegistereCell.m in Sources */,
 				2E9938DF1B0DD11E00870456 /* SidebarMenuTableViewController.m in Sources */,
+				2E7CFF651B41724000AF8A98 /* NSObject+SafeKit.m in Sources */,
 				2E93B1591B37EA1B00B282FF /* AreaInfo.m in Sources */,
 				2ED17F261B3192B400F96595 /* MJRefreshBackStateFooter.m in Sources */,
 				2ED84A951B12B8800086992D /* PromoListCell.m in Sources */,
@@ -2327,6 +2410,7 @@
 				2E7EB5D51B22F1C800D386C2 /* AFURLSessionManager.m in Sources */,
 				2E7D78161B097CDC00222C1E /* SUHelper.m in Sources */,
 				2ED84AE21B12E94E0086992D /* MenuCollectionCell.m in Sources */,
+				2E7CFF691B41724000AF8A98 /* SafeKitLog.m in Sources */,
 				2ED84B251B134F430086992D /* AllOrdersCell.m in Sources */,
 				2E7D777F1B097CDC00222C1E /* ConfigManager.m in Sources */,
 				2ED84C5D1B16E3730086992D /* MembersSexCell.m in Sources */,
@@ -2361,8 +2445,10 @@
 				2EDD3D6D1B1F4C4800D19EA0 /* DetailsCell.m in Sources */,
 				2E7EB5D61B22F1C800D386C2 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				2ED84C261B15D5CD0086992D /* ResetPasswordViewController.m in Sources */,
+				2E7CFF681B41724000AF8A98 /* NSObject+Swizzle.m in Sources */,
 				2EE9F27C1B2204F6006EB46B /* SelectBankCardCell.m in Sources */,
 				2ED84B341B143D140086992D /* OrderGiftCell.m in Sources */,
+				2E7CFF621B41724000AF8A98 /* NSMutableArray+SafeKit.m in Sources */,
 				2ED17F311B31C37B00F96595 /* BanKCode.m in Sources */,
 				2EE9F25D1B21D135006EB46B /* addBankCardViewController.m in Sources */,
 				2ED4748B1B18521A005543AC /* StatisticsCell.m in Sources */,
@@ -2415,6 +2501,8 @@
 				2E7DA2111B1DD39400E068FF /* UUDatePicker.m in Sources */,
 				2ED84AD31B12E1C60086992D /* RewardsCollectionCell.m in Sources */,
 				2E7EB5CE1B22F1C800D386C2 /* AFHTTPRequestOperationManager.m in Sources */,
+				2E7CFF631B41724000AF8A98 /* NSMutableDictionary+SafeKit.m in Sources */,
+				2E7CFF641B41724000AF8A98 /* NSMutableString+SafeKit.m in Sources */,
 				2ED475181B1CA0FB005543AC /* StoresDetailsViewController.m in Sources */,
 				2ED84B591B1556900086992D /* PickGoodsViewController.m in Sources */,
 				2EE9F24D1B214D55006EB46B /* registeredMenuColCell.m in Sources */,
@@ -2427,6 +2515,7 @@
 				2ED474E51B1C3A1D005543AC /* SettlementCell.m in Sources */,
 				2ED84B051B1333910086992D /* OrderManagementViewController.m in Sources */,
 				2E93B1561B37EA0B00B282FF /* CityInfo.m in Sources */,
+				2E7CFF611B41724000AF8A98 /* NSDictionary+SafeKit.m in Sources */,
 				2E7EB5D71B22F1C800D386C2 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				2ED17F281B3192B400F96595 /* MJRefreshNormalHeader.m in Sources */,
 				2ED17F2D1B3192B400F96595 /* UIScrollView+MJRefresh.m in Sources */,
@@ -2453,6 +2542,7 @@
 				2ED17F231B3192B400F96595 /* MJRefreshAutoStateFooter.m in Sources */,
 				2E7D781A1B097DEC00222C1E /* BaseHttpDTO.m in Sources */,
 				2EE9F2481B214C89006EB46B /* registeredMenuCell.m in Sources */,
+				2E7CFF671B41724000AF8A98 /* NSException+SafeKit.m in Sources */,
 				2ED475031B1C6451005543AC /* UpdateVersionViCell.m in Sources */,
 				2E7D77801B097CDC00222C1E /* MImageFile.m in Sources */,
 				2EE9F2771B21F5E8006EB46B /* AddShoppersCell.m in Sources */,
@@ -2647,6 +2737,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -2736,6 +2827,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

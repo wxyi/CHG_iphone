@@ -44,6 +44,7 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+//    setSafeKitLogType(SafeKitLogTypeDebugger);
 //    self.navigationController.navigationBar.barTintColor = UIColorFromRGB(0x171c61);
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"bgnav.png"] forBarMetrics:UIBarMetricsDefault];
     
@@ -420,9 +421,9 @@
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
-                         vertical:0.5];
+                         vertical:0.7];
         }
         
         
@@ -430,9 +431,9 @@
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -467,19 +468,24 @@
         {
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
-                           inView:self.view
-                         vertical:0.7];
+            
+            if(![msg isEqual:[NSNull null]]){
+                //do something
+                [SGInfoAlert showInfo:msg
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            }
+            ;
         }
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

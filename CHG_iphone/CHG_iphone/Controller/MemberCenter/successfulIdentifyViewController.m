@@ -94,7 +94,7 @@
         NSArray* items = [NSArray arrayWithObjects:
                           [NSDictionary dictionaryWithObjectsAndKeys:@"selling_goods.png",@"icon",@"卖货",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"order_management.png",@"icon",@"订单管理",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"btn_Member_order.png",@"icon",@"订单管理",@"title", nil],
                           nil];
         cell.height = 105;
         [cell setupView:[items mutableCopy]];

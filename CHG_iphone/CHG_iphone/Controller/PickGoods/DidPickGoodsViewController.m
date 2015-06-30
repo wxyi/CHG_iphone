@@ -230,7 +230,7 @@
             [self.tableview.header endRefreshing];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
         }
@@ -239,9 +239,9 @@
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

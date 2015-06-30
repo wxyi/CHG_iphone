@@ -148,7 +148,7 @@
     if (info.length != 0) {
         
         [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
         return ;
@@ -187,18 +187,18 @@
         {
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
-                         vertical:0.5];
+                         vertical:0.7];
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             
         }
     } failureBlock:^(NSString *description) {
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
@@ -229,9 +229,9 @@
     else
     {
         [SGInfoAlert showInfo:@"银行卡错误"
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.5];
+                     vertical:0.7];
     }
     
 }

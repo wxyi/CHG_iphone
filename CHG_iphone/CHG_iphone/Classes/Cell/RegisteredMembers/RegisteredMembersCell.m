@@ -38,12 +38,13 @@
     //button type要 设置成custom 否则会闪动
     [sender startWithSecond:60];
     sender.backgroundColor = UIColorFromRGB(0xdddddd);
-    
+    sender.alpha=0.4;
     [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
         NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
         return title;
     }];
     [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+        sender.alpha=1;
         countDownButton.enabled = YES;
         return @"点击重新获取";
         
@@ -95,7 +96,7 @@
         else
         {
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self
                          vertical:0.7];
         }

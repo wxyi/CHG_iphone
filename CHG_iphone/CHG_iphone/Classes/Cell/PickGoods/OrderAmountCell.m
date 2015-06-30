@@ -43,7 +43,7 @@
             info = @"实退金额大于应退金额";
         }
         [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self
                      vertical:0.7];
     }

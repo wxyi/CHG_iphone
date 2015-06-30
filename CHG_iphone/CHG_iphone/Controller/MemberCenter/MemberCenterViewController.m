@@ -110,7 +110,7 @@
                           [NSDictionary dictionaryWithObjectsAndKeys:@"member_management.png",@"icon",@"会员管理",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil],nil];
-        cell.height = (SCREEN_WIDTH-2)/3;
+        cell.height = 72;
         [cell setupView:[items mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
             DLog(@"row = %ld",(long)indexPath.row);

@@ -43,7 +43,7 @@
 #pragma 正则匹配用户身份证号15或18位
 + (BOOL)checkUserIdCard: (NSString *) idCard
 {
-    NSString *pattern = @"(^[0-9]{15}$)|([0-9]{17}([0-9]|X)$)";
+    NSString *pattern = @"^(//d{14}|//d{17})(//d|[xX])$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
     BOOL isMatch = [pred evaluateWithObject:idCard];
     return isMatch;

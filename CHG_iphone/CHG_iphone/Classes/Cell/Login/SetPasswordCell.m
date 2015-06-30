@@ -47,7 +47,7 @@
     //button type要 设置成custom 否则会闪动
     [sender startWithSecond:60];
 //    __weak typeof(self) weakSelf = self;
-    
+    sender.alpha=0.4;
     [self httpGetCheckCode];
     
     [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
@@ -55,6 +55,7 @@
         return title;
     }];
     [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+        sender.alpha=1;
         countDownButton.enabled = YES;
         return @"点击重新获取";
         
@@ -80,7 +81,7 @@
         else
         {
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self
                          vertical:0.7];
         }

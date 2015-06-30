@@ -314,7 +314,7 @@
         {
 //            [MMProgressHUD dismissWithError:msg];
             [SGInfoAlert showInfo:msg
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
             [self.tableview.header endRefreshing];
@@ -352,7 +352,7 @@
         else
         {
             [SGInfoAlert showInfo:[data objectForKey:@"msg"]
-                          bgColor:[[UIColor darkGrayColor] CGColor]
+                          bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
         }

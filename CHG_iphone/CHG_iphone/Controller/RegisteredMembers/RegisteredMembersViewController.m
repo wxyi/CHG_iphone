@@ -59,7 +59,7 @@
     cell.iphoneField.text = self.strIphone;
     cell.didshowInfo = ^(NSString* info){
         [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
     };
@@ -135,7 +135,7 @@
     if (info.length != 0) {
         
         [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
         return ;

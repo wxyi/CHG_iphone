@@ -55,7 +55,8 @@
         
     }
     cell.userField.text = self.strmobile;
-    
+    cell.userField.enabled = NO;
+    cell.userField.backgroundColor = UIColorFromRGB(0xdddddd);
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -135,7 +136,7 @@
     if (info.length != 0) {
         
         [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor darkGrayColor] CGColor]
+                      bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
         return ;
