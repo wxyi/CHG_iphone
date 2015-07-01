@@ -34,7 +34,10 @@ BMKMapManager* _mapManager;
         NSLog(@"manager start failed!");
     }
     
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(setupLoginViewController)
+                                                 name:ACCESS_TOKEN_FAILURE
+                                               object:nil];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -143,9 +146,10 @@ BMKMapManager* _mapManager;
     // Create frosted view controller
     //
     REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
+    
     frostedViewController.direction = REFrostedViewControllerDirectionLeft;
     frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
-    
+    frostedViewController.limitMenuViewSize = YES;
     // Make it a root controller
     //
     self.window.rootViewController = frostedViewController;

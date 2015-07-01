@@ -44,7 +44,13 @@
 //            successBlock(YES,json,@"");
             if([json objectForKey:@"code"] &&[[json objectForKey:@"code"]  intValue]==200){
                 successBlock(YES,[json objectForKey:@"datas"],@"");
-            }else{
+            }
+            else if([[json objectForKey:@"code"] intValue] == 401)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
+                                                                    object:nil];
+            }
+            else{
                 successBlock(NO,nil,[json objectForKey:@"msg"]);
             }
             
@@ -55,8 +61,19 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
-        DLog(@"error = %@",error);
-        failureBlock(error.localizedDescription);
+        DLog(@"error = %d",error.code);
+        if (error.code == -1004) {
+            failureBlock(@"网络不可用");
+        }
+        else if(error.code == -1001)
+        {
+            failureBlock(@"网络超时");
+        }
+        else
+        {
+            failureBlock(error.localizedDescription);
+        }
+        
         
     }];
     [operation start];
@@ -97,7 +114,8 @@
         if(!nsError){
             if([json objectForKey:@"code"] &&[[[json objectForKey:@"code"] substringFromIndex:2] intValue]==1){
                 successBlock(YES,[json objectForKey:@"data"],@"");
-            }else{
+            }
+            else{
                 successBlock(NO,nil,[json objectForKey:@"msg"]);
             }
         }else{
@@ -106,7 +124,17 @@
         [operation cancel];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
-        failureBlock(error.localizedDescription);
+        if (error.code == -1004) {
+            failureBlock(@"网络不可用");
+        }
+        else if(error.code == -1001)
+        {
+            failureBlock(@"网络超时");
+        }
+        else
+        {
+            failureBlock(error.localizedDescription);
+        }
         
     }];
     [operation start];
@@ -141,7 +169,16 @@
 //        NSDictionary *
         json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
         if(!error){
-            successBlock(YES,json,@"");
+            if([[json objectForKey:@"code"] intValue] == 401)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
+                                                    object:nil];
+            }
+            else
+            {
+               successBlock(YES,json,@"");
+            }
+            
             
         }else{
             successBlock(NO,nil,error.description);
@@ -151,7 +188,17 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
         DLog(@"error = %@",error)
-        failureBlock(error.localizedDescription);
+        if (error.code == -1004) {
+            failureBlock(@"网络不可用");
+        }
+        else if(error.code == -1001)
+        {
+            failureBlock(@"网络超时");
+        }
+        else
+        {
+            failureBlock(error.localizedDescription);
+        }
     
     }];
     [operation start];
@@ -185,7 +232,17 @@
         successBlock([NSURL fileURLWithPath:downloadPath]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DLog(@"下载失败");
-        failureBlock(error.localizedDescription);
+        if (error.code == -1004) {
+            failureBlock(@"网络不可用");
+        }
+        else if(error.code == -1001)
+        {
+            failureBlock(@"网络超时");
+        }
+        else
+        {
+            failureBlock(error.localizedDescription);
+        }
     }];
     [operation start];
 }

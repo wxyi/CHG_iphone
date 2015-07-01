@@ -11,4 +11,7 @@
 @interface addBankCardViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)BanKCode* bank;
+@property(nonatomic,strong)UITableView* banktableview;
+@property(nonatomic,strong)NSMutableArray* bankitems;
 @end

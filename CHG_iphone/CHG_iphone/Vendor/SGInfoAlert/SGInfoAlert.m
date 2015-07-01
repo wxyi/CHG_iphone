@@ -35,7 +35,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect,
 }
 
 - (id)initWithFrame:(CGRect)frame bgColor:(CGColorRef)color info:(NSString*)info{
-    CGRect viewR = CGRectMake(0, 0, frame.size.width*2, frame.size.height*2);
+    CGRect viewR = CGRectMake(0, 0, frame.size.width*1.5, frame.size.height*1.5);
     self = [super initWithFrame:viewR];
     if (self) {
         self.backgroundColor = [UIColor clearColor];

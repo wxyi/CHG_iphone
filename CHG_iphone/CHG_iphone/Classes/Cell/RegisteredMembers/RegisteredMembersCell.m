@@ -21,34 +21,44 @@
 }
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender
 {
-    NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
+    if (self.iphoneField.text.length != 0) {
+        NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
+        
+        self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
+            DLog(@"否");
+            
+            
+            
+        } otherButtonBlock:^{
+            
+        }];
+        [self.stAlertView show];
+        
+        [self httpValidateCustMobile];
+        sender.enabled = NO;
+        //button type要 设置成custom 否则会闪动
+        [sender startWithSecond:60];
+        sender.backgroundColor = UIColorFromRGB(0xdddddd);
+        sender.alpha=0.4;
+        [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
+            NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+            return title;
+        }];
+        [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+            sender.alpha=1;
+            countDownButton.enabled = YES;
+            return @"点击重新获取";
+            
+        }];
+    }
+    else
+    {
+        [SGInfoAlert showInfo:@"请输入手机号码"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self
+                     vertical:0.7];
+    }
     
-    self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
-        DLog(@"否");
-        
-        
-        
-    } otherButtonBlock:^{
-        
-    }];
-    [self.stAlertView show];
-
-    [self httpValidateCustMobile];
-    sender.enabled = NO;
-    //button type要 设置成custom 否则会闪动
-    [sender startWithSecond:60];
-    sender.backgroundColor = UIColorFromRGB(0xdddddd);
-    sender.alpha=0.4;
-    [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-        NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
-        return title;
-    }];
-    [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
-        sender.alpha=1;
-        countDownButton.enabled = YES;
-        return @"点击重新获取";
-        
-    }];
     
 }
 -(BOOL)isCorrect

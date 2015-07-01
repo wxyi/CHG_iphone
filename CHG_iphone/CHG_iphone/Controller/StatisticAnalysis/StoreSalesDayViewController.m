@@ -79,7 +79,9 @@
 //    rect.size.height = SCREEN_HEIGHT - 70 -40;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
+    
     self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
+    DLog(@"-----%@",NSStringFromCGRect(self.tableview.frame))
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     
@@ -129,7 +131,7 @@
             cell.datelab.text = dictionary[@"orderDate"];
             cell.statelab.text = [NSString stringWithFormat:@"订单编号:%d",[dictionary[@"orderCode"] intValue]];
             cell.namelab.text = dictionary[@"custName"];
-            cell.producerlab.text = dictionary[@"orderCreater"];
+            cell.producerlab.text = [NSString stringWithFormat:@"制单人:%@",dictionary[@"orderCreator"]];
             cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[dictionary[@"orderAmount"] doubleValue]];
             
             cell.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];

@@ -323,6 +323,8 @@
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
+        [self.tableview.header endRefreshing];
+        [self.tableview.footer endRefreshing];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];

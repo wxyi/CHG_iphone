@@ -21,17 +21,26 @@
     [super viewDidLoad];
     self.title = @"会员信息";
     
-    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
-    leftbtn.titleColor = [UIColor whiteColor];
+//    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+//    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+//    leftbtn.titleColor = [UIColor whiteColor];
+//    
+//    leftbtn.iconColor = [UIColor whiteColor];
+//    leftbtn.padding = JTImageButtonPaddingSmall;
+//    leftbtn.borderColor = [UIColor clearColor];
+//    leftbtn.iconSide = JTImageButtonIconSideLeft;
+//    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    leftbtn.iconColor = [UIColor whiteColor];
-    leftbtn.padding = JTImageButtonPaddingSmall;
-    leftbtn.borderColor = [UIColor clearColor];
-    leftbtn.iconSide = JTImageButtonIconSideLeft;
-    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }

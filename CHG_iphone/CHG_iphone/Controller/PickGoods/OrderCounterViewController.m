@@ -32,18 +32,27 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
-    leftbtn.titleColor = [UIColor whiteColor];
     
-    leftbtn.iconColor = [UIColor whiteColor];
-    leftbtn.padding = JTImageButtonPaddingSmall;
-    leftbtn.borderColor = [UIColor clearColor];
-    leftbtn.iconSide = JTImageButtonIconSideLeft;
-    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+//    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+//    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+//    leftbtn.titleColor = [UIColor whiteColor];
+//    
+//    leftbtn.iconColor = [UIColor whiteColor];
+//    leftbtn.padding = JTImageButtonPaddingSmall;
+//    leftbtn.borderColor = [UIColor clearColor];
+//    leftbtn.iconSide = JTImageButtonIconSideLeft;
+//    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     self.title = @"订单柜台";
     [self setupView];
 
@@ -193,10 +202,11 @@
             {
                 cell.receivableNameLab.text =@"应退金额";
                 cell.actualNameLab.text = @"实退金额";
+                cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] doubleValue]] ;
                 
             }
             cell.receivableLab.text =[NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] doubleValue]] ;
-
+            
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
@@ -226,6 +236,8 @@
 
             cell.allprice = allPrice;
             cell.receivablelab.text = [NSString stringWithFormat:@"%.2f",allPrice];
+            cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f",allPrice];
+            cell.favorablelab.text = [NSString stringWithFormat:@"%.2f",0];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
 
@@ -479,7 +491,7 @@
             [MMProgressHUD dismiss];
             if (self.orderSaletype == SaleTypePickingGoods || self.orderSaletype == SaleTypeReturnGoods) {
                 OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-                
+                OrderManagementView.m_returnType = OrderReturnTypeAMember;
                 OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
                 [self.navigationController pushViewController:OrderManagementView animated:YES];
             }

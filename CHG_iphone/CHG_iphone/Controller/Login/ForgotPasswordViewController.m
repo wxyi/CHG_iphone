@@ -54,9 +54,18 @@
         cell = (ForgotPasswordCell*)[[self.ForgotPasswordNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
+    
+//    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 15, 20)];
+//    
+//    cell.userField.leftView = paddingView;
+//    
+//    cell.userField.leftViewMode = UITextFieldViewModeAlways;
+//    
+//    cell.Verificationfield.leftView = paddingView;
+//    cell.Verificationfield.leftViewMode = UITextFieldViewModeAlways;
     cell.userField.text = self.strmobile;
     cell.userField.enabled = NO;
-    cell.userField.backgroundColor = UIColorFromRGB(0xdddddd);
+    cell.userbgView.backgroundColor = UIColorFromRGB(0xdddddd);
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -85,9 +94,35 @@
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(10, 35, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_black_back.png"] forState:UIControlStateNormal];
+//    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+//    [leftButton setBackgroundColor:[UIColor blackColor]];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    [v_header addSubview:leftButton];
+//    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(10, 15, 50, 44)];
+//    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+//    leftbtn.titleColor = UIColorFromRGB(0x171c61);
+//    
+//    leftbtn.iconColor = UIColorFromRGB(0x171c61);
+//    leftbtn.padding = JTImageButtonPaddingSmall;
+//    leftbtn.borderColor = [UIColor clearColor];
+//    leftbtn.iconSide = JTImageButtonIconSideLeft;
+//    [leftbtn addTarget:self action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    [v_header addSubview:leftbtn];
+    
     return v_header;
 }
-
+-(void)goback
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
 -(void)skipPage:(NSInteger)tag
 {
     if (tag == 100) {

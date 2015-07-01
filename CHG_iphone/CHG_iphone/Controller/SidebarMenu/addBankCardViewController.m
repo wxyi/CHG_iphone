@@ -10,7 +10,8 @@
 #import "AddShoppersCell.h"
 #import "SelectBankCardCell.h"
 #import "JTImageLabel.h"
-@interface addBankCardViewController ()
+#import "UIPopoverListView.h"
+@interface addBankCardViewController ()<UIPopoverListViewDataSource, UIPopoverListViewDelegate>
 @property UINib* AddShoppersNib;
 @property UINib* SelectBankCardNib;
 @end
@@ -30,6 +31,9 @@
 }
 -(void)setupView
 {
+    self.bankitems = [[NSMutableArray alloc] init];
+    
+    self.bankitems = [[SQLiteManager sharedInstance] getBankCodeDatas];
     self.items = [NSArray arrayWithObjects:@"持卡人",@"银行卡号",@"开户银行", nil];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
@@ -43,6 +47,7 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -60,6 +65,12 @@
         cell.namelab.text = [self.items objectAtIndex:indexPath.row];
         cell.namelab.textAlignment = NSTextAlignmentRight;
         cell.nametext.placeholder = [self.items objectAtIndex:indexPath.row];
+        
+        if (indexPath.row == 0) {
+            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            cell.nametext.text = config.strUsername;
+        }
+        
         cell.nametext.textAlignment = NSTextAlignmentLeft;
         if (indexPath.row == 1) {
             cell.nametext.keyboardType = UIKeyboardTypeNumberPad;
@@ -120,8 +131,29 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     if (indexPath.row == 2) {
         DLog(@"请选择银行");
+        UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
+        NSString * info = @"";
+        if (Card.text.length == 0) {
+            info = @"请输入银行卡";
+            
+        }
+        else if(Card.text.length < 16 ||Card.text.length > 19)
+        {
+            info = @"银行卡不能小于16位大于19位";
+            
+        }
+        if(info.length != 0)
+        {
+            [SGInfoAlert showInfo:info
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            return;
+        }
+        [self getBankCardList];
     }
 }
 -(void)Confirm
@@ -130,6 +162,9 @@
     [name resignFirstResponder];
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
     [Card resignFirstResponder];
+    
+    UITextField* Cardtype = (UITextField*)[self.view viewWithTag:1012];
+    [Card resignFirstResponder];
     NSString* info;
     if (name.text.length == 0) {
         info = @"请输入姓名";
@@ -137,6 +172,15 @@
     else if(Card.text.length == 0)
     {
         info = @"请输入银行卡";
+    }
+    else if(Card.text.length <16 ||Card.text.length >19)
+    {
+        info = @"银行卡不能小于16位大于19位";
+        
+    }
+    else if ([Cardtype.text isEqualToString:@"请选择银行"])
+    {
+        info = @"请选择银行";
     }
 //    else if ([IdentifierValidator isValid:IdentifierTypeCreditNumber value:Card.text]) {
 //        JTImageLabel *promptlabel = (JTImageLabel*)[self.view viewWithTag:103];
@@ -167,11 +211,12 @@
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiAddBankCard] parameters:parameter];
     NSMutableDictionary *bankpar = [NSMutableDictionary dictionary];
     
-    BanKCode* code = [[BanKCode alloc] init];
-    DLog(@"[textField.text substringToIndex:6] = %@",[Card.text substringToIndex:6]);
-    code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[Card.text substringToIndex:6]];
+//    BanKCode* code = [[BanKCode alloc] init];
+//    DLog(@"[textField.text substringToIndex:6] = %@",[Card.text substringToIndex:6]);
+//    code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[Card.text substringToIndex:6]];
     
-    [bankpar setObject:code.bankCode forKey:@"bankCode"];
+   
+    [bankpar setObject:self.bank.bankCode forKey:@"bankCode"];
     [bankpar setObject:Card.text forKey:@"cardNumber"];
     [bankpar setObject:name.text forKey:@"accountName"];
     
@@ -217,7 +262,7 @@
     if (textField.text.length >=16 &&textField.text.length <=19) {
         BanKCode* code = [[BanKCode alloc] init];
         DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
-        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[textField.text substringToIndex:6]];
+        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[textField.text substringToIndex:6]];
         DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
         UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
         
@@ -226,13 +271,63 @@
         }
         
     }
-    else
-    {
-        [SGInfoAlert showInfo:@"银行卡错误"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
-    }
+//    else
+//    {
+//        [SGInfoAlert showInfo:@"银行卡错误"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.7];
+//    }
     
+}
+
+-(void)getBankCardList
+{
+    UIPopoverListView *poplistview = [[UIPopoverListView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH -100)/2,64,SCREEN_WIDTH-100,SCREEN_HEIGHT -40)];
+    poplistview.delegate = self;
+    poplistview.datasource = self;
+//    poplistview.listView.scrollEnabled = FALSE;
+    [poplistview setTitle:@"请选择银行"];
+    [poplistview show];
+}
+
+
+#pragma mark - UIPopoverListViewDataSource
+
+- (UITableViewCell *)popoverListView:(UIPopoverListView *)popoverListView
+                    cellForIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *identifier = @"cell";
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                    reuseIdentifier:identifier];
+    
+    BanKCode* textbank = [self.bankitems objectAtIndex:indexPath.row];
+    cell.textLabel.text = textbank.bankName;
+    
+    return cell;
+}
+
+- (NSInteger)popoverListView:(UIPopoverListView *)popoverListView
+       numberOfRowsInSection:(NSInteger)section
+{
+    return self.bankitems.count;
+}
+
+#pragma mark - UIPopoverListViewDelegate
+- (void)popoverListView:(UIPopoverListView *)popoverListView
+     didSelectIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"%s : %d", __func__, indexPath.row);
+    // your code here
+    
+    self.bank = [self.bankitems objectAtIndex:indexPath.row];
+    UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
+    textlab.text = self.bank.bankName;
+}
+
+- (CGFloat)popoverListView:(UIPopoverListView *)popoverListView
+   heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40;
 }
 @end

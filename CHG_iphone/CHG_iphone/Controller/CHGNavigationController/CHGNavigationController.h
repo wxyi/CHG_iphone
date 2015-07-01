@@ -11,6 +11,7 @@
 @interface CHGNavigationController : UINavigationController
 - (void)showMenu;
 - (void)goback;
+- (void)gobacktoSuccess;
 -(void)skipPage;
 -(void)RegisteSuccessful;
 @end

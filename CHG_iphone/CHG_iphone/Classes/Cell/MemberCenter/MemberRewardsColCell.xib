@@ -21,7 +21,7 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oF3-eK-E48">
                         <rect key="frame" x="10" y="35" width="130" height="44"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="27"/>
                         <color key="textColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>

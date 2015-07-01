@@ -131,7 +131,7 @@
             cell1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
-        self.page = [[LKPageView alloc]initWithPathStringArray:self.pagearray andFrame:CGRectMake(0, -10, SCREEN_WIDTH, 128)];
+        self.page = [[LKPageView alloc]initWithPathStringArray:self.pagearray andFrame:CGRectMake(0, -10, SCREEN_WIDTH, SCREEN_WIDTH*0.4)];
         //        self.page.delegate = self;
         [cell1.contentView addSubview:self.page];        //测试
         return cell1;
@@ -169,7 +169,7 @@
             
         }
 //        cell.backgroundColor = UIColorFromRGB(0x646464);
-        cell.nameLab.text = @"奖励总额(元)";
+        cell.nameLab.text = @"奖励余额(元)";
         cell.amountLab.text = [NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardTotalAmount"] intValue]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -184,7 +184,7 @@
 
         NSArray* itme = [NSArray arrayWithObjects:
                          [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardSaleAmount"] intValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"合作商分账奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardPartnerAmount"] intValue]],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardPartnerAmount"] intValue]],@"count", nil], nil];
 
         [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -219,7 +219,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return 128;
+        return SCREEN_WIDTH*0.4;
     }
     else if(indexPath.row == 1)
         return 48;
@@ -300,9 +300,10 @@
         case 2:
         case 3:
         {
-            DLog(@"订单管理");
+//            DLog(@"订单管理");
             
             IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
+            
             if (selectType == 2) {
                 IdentificationView.m_MenuType = MenuTypePresell;
             }
@@ -325,6 +326,7 @@
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
 //            OrderManagementView.strCustId =@"" ;
             OrderManagementView.ManagementTyep = OrderManagementTypeAll;
+            OrderManagementView.m_returnType = OrderReturnTypeHomePage;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             
             break;

@@ -23,6 +23,7 @@
                             <constraint firstAttribute="width" constant="70" id="ztc-nD-1fY"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="订单金额:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i4T-0v-jWJ">
@@ -34,7 +35,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7dx-Rq-nJV">
                         <rect key="frame" x="80" y="24" width="80" height="30"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJq-zI-khM">
@@ -44,7 +45,7 @@
                             <constraint firstAttribute="width" constant="150" id="xqF-FJ-gVW"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JUU-dx-hwD">
@@ -128,6 +129,7 @@
                     <constraint firstItem="hgg-uB-zNF" firstAttribute="top" secondItem="xMu-Fm-Rf0" secondAttribute="bottom" id="SBZ-v8-Jnl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="JUU-dx-hwD" secondAttribute="trailing" constant="12" id="SH2-qH-Lgt"/>
                     <constraint firstItem="xMu-Fm-Rf0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="VA4-cI-5gh"/>
+                    <constraint firstItem="JUU-dx-hwD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="90" id="We6-i8-CpO"/>
                     <constraint firstItem="i4T-0v-jWJ" firstAttribute="baseline" secondItem="JUU-dx-hwD" secondAttribute="baseline" id="Wod-Ut-xPB"/>
                     <constraint firstItem="Z2l-kp-7SG" firstAttribute="baseline" secondItem="32O-WB-hB8" secondAttribute="baseline" id="Y1L-YG-Bje"/>
                     <constraint firstAttribute="trailingMargin" secondItem="rJq-zI-khM" secondAttribute="trailing" constant="2" id="ZTe-kf-6F0"/>

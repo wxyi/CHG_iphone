@@ -85,7 +85,22 @@
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(10, 35, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_black_back.png"] forState:UIControlStateNormal];
+//    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    //    [leftButton setBackgroundColor:[UIColor blackColor]];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    [v_header addSubview:leftButton];
     return v_header;
+}
+-(void)goback
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 -(void)skipPage:(NSInteger)tag
 {
@@ -157,9 +172,9 @@
     
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    [param setObject:config.strUsername forKey:@"userName"];
-    [param setObject:[[NSObject md5:passfield1.text] uppercaseString]forKey:@"newpwd"];
+//    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+//    [param setObject:config.strUsername forKey:@"userName"];
+    [param setObject:[[NSObject md5:passfield1.text] uppercaseString]forKey:@"newPwd"];
     [param setObject:self.strCheckCode forKey:@"checkCode"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
     

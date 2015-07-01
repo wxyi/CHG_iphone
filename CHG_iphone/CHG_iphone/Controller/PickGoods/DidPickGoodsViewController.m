@@ -52,7 +52,7 @@
 //    rect.size.height = SCREEN_HEIGHT - 80;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-80);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
@@ -60,7 +60,7 @@
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
     
     
-    self.returnbtn.frame = CGRectMake(0, SCREEN_WIDTH -80, SCREEN_WIDTH, 40);
+    self.returnbtn.frame = CGRectMake(0, SCREEN_HEIGHT -80, SCREEN_WIDTH, 40);
     if (self.ManagementTyep == OrderManagementTypeAll) {
 //        CGRect rect = self.tableview.frame;
 //        rect.size.height = rect.size.height + 40;

@@ -12,6 +12,15 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    
+//    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 15, 20)];
+//    
+//    self.userField.leftView = paddingView;
+//    
+//    self.userField.leftViewMode = UITextFieldViewModeAlways;
+//    
+//    self.Verificationfield.leftView = paddingView;
+//    self.Verificationfield.leftViewMode = UITextFieldViewModeAlways;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -29,7 +38,10 @@
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender
 {
     if (self.userField.text.length == 0) {
-        return;
+        [SGInfoAlert showInfo:@"请输入手机号码"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self
+                     vertical:0.7];
     }
     
     

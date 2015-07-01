@@ -154,11 +154,11 @@ static SQLiteManager *sSharedInstance;
     }];
 }
 #pragma make 根据cardcode查找银行卡名
--(BanKCode*)getBankCodeDataByCardCode:(NSString*)cardCode
+-(BanKCode*)getBankCodeDataByCardNumber:(NSString*)cardNumber
 {
     BanKCode *mData=[[BanKCode alloc]init];
     [_dbQueue inDatabase:^(FMDatabase *db) {
-        FMResultSet *rs=[db executeQuery:Q_SQL_BankCodeByCode,cardCode];
+        FMResultSet *rs=[db executeQuery:Q_SQL_BankCodeByNumber,cardNumber];
 
         if(rs.next){
             mData.bankName =[rs stringForColumn:@"bankName"];
@@ -171,7 +171,23 @@ static SQLiteManager *sSharedInstance;
     }];
     return mData;
 }
-
+-(BanKCode*)getBankCodeDataByCardCode:(NSString*)cardCode
+{
+    BanKCode *mData=[[BanKCode alloc]init];
+    [_dbQueue inDatabase:^(FMDatabase *db) {
+        FMResultSet *rs=[db executeQuery:Q_SQL_BankCodeByCode,cardCode];
+        
+        if(rs.next){
+            mData.bankName =[rs stringForColumn:@"bankName"];
+            mData.bankCode =[rs stringForColumn:@"bankCode"];
+            mData.cardCodeList =[rs stringForColumn:@"cardCodeList"];
+            
+        }
+        [rs close];
+        
+    }];
+    return mData;
+}
 -(NSMutableArray*) getProvinceCodeData
 {
     __block NSMutableArray *list;

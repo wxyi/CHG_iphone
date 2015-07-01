@@ -35,4 +35,6 @@
 @dynamic promoListUpdateTime;
 
 @dynamic strImagePath;
+
+@dynamic strUserName;
 @end

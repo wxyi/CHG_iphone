@@ -40,7 +40,7 @@
                 <constraint firstAttribute="bottom" secondItem="o3b-nl-Tt6" secondAttribute="bottom" constant="34" id="l5e-TO-w5I"/>
                 <constraint firstAttribute="trailing" secondItem="LyU-cV-7Ph" secondAttribute="trailing" id="v0c-8F-ASg"/>
             </constraints>
-            <size key="customSize" width="50" height="72"/>
+            <size key="customSize" width="55" height="292"/>
             <connections>
                 <outlet property="imageName" destination="LyU-cV-7Ph" id="tPy-T3-BF9"/>
                 <outlet property="imageView" destination="o3b-nl-Tt6" id="KfA-Gq-b14"/>

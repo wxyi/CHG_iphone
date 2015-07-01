@@ -40,6 +40,8 @@
     [timer invalidate];
     [_session removeOutput:self.output];
     [_session removeInput:self.input];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 //    [self.ZBarReader stop];
 //    self.is_have = NO;
 //    self.is_Anmotion = NO;
@@ -49,9 +51,23 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupCamera];
-    [_session startRunning];
-    self.isfinish = NO;
+    
+    
+    NSString *mediaType = AVMediaTypeVideo;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
+        NSLog(@"相机权限受限");
+        
+        NSString *tips = @"\n请授权本App可以访问相机\n设置方式:手机设置->隐私->相机\n允许本App使用相机";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"扫描启动失败！" message:tips delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] ;
+        [alert show];
+        return;
+    }
+    else{
+        [self setupCamera];
+        [_session startRunning];
+        self.isfinish = NO;
+    }
 //    self.is_have = NO;
 //    self.isScan = NO;
 //    self.is_Anmotion = YES;
@@ -70,7 +86,20 @@
 //    rect.size.height = SCREEN_HEIGHT - 40;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
+    //增加监听，当键盘出现或改变时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
     
+    //增加监听，当键退出时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     
@@ -78,7 +107,7 @@
     self.IdentificationNib = [UINib nibWithNibName:@"IdentificationCell" bundle:nil];
     self.IdentUserInfoNib = [UINib nibWithNibName:@"IdentUserInfoCell" bundle:nil];
     
-    
+    self.nextbtn.frame = CGRectMake(0, SCREEN_HEIGHT-40, SCREEN_WIDTH, 40);
 //    rect = self.nextbtn.frame;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
 //    self.nextbtn.frame = rect;
@@ -272,33 +301,33 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (self.isScan) {
-//        return 90;
-//    }
-    return SCREEN_HEIGHT -255 -40 ;
+    if (self.isScan) {
+        return 90;
+    }
+    return 40 ;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 255;
 }
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 40;
-}
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
-    UIButton* nextBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    nextBtn.frame = v_footer.frame;
-    [nextBtn.layer setMasksToBounds:YES];
-    [nextBtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
-    [nextBtn setBackgroundColor:UIColorFromRGB(0x171c61)];
-    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
-    [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [nextBtn addTarget:self action:@selector(IdentificationMember:) forControlEvents:UIControlEventTouchUpInside];
-    [v_footer addSubview:nextBtn];
-    return v_footer;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return 40;
+//}
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
+//    UIButton* nextBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    nextBtn.frame = v_footer.frame;
+//    [nextBtn.layer setMasksToBounds:YES];
+//    [nextBtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
+//    [nextBtn setBackgroundColor:UIColorFromRGB(0x171c61)];
+//    [nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
+//    [nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [nextBtn addTarget:self action:@selector(IdentificationMember:) forControlEvents:UIControlEventTouchUpInside];
+//    [v_footer addSubview:nextBtn];
+//    return v_footer;
+//}
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 255)];
@@ -326,41 +355,50 @@
     
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
     // Device
-    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-    // Input
-    _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
-    
-    // Output
-    _output = [[AVCaptureMetadataOutput alloc]init];
-    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-    
-    // Session
-    _session = [[AVCaptureSession alloc]init];
-    [_session setSessionPreset:AVCaptureSessionPresetHigh];
-    if ([_session canAddInput:self.input])
-    {
-        [_session addInput:self.input];
+    NSString *mediaType = AVMediaTypeVideo;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if(authStatus != AVAuthorizationStatusRestricted && authStatus != AVAuthorizationStatusDenied){
+        NSLog(@"相机权限受限");
+        _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        
+        // Input
+        _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
+        
+        // Output
+        _output = [[AVCaptureMetadataOutput alloc]init];
+        [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+        
+        // Session
+        _session = [[AVCaptureSession alloc]init];
+        [_session setSessionPreset:AVCaptureSessionPresetHigh];
+        if ([_session canAddInput:self.input])
+        {
+            [_session addInput:self.input];
+        }
+        
+        if ([_session canAddOutput:self.output])
+        {
+            [_session addOutput:self.output];
+        }
+        
+        // 条码类型 AVMetadataObjectTypeQRCode
+        _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
+        
+        // Preview
+        _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
+        _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+        [v_header.layer insertSublayer:self.preview atIndex:0];
+        [_session startRunning];
     }
+
     
-    if ([_session canAddOutput:self.output])
-    {
-        [_session addOutput:self.output];
-    }
-    
-    // 条码类型 AVMetadataObjectTypeQRCode
-    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
-    
-    // Preview
-    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
-    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
-    [v_header.layer insertSublayer:self.preview atIndex:0];
     
 //    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
     
     //将触摸事件添加到当前view
-    [_session startRunning];
+    
     UIImageView *topeview=[[UIImageView alloc] init];
     topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
     topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
@@ -568,7 +606,7 @@
         {
             DLog(@"订单管理")
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            
+            OrderManagementView.m_returnType = OrderReturnTypeHomePage;
             OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             break;
@@ -743,6 +781,107 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     self.isScan = NO;
+//     [self animateTextField: textField up: YES];
+}
+
+
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+
+{
+    
+//    [self animateTextField: textField up: NO];
+    
+}
+
+
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+
+{
+    
+    const int movementDistance = 80; // tweak as needed
+    
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    
+    [UIView setAnimationDuration: movementDuration];
+    
+    CGRect rect = self.tableview.frame;
+    rect.origin.y = rect.origin.y + movement;
+    self.tableview.frame = rect;
+    DLog(@"frame = %@",NSStringFromCGRect(self.tableview.frame));
+    [UIView commitAnimations];
+    
+}
+
+
+//当键盘出现或改变时调用
+- (void)keyboardWillShow:(NSNotification *)aNotification
+{
+    //获取键盘的高度
+    NSDictionary *userInfo = [aNotification userInfo];
+    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    self.keyHeight = keyboardRect.size.height;
+    
+//    const int movementDistance = self.keyHeight; // tweak as needed
+    
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    
+    
+//    int movement = (up ? -movementDistance : movementDistance);
+    
+    
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    
+    [UIView setAnimationDuration: movementDuration];
+    
+    CGRect rect = self.tableview.frame;
+    rect.origin.y = rect.origin.y - self.keyHeight;
+    self.tableview.frame = rect;
+    
+    rect = self.nextbtn.frame;
+    rect.origin.y = rect.origin.y - self.keyHeight;
+    self.nextbtn.frame = rect;
+    
+    DLog(@"frame = %@",NSStringFromCGRect(self.nextbtn.frame));
+    [UIView commitAnimations];
+}
+
+//当键退出时调用
+- (void)keyboardWillHide:(NSNotification *)aNotification
+{
+    const float movementDuration = 0.3f; // tweak as needed
+    [UIView beginAnimations: @"anim" context: nil];
+    
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    
+    [UIView setAnimationDuration: movementDuration];
+    
+    CGRect rect = self.tableview.frame;
+    rect.origin.y = rect.origin.y + self.keyHeight;
+    self.tableview.frame = rect;
+    
+    rect = self.nextbtn.frame;
+    rect.origin.y = rect.origin.y + self.keyHeight;
+    self.nextbtn.frame = rect;
+    DLog(@"frame = %@",NSStringFromCGRect(self.nextbtn.frame));
+    [UIView commitAnimations];
 }
 //-(void)httpScanInfo
 //{

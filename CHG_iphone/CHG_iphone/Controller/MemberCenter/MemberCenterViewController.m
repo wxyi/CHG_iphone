@@ -130,7 +130,7 @@
     }
     else
     {
-        return 72;
+        return 71;
     }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -142,6 +142,7 @@
     DLog(@"会员识别");
     IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
     IdentificationView.m_MenuType = MenuTypeMemberCenter;
+    
     [self.navigationController pushViewController:IdentificationView animated:YES];
 }
 -(void)httpGetCustCenter

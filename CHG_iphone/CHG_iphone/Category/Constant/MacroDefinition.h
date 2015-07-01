@@ -24,7 +24,7 @@
 #define PAGESIZE @"20"
 //-------------------获取设备大小-------------------------
 
-
+#define ACCESS_TOKEN_FAILURE @"access_token_failure"
 // block self
 #define WEAKSELF typeof(self) __weak weakSelf = self;
 
@@ -346,4 +346,12 @@ typedef enum
     OrderManagementTypeSingle, //会员订单管理
     
 }OrderManagementType;
+
+
+typedef enum
+{
+    OrderReturnTypeAMember = 0,//门店订单管理
+    OrderReturnTypeHomePage, //会员订单管理
+    
+}OrderReturnType;
 #endif

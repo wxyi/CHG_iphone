@@ -28,11 +28,11 @@
 
 -(void)setupView
 {
-    self.title = [self pagetitle];
+//    self.title = [self pagetitle];
     
     self.isSkip = NO;
     [self getCurrentData];
-    
+    self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     self.slideSwitchView.backgroundColor = UIColorFromRGB(0x171c61);
     //    self.slideSwitchView.frame = self.view.bounds;

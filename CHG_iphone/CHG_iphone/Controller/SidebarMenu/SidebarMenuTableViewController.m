@@ -31,7 +31,7 @@
     self.tableView.scrollEnabled = NO;
 //    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
    
-//    self.tableView.opaque = NO;
+    self.tableView.opaque = NO;
     
     [NSObject setExtraCellLineHidden:self.tableView];
 //    self.tableView.backgroundColor = [UIColor clearColor];
@@ -45,19 +45,23 @@
         imageView.layer.rasterizationScale = [UIScreen mainScreen].scale;
         imageView.layer.shouldRasterize = YES;
         imageView.clipsToBounds = YES;
+        [view addSubview:imageView];
         
+        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        if (![config.Roles isEqualToString:@"PARTNER"]) {
+            UIButton *Scanbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 95, 72, 72)];
+            Scanbtn.backgroundColor = [UIColor whiteColor];
+            Scanbtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+            
+            [Scanbtn setImage:[QRCodeGenerator qrImageForString:[ConfigManager sharedInstance].strdimensionalCodeUrl imageSize:72] forState:UIControlStateNormal];
+            Scanbtn.layer.rasterizationScale = [UIScreen mainScreen].scale;
+            Scanbtn.layer.shouldRasterize = YES;
+            Scanbtn.clipsToBounds = YES;
+            [Scanbtn addTarget:self action:@selector(showQrCode)
+              forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:Scanbtn];
+        }
         
-        
-        UIButton *Scanbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 95, 72, 72)];
-        Scanbtn.backgroundColor = [UIColor whiteColor];
-        Scanbtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        
-        [Scanbtn setImage:[QRCodeGenerator qrImageForString:[ConfigManager sharedInstance].strdimensionalCodeUrl imageSize:72] forState:UIControlStateNormal];
-        Scanbtn.layer.rasterizationScale = [UIScreen mainScreen].scale;
-        Scanbtn.layer.shouldRasterize = YES;
-        Scanbtn.clipsToBounds = YES;
-        [Scanbtn addTarget:self action:@selector(showQrCode)
-         forControlEvents:UIControlEventTouchUpInside];
 //        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 150, 0, 24)];
 //        UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
 //        label.text = cfg.strUsername;
@@ -67,8 +71,8 @@
 //        [label sizeToFit];
 //        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 //        
-        [view addSubview:imageView];
-        [view addSubview:Scanbtn];
+        
+        
         view;
     });
 }

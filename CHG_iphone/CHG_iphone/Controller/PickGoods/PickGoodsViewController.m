@@ -32,6 +32,7 @@
 }
 -(void)setupView
 {
+    self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     //    self.slideSwitchView.frame = self.view.bounds;
     

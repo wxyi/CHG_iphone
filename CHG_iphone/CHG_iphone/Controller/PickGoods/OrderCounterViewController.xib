@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -18,13 +18,10 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lke-Px-jhz">
+                <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Lke-Px-jhz">
                     <rect key="frame" x="0.0" y="528" width="160" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.96470588235294119" green="0.6705882352941176" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="2BY-Wq-z1i"/>
-                        <constraint firstAttribute="width" constant="160" id="hcG-UJ-cND"/>
-                    </constraints>
                     <state key="normal" title="继续扫描">
                         <color key="titleColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -33,13 +30,10 @@
                         <action selector="OrderCounterView:" destination="-1" eventType="touchDown" id="UOg-Ax-dl9"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="105" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="47i-gD-6Sh">
+                <button opaque="NO" tag="105" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="47i-gD-6Sh">
                     <rect key="frame" x="160" y="528" width="160" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.090196078430000007" green="0.10980392160000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="5Kd-jO-xtV"/>
-                        <constraint firstAttribute="width" constant="160" id="Vp8-b4-dgR"/>
-                    </constraints>
                     <state key="normal" title="确认订单">
                         <color key="titleColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -48,25 +42,13 @@
                         <action selector="OrderCounterView:" destination="-1" eventType="touchDown" id="vmQ-KO-xwV"/>
                     </connections>
                 </button>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="zCl-7U-ZWd" customClass="TPKeyboardAvoidingTableView">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="zCl-7U-ZWd" customClass="TPKeyboardAvoidingTableView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="528" id="ITk-W9-JEA"/>
-                    </constraints>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="Lke-Px-jhz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0Oq-bH-q0z"/>
-                <constraint firstItem="zCl-7U-ZWd" firstAttribute="leading" secondItem="Lke-Px-jhz" secondAttribute="leading" id="8Tk-5H-wF6"/>
-                <constraint firstItem="zCl-7U-ZWd" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="GIk-wJ-daY"/>
-                <constraint firstItem="Lke-Px-jhz" firstAttribute="width" secondItem="47i-gD-6Sh" secondAttribute="width" id="R45-cO-PCD"/>
-                <constraint firstAttribute="trailing" secondItem="47i-gD-6Sh" secondAttribute="trailing" id="SsM-mJ-c7e"/>
-                <constraint firstAttribute="bottom" secondItem="47i-gD-6Sh" secondAttribute="bottom" id="fX1-eN-BYX"/>
-                <constraint firstAttribute="bottom" secondItem="Lke-Px-jhz" secondAttribute="bottom" id="glp-Pp-SJf"/>
-                <constraint firstItem="zCl-7U-ZWd" firstAttribute="trailing" secondItem="47i-gD-6Sh" secondAttribute="trailing" id="s27-O2-jZ7"/>
-            </constraints>
             <point key="canvasLocation" x="269" y="199"/>
         </view>
     </objects>

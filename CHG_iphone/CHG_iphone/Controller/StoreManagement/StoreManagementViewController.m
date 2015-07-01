@@ -158,7 +158,7 @@
     REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
     frostedViewController.direction = REFrostedViewControllerDirectionLeft;
     frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
-    
+    frostedViewController.limitMenuViewSize = YES;
     
     [self presentViewController:frostedViewController animated:YES completion:^{
         [MMProgressHUD dismiss];

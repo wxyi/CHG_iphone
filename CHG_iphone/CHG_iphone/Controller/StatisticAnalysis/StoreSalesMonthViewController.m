@@ -164,13 +164,14 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
-    else
-    {
-        return 10;
-    }
+    return 10;
+//    if (section == 0) {
+//        return 1;
+//    }
+//    else
+//    {
+//        return 10;
+//    }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -265,12 +266,20 @@
             NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
 
             int month = [dateComponent month];
+            int year = [dateComponent year];
             if ([self.strMonth intValue] != month) {
                 self.nameLab.text = [NSString stringWithFormat:@"%@年%@月%@",self.strYear,self.strMonth,[self GetCurrentTitle]];
             }
             else
             {
-                self.nameLab.text = self.strtitle;
+                if ([self.strYear intValue] != year) {
+                    self.nameLab.text = [NSString stringWithFormat:@"%@年%@月%@",self.strYear,self.strMonth,[self GetCurrentTitle]];
+                }
+                else
+                {
+                    self.nameLab.text = self.strtitle;
+                }
+                
             }
             
             

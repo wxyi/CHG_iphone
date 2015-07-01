@@ -12,6 +12,7 @@
 #import "GoodsDetailsViewController.h"
 #import "DidPickGoodsViewController.h"
 #import "CompletedOrderDetailsViewController.h"
+#import "successfulIdentifyViewController.h"
 @interface OrderManagementViewController ()
 
 @end
@@ -45,17 +46,33 @@
     
     
     
-    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 7, 50, 30)];
-    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
-    leftbtn.titleColor = [UIColor whiteColor];
+//    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 7, 50, 30)];
+//    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+//    leftbtn.titleColor = [UIColor whiteColor];
+//    
+//    leftbtn.iconColor = [UIColor whiteColor];
+//    leftbtn.padding = JTImageButtonPaddingSmall;
+//    leftbtn.borderColor = [UIColor clearColor];
+//    leftbtn.iconSide = JTImageButtonIconSideLeft;
+//    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    leftbtn.iconColor = [UIColor whiteColor];
-    leftbtn.padding = JTImageButtonPaddingSmall;
-    leftbtn.borderColor = [UIColor clearColor];
-    leftbtn.iconSide = JTImageButtonIconSideLeft;
-    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    if (self.m_returnType == OrderReturnTypeAMember) {
+        
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else
+    {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
@@ -68,8 +85,14 @@
 //    OrderQueryViewController* OrderQueryView = [[OrderQueryViewController alloc] initWithNibName:@"OrderQueryViewController" bundle:nil];
 //    [self.navigationController pushViewController:OrderQueryView animated:YES];
 }
+//-(void)gobacktoSuccess
+//{
+//    successfulIdentifyViewController* successView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
+//    [self.navigationController popToViewController:successView animated:YES];
+//}
 -(void)setupView
 {
+    self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     if (self.ManagementTyep == OrderManagementTypeAll) {
         [ConfigManager sharedInstance].strCustId = @"";
     }

@@ -27,18 +27,54 @@
     }
     
     //导航
-    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
-    leftbtn.titleColor = [UIColor whiteColor];
+//    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+//    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+//    leftbtn.titleColor = [UIColor whiteColor];
+//    
+//    leftbtn.iconColor = [UIColor whiteColor];
+//    leftbtn.padding = JTImageButtonPaddingSmall;
+//    leftbtn.borderColor = [UIColor clearColor];
+//    leftbtn.iconSide = JTImageButtonIconSideLeft;
+//    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     
-    leftbtn.iconColor = [UIColor whiteColor];
-    leftbtn.padding = JTImageButtonPaddingSmall;
-    leftbtn.borderColor = [UIColor clearColor];
-    leftbtn.iconSide = JTImageButtonIconSideLeft;
-    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     self.items = [[NSMutableArray alloc] init];
+    
+    
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
+    
+    //将触摸事件添加到当前view
+    
+    UIImageView *topeview=[[UIImageView alloc] init];
+    topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
+    [topeview addGestureRecognizer:tapGestureRecognizer];
+    UIImageView *lefteview=[[UIImageView alloc] init];
+    lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+    [lefteview addGestureRecognizer:tapGestureRecognizer];
+    UIImageView *righteview=[[UIImageView alloc] init];
+    righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
+    [righteview addGestureRecognizer:tapGestureRecognizer];
+    UIImageView *bottomview=[[UIImageView alloc] init];
+    bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
+    bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
+    [bottomview addGestureRecognizer:tapGestureRecognizer];
+    [self.view addSubview:topeview];
+    [self.view addSubview:lefteview];
+    [self.view addSubview:righteview];
+    [self.view addSubview:bottomview];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 
@@ -123,7 +159,22 @@
     [super viewWillAppear:animated];
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
     timer1 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
-    [self setupCamera];
+    
+    NSString *mediaType = AVMediaTypeVideo;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
+        NSLog(@"相机权限受限");
+        
+        NSString *tips = @"\n请授权本App可以访问相机\n设置方式:手机设置->隐私->相机\n允许本App使用相机";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"扫描启动失败！" message:tips delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil] ;
+        [alert show];
+        
+    }
+    else
+    {
+        [self setupCamera];
+    }
+    
 }
 
 
@@ -722,6 +773,8 @@
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
         
             [MMProgressHUD dismiss];
+            
+            
             OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
             OrderCounterView.orderSaletype = weakSelf.orderSaletype;
             OrderCounterView.items = weakSelf.items;
@@ -732,6 +785,13 @@
         else
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
+            if (self.orderSaletype == SaleTypePickingGoods) {
+                OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
+                OrderCounterView.orderSaletype = weakSelf.orderSaletype;
+                OrderCounterView.items = weakSelf.items;
+                OrderCounterView.priceDict = [data objectForKey:@"datas"];
+                [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
+            }
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKey:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
@@ -792,30 +852,7 @@
     _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
     [self.view.layer insertSublayer:self.preview atIndex:0];
     
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
     
-    //将触摸事件添加到当前view
-    
-    UIImageView *topeview=[[UIImageView alloc] init];
-    topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
-    [topeview addGestureRecognizer:tapGestureRecognizer];
-    UIImageView *lefteview=[[UIImageView alloc] init];
-    lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
-    [lefteview addGestureRecognizer:tapGestureRecognizer];
-    UIImageView *righteview=[[UIImageView alloc] init];
-    righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
-    [righteview addGestureRecognizer:tapGestureRecognizer];
-    UIImageView *bottomview=[[UIImageView alloc] init];
-    bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
-    bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
-    [bottomview addGestureRecognizer:tapGestureRecognizer];
-    [self.view addSubview:topeview];
-    [self.view addSubview:lefteview];
-    [self.view addSubview:righteview];
-    [self.view addSubview:bottomview];
     // Start
     [_session startRunning];
 }

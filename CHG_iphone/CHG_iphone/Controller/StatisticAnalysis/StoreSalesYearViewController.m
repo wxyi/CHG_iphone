@@ -209,7 +209,7 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfMonth] parameters:parameter];
+            self.strUrl = [NSObject URLWithBaseString:[APIAddress ApiGetAwardPartnerStatOfYear] parameters:parameter];
             
             break;
         }

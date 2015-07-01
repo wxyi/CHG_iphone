@@ -115,6 +115,7 @@
     }
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
     StoreSalesView.statisticalType = type;
+    StoreSalesView.title = [self.items objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:StoreSalesView animated:YES];
 
 }

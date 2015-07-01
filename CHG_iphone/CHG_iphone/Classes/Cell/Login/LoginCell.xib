@@ -18,23 +18,40 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nDm-V7-jud">
                         <rect key="frame" x="40" y="0.0" width="240" height="80"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" tag="1011" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="账号" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Xy-KW-Hzs">
+                            <textField opaque="NO" clipsSubviews="YES" tag="1011" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="账号" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Xy-KW-Hzs">
                                 <rect key="frame" x="15" y="0.0" width="210" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="1Dp-LE-shE"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" tag="1012" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="密码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dCm-Xb-AJ5">
+                            <textField opaque="NO" clipsSubviews="YES" tag="1012" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="密码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dCm-Xb-AJ5">
                                 <rect key="frame" x="15" y="40" width="210" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="EYX-0d-pAc"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="line_x.png" translatesAutoresizingMaskIntoConstraints="NO" id="Xbo-7x-Xm2">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="line_x.png" translatesAutoresizingMaskIntoConstraints="NO" id="Xbo-7x-Xm2">
                                 <rect key="frame" x="0.0" y="40" width="240" height="1"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8Xy-KW-Hzs" secondAttribute="trailing" constant="15" id="AZO-5L-n9t"/>
+                            <constraint firstAttribute="bottom" secondItem="dCm-Xb-AJ5" secondAttribute="bottom" id="MKk-cf-GNN"/>
+                            <constraint firstItem="Xbo-7x-Xm2" firstAttribute="leading" secondItem="nDm-V7-jud" secondAttribute="leading" id="dXg-tz-Pjl"/>
+                            <constraint firstItem="dCm-Xb-AJ5" firstAttribute="top" secondItem="Xbo-7x-Xm2" secondAttribute="top" id="hHG-8r-dKp"/>
+                            <constraint firstAttribute="trailing" secondItem="Xbo-7x-Xm2" secondAttribute="trailing" id="jGk-ws-Rxp"/>
+                            <constraint firstAttribute="trailing" secondItem="dCm-Xb-AJ5" secondAttribute="trailing" constant="15" id="jaD-63-euf"/>
+                            <constraint firstItem="dCm-Xb-AJ5" firstAttribute="leading" secondItem="nDm-V7-jud" secondAttribute="leading" constant="15" id="lvN-Og-io8"/>
+                            <constraint firstItem="8Xy-KW-Hzs" firstAttribute="leading" secondItem="nDm-V7-jud" secondAttribute="leading" constant="15" id="obH-nZ-L5J"/>
+                            <constraint firstItem="dCm-Xb-AJ5" firstAttribute="top" secondItem="8Xy-KW-Hzs" secondAttribute="bottom" id="pLh-qw-7tk"/>
+                        </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">

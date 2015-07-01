@@ -36,7 +36,7 @@
     //    }
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setItemSize:CGSizeMake((SCREEN_WIDTH-2)/3, 72)];
-    [flowLayout setMinimumLineSpacing:1.f];
+    [flowLayout setMinimumLineSpacing:0.f];
     [flowLayout setMinimumInteritemSpacing:0.f];
     [self.MenuCollection setCollectionViewLayout:flowLayout];
     

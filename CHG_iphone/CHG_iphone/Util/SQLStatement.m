@@ -16,7 +16,9 @@ NSString* const R_SQL_BankCode=@"REPLACE INTO tbl_bankcode( `bankName` , `bankCo
 
 NSString* const Q_SQL_BankCode=@"SELECT * FROM tbl_bankcode";
 
-NSString* const Q_SQL_BankCodeByCode=@"SELECT * FROM tbl_bankcode where cardCodeList  like  '%'||?||'%' ";
+NSString* const Q_SQL_BankCodeByNumber=@"SELECT * FROM tbl_bankcode where cardCodeList  like  '%'||?||'%' ";
+
+NSString* const Q_SQL_BankCodeByCode=@"SELECT * FROM tbl_bankcode where bankCode = ? ";
 
 NSString* const D_SQL_BankCodeByCode = @"DELETE FROM tbl_bankcode where bankCode = ? ";
 NSString* const D_SQL_BankCode = @"DELETE FROM tbl_bankcode ";

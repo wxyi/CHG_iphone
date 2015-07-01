@@ -23,18 +23,26 @@
     [super viewDidLoad];
     self.title = @"会员信息";
     
-    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
-    leftbtn.titleColor = [UIColor whiteColor];
+//    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+//    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
+//    leftbtn.titleColor = [UIColor whiteColor];
+//    
+//    leftbtn.iconColor = [UIColor whiteColor];
+//    leftbtn.padding = JTImageButtonPaddingSmall;
+//    leftbtn.borderColor = [UIColor clearColor];
+//    leftbtn.iconSide = JTImageButtonIconSideLeft;
+//    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
+//    
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    leftbtn.iconColor = [UIColor whiteColor];
-    leftbtn.padding = JTImageButtonPaddingSmall;
-    leftbtn.borderColor = [UIColor clearColor];
-    leftbtn.iconSide = JTImageButtonIconSideLeft;
-    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
-    
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -94,7 +102,7 @@
         NSArray* items = [NSArray arrayWithObjects:
                           [NSDictionary dictionaryWithObjectsAndKeys:@"selling_goods.png",@"icon",@"卖货",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
-                          [NSDictionary dictionaryWithObjectsAndKeys:@"btn_Member_order.png",@"icon",@"订单管理",@"title", nil],
+                          [NSDictionary dictionaryWithObjectsAndKeys:@"btn_Member_order.png",@"icon",@"会员订单",@"title", nil],
                           nil];
         cell.height = 105;
         [cell setupView:[items mutableCopy]];
@@ -164,7 +172,7 @@
         case 2:
         {
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-            
+            OrderManagementView.m_returnType = OrderReturnTypeAMember;
             OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
             break;

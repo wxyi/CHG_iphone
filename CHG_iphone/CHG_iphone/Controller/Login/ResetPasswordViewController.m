@@ -87,9 +87,26 @@
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
     
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(10, 35, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_black_back.png"] forState:UIControlStateNormal];
+//    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    //    [leftButton setBackgroundColor:[UIColor blackColor]];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    [v_header addSubview:leftButton];
+    
+//    [v_header addSubview:leftbtn];
+    
     return v_header;
 }
-
+-(void)goback
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
 -(void)skipPage:(NSInteger)tag
 {
     if (tag == 100) {
@@ -150,9 +167,9 @@
 {
     UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:self.strmobile forKey:@"userName"];
+    [parameter setObject:[ConfigManager sharedInstance].strUserName forKey:@"userName"];
     [parameter setObject:self.strcheckCode forKey:@"checkCode"];
-    [parameter setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newpwd"];
+    [parameter setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newPwd"];
     
    
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiForgetPassword] parameters:nil];
@@ -163,21 +180,23 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             
-            [MMProgressHUD dismiss];
-            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-            if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
-                
-                
-                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
-                [self presentViewController:StoreManagementView animated:YES completion:^{
-                    
-                }];
-            }
-            else
-            {
-                [self setupHomePageViewController];
-            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
+                                                                object:nil];
+//            [MMProgressHUD dismiss];
+//            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+//            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+//            if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
+//                
+//                
+//                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+//                [self presentViewController:StoreManagementView animated:YES completion:^{
+//                    
+//                }];
+//            }
+//            else
+//            {
+//                [self setupHomePageViewController];
+//            }
         }
         else
         {
@@ -211,7 +230,7 @@
     REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
     frostedViewController.direction = REFrostedViewControllerDirectionLeft;
     frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
-    
+    frostedViewController.limitMenuViewSize = YES;
     
     [self presentViewController:frostedViewController animated:YES completion:^{
         [MMProgressHUD dismiss];

@@ -28,8 +28,8 @@
 
 -(void) deleteBankCodeData;
 -(void) saveOrUpdateBankCodeData:(NSMutableArray *) arrays;
+-(BanKCode*)getBankCodeDataByCardNumber:(NSString*)cardNumber;
 -(BanKCode*)getBankCodeDataByCardCode:(NSString*)cardCode;
-
 
 //地址对照表
 -(NSMutableArray*) getProvinceCodeData;

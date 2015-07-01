@@ -39,6 +39,8 @@
 @property(nonatomic,assign) NSString * currentUserInfo;
 
 
+//当前登录人员信息
+@property(nonatomic,assign) NSString * strUserName;
 //token
 @property(nonatomic,assign) NSString * access_token;
 

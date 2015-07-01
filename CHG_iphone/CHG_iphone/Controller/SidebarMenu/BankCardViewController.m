@@ -59,6 +59,12 @@
     self.addbtn.borderWidth = 0;
     self.addbtn.iconSide = JTImageButtonIconSideLeft;
     
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self httpGetBankCardList];
 }
 -(IBAction)addBankCard:(id)sender{
@@ -96,7 +102,11 @@
     
     NSDictionary* dict = [self.items objectAtIndex:indexPath.row];
     [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
-    cell.BankNameLab.text = dict[@"bankCode"];
+    
+    BanKCode* code = [[BanKCode alloc] init];
+//    DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
+    code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:dict[@"bankCode"]];
+    cell.BankNameLab.text = code.bankName;
     cell.CardTypeLab.text = dict[@"cardType"];
     
     NSString* numlab = dict[@"cardNumber"];
@@ -115,6 +125,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BankCardDetailsViewController* BankCardDetailsView = [[BankCardDetailsViewController alloc] initWithNibName:@"BankCardDetailsViewController" bundle:nil];
+    BankCardDetailsView.items = [self.items objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:BankCardDetailsView animated:YES];
 }
 - (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
@@ -189,6 +200,7 @@
             }
             else
             {
+                [self.items removeAllObjects];
                 [self.items addObject:data];
                 self.tableview.hidden = NO;
                 self.addbtn.hidden = YES;

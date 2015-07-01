@@ -302,7 +302,7 @@
                     
                     
                     
-                    if ([config.shopList count] != 0){
+                    if ([config.shopList count] != 0 || [config.Roles isEqualToString:@"PARTNER"]){
                         [self setupHomePageViewController];
                     }
                     else
@@ -368,7 +368,7 @@
     REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:navigationController menuViewController:SidebarMenu];
     frostedViewController.direction = REFrostedViewControllerDirectionLeft;
     frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
-    
+    frostedViewController.limitMenuViewSize = YES;
     
     [self presentViewController:frostedViewController animated:YES completion:^{
         [MMProgressHUD dismiss];
@@ -380,6 +380,7 @@
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
     UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
+    
     [parameter setObject:textfield.text forKey:@"userName"];
     NSString *url = [NSObject URLWithBaseString:[APIAddress ApiGetMobileByUserName] parameters:parameter];
     
@@ -392,6 +393,7 @@
             NSString* mobile = [data objectForKey:@"mobile"];
             if (mobile.length) {
                 [MMProgressHUD dismiss];
+                [ConfigManager sharedInstance].strUserName = textfield.text;
                 ForgotPasswordViewController *ForgotPasswordView = [[ForgotPasswordViewController alloc] initWithNibName:@"ForgotPasswordViewController" bundle:nil];
                 ForgotPasswordView.strmobile = mobile;
                 [self presentViewController:ForgotPasswordView animated:YES completion:^{

@@ -12,6 +12,7 @@
 
 #import "OrderQuryViewController.h"
 #import "SuccessRegisterViewController.h"
+#import "successfulIdentifyViewController.h"
 @interface CHGNavigationController ()
 @property (strong, readwrite, nonatomic) SidebarMenuTableViewController *SidebarMenuController;
 @end
@@ -45,6 +46,10 @@
 - (void)goback
 {
     [self popToRootViewControllerAnimated:YES];
+}
+-(void)gobacktoSuccess
+{
+    [self popViewControllerAnimated:YES];
 }
 #pragma mark -
 #pragma mark Gesture recognizer

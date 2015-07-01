@@ -29,9 +29,9 @@
 
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"武新义",@"name",@" 开户名",@"title", nil],
-                                           [NSDictionary dictionaryWithObjectsAndKeys:@"6222222222222222",@"name",@"银行卡号",@"title" ,nil],
-                                            [NSDictionary dictionaryWithObjectsAndKeys:@"工商银行",@"name",@"开户银行",@"title" ,nil], nil];
+//    self.items = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"武新义",@"name",@" 开户名",@"title", nil],
+//                                           [NSDictionary dictionaryWithObjectsAndKeys:@"6222222222222222",@"name",@"银行卡号",@"title" ,nil],
+//                                            [NSDictionary dictionaryWithObjectsAndKeys:@"工商银行",@"name",@"开户银行",@"title" ,nil], nil];
     
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
@@ -50,7 +50,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.items.count;
+    return 3;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -59,8 +59,27 @@
         cell = (BankCardDetailsCell*)[[self.BankCardDetailsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
     
     }
-    cell.namelab.text =[[self.items objectAtIndex:indexPath.row] objectForKey:@"title"];
-    cell.Detailslab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"name"];
+    if (indexPath.row == 0) {
+        cell.namelab.text =@"开户名";
+        cell.Detailslab.text = self.items[@"accountName"];
+    }
+    else if (indexPath.row == 1)
+    {
+        cell.namelab.text =@"银行卡号";
+        cell.Detailslab.text = self.items[@"cardNumber"];
+        
+        
+    }
+    else
+    {
+        cell.namelab.text =@"开户银行";
+        
+        BanKCode* code = [[BanKCode alloc] init];
+        //    DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
+        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:self.items[@"bankCode"]];
+        cell.Detailslab.text = code.bankName;
+    }
+    
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }

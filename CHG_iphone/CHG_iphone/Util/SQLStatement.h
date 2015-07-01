@@ -16,6 +16,8 @@ extern NSString* const CT_SQL_BankCode;
 extern NSString* const R_SQL_BankCode;
 #pragma mark 查询银行卡对照表
 extern NSString* const Q_SQL_BankCode;
+#pragma mark 查询银行卡某个前六位数字
+extern NSString* const Q_SQL_BankCodeByNumber;
 #pragma mark 查询银行卡某个Code
 extern NSString* const Q_SQL_BankCodeByCode;
 #pragma mark 删除BankCode相关数据
