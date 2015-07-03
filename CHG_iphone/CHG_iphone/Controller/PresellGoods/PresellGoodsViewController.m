@@ -158,7 +158,7 @@
 {
     [super viewWillAppear:animated];
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
-    timer1 = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
+    timer1 = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
     
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];

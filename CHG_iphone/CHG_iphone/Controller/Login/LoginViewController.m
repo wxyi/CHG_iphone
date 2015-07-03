@@ -302,7 +302,7 @@
                     
                     
                     
-                    if ([config.shopList count] != 0 || [config.Roles isEqualToString:@"PARTNER"]){
+                    if ([config.shopList count] == 0 || [config.Roles isEqualToString:@"PARTNER"]){
                         [self setupHomePageViewController];
                     }
                     else

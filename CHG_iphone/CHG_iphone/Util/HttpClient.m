@@ -47,6 +47,7 @@
             }
             else if([[json objectForKey:@"code"] intValue] == 401)
             {
+                [MMProgressHUD dismiss];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                                     object:nil];
             }
@@ -171,6 +172,7 @@
         if(!error){
             if([[json objectForKey:@"code"] intValue] == 401)
             {
+                [MMProgressHUD dismiss];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                     object:nil];
             }

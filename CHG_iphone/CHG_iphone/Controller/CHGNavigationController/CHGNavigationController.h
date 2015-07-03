@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface CHGNavigationController : UINavigationController
+@property (nonatomic,strong)STAlertView* stAlertView;
 - (void)showMenu;
 - (void)goback;
 - (void)gobacktoSuccess;
+-(void)unbundlingbankCard;
 -(void)skipPage;
 -(void)RegisteSuccessful;
 @end

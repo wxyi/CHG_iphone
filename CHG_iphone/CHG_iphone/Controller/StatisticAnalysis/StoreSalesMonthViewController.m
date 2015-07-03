@@ -364,34 +364,6 @@
         
         // 拿到当前的下拉刷新控件，结束刷新状态
         
-        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue]- 1];
-        
-        NSString* lastYear =[NSString stringWithFormat:@"%d",[self.strYear intValue]];
-        if ([lastMonth intValue] == 0) {
-            lastMonth = @"12";
-            lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]- 1];
-        }
-        self.strYear = lastYear;
-        self.strMonth = lastMonth;
-        [self httpGetStatisticAnalysis];
-//        [self.tableview.header endRefreshing];
-        
-//        [self.tableview.header endRefreshing];
-    });
-}
-
-#pragma mark 上拉加载更多数据
-- (void)loadMoreData
-{
-    
-    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-        //        [self.tableView reloadData];
-        
-        
-        
-        
         NSDate *now = [NSDate date];
         NSLog(@"now date is: %@", now);
         
@@ -418,10 +390,38 @@
             }
         }
         
-
+        
         self.strYear = nextYear;
         self.strMonth = nextMonth;
         [self httpGetStatisticAnalysis];
+//        [self.tableview.header endRefreshing];
+        
+//        [self.tableview.header endRefreshing];
+    });
+}
+
+#pragma mark 上拉加载更多数据
+- (void)loadMoreData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        
+        
+        
+        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue]- 1];
+        
+        NSString* lastYear =[NSString stringWithFormat:@"%d",[self.strYear intValue]];
+        if ([lastMonth intValue] == 0) {
+            lastMonth = @"12";
+            lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]- 1];
+        }
+        self.strYear = lastYear;
+        self.strMonth = lastMonth;
+        [self httpGetStatisticAnalysis];
+        
         // 拿到当前的上拉刷新控件，结束刷新状态
 //        [self.tableview.footer endRefreshing];
     });

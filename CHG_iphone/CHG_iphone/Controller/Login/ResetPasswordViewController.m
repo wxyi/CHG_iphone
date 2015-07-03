@@ -179,7 +179,8 @@
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:parameter successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
-            
+            [MMProgressHUD dismiss];
+            DLog(@"msg = %@",[data objectForKey:@"msg"]);
             [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                                 object:nil];
 //            [MMProgressHUD dismiss];

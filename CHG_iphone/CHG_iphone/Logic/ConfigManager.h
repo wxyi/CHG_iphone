@@ -83,4 +83,8 @@
 
 //图片保存路径
 @property(nonatomic,assign) NSString* strImagePath;
+
+
+//银行卡ID
+@property(nonatomic,assign) NSString* strBankId;
 @end

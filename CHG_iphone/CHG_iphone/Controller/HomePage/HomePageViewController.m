@@ -69,6 +69,23 @@
 //    rect.size.height = SCREEN_HEIGHT;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
+//    NSInteger count;
+    self.config = [[SUHelper sharedInstance] currentUserConfig];
+    if ([self.config.Roles isEqualToString:@"SHOPSELLER"])
+    {
+        self.cellCount = 3;
+    }
+    else if([self.config.Roles isEqualToString:@"PARTNER"])
+    {
+        self.cellCount = 4;
+    }
+    else
+    {
+       self.cellCount = 5;
+    }
+    
+    
+    
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -116,7 +133,8 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
-    return 5;
+    
+    return self.cellCount;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -161,20 +179,43 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
-    else if(indexPath.row == 2)
+    else if((indexPath.row == 2 && ![self.config.Roles isEqualToString:@"SHOPSELLER"]))
     {
-        awardTotalAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"awardTotalAmountCell"];
-        if(cell==nil){
-            cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        
+        if ([self.config.Roles isEqualToString:@"PARTNER"]) {
+            RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
+            if(cell==nil){
+                cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
             
+            NSArray* itme = [NSArray arrayWithObjects:
+                             [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardPartnerAmount"] intValue]],@"count", nil], nil];
+            
+            [cell setupView:[itme mutableCopy]];
+            cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
+                DLog(@"row = %ld",(long)indexPath.row);
+                [weakSelf didSelectRewardsCell:indexPath];
+            };
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
         }
-//        cell.backgroundColor = UIColorFromRGB(0x646464);
-        cell.nameLab.text = @"奖励余额(元)";
-        cell.amountLab.text = [NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardTotalAmount"] intValue]];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+        else
+        {
+            awardTotalAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"awardTotalAmountCell"];
+            if(cell==nil){
+                cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                
+            }
+            //        cell.backgroundColor = UIColorFromRGB(0x646464);
+            cell.nameLab.text = @"奖励余额(元)";
+            cell.amountLab.text = [NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardTotalAmount"] intValue]];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+        }
+        
     }
-    else if(indexPath.row == 3)
+    else if(indexPath.row == 3 && ![self.config.Roles isEqualToString:@"SHOPSELLER"]&& ![self.config.Roles isEqualToString:@"PARTNER"])
     {
         RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
         if(cell==nil){
@@ -224,7 +265,13 @@
     else if(indexPath.row == 1)
         return 48;
     else if(indexPath.row == 2)
+    {
+        if ([self.config.Roles isEqualToString:@"PARTNER"])
+        {
+            return 75;
+        }
         return 100;
+    }
     else if (indexPath.row == 3)
         return 75;
     else
@@ -458,7 +505,7 @@
 
         if (success) {
 //            [MMProgressHUD dismiss];
-            for (int i = 1; i < 4; i ++ ) {
+            for (NSInteger i = 1; i < self.cellCount; i ++ ) {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForRow:i inSection:0];
                 [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
             }

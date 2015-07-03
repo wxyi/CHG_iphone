@@ -142,7 +142,7 @@
             [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
             cell.titlelab.text = dict[@"productName"] ;
             cell.pricelab.text = dict[@"productPrice"];
-            cell.countlab.text = [NSString stringWithFormat:@"%d",[dict[@"QrcList"] count]];
+            cell.countlab.text = [NSString stringWithFormat:@"x%d",[dict[@"QrcList"] count]];
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -237,7 +237,7 @@
             cell.allprice = allPrice;
             cell.receivablelab.text = [NSString stringWithFormat:@"%.2f",allPrice];
             cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f",allPrice];
-            cell.favorablelab.text = [NSString stringWithFormat:@"%.2f",0];
+            cell.favorablelab.text = @"0.00";
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
 

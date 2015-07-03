@@ -37,4 +37,6 @@
 @dynamic strImagePath;
 
 @dynamic strUserName;
+
+@dynamic strBankId;
 @end

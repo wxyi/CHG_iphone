@@ -19,6 +19,13 @@
     // Do any additional setup after loading the view from its nib.
     
     self.title = @"银行卡详情";
+    
+    
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    if ([config.Roles isEqualToString:@"PARTNER"]&& config.nRoleType == 0) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"解绑" style:UIBarButtonItemStylePlain target:(UINavigationController*)self.navigationController action:@selector(unbundlingbankCard)];
+    }
+    
     [self setupView];
 }
 
@@ -43,6 +50,8 @@
     self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.BankCardDetailsNib = [UINib nibWithNibName:@"BankCardDetailsCell" bundle:nil];
+    
+    [ConfigManager sharedInstance].strBankId = [NSString stringWithFormat:@"%d",[self.items[@"bankId"] intValue]];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

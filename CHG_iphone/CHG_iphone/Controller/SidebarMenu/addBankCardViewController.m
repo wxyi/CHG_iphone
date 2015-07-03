@@ -21,7 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"添加银行卡";
+    
+    
     [self setupView];
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -74,7 +77,8 @@
         cell.nametext.textAlignment = NSTextAlignmentLeft;
         if (indexPath.row == 1) {
             cell.nametext.keyboardType = UIKeyboardTypeNumberPad;
-            cell.nametext.delegate = self;
+//            cell.nametext.delegate = self;
+            [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         }
         
         cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
@@ -257,29 +261,29 @@
     // Pass the selected object to the new view controller.
 }
 */
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField.text.length >=16 &&textField.text.length <=19) {
-        BanKCode* code = [[BanKCode alloc] init];
-        DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
-        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[textField.text substringToIndex:6]];
-        DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
-        UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
-        
-        if (code.bankName.length != 0) {
-            textlab.text = code.bankName;
-        }
-        
-    }
-//    else
-//    {
-//        [SGInfoAlert showInfo:@"银行卡错误"
-//                      bgColor:[[UIColor blackColor] CGColor]
-//                       inView:self.view
-//                     vertical:0.7];
+//-(void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+//    if (textField.text.length >= 6) {
+//        BanKCode* code = [[BanKCode alloc] init];
+//        DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
+//        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[textField.text substringToIndex:6]];
+//        DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
+//        UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
+//        
+//        if (code.bankName.length != 0) {
+//            textlab.text = code.bankName;
+//        }
+//        
 //    }
-    
-}
+////    else
+////    {
+////        [SGInfoAlert showInfo:@"银行卡错误"
+////                      bgColor:[[UIColor blackColor] CGColor]
+////                       inView:self.view
+////                     vertical:0.7];
+////    }
+//    
+//}
 
 -(void)getBankCardList
 {
@@ -329,5 +333,30 @@
    heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 40;
+}
+
+- (void) textFieldDidChange:(id) sender {
+    UITextField *_field = (UITextField *)sender;
+    UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
+    if (_field.text.length >= 6) {
+        BanKCode* code = [[BanKCode alloc] init];
+        DLog(@"[textField.text substringToIndex:6] = %@",[_field.text substringToIndex:6]);
+        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[_field.text substringToIndex:6]];
+        DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
+        self.bank = code;
+        
+        if (code.bankName.length != 0) {
+            textlab.text = code.bankName;
+        }
+        else
+        {
+            textlab.text = @"请选择银行";
+        }
+        
+    }
+    else
+    {
+        textlab.text = @"请选择银行";
+    }
 }
 @end

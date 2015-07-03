@@ -61,15 +61,6 @@ BMKMapManager* _mapManager;
        
     }
     
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
-    }
-    else{
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
-    }
-    
-    
     
     [[SUHelper sharedInstance] sysInit:^(BOOL success) {
         
@@ -80,7 +71,7 @@ BMKMapManager* _mapManager;
                 // 这里判断是否第一次
                 [[SUHelper sharedInstance] GetAddressInfo];
                 [[SUHelper sharedInstance] GetBankCodeInfo];
-//                [[SUHelper sharedInstance] GetPromoList];
+                //                [[SUHelper sharedInstance] GetPromoList];
                 
                 [[SUHelper sharedInstance] GetRefreshCache:YES];
                 
@@ -89,9 +80,34 @@ BMKMapManager* _mapManager;
             
         }
     }];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+    }
+    
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
+    {
+        [self setupLoginViewController];
+    }
+    else
+    {
+        if ([ConfigManager sharedInstance].access_token.length != 0) {
+            [self setupHomePageViewController];
+        }
+        else
+        {
+            [self setupLoginViewController];
+        }
+    }
+    
 
 //    [[SUHelper sharedInstance] GetPromoList];
-    [self setupLoginViewController];
+    
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

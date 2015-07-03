@@ -27,14 +27,14 @@
         self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
             DLog(@"否");
             
-            
+            [self httpValidateCustMobile];
             
         } otherButtonBlock:^{
             
         }];
         [self.stAlertView show];
         
-        [self httpValidateCustMobile];
+        
         sender.enabled = NO;
         //button type要 设置成custom 否则会闪动
         [sender startWithSecond:60];

@@ -88,16 +88,19 @@
     if(cell==nil){
         cell = (BanKCardCell*)[[self.BanKCardNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
-        NSMutableArray *rightUtilityButtons = [NSMutableArray new];
-        
-        
-        [rightUtilityButtons sw_addUtilityButtonWithColor:
-         [UIColor whiteColor]
-                                                 icon:[UIImage imageNamed:@"left_slide_delete.png"]];
-        [cell setRightUtilityButtons:rightUtilityButtons WithButtonWidth:60.0f];
-        cell.delegate = self;
-
-        
+        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        if ([config.Roles isEqualToString:@"PARTNER"]&& config.nRoleType == 0)
+        {
+            NSMutableArray *rightUtilityButtons = [NSMutableArray new];
+            
+            
+            [rightUtilityButtons sw_addUtilityButtonWithColor:
+             [UIColor whiteColor]
+                                                         icon:[UIImage imageNamed:@"left_slide_delete.png"]];
+            [cell setRightUtilityButtons:rightUtilityButtons WithButtonWidth:60.0f];
+            cell.delegate = self;
+        }
+   
     }
     
     NSDictionary* dict = [self.items objectAtIndex:indexPath.row];
@@ -134,7 +137,7 @@
         case 0:
         {
 //            [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此银行卡" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
                 DLog(@"否");
                 
                 

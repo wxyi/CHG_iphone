@@ -83,6 +83,9 @@
     cell.pricelab.text = dict[@"productPrice"];;
     cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKey:@"quantity"] intValue] ];
     
+    if ([dict[@"returnQuantity"] intValue] != 0) {
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[dict[@"returnQuantity"] intValue]];
+    }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }

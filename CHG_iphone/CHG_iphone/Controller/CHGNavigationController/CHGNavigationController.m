@@ -131,5 +131,58 @@
         
     }];
 }
+-(void)unbundlingbankCard
+{
+    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+        DLog(@"否");
+        
+        
+    } otherButtonBlock:^{
+        DLog(@"是");
+        
+        // Delete button was pressed
+        [self httpDeleteBankCard];
+        
+    }];
+    
+    [self.stAlertView show];
+}
 
+-(void)httpDeleteBankCard
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObject:[ConfigManager sharedInstance].strBankId forKey:@"bankId"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiDeleteBankCard] parameters:parameter];
+    
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
+        [MMProgressHUD showWithTitle:@"" status:@""];
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        if (success) {
+                        [MMProgressHUD dismiss];
+//            [self httpGetBankCardList];
+            [self popViewControllerAnimated:YES];
+        }
+        else
+        {
+            //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
 @end

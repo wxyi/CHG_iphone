@@ -73,6 +73,11 @@
     cell.didGetCode = ^(NSString* checkcode)
     {
         weakSelf.strCheckCode = checkcode;
+        
+        [SGInfoAlert showInfo:weakSelf.strCheckCode
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     };
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;

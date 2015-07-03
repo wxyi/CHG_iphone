@@ -289,8 +289,12 @@
             }
             else
             {
-                self.addbtn.userInteractionEnabled=YES;
-                self.addbtn.alpha=1;
+                UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+                if (![config.Roles isEqualToString:@"SHOPLEADER"]) {
+                    self.addbtn.userInteractionEnabled=YES;
+                    self.addbtn.alpha=1;
+                }
+                
 //                self.addbtn.alpha=0.4;
             }
             

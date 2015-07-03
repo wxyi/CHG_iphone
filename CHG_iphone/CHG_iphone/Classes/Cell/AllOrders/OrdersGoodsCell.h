@@ -13,4 +13,5 @@
 @property(nonatomic,weak)IBOutlet UILabel* titlelab;
 @property(nonatomic,weak)IBOutlet UILabel* pricelab;
 @property(nonatomic,weak)IBOutlet UILabel* countlab;
+@property(nonatomic,weak)IBOutlet UILabel* returnCountlab;
 @end

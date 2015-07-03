@@ -14,5 +14,6 @@
 @property (retain, nonatomic) NSMutableArray* pagearray;
 @property (nonatomic,strong)NSDictionary* AccountBriefDict;
 @property (nonatomic,strong)NSMutableArray* menuArr;
-
+@property (nonatomic,strong)UserConfig* config;
+@property (nonatomic,assign)NSInteger cellCount;
 @end

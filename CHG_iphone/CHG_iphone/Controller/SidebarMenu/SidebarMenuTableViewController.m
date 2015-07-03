@@ -32,7 +32,7 @@
 //    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
    
     self.tableView.opaque = NO;
-    
+    self.config = [[SUHelper sharedInstance] currentUserConfig];
     [NSObject setExtraCellLineHidden:self.tableView];
 //    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.tableHeaderView = ({
@@ -47,8 +47,8 @@
         imageView.clipsToBounds = YES;
         [view addSubview:imageView];
         
-        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-        if (![config.Roles isEqualToString:@"PARTNER"]) {
+//        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        if (![self.config.Roles isEqualToString:@"PARTNER"]) {
             UIButton *Scanbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 95, 72, 72)];
             Scanbtn.backgroundColor = [UIColor whiteColor];
             Scanbtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -106,18 +106,18 @@
         BasicInfoViewController* BasicInfo = [[BasicInfoViewController alloc] initWithNibName:@"BasicInfoViewController" bundle:nil];
         [navigationController pushViewController:BasicInfo animated:YES];
     }
-    else if (indexPath.row == 1) {
+    else if (indexPath.row == 1 &&![self.config.Roles isEqualToString:@"SHOPSELLER"]) {
         DLog(@"银行卡");
         BankCardViewController* BankCardView = [[BankCardViewController alloc] initWithNibName:@"BankCardViewController" bundle:nil];
         [navigationController pushViewController:BankCardView animated:YES];
     }
-    else if (indexPath.row == 2) {
+    else if (indexPath.row == 2&& ![self.config.Roles isEqualToString:@"SHOPSELLER"]) {
         DLog(@"我的账户");
         MyAccountViewController* MyAccountView = [[MyAccountViewController alloc] initWithNibName:@"MyAccountViewController" bundle:nil];
 //        navigationController.viewControllers = @[BasicInfo];
         [navigationController pushViewController:MyAccountView animated:YES];
     }
-    else if (indexPath.row == 3) {
+    else {
         DLog(@"设置");
         SettingViewController* SettingView = [[SettingViewController alloc] initWithNibName:@"SettingViewController" bundle:nil];
         [navigationController pushViewController:SettingView animated:YES];
@@ -141,6 +141,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
 {
+    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]){
+        return 2;
+    }
     return 4;
 }
 
@@ -154,7 +157,14 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    NSArray *titles = @[@"我的信息", @"银行卡", @"我的账户", @"设置"];
+    NSArray *titles;
+    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]){
+        titles = @[@"我的信息", @"设置"];
+    }
+    else
+    {
+        titles = @[@"我的信息", @"银行卡", @"我的账户", @"设置"];
+    }
     cell.textLabel.text = titles[indexPath.row];
     cell.textLabel.textColor = UIColorFromRGB(0x646464);
     cell.textLabel.font = FONT(16);

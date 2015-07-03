@@ -48,11 +48,22 @@
     
     
 }
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
     
+    //增加监听，当键退出时收出消息
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
     if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
@@ -64,8 +75,9 @@
         return;
     }
     else{
-        [self setupCamera];
-        [_session startRunning];
+        [self.tableview reloadData];
+//        [self setupCamera];
+//        [_session startRunning];
         self.isfinish = NO;
     }
 //    self.is_have = NO;
@@ -87,16 +99,6 @@
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
     //增加监听，当键盘出现或改变时收出消息
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    //增加监听，当键退出时收出消息
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
     
     
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
@@ -108,6 +110,7 @@
     self.IdentUserInfoNib = [UINib nibWithNibName:@"IdentUserInfoCell" bundle:nil];
     
     self.nextbtn.frame = CGRectMake(0, SCREEN_HEIGHT-40, SCREEN_WIDTH, 40);
+    [self.view bringSubviewToFront:self.nextbtn];
 //    rect = self.nextbtn.frame;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
 //    self.nextbtn.frame = rect;
@@ -439,6 +442,7 @@
     else
     {
         UITextField* texield = (UITextField*)[self.view viewWithTag:100];
+        [texield resignFirstResponder];
         NSString * info  = @"";
         if (texield.text.length == 0)
         {
@@ -839,7 +843,7 @@
     
     const float movementDuration = 0.3f; // tweak as needed
     
-    
+//    DLog(@"dever = %@",);
     
 //    int movement = (up ? -movementDistance : movementDistance);
     
@@ -852,7 +856,16 @@
     [UIView setAnimationDuration: movementDuration];
     
     CGRect rect = self.tableview.frame;
-    rect.origin.y = rect.origin.y - self.keyHeight;
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"]) {
+        rect.origin.y = rect.origin.y - 100;
+        
+    }
+    else
+    {
+        rect.origin.y = rect.origin.y - self.keyHeight;
+    }
+    
     self.tableview.frame = rect;
     
     rect = self.nextbtn.frame;
@@ -874,12 +887,23 @@
     [UIView setAnimationDuration: movementDuration];
     
     CGRect rect = self.tableview.frame;
-    rect.origin.y = rect.origin.y + self.keyHeight;
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"]) {
+        rect.origin.y = rect.origin.y + 100;
+        
+    }
+    else
+    {
+        rect.origin.y = rect.origin.y + self.keyHeight;
+        
+    }
+//    rect.origin.y = rect.origin.y + self.keyHeight;
     self.tableview.frame = rect;
     
     rect = self.nextbtn.frame;
     rect.origin.y = rect.origin.y + self.keyHeight;
     self.nextbtn.frame = rect;
+    
     DLog(@"frame = %@",NSStringFromCGRect(self.nextbtn.frame));
     [UIView commitAnimations];
 }

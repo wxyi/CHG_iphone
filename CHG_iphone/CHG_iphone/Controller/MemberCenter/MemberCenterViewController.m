@@ -36,7 +36,7 @@
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableview.scrollEnabled = NO;
+//    self.tableview.scrollEnabled = NO;
     self.tableview.backgroundColor = UIColorFromRGB(0xdddddd);
     [NSObject setExtraCellLineHidden:self.tableview];
     self.awardTotalAmountNib = [UINib nibWithNibName:@"awardTotalAmountCell" bundle:nil];

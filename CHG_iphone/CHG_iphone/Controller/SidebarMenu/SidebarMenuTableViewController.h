@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 #import "REFrostedViewController.h"
 @interface SidebarMenuTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate>
-
+@property (nonatomic,strong)UserConfig* config;
 @end

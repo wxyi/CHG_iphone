@@ -91,7 +91,7 @@
         self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
             DLog(@"否");
             
-            
+            [self httpGetCheckCode];
             
         } otherButtonBlock:^{
             
@@ -99,10 +99,10 @@
         [self.stAlertView show];
         DLog(@"是");
         
-        [self httpGetCheckCode];
+        
         
         sender.enabled = NO;
-        
+        sender.alpha=0.4;
         [sender startWithSecond:60];
         
         [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
@@ -207,6 +207,12 @@
         if (success) {
             [MMProgressHUD dismiss];
             self.strCheckCode = [data objectForKey:@"checkCode"];
+            
+            
+            [SGInfoAlert showInfo:self.strCheckCode
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
         }
         else
         {

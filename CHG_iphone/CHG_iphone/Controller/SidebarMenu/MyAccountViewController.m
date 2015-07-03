@@ -47,6 +47,8 @@
 {
     
     
+    
+    self.config = [[SUHelper sharedInstance] currentUserConfig];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
@@ -64,6 +66,9 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if ([self.config.Roles isEqualToString:@"PARTNER"]) {
+        return 3;
+    }
     return 4;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -80,9 +85,11 @@
             
         }
         
+        
+        
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"可用奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.dictionary[@"awardUsing"] intValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%d",[self.dictionary[@"awardTotal"] intValue]],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"可用奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.dictionary[@"awardUsing"] doubleValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.dictionary[@"awardTotal"] doubleValue]],@"count", nil], nil];
         cell.RewardsView.backgroundColor = UIColorFromRGB(0xf0f0f0);
         cell.isMy = YES;
         [cell setupView:[itme mutableCopy]];
@@ -112,7 +119,7 @@
         cell.datelab.text = [NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay];
         cell.statelab.text = @"支出";
         cell.namelab.text = @"晨冠已结算";
-        cell.pricelab.text = [NSString stringWithFormat:@"￥%.0f",[self.dictionary[@"awardArrive"] doubleValue]];
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardArrive"] doubleValue]];
         cell.BankCardlab.text = self.dictionary[@"awardArriveBank"];
         cell.CardNumlab.text = self.dictionary[@"awardAccount"];
 
@@ -128,11 +135,11 @@
             
         }
         
-        if (indexPath.section == 2) {
+        if (indexPath.section == 2 && ![self.config.Roles isEqualToString:@"PARTNER"]) {
             cell.datelab.text = [NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay];
             cell.statelab.text = @"收入";
             cell.namelab.text = @"动销奖励";
-            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.0f",[self.dictionary[@"awardSaleAmount"] doubleValue]];
+            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardSaleAmount"] doubleValue]];
             cell.skipbtn.tag = 101;
         }
         else
@@ -140,7 +147,7 @@
             cell.datelab.text = [NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay];
             cell.statelab.text = @"收入";
             cell.namelab.text = @"消费分账奖励";
-            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.0f",[self.dictionary[@"awardPartnerAmount"] doubleValue]];
+            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardPartnerAmount"] doubleValue]];
             cell.skipbtn.tag = 102;
         }
         

@@ -155,7 +155,7 @@
     NSString* strTitle;
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
-            strTitle = @"门店销售";
+            strTitle = @"会员消费";
             break;
         case StatisticalTypeMembershipGrowth:
             strTitle = @"会员增长";

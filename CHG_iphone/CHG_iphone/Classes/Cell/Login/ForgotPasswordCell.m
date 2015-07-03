@@ -50,14 +50,14 @@
     
     self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
         DLog(@"否");
-        
+        [self httpGetCheckCode];
         
         
     } otherButtonBlock:^{
         
     }];
     [self.stAlertView show];
-    [self httpGetCheckCode];
+//    [self httpGetCheckCode];
     
     sender.enabled = NO;
     //button type要 设置成custom 否则会闪动
@@ -81,7 +81,7 @@
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
     [parameter setObject:self.userField.text forKey:@"mobile"];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];

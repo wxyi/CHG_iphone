@@ -35,7 +35,7 @@
     self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
         DLog(@"否");
         
-        
+        [self httpGetCheckCode];
         
     } otherButtonBlock:^{
         
@@ -48,7 +48,7 @@
     [sender startWithSecond:60];
 //    __weak typeof(self) weakSelf = self;
     sender.alpha=0.4;
-    [self httpGetCheckCode];
+    
     
     [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
         NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];

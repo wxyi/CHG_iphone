@@ -35,12 +35,16 @@
                         self.Roles = @"SHOP_OWNER";
                         break;
                     }
-                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]||[[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]) {
+                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopLeader"]) {
                         self.Roles = @"SHOPLEADER";
                         break;
                     }
                     else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPSELLER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopSeller"]) {
                         self.Roles = @"SHOPSELLER";
+                        break;
+                    }
+                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"CHGSELLER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ChgSeller"]) {
+                        self.Roles = @"CHGSELLER";
                         break;
                     }
                     else  {
@@ -52,6 +56,9 @@
                 
             } else if([key isEqualToString:@"shops"]){
                 self.shopList=obj;
+            }
+            else if([key isEqualToString:@"roleType"]){
+                self.nRoleType=[obj integerValue];
             }
             else if([key isEqualToString:@"dimensionalCodeUrl"]){
                 self.strdimensionalCodeUrl=obj;
