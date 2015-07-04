@@ -13,6 +13,7 @@
 #import "OrderQuryViewController.h"
 #import "SuccessRegisterViewController.h"
 #import "successfulIdentifyViewController.h"
+#import "MemberCenterViewController.h"
 @interface CHGNavigationController ()
 @property (strong, readwrite, nonatomic) SidebarMenuTableViewController *SidebarMenuController;
 @end
@@ -46,6 +47,12 @@
 - (void)goback
 {
     [self popToRootViewControllerAnimated:YES];
+}
+- (void)gobackMemberCenter
+{
+    MemberCenterViewController* memberView = [[MemberCenterViewController alloc] initWithNibName:@"MemberCenterViewController" bundle:nil];
+    [self pushViewController:memberView animated:YES];
+//    [self popToRootViewControllerAnimated:YES];
 }
 -(void)gobacktoSuccess
 {

@@ -219,8 +219,28 @@
         DLog(@"data = %@,msg = %@",data,msg);
         if (success) {
             [MMProgressHUD dismiss];
-            self.items = [data objectForKey:@"order"];
-            self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5;
+            
+            NSDictionary* tmitem = [data objectForKey:@"order"];
+            NSArray* prolist = [tmitem objectForKey:@"productList"];
+            
+            NSMutableArray* productList = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [prolist count]; i++) {
+                
+                NSInteger quantity = [[[prolist objectAtIndex:i] objectForKey:@"quantity"] integerValue] ;
+                NSInteger remainQuantity = [[[prolist objectAtIndex:i] objectForKey:@"remainQuantity"] integerValue] ;
+                if (quantity - remainQuantity > 0) {
+                    [productList addObject:[prolist objectAtIndex:i]];
+                }
+                
+            }
+            
+            NSMutableDictionary* testdict = [tmitem mutableCopy];
+            [testdict setValue:productList forKey:@"productList"];
+            
+            self.items = [testdict copy];
+            
+//            self.items = [data objectForKey:@"order"];
+            self.m_height = ([productList count] + 1)*65 - 5 + 30;
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
         }

@@ -233,7 +233,7 @@
         DLog(@"下载成功");
         successBlock([NSURL fileURLWithPath:downloadPath]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        DLog(@"下载失败");
+        DLog(@"下载失败 error ");
         if (error.code == -1004) {
             failureBlock(@"网络不可用");
         }

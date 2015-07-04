@@ -14,7 +14,7 @@
 @synthesize strNickname;//昵称
 @synthesize Roles;//角色
 @synthesize shopList;//角色
-
+@synthesize nRoleType;
 -(id) initWithDictionary:(NSDictionary*)jsonData
 {
     self=[super init];

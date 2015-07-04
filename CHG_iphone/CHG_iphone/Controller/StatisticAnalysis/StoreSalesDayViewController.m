@@ -307,7 +307,7 @@
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"custCount"] doubleValue]];
                     self.items = [data objectForKey:@"custList"];
                     break;
                 }
@@ -319,13 +319,13 @@
                 }
                 case StatisticalTypePinRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardSalerCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardSalerCount"] doubleValue]];
                     self.items = [data objectForKey:@"awardSalerList"];
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardPartnerCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardPartnerCount"] doubleValue]];
                     self.items = [data objectForKey:@"awardPartnerList"];
                     break;
                 }

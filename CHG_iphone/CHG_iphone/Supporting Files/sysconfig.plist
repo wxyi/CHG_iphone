@@ -2,11 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>PubServer_HOST</key>
+	<key>PubServer_HOST_ShH</key>
 	<string>http://27.115.74.138:8080/chg/api/app/v1/</string>
+	<key>PubServer_HOST_BJ</key>
+	<string>http://111.202.33.27:9080/chg</string>
 	<key>clientVersion</key>
 	<string>1.1</string>
-	<key>PubServer_Token</key>
+	<key>PubServer_Token_ShH</key>
 	<string>https://27.115.74.138:8443/chg/</string>
+	<key>PubServer_Token_BJ</key>
+	<string>https://111.202.33.27:443/chg</string>
+	<key>BelongsArea</key>
+	<string>1</string>
 </dict>
 </plist>

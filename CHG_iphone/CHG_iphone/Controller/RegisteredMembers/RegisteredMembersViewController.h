@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RegisteredMembersViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface RegisteredMembersViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSString* strIphone;
 @property(nonatomic,strong)NSString* strCheckCode;

@@ -18,6 +18,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"忘记密码";
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -75,7 +84,7 @@
     countDownCode.titleLabel.font = FONT(13);
     countDownCode.titleLabel.textColor = UIColorFromRGB(0x646464);
     countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
-    [countDownCode setTitle:@"再次发送" forState:UIControlStateNormal];
+    [countDownCode setTitle:@"发送验证码" forState:UIControlStateNormal];
     
     [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 //    countDownCode.backgroundColor = [UIColor whiteColor];
@@ -103,6 +112,7 @@
         
         sender.enabled = NO;
         sender.alpha=0.4;
+        sender.titleLabel.tintColor = [UIColor grayColor];
         [sender startWithSecond:60];
         
         [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
@@ -111,6 +121,7 @@
         }];
         [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
             countDownButton.enabled = YES;
+            sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
             return @"点击重新获取";
             
         }];

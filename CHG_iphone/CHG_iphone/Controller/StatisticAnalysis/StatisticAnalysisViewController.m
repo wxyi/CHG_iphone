@@ -30,7 +30,7 @@
 {
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     if ([config.Roles isEqualToString:@"SHOP_OWNER"]){
-        self.items = [NSArray arrayWithObjects:@"会员消费",@"会员增长",@"动销奖励",@"合作商消费分账奖励", nil];
+        self.items = [NSArray arrayWithObjects:@"会员消费",@"会员增长",@"动销奖励",@"消费分账奖励", nil];
     }
     else if ([config.Roles isEqualToString:@"SHOPLEADER"])
     {
@@ -38,7 +38,7 @@
     }
     else if ([config.Roles isEqualToString:@"PARTNER"])
     {
-        self.items = [NSArray arrayWithObjects:@"会员增长",@"合作商消费分账奖励", nil];
+        self.items = [NSArray arrayWithObjects:@"会员增长",@"消费分账奖励", nil];
     }
     
 //    CGRect rect = self.tableview.frame;

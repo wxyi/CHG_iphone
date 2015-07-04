@@ -28,7 +28,7 @@
 @property(nonatomic,weak)IBOutlet UIButton* confirmbtn;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)SaleType orderSaletype;
-
+@property(nonatomic,assign)OrderReturnType m_returnType;
 -(IBAction)ConfirmInfo:(id)sender;
 
 @end

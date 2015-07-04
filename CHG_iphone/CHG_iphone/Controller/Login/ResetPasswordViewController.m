@@ -60,7 +60,8 @@
         
     }
     
-    
+    [cell.resetpasswordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [cell.confirmpasswordfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     cell.didSkipSubItem = ^(NSInteger tag){
         
@@ -247,5 +248,14 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+- (void) textFieldDidChange:(UITextField *)textField
+{
+    if (textField.text.length > 16) {
+        [SGInfoAlert showInfo:@"密码不能大于16位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        [textField resignFirstResponder];
+    }
+}
 @end

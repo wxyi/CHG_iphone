@@ -14,6 +14,7 @@
 #import "AFNetworkActivityIndicatorManager.h"
 
 #import "LoginViewController.h"
+#import "StoreManagementViewController.h"
 BMKMapManager* _mapManager;
 @interface AppDelegate ()
 
@@ -97,7 +98,11 @@ BMKMapManager* _mapManager;
     else
     {
         if ([ConfigManager sharedInstance].access_token.length != 0) {
-            [self setupHomePageViewController];
+            
+            [self httpGetUserConfig];
+//            [self setupHomePageViewController];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FREE_LOGIN
+//                                                                object:nil];
         }
         else
         {
@@ -191,5 +196,92 @@ BMKMapManager* _mapManager;
     }
 }
 
+
+
+-(void)httpGetUserConfig
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetUserConfig] parameters:parameter];
+    
+    
+    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        //        [MMProgressHUD dismiss];
+        if (success) {
+            DLog(@"data = %@",data);
+            
+            //            [MMProgressHUD dismiss];
+            [ConfigManager sharedInstance].usercfg = [data JSONString];
+            
+            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            
+            
+            if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] !=1 && [config.shopList count] != 0) {
+                
+                
+                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+                self.window.rootViewController = StoreManagementView;
+            }
+            else if([config.shopList count] == 0)
+            {
+                [MMProgressHUD dismiss];
+                [self setupLoginViewController];
+            }
+            else
+            {
+                
+                
+                if ([config.Roles isEqualToString:@"PARTNER"]) {
+                    [ConfigManager sharedInstance].shopId = @"";
+                    [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
+                }
+                else
+                {
+                    if ([config.shopList count] != 0) {
+                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
+                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                        
+                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+                    }
+                    
+                }
+                
+                
+                
+                if ([config.shopList count] == 0 || [config.Roles isEqualToString:@"PARTNER"]){
+                    [self setupHomePageViewController];
+                }
+                else
+                {
+                    [MMProgressHUD dismiss];
+                    [self setupLoginViewController];
+                    
+                }
+
+                
+            }
+            
+            
+            
+            
+            
+        }
+        else
+        {
+            //            [MMProgressHUD dismissWithError:msg];
+            [MMProgressHUD dismiss];
+            [self setupLoginViewController];
+        }
+    } failureBlock:^(NSString *description) {
+        DLog(@"description = n%@",description);
+        //        [MMProgressHUD dismissWithError:description];
+        [MMProgressHUD dismiss];
+        [self setupLoginViewController];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
+}
 
 @end

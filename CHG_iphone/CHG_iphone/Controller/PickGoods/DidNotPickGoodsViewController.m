@@ -56,8 +56,8 @@
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
 //    self.amountNib = [UINib nibWithNibName:@"amountCell" bundle:nil];
-    self.Pickupbtn.frame = CGRectMake(0, SCREEN_HEIGHT -80, SCREEN_WIDTH/2, 40);
-    self.Terminationbtn.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_HEIGHT -80, SCREEN_WIDTH/2, 40);
+    self.Terminationbtn.frame = CGRectMake(0, SCREEN_HEIGHT -80, SCREEN_WIDTH/2, 40);
+    self.Pickupbtn.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_HEIGHT -80, SCREEN_WIDTH/2, 40);
     if (self.ManagementTyep == OrderManagementTypeAll) {
 //        CGRect rect = self.tableview.frame;
 //        rect.size.height = rect.size.height + 40;
@@ -230,8 +230,24 @@
         DLog(@"data = %@,msg = %@",data,msg);
         if (success) {
             [MMProgressHUD dismiss];
-            self.items = [data objectForKey:@"order"];
-            self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5;
+//            self.items = [data objectForKey:@"order"];
+            
+            NSDictionary* tmitem = [data objectForKey:@"order"];
+            NSArray* prolist = [tmitem objectForKey:@"productList"];
+            
+            NSMutableArray* productList = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [prolist count]; i++) {
+                if ([[[prolist objectAtIndex:i] objectForKey:@"remainQuantity"] intValue] != 0) {
+                    [productList addObject:[prolist objectAtIndex:i]];
+                }
+                
+            }
+            
+            NSMutableDictionary* testdict = [tmitem mutableCopy];
+            [testdict setValue:productList forKey:@"productList"];
+            
+            self.items = [testdict copy];
+            self.m_height = ([productList count] + 1)*65 - 5 + 30;
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
         }

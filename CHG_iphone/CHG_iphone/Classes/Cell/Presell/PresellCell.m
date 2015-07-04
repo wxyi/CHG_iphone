@@ -40,6 +40,11 @@
     }
     if (_counter > 60) {
         _counter = 60;
+        
+        [SGInfoAlert showInfo:@"该商量已超过销售数量限制，禁止添加商品！"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self
+                     vertical:0.7];
     }
     else if(_counter < 0)
     {

@@ -104,22 +104,10 @@
 //        [self.pagearray addObject:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"image%d",i] ofType:@"jpg"]];
 //    }
     
-    NSString *path = [NSObject CreateDocumentsfileManager:@"image"];
-    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:path];
     
-    NSLog(@"%@",file);
     //NSLog(@"%d",[file count]);
     
-    if (file.count == 0) {
-        [self httpGetPromoList];
-        
-    }
-    else
-    {
-        self.pagearray = [file mutableCopy];
-        NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
-    }
+    
     
     
 }
@@ -190,8 +178,8 @@
             }
             
             NSArray* itme = [NSArray arrayWithObjects:
-                             [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardPartnerAmount"] intValue]],@"count", nil], nil];
-            
+                             [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardPartnerAmount"] doubleValue]],@"count", nil], nil];
+            cell.line.hidden = YES;
             [cell setupView:[itme mutableCopy]];
             cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
                 DLog(@"row = %ld",(long)indexPath.row);
@@ -209,7 +197,7 @@
             }
             //        cell.backgroundColor = UIColorFromRGB(0x646464);
             cell.nameLab.text = @"奖励余额(元)";
-            cell.amountLab.text = [NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardTotalAmount"] intValue]];
+            cell.amountLab.text = [NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardTotalAmount"] doubleValue]];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
@@ -224,8 +212,8 @@
         }
 
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardSaleAmount"] intValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%d",[self.AccountBriefDict[@"awardPartnerAmount"] intValue]],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardSaleAmount"] doubleValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardPartnerAmount"] doubleValue]],@"count", nil], nil];
 
         [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -372,6 +360,7 @@
 
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
 //            OrderManagementView.strCustId =@"" ;
+            OrderManagementView.title = @"门店订单";
             OrderManagementView.ManagementTyep = OrderManagementTypeAll;
             OrderManagementView.m_returnType = OrderReturnTypeHomePage;
             [self.navigationController pushViewController:OrderManagementView animated:YES];
@@ -443,7 +432,10 @@
                     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
                     [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
                 } failureBlock:^(NSString *description) {
-                    
+                    [SGInfoAlert showInfo:@"图片下载失败"
+                                  bgColor:[[UIColor blackColor] CGColor]
+                                   inView:self.view
+                                 vertical:0.7];
                 } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
                     
                 }];
@@ -616,6 +608,20 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
 //        [self httpGetPromoList];
+        NSString *path = [NSObject CreateDocumentsfileManager:@"image"];
+        NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:path];
+        
+        NSLog(@"%@",file);
+        if (file.count == 0) {
+            [self httpGetPromoList];
+            
+        }
+        else
+        {
+            self.pagearray = [file mutableCopy];
+            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+        }
         [self httpGetAccountBrief];
         // 拿到当前的下拉刷新控件，结束刷新状态
 //        [self.tableview reloadData];

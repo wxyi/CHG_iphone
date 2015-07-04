@@ -23,6 +23,15 @@
     // Do any additional setup after loading the view from its nib.
     
     self.title = @"设置";
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
 }
 
@@ -128,12 +137,21 @@
 -(void)loginout
 {
     DLog(@"退出账号");
-    [ConfigManager sharedInstance].access_token = @"";
-    LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    
-    [self presentViewController:loginview animated:YES completion:^{
-       
+    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定退出" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+        DLog(@"否");
+        
+        
+    } otherButtonBlock:^{
+        DLog(@"是");
+        [ConfigManager sharedInstance].access_token = @"";
+        LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+        
+        [self presentViewController:loginview animated:YES completion:^{
+            
+        }];
     }];
+
+    [self.stAlertView show];
 }
 /*
 #pragma mark - Navigation

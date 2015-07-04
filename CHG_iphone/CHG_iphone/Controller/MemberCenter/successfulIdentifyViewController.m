@@ -41,7 +41,7 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobackMemberCenter) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     // Do any additional setup after loading the view from its nib.
     [self setupView];
@@ -117,10 +117,20 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+//    return 1;
     if (section == 0) {
         return 1;
     }
     return SCREEN_HEIGHT - 290;
+}
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return nil;
+    }
+    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 290)];
+    v_footer.backgroundColor = UIColorFromRGB(0xdddddd);
+    return v_footer;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -166,12 +176,14 @@
             {
                 PresellGoodsView.orderSaletype = SaleTypePresell;
             }
+            PresellGoodsView.m_returnType = OrderReturnTypeAMember;
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }
         case 2:
         {
             OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+            OrderManagementView.title = @"会员订单";
             OrderManagementView.m_returnType = OrderReturnTypeAMember;
             OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
             [self.navigationController pushViewController:OrderManagementView animated:YES];

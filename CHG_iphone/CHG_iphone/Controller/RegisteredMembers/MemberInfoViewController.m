@@ -13,7 +13,7 @@
 #import "SuccessRegisterViewController.h"
 #import "CHGNavigationController.h"
 
-@interface MemberInfoViewController ()<UUDatePickerDelegate>
+@interface MemberInfoViewController ()<UUDatePickerDelegate,UITextFieldDelegate>
 @property UINib* MembersRelationNib;
 @property UINib* MembersBirthdayNib;
 @property UINib* MembersSexNib;
@@ -127,6 +127,7 @@
         }
 //        [cell setupCell];
         cell.Birthdayfield.inputView = self.datePicker;
+        cell.Birthdayfield.delegate = self;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -335,5 +336,20 @@
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField.text.length == 0) {
+        NSDate *  senddate=[NSDate date];
+        
+        NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+        
+        [dateformatter setDateFormat:@"YYYY-MM-dd"];
+        
+        NSString *  locationString=[dateformatter stringFromDate:senddate];
+        textField.text = locationString;
+        NSLog(@"locationString:%@",locationString);
+    }
 }
 @end

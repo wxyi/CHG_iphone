@@ -45,7 +45,14 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    if (self.m_returnType == OrderReturnTypeAMember || self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods) {
+        
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else
+    {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     self.items = [[NSMutableArray alloc] init];
     
@@ -341,7 +348,7 @@
          [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = dict[@"productName"] ;
         cell.pricelab.text = dict[@"productPrice"];
-        cell.countlab.text = [NSString stringWithFormat:@"%d",[dict[@"QrcList"] count]];
+        cell.countlab.text = [NSString stringWithFormat:@"x%d",[dict[@"QrcList"] count]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -366,6 +373,8 @@
         NSInteger Qrclistcount;
         if ([dict[@"QrcList"] count] > 60) {
             Qrclistcount = 60;
+            
+            
         }
         else
         {
@@ -621,8 +630,14 @@
             NSMutableArray *QrcArr = tempArray[index][@"QrcList"];
             NSMutableArray *prodQrcArr = product[@"QrcList"];
             
+            if (QrcArr.count == 60 && prodQrcArr.count > 0) {
+                [SGInfoAlert showInfo:@"该商量已超过销售数量限制，禁止添加商品！"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            }
             for (int i = 0; i < prodQrcArr.count; i++) {
-                if (i > 60) {
+                if (QrcArr.count == 60) {
                     break;
                 }
                 [QrcArr addObject:prodQrcArr[i]];
@@ -913,14 +928,14 @@
 {
     if (upOrdown == NO) {
         num ++;
-        _line.frame = CGRectMake(75, 15+2*num, 170, 2);
+        _line.frame = CGRectMake((SCREEN_WIDTH-170)/2, 15+2*num, 170, 2);
         if (2*num == 170) {
             upOrdown = YES;
         }
     }
     else {
         num --;
-        _line.frame = CGRectMake(75, 15+2*num, 170, 2);
+        _line.frame = CGRectMake((SCREEN_WIDTH-170)/2, 15+2*num, 170, 2);
         if (num == 0) {
             upOrdown = NO;
         }

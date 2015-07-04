@@ -57,6 +57,8 @@
         
     }
     cell.iphoneField.text = self.strIphone;
+    cell.iphoneField.delegate = self;
+    [cell.iphoneField becomeFirstResponder];// 2
     cell.didshowInfo = ^(NSString* info){
         [SGInfoAlert showInfo:info
                       bgColor:[[UIColor blackColor] CGColor]
@@ -167,6 +169,26 @@
 }
 */
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField.text.length > 11) {
+        [SGInfoAlert showInfo:@"手机号输入有误"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.4];
+    }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+//    NSString* info;
+    if (textField.text.length != 11 ) {
 
+        [SGInfoAlert showInfo:@"手机号输入有误"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.4];
+    }
+    
+}
 
 @end

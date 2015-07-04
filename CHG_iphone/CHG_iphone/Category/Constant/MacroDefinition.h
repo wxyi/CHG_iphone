@@ -25,6 +25,8 @@
 //-------------------获取设备大小-------------------------
 
 #define ACCESS_TOKEN_FAILURE @"access_token_failure"
+#define ACCESS_TOKEN_FREE_LOGIN @"access_token_free_login"
+
 // block self
 #define WEAKSELF typeof(self) __weak weakSelf = self;
 

@@ -39,7 +39,7 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
 //    JTImageButton *leftbtn = [[JTImageButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
 //    [leftbtn createTitle:@"返回" withIcon:[UIImage imageNamed:@"btn_back.png"] font:[UIFont systemFontOfSize:17] iconHeight:JTImageButtonIconHeightDefault iconOffsetY:1.0];
@@ -67,7 +67,7 @@
 {
 //    self.items = [NSArray arrayWithObjects: nil];
 
-    
+//    self.items = [[NSMutableArray alloc] init];
     
 //    self.items = [NSArray arrayWithObjects:[NSArray arrayWithObjects:dict,dict,dict, nil],[NSArray arrayWithObjects:dict,dict, nil], nil];
 //    CGRect rect = self.tableview.frame;
@@ -92,9 +92,9 @@
 //    rect = self.button.frame;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
 //    rect.size.width = SCREEN_WIDTH/2;
-    self.button.frame = CGRectMake(0, SCREEN_HEIGHT-40, SCREEN_WIDTH/2, 40);
+    self.continuebtn.frame = CGRectMake(0, SCREEN_HEIGHT-40, SCREEN_WIDTH/2, 40);
     
-    self.continuebtn.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_HEIGHT-40, SCREEN_WIDTH/2, 40);
+    self.button.frame = CGRectMake(SCREEN_WIDTH/2, SCREEN_HEIGHT-40, SCREEN_WIDTH/2, 40);
 //
 //    rect = self.continuebtn.frame;
 //    rect.size.width = SCREEN_WIDTH/2;
@@ -297,7 +297,7 @@
             DLog(@"提货退货");
 
             UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
-            UILabel* label = (UILabel*)[self.view viewWithTag:1010];
+//            UILabel* label = (UILabel*)[self.view viewWithTag:1010];
             NSString *info;
             if (textField.text.length == 0) {
                 info = @"请输入金额";
@@ -355,6 +355,11 @@
             } otherButtonBlock:^{
                 DLog(@"是");
                 
+                NSMutableArray* tmArray = [self.items mutableCopy];
+                
+                [tmArray removeObjectAtIndex:index];
+                self.items = [tmArray copy];
+                [self.tableview reloadData];
             }];
             
             [self.stAlertView show];
@@ -462,7 +467,7 @@
                 NSMutableDictionary *product = [NSMutableDictionary dictionary];
                 [product setObject:self.items[i][@"productId"] forKey:@"productId"];
                 
-                [product setObject:self.items[i][@"quantity"] forKey:@"quantity"];
+                [product setObject:[NSString stringWithFormat:@"%d",[self.items[i][@"quantity"]intValue]]  forKey:@"quantity"];
                 
                 [productList addObject:product];
             }
@@ -491,6 +496,7 @@
             [MMProgressHUD dismiss];
             if (self.orderSaletype == SaleTypePickingGoods || self.orderSaletype == SaleTypeReturnGoods) {
                 OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+                OrderManagementView.title = @"会员订单";
                 OrderManagementView.m_returnType = OrderReturnTypeAMember;
                 OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
                 [self.navigationController pushViewController:OrderManagementView animated:YES];

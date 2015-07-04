@@ -43,7 +43,7 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
-    SaleType satype = SaleTypeReturnGoods;
+//    SaleType satype = SaleTypeReturnGoods;
     PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
     PresellGoodsView.orderSaletype = SaleTypeReturnGoods;
     [self.navigationController pushViewController:PresellGoodsView animated:YES];
@@ -152,10 +152,10 @@
             
         }
         
-        cell.receivablelab.text = [NSString stringWithFormat:@"%.1f",[self.items[@"orderAmount"] doubleValue]];
-        cell.Receivedlab.text =[NSString stringWithFormat:@"%.1f",[self.items[@"orderFactAmount"] doubleValue]] ;
+        cell.receivablelab.text = [NSString stringWithFormat:@"%.2f",[self.items[@"orderAmount"] doubleValue]];
+        cell.Receivedlab.text =[NSString stringWithFormat:@"%.2f",[self.items[@"orderFactAmount"] doubleValue]] ;
         [cell.Receivedlab setEnabled:NO];
-        cell.favorablelab.text = [NSString stringWithFormat:@"%.1f",[self.items[@"orderDiscount"] doubleValue]] ;
+        cell.favorablelab.text = [NSString stringWithFormat:@"%.2f",[self.items[@"orderDiscount"] doubleValue]] ;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -255,7 +255,7 @@
         if (success) {
 //            [MMProgressHUD dismiss];
             self.items = [data objectForKey:@"order"] ;
-            self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5;
+            self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5 + 35;
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
 

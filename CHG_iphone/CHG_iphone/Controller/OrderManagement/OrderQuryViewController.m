@@ -11,7 +11,9 @@
 #import "OrdersGoodsCell.h"
 #import "NimbusAttributedLabel.h"
 #import "NSMutableAttributedString+NimbusAttributedLabel.h"
-@interface OrderQuryViewController ()<UUDatePickerDelegate>
+#import "PickGoodsViewController.h"
+#import "CompletedOrderDetailsViewController.h"
+@interface OrderQuryViewController ()<UUDatePickerDelegate,UITextFieldDelegate>
 @property UINib* OrderQueryNib;
 @property UINib* OrdersGoodsNib;
 @end
@@ -68,6 +70,7 @@
                                                Delegate:self
                                             PickerStyle:UUDateStyle_YearMonthDay];
     NSDate *now = [NSDate date];
+    self.startdatePicker.maxLimitDate = now;
     self.startdatePicker.ScrollToDate = now;
     
     //delegate
@@ -75,11 +78,13 @@
                                                     Delegate:self
                                                  PickerStyle:UUDateStyle_YearMonthDay];
 //    NSDate *now = [NSDate date];
+    self.enddatePicker.maxLimitDate = now;
     self.enddatePicker.ScrollToDate = now;
     
     self.starttime.inputView = self.startdatePicker;
+    self.starttime.delegate = self;
     self.endtime.inputView = self.enddatePicker;
-    
+    self.endtime.delegate = self;
     [self setupRefresh];
 }
 -(void)setupQRadioButton
@@ -126,11 +131,12 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return  1;
+    NSArray* itme = [[self.items objectAtIndex:section] objectForKey:@"productList"] ;
+    return  [itme count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
 //    if (indexPath.section == 0) {
 //        OrderQueryCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderQueryCell"];
 //        if(cell==nil){
@@ -325,6 +331,34 @@
     
     return v_footer;
 }
+
+-(void)goskipdetails:(UIButton*)sender
+{
+    NSString* strtag = [NSString stringWithFormat:@"%d",sender.tag];
+    NSInteger ntag = [[strtag substringFromIndex:2] intValue];
+    
+    NSDictionary* dictionary = [self.items objectAtIndex:ntag];
+    DLog(@"dictionary = %@",dictionary);
+    if (ntag == 10) {
+        DLog(@"详情");
+        if ([dictionary[@"orderStatus"] intValue] == 0) {
+            DLog(@"未完成订单")
+            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+            PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            PickGoodsView.ManagementTyep = self.ManagementTyep;
+            [self.navigationController pushViewController:PickGoodsView animated:YES];
+        }
+        else
+        {
+            DLog(@"已完成订单");
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.ManagementTyep = self.ManagementTyep;
+            [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            
+        }
+    }
+}
 #pragma mark - UUDatePicker's delegate
 - (void)uuDatePicker:(UUDatePicker *)datePicker
                 year:(NSString *)year
@@ -451,6 +485,9 @@
 
 -(IBAction)QueryOrderBtn:(UIButton*)sender
 {
+    [self.starttime resignFirstResponder];
+    [self.endtime resignFirstResponder];
+    [self.items removeAllObjects];
     self.m_nPageNumber = 1;
     [self checkDatas];
 }
@@ -511,5 +548,18 @@
         //        [self.tableview.footer endRefreshing];
     });
 }
-
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (textField.text.length == 0) {
+        NSDate *  senddate=[NSDate date];
+        
+        NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
+        
+        [dateformatter setDateFormat:@"YYYY-MM-dd"];
+        
+        NSString *  locationString=[dateformatter stringFromDate:senddate];
+        textField.text = locationString;
+        NSLog(@"locationString:%@",locationString);
+    }
+}
 @end

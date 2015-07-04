@@ -140,7 +140,7 @@
     }
     else
     {
-        return 106;
+        return 105;
     }
 }
 //-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -180,6 +180,8 @@
             {
                 PresellGoodsView.orderSaletype = SaleTypePresell;
             }
+            
+            PresellGoodsView.m_returnType = OrderReturnTypeAMember;
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		27A02FF8FF9E75B8B06D1157 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FFC0609EA17E6E08581D28 /* libPods.a */; };
+		2E2B0A751B46D0490009720E /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E2B0A741B46D0490009720E /* BaiduMapAPI.framework */; };
 		2E3B4C151B2228CF00D4C34F /* QRadioButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3B4BF91B2228CF00D4C34F /* QRadioButton.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2E3D118D1B1E91CB00180782 /* JKCountDownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3D118C1B1E91CB00180782 /* JKCountDownButton.m */; };
 		2E3D11981B1ECED300180782 /* OrderCounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3D11961B1ECED300180782 /* OrderCounterViewController.m */; };
@@ -346,7 +347,6 @@
 		2EE9F2971B221F41006EB46B /* DKFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F28F1B221F41006EB46B /* DKFilterModel.m */; };
 		2EE9F2981B221F41006EB46B /* DKFilterSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F2911B221F41006EB46B /* DKFilterSectionHeaderView.m */; };
 		2EE9F2991B221F41006EB46B /* DKFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F2931B221F41006EB46B /* DKFilterView.m */; };
-		2EEA2C701B4419E800093FF5 /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEA2C6F1B4419E800093FF5 /* BaiduMapAPI.framework */; };
 		2EFD84C71B426AF500E5A915 /* btn_Member_order.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EFD84C61B426AF500E5A915 /* btn_Member_order.png */; };
 		2EFD84CA1B4287D900E5A915 /* btn_return_hl.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EFD84C81B4287D900E5A915 /* btn_return_hl.png */; };
 		2EFD84CB1B4287D900E5A915 /* btn_return.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EFD84C91B4287D900E5A915 /* btn_return.png */; };
@@ -362,6 +362,7 @@
 /* Begin PBXFileReference section */
 		0CB982631FF3B74918494AE3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		27FFC0609EA17E6E08581D28 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E2B0A741B46D0490009720E /* BaiduMapAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BaiduMapAPI.framework; path = CHG_iphone/Vendor/BaiduMapAPI.framework; sourceTree = "<group>"; };
 		2E3B4BF81B2228CF00D4C34F /* QRadioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRadioButton.h; sourceTree = "<group>"; };
 		2E3B4BF91B2228CF00D4C34F /* QRadioButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRadioButton.m; sourceTree = "<group>"; };
 		2E3D118B1B1E91CB00180782 /* JKCountDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKCountDownButton.h; sourceTree = "<group>"; };
@@ -902,7 +903,6 @@
 		2EE9F2921B221F41006EB46B /* DKFilterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DKFilterView.h; sourceTree = "<group>"; };
 		2EE9F2931B221F41006EB46B /* DKFilterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DKFilterView.m; sourceTree = "<group>"; };
 		2EE9F2941B221F41006EB46B /* DKMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DKMacros.h; sourceTree = "<group>"; };
-		2EEA2C6F1B4419E800093FF5 /* BaiduMapAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BaiduMapAPI.framework; path = CHG_iphone/Vendor/BaiduMapAPI.framework; sourceTree = "<group>"; };
 		2EFD84C61B426AF500E5A915 /* btn_Member_order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_Member_order.png; sourceTree = "<group>"; };
 		2EFD84C81B4287D900E5A915 /* btn_return_hl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_return_hl.png; sourceTree = "<group>"; };
 		2EFD84C91B4287D900E5A915 /* btn_return.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_return.png; sourceTree = "<group>"; };
@@ -928,7 +928,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EEA2C701B4419E800093FF5 /* BaiduMapAPI.framework in Frameworks */,
+				2E2B0A751B46D0490009720E /* BaiduMapAPI.framework in Frameworks */,
 				2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */,
 				2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */,
 				2EDD3D781B1F61B800D19EA0 /* SystemConfiguration.framework in Frameworks */,
@@ -950,7 +950,7 @@
 		190B73523040FED61E1E3449 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2EEA2C6F1B4419E800093FF5 /* BaiduMapAPI.framework */,
+				2E2B0A741B46D0490009720E /* BaiduMapAPI.framework */,
 				2E93B1261B32E63D00B282FF /* MapKit.framework */,
 				2E547D371B1FF8A400E148C2 /* libiconv.dylib */,
 				2E547D351B1FF89500E148C2 /* CoreVideo.framework */,

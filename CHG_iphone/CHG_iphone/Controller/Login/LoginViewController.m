@@ -41,6 +41,7 @@
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
+    
     DLog(@"frame = %@  width = %f height = %f",NSStringFromCGRect(self.tableview.frame),SCREEN_WIDTH,SCREEN_HEIGHT);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -69,8 +70,8 @@
         cell = (LoginCell*)[[self.LoginNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
-    
    
+   [cell.passwordTextfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     cell.didSkipSubItem = ^(NSInteger tag){
         
@@ -273,7 +274,7 @@
             {
                 
                 
-                if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] !=1) {
+                if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] > 1) {
                     
                     
                     StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
@@ -281,6 +282,14 @@
                         [MMProgressHUD dismiss];
                     }];
                 }
+//                else if([config.shopList count] == 0)
+//                {
+//                    [MMProgressHUD dismiss];
+//                    [SGInfoAlert showInfo:@"门店老板没有门店"
+//                                  bgColor:[[UIColor blackColor] CGColor]
+//                                   inView:self.view
+//                                 vertical:0.7];
+//                }
                 else
                 {
                     
@@ -302,13 +311,13 @@
                     
                     
                     
-                    if ([config.shopList count] == 0 || [config.Roles isEqualToString:@"PARTNER"]){
+                    if ([config.shopList count] != 0 || ([config.shopList count] == 0 &&[config.Roles isEqualToString:@"PARTNER"])){
                         [self setupHomePageViewController];
                     }
                     else
                     {
                         [MMProgressHUD dismiss];
-                        [SGInfoAlert showInfo:@"数据异常"
+                        [SGInfoAlert showInfo:@"没有门店信息"
                                       bgColor:[[UIColor blackColor] CGColor]
                                        inView:self.view
                                      vertical:0.7];
@@ -431,5 +440,15 @@
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     }];
+}
+- (void) textFieldDidChange:(UITextField *)textField
+{
+    if (textField.text.length > 16) {
+        [SGInfoAlert showInfo:@"密码不能大于16位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        [textField resignFirstResponder];
+    }
 }
 @end

@@ -562,6 +562,7 @@
             else
             {
 //                [MMProgressHUD dismissWithError:@"手机号码不正确"];
+                self.isScan = NO;
                 [MMProgressHUD dismiss];
                 [SGInfoAlert showInfo:@"手机号码不正确"
                               bgColor:[[UIColor blackColor] CGColor]
@@ -631,7 +632,7 @@
             {
                 PresellGoodsView.orderSaletype = SaleTypeSellingGoods;
             }
-            
+            PresellGoodsView.m_returnType = OrderReturnTypeHomePage;
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }
@@ -768,14 +769,14 @@
 {
     if (upOrdown == NO) {
         num ++;
-        _line.frame = CGRectMake(75, 15+2*num, 170, 2);
+        _line.frame = CGRectMake((SCREEN_WIDTH-170)/2, 15+2*num, 170, 2);
         if (2*num == 170) {
             upOrdown = YES;
         }
     }
     else {
         num --;
-        _line.frame = CGRectMake(75, 15+2*num, 170, 2);
+        _line.frame = CGRectMake((SCREEN_WIDTH-170)/2, 15+2*num, 170, 2);
         if (num == 0) {
             upOrdown = NO;
         }

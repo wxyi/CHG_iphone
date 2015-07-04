@@ -31,10 +31,24 @@ static SUHelper *sSharedInstance;
     
     
     if (![ConfigManager sharedInstance].PubServer_URL) {
-        [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKey:@"PubServer_HOST"];
+        if ([[dictionary objectForKey:@"BelongsArea"] intValue] == 0) {
+            [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKey:@"PubServer_HOST_ShH"];
+        }
+        else
+        {
+            [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKey:@"PubServer_HOST_BJ"];
+        }
+        
     }
     if (![ConfigManager sharedInstance].PubServer_TokenUrl) {
-        [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token"];
+        if ([[dictionary objectForKey:@"BelongsArea"] intValue] == 0) {
+            [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token_ShH"];
+        }
+        else
+        {
+            [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token_BJ"];
+        }
+        
     }
     DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_URL);
     DLog(@"PubServer_Token = %@",[ConfigManager sharedInstance].PubServer_TokenUrl);

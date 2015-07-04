@@ -35,12 +35,12 @@
         textField.text = @"";
         
         NSString* info;
-        if (self.orderSaletype == SaleTypePickingGoods) {
-            info = @"实收金额大于应收金额";
+        if (self.orderSaletype == SaleTypeSellingGoods ||self.orderSaletype == SaleTypePresell) {
+            info = @"实收金额小于或等于应收金额";
         }
         else
         {
-            info = @"实退金额大于应退金额";
+            info = @"实退金额小于或等于应退金额";
         }
         [SGInfoAlert showInfo:info
                       bgColor:[[UIColor blackColor] CGColor]

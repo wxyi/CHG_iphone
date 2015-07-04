@@ -48,7 +48,7 @@
     [sender startWithSecond:60];
 //    __weak typeof(self) weakSelf = self;
     sender.alpha=0.4;
-    
+    sender.titleLabel.textColor = [UIColor grayColor];
     
     [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
         NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
@@ -56,6 +56,7 @@
     }];
     [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
         sender.alpha=1;
+        sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
         countDownButton.enabled = YES;
         return @"点击重新获取";
         

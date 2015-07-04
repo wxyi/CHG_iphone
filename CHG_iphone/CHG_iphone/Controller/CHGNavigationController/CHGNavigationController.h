@@ -13,6 +13,7 @@
 - (void)showMenu;
 - (void)goback;
 - (void)gobacktoSuccess;
+- (void)gobackMemberCenter;
 -(void)unbundlingbankCard;
 -(void)skipPage;
 -(void)RegisteSuccessful;

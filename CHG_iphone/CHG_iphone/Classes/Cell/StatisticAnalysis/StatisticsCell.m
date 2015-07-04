@@ -19,6 +19,7 @@
     [self addSubview:self.bottomview];
     
     self.bgview = [[UIView alloc] initWithFrame:CGRectZero];
+//    self.bgview.backgroundColor = UIColorFromRGB(0x)
     [self.bottomview addSubview:self.bgview];
     
 }
@@ -44,16 +45,18 @@
     else
         self.bgview.backgroundColor = [UIColor grayColor];
     
-    self.dateLab = [[UILabel alloc] initWithFrame:frame];
+    self.dateLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, CGRectGetWidth(self.bgview.frame)-10, CGRectGetHeight(self.bgview.frame))];
     self.dateLab.textAlignment = NSTextAlignmentLeft;
     self.dateLab.font = FONT(12);
+    self.dateLab.textColor = [UIColor whiteColor];
     self.dateLab.text = date;
     [self.bgview addSubview:self.dateLab];
     
     frame.size.width -= 10;
-    self.numlab = [[UILabel alloc] initWithFrame:frame];
+    self.numlab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, CGRectGetWidth(self.bgview.frame)-10, CGRectGetHeight(self.bgview.frame))];
     self.numlab.textAlignment = NSTextAlignmentRight;
     self.numlab.font = FONT(12);
+    self.numlab.textColor = [UIColor whiteColor];
     self.numlab.text = [NSString stringWithFormat:@"%d",number];
     [self.bgview addSubview:self.numlab];
     

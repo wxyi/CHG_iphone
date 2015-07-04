@@ -120,7 +120,13 @@
     orderstatus.font = FONT(13);
     orderstatus.textColor = UIColorFromRGB(0x878787);
     
+    NSString* statue;
+    if ([dict[@"orderStatus"] intValue] == 1)
+        statue = @"已完成";
+    else if ([dict[@"orderStatus"] intValue] == 0)
+        statue = @"未完成";
     NSString* orderType;
+    
     if ([dict[@"orderType"] isEqualToString:@"ShopSale"]) {
         orderType = @"卖货订单";
     }
@@ -128,8 +134,8 @@
     {
         orderType = @"预订订单";
     }
-
-    orderstatus.text = [NSString stringWithFormat:@"%@ ",orderType];
+    
+    orderstatus.text = [NSString stringWithFormat:@"%@ %@",statue,orderType];
     
     [v_header addSubview:orderstatus];
     
@@ -161,6 +167,31 @@
     goodscountlab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
     goodscountlab.attributedText = text;
     [v_footer addSubview:goodscountlab];
+    
+    
+    string = [NSString stringWithFormat:@"实付%.2f元",[dict[@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[dict[@"orderFactAmount"] doubleValue]]];
+    text = [[NSMutableAttributedString alloc] initWithString:string];
+    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
+    
+    
+    
+    
+    //设置一个行高上限
+    CGSize size = CGSizeMake(320,2000);
+    //计算实际frame大小，并将label的frame变成实际大小
+    CGSize labelsize = [string sizeWithFont:FONT(15) constrainedToSize:size];
+    
+    
+    NIAttributedLabel* pricelab = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - labelsize.width+5, 0, labelsize.width, 30)];
+    
+    pricelab.font = FONT(15);
+    pricelab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
+    pricelab.textAlignment = NSTextAlignmentRight;
+    pricelab.attributedText = text;
+    [v_footer addSubview:pricelab];
+    
+    
     
     UILabel* line = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, SCREEN_WIDTH, 0.5)];
     line.backgroundColor = [UIColor lightGrayColor];
