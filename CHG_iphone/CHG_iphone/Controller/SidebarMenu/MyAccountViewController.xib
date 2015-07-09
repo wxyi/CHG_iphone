@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyAccountViewController">
             <connections>
+                <outlet property="collection" destination="Liv-sG-l1j" id="NvD-0d-zxR"/>
                 <outlet property="tableview" destination="10o-QJ-BT0" id="TFf-0T-V2q"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,16 +18,60 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="10o-QJ-BT0">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <rect key="frame" x="0.0" y="105" width="320" height="463"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="463" id="Gka-Vg-dMz"/>
+                    </constraints>
                 </tableView>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Liv-sG-l1j">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                    <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="75" id="QK2-8Q-A6z"/>
+                        <constraint firstAttribute="width" constant="320" id="RUb-zm-laP"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="X5K-DA-YKN">
+                        <size key="itemSize" width="160" height="75"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jz4-Oi-Ap4">
+                    <rect key="frame" x="159" y="10" width="1" height="51"/>
+                    <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="1" id="YJr-Fu-UTO"/>
+                        <constraint firstAttribute="height" constant="51" id="h8F-U9-4zy"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="账户明细" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6af-d6-Mch">
+                    <rect key="frame" x="0.0" y="75" width="320" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="0lv-ql-9J9"/>
+                        <constraint firstAttribute="height" constant="30" id="gLM-0A-gav"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="10o-QJ-BT0" secondAttribute="centerY" id="Czk-O2-9Pr"/>
-                <constraint firstAttribute="centerX" secondItem="10o-QJ-BT0" secondAttribute="centerX" id="Wc5-FY-WaK"/>
-                <constraint firstItem="10o-QJ-BT0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ucL-M7-6o4"/>
-                <constraint firstItem="10o-QJ-BT0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="vIr-fP-xRt"/>
+                <constraint firstItem="10o-QJ-BT0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="51X-vO-BdB"/>
+                <constraint firstItem="Liv-sG-l1j" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="5dF-aR-Ba3"/>
+                <constraint firstAttribute="trailing" secondItem="Liv-sG-l1j" secondAttribute="trailing" id="7dy-uw-UZN"/>
+                <constraint firstAttribute="centerX" secondItem="jz4-Oi-Ap4" secondAttribute="centerX" id="Irc-mh-H8E"/>
+                <constraint firstAttribute="trailing" secondItem="6af-d6-Mch" secondAttribute="trailing" id="J93-Jr-6Oc"/>
+                <constraint firstItem="6af-d6-Mch" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="75" id="M0c-aB-q6I"/>
+                <constraint firstAttribute="trailing" secondItem="6af-d6-Mch" secondAttribute="trailing" id="QqI-oN-LmN"/>
+                <constraint firstAttribute="bottom" secondItem="10o-QJ-BT0" secondAttribute="bottom" id="TMO-8T-MbD"/>
+                <constraint firstItem="10o-QJ-BT0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="105" id="Uoc-Tc-cWW"/>
+                <constraint firstItem="6af-d6-Mch" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="VbN-US-ntO"/>
+                <constraint firstAttribute="trailing" secondItem="10o-QJ-BT0" secondAttribute="trailing" id="WMu-S8-DDr"/>
+                <constraint firstItem="Liv-sG-l1j" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lz8-yc-VcF"/>
+                <constraint firstItem="6af-d6-Mch" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tmD-J5-CXZ"/>
             </constraints>
             <point key="canvasLocation" x="325" y="155"/>
         </view>

@@ -42,9 +42,12 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
-    if (self.BtnSkipSelect) {
-        self.BtnSkipSelect(sender.tag,self.items);
+    if ([[self.items objectForKey:@"productList"] count] != 0) {
+        if (self.BtnSkipSelect) {
+            self.BtnSkipSelect(sender.tag,self.items);
+        }
     }
+    
 }
 -(void)setupView
 {

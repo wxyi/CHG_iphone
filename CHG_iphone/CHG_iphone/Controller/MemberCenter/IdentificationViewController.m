@@ -283,8 +283,8 @@
             cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.iphonelab.text = [NSString stringWithFormat:@"手机号码:%@",self.dict[@"custMobile"]];
-        cell.namelab.text = [NSString stringWithFormat:@"姓名:%@",self.dict[@"custName"]];
+        cell.iphonelab.text = [NSString stringWithFormat:@"%@",self.dict[@"custMobile"]];
+        cell.namelab.text = [NSString stringWithFormat:@"%@",self.dict[@"custName"]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -295,7 +295,7 @@
             cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        
+        cell.iphoneTextfiel.frame = CGRectMake(10, 0, SCREEN_WIDTH -20, 40);
         cell.iphoneTextfiel.delegate = self;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -342,7 +342,7 @@
     upOrdown = NO;
     num =0;
     _line = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 2)];
-    _line.image = [UIImage imageNamed:@"scan_laser.png"];
+    _line.image = [NSObject createImageWithColor:UIColorFromRGB(0xF5A541)];//[UIImage imageNamed:@"scan_laser.png"];
     [v_header addSubview:_line];
     
     
@@ -350,7 +350,7 @@
     promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
     promptlabel.textLabel.text = @"扫描二维码识别商品信息";
     promptlabel.textLabel.font = FONT(12);
-    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+    promptlabel.textLabel.textColor = [UIColor whiteColor];
     promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
     //    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_header addSubview:promptlabel];
@@ -511,14 +511,27 @@
             
             [MMProgressHUD dismiss];
             [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKey:@"datas"] objectForKey:@"Cust"] objectForKey:@"custId"] intValue]];
+            
+            
             DLog(@"识别成功");
             self.dict = [[data objectForKey:@"datas"] objectForKey:@"Cust"];
-            self.isScan = YES;
-//            [self.tableview reloadData];
-            NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-            [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[self.dict objectForKey:@"custId"] intValue]];
+            [ConfigManager sharedInstance].strcustMobile = [NSString stringWithFormat:@"%@",[self.dict objectForKey:@"custMobile"] ];
+            [ConfigManager sharedInstance].strcustName = [NSString stringWithFormat:@"%@",[self.dict objectForKey:@"custName"]];
             
-            [self setBtnTitle];
+            if (self.m_MenuType == MenuTypeMemberCenter) {
+                [self skipVariousPages];
+            }
+            else
+            {
+                [self setBtnTitle];
+                
+                self.isScan = YES;
+                //            [self.tableview reloadData];
+                NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+                [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            
 //            if (self.isScan){
 //                
 //                [self.tableview reloadData];
@@ -538,15 +551,8 @@
             if ([IdentifierValidator isValid:IdentifierTypePhone value:custMobile])
             {
                 [MMProgressHUD dismiss];
-                self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                     DLog(@"否");
-                    //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
-                    //                textfield.text = @"";
-                    //                [_session stopRunning];
-                    //                [_session startRunning];
-                    self.isfinish = NO;
-                } otherButtonBlock:^{
-                    DLog(@"是");
                     self.isScan = NO;
                     //                [self.ZBarReader stop];
                     
@@ -555,6 +561,15 @@
                     RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
                     RegisteredMembersView.strIphone = texield.text;
                     [self.navigationController pushViewController:RegisteredMembersView animated:YES];
+                    //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
+                    //                textfield.text = @"";
+                    //                [_session stopRunning];
+                    //                [_session startRunning];
+                    
+                } otherButtonBlock:^{
+                    self.isfinish = NO;
+                    DLog(@"是");
+                    
                 }];
                 
                 [self.stAlertView show];
@@ -603,7 +618,7 @@
         {
             DLog(@"注册成功")
             successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
-            successfulIdentifyView.m_CustDict = self.dict;
+//            successfulIdentifyView.m_CustDict = self.dict;
             [self.navigationController pushViewController:successfulIdentifyView animated:YES];
             break;
         }

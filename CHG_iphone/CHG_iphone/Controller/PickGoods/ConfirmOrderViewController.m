@@ -11,6 +11,7 @@
 #import "PickGoodsViewController.h"
 #import "PresellGoodsViewController.h"
 #import "CompletedOrderDetailsViewController.h"
+#import "OrderManagementViewController.h"
 @interface ConfirmOrderViewController ()
 @property UINib* ConfirmOrderNib;
 @end
@@ -19,7 +20,34 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"订单完成";
+//    self.title = @"订单完成";
+    
+    if(self.Confirmsaletype == SaleTypeSellingGoods || self.Confirmsaletype == SaleTypePresell)
+    {
+        self.strfinish = @"订单完成";
+    }
+    else if(self.Confirmsaletype == SaleTypePickingGoods)
+    {
+        self.strfinish = @"提货完成";
+    }
+    else if (self.Confirmsaletype == SaleTypeReturnGoods)
+    {
+        self.strfinish = @"退货完成";
+    }
+    else if (self.Confirmsaletype == SaleTypeStopOrder)
+    {
+        self.strfinish = @"终止订单完成";
+    }
+    self.title = self.strfinish;
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -57,6 +85,9 @@
         
     }
     
+    
+    cell.finishLab.text = self.strfinish;
+    
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -83,14 +114,25 @@
     
     if (self.Confirmsaletype == SaleTypeSellingGoods
         ||self.Confirmsaletype == SaleTypePickingGoods
-        ||self.Confirmsaletype == SaleTypeReturnGoods) {
+        ||self.Confirmsaletype == SaleTypeReturnGoods
+        ||self.Confirmsaletype == SaleTypeStopOrder) {
         UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         detailsbtn.tag = 100;
         detailsbtn.frame = CGRectMake(6, 65, CGRectGetWidth(self.view.bounds)-12, 40);
         [detailsbtn.layer setMasksToBounds:YES];
         [detailsbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
         [detailsbtn setBackgroundColor:UIColorFromRGB(0x171c61)];
-        [detailsbtn setTitle:@"订单详情" forState:UIControlStateNormal];
+        
+        if (self.Confirmsaletype == SaleTypePickingGoods
+            ||self.Confirmsaletype == SaleTypeReturnGoods
+            ||self.Confirmsaletype == SaleTypeStopOrder) {
+            [detailsbtn setTitle:@"会员订单" forState:UIControlStateNormal];
+        }
+        else
+        {
+            [detailsbtn setTitle:@"订单详情" forState:UIControlStateNormal];
+        }
+        
         [detailsbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [detailsbtn addTarget:self action:@selector(detailsbtn:) forControlEvents:UIControlEventTouchUpInside];
         [v_footer addSubview:detailsbtn];
@@ -133,15 +175,31 @@
             PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
             PickGoodsView.strOrderId = self.strOrderId;
             PickGoodsView.ManagementTyep = OrderManagementTypeSingle;
+            PickGoodsView.skiptype = SkipFromOrderFinish;
             [self.navigationController pushViewController:PickGoodsView animated:YES];
         }
         else
         {
-            DLog(@"已完成订单");
-            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = self.strOrderId;
-            CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeSingle;
-            [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            if (self.Confirmsaletype == SaleTypePickingGoods
+                ||self.Confirmsaletype == SaleTypeReturnGoods
+                ||self.Confirmsaletype == SaleTypeStopOrder) {
+                OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+                OrderManagementView.title = @"会员订单";
+                OrderManagementView.m_returnType = OrderReturnTypeAMember;
+                OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
+                [self.navigationController pushViewController:OrderManagementView animated:YES];
+            }
+            else
+            {
+                DLog(@"已完成订单");
+                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                CompletedOrderDetailsView.strOrderId = self.strOrderId;
+                CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeSingle;
+                CompletedOrderDetailsView.skiptype = SkipFromOrderFinish;
+                CompletedOrderDetailsView.Comordertype = detailsOrder;
+                [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            }
+            
             
         }
     
@@ -152,7 +210,9 @@
         DLog(@"提货");
 
         PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+        PresellGoodsView.m_returnType = OrderReturnTypeAMember;
         PresellGoodsView.orderSaletype = SaleTypePickingGoods;
+        PresellGoodsView.skiptype = SkipFromOrderFinish;
         [self.navigationController pushViewController:PresellGoodsView animated:YES];
     }
 

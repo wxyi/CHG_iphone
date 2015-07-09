@@ -31,7 +31,7 @@
 //    self.title = [self pagetitle];
     
     self.isSkip = NO;
-    [self getCurrentData];
+    
     self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     self.slideSwitchView.backgroundColor = UIColorFromRGB(0x171c61);
@@ -55,12 +55,29 @@
     self.StoreSalesDay.strMonth = self.strMonth;
     self.StoreSalesDay.strDay = self.strDay;
     self.StoreSalesDay.statisticalType = self.statisticalType;
-    self.StoreSalesDay.skipdetails=^(NSString* orderID){
+    self.StoreSalesDay.CellSkipSelect =^(NSDictionary* dictionary){
         DLog(@"跳转详情");
-        CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-        CompletedOrderDetailsView.strOrderId = orderID;
-        CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeAll;
-        [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+        if ([dictionary[@"orderStatus"] intValue] == 0) {
+            DLog(@"未完成订单")
+            PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+            PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            PickGoodsView.ManagementTyep = OrderManagementTypeAll;
+            [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+        }
+        else
+        {
+            DLog(@"已完成订单");
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeAll;
+            CompletedOrderDetailsView.Comordertype = detailsOrder;
+            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            
+        }
+//        CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+//        CompletedOrderDetailsView.strOrderId = orderID;
+//        CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeAll;
+//        [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
     };
     
 
@@ -164,7 +181,7 @@
             strTitle = @"动销奖励";
             break;
         case StatisticalTypePartnersRewards:
-            strTitle = @"合作商分账奖励";
+            strTitle = @"分账奖励";
             break;
         default:
             break;
@@ -180,20 +197,5 @@
     // Pass the selected object to the new view controller.
 }
 */
--(void)getCurrentData
-{
-    NSDate *now = [NSDate date];
-    NSLog(@"now date is: %@", now);
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-    
-    
-    self.strYear = [NSString stringWithFormat:@"%ld",(long)[dateComponent year]];
-    self.strMonth = [NSString stringWithFormat:@"%d",[dateComponent month]];
-    self.strDay = [NSString stringWithFormat:@"%d",[dateComponent day]];
-    
-    
-}
+
 @end

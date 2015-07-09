@@ -8,7 +8,7 @@
 
 #import "ChangePasswordViewController.h"
 #import "ForgetViewController.h"
-@interface ChangePasswordViewController ()
+@interface ChangePasswordViewController ()<UITextFieldDelegate>
 
 @end
 
@@ -80,7 +80,7 @@
     textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.returnKeyType = UIReturnKeyDone;
     textField.clearButtonMode = UITextFieldViewModeWhileEditing; //编辑时会出现个修改X
-    
+    textField.delegate = self;
     [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [cell.contentView addSubview:textField];
     
@@ -165,6 +165,10 @@
     {
         info = @"密码必须大于16位";
     }
+    else if (passfield0.text.length < 6)
+    {
+        info = @"密码不能小于6位";
+    }
     else if(passfield1.text.length == 0)
     {
         info = @"请确认密码";
@@ -173,9 +177,17 @@
     {
         info = @"密码必须小于16位";
     }
+    else if (passfield1.text.length < 6)
+    {
+        info = @"密码不能小于6位";
+    }
     else if(passfield2.text.length == 0)
     {
         info = @"请确认密码";
+    }
+    else if (passfield2.text.length < 6)
+    {
+        info = @"密码不能小于6位";
     }
     else if (passfield2.text.length > 16)
     {
@@ -222,10 +234,16 @@
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
         {
             [MMProgressHUD dismiss];
+            
+//            [SGInfoAlert showInfo:@"密码修改成功"
+//                          bgColor:[[UIColor blackColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+            
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
             [self.navigationController popToRootViewControllerAnimated:YES];
-//            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-//            [delegate setupHomePageViewController];
+            AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+            [delegate setupHomePageViewController];
             
         }
         else
@@ -264,7 +282,17 @@
         [SGInfoAlert showInfo:@"密码不能大于16位"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.7];
+                     vertical:0.5];
+        [textField resignFirstResponder];
+    }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length < 6) {
+        [SGInfoAlert showInfo:@"密码不能小于6位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.5];
         [textField resignFirstResponder];
     }
 }

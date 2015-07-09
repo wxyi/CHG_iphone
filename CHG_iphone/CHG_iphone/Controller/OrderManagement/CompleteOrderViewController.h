@@ -14,5 +14,6 @@
 @property(nonatomic,strong)NSMutableArray* items;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property(nonatomic,assign)NSInteger m_nPageNumber;
+@property(nonatomic,assign)BOOL isRefresh;
 -(IBAction)returnGoods:(UIButton*)sender;
 @end

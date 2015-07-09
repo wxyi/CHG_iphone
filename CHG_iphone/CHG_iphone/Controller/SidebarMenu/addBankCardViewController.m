@@ -11,7 +11,7 @@
 #import "SelectBankCardCell.h"
 #import "JTImageLabel.h"
 #import "UIPopoverListView.h"
-@interface addBankCardViewController ()<UIPopoverListViewDataSource, UIPopoverListViewDelegate>
+@interface addBankCardViewController ()<UIPopoverListViewDataSource, UIPopoverListViewDelegate,UITextFieldDelegate>
 @property UINib* AddShoppersNib;
 @property UINib* SelectBankCardNib;
 @end
@@ -75,7 +75,9 @@
         cell.namelab.text = [self.items objectAtIndex:indexPath.row];
         cell.namelab.textAlignment = NSTextAlignmentRight;
         cell.nametext.placeholder = [self.items objectAtIndex:indexPath.row];
-        
+        cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
+        cell.nametext.delegate = self;
+        [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         if (indexPath.row == 0) {
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             cell.nametext.text = config.strUsername;
@@ -85,7 +87,7 @@
         if (indexPath.row == 1) {
             cell.nametext.keyboardType = UIKeyboardTypeNumberPad;
 //            cell.nametext.delegate = self;
-            [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            
         }
         
         cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
@@ -119,12 +121,14 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 85)];
     
     JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
-    promptlabel.tag = 103;
+    promptlabel.tag = 103333;
     
     promptlabel.textLabel.text = @"";
     promptlabel.textLabel.font = FONT(12);
     promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
     promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+//    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+//    promptlabel.textLabel.text = @"持卡人名称不能大于32位";
     //    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_footer addSubview:promptlabel];
     UIButton* Confirmbtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -342,28 +346,70 @@
     return 40;
 }
 
-- (void) textFieldDidChange:(id) sender {
-    UITextField *_field = (UITextField *)sender;
+- (void) textFieldDidChange:(UITextField*) field {
+    
     UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
-    if (_field.text.length >= 6) {
-        BanKCode* code = [[BanKCode alloc] init];
-        DLog(@"[textField.text substringToIndex:6] = %@",[_field.text substringToIndex:6]);
-        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[_field.text substringToIndex:6]];
-        DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
-        self.bank = code;
-        
-        if (code.bankName.length != 0) {
-            textlab.text = code.bankName;
+    NSString* info;
+    if (field.tag == 1010) {
+        if (field.text.length > 32) {
+            field.text = [field.text substringToIndex:32];
+//            [field resignFirstResponder];
+            info = @"持卡人姓名不能大于32位";
+        }
+    }
+    else if(field.tag == 1011)
+    {
+        if (field.text.length >= 6 && field.text.length <= 19) {
+            BanKCode* code = [[BanKCode alloc] init];
+            DLog(@"[textField.text substringToIndex:6] = %@",[field.text substringToIndex:6]);
+            code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[field.text substringToIndex:6]];
+            DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
+            self.bank = code;
+            
+            if (code.bankName.length != 0) {
+                textlab.text = code.bankName;
+            }
+            else
+            {
+                textlab.text = @"请选择银行";
+            }
+            
+        }
+        else if(field.text.length >= 19)
+        {
+            field.text = [field.text substringToIndex:19];
+            info = @"银行卡号不能大于19位";
+//            [field resignFirstResponder];
         }
         else
         {
             textlab.text = @"请选择银行";
         }
-        
+    }
+    
+    if (info.length > 0) {
+        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+        imagelabel.textLabel.text = info;
+        [imagelabel layoutSubviews];
     }
     else
     {
-        textlab.text = @"请选择银行";
+        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+        imagelabel.imageView.image = nil;
+        imagelabel.textLabel.text = @"";
+        [imagelabel layoutSubviews];
     }
+    
+
 }
+//-(void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    NSString* info;
+//    if (textField.tag == 1011) {
+//        if (textField.text.length < 19) {
+//            info
+//        }
+//    }
+//}
 @end

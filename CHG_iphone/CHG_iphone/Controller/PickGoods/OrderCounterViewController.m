@@ -53,7 +53,18 @@
 ////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
-    self.title = @"订单柜台";
+    if (self.orderSaletype == SaleTypeReturnGoods) {
+        self.title = @"退货柜台";
+    }
+    else if(self.orderSaletype == SaleTypePickingGoods)
+    {
+        self.title = @"提货柜台";
+    }
+    else
+    {
+        self.title = @"订单柜台";
+    }
+//    self.title = @"订单柜台";
     [self setupView];
 
     // Do any additional setup after loading the view from its nib.
@@ -166,11 +177,16 @@
             
             
            [cell setupCell];
+            cell.indexPath = indexPath;
+            cell.operationPage = @"1";
             NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
             
             cell.showCount =^(NSInteger count){
                 UILabel* label = (UILabel*)[self.view viewWithTag:1010];
                 label.text = [NSString stringWithFormat:@"%.2f",count*[dict[@"productPrice"] doubleValue]];
+                
+                UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
+                textfield.text = [NSString stringWithFormat:@"%.2f",count*[dict[@"productPrice"] doubleValue]];
             };
             
             [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
@@ -313,15 +329,15 @@
             }
             
             if (self.orderSaletype == SaleTypeReturnGoods) {
-                self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+                self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                     DLog(@"否");
                     
-                    
+                    [self httpOrderCounter];
                     
                 } otherButtonBlock:^{
                     DLog(@"是");
                     
-                    [self httpOrderCounter];
+                    
                     
                 }];
                 [self.stAlertView show];
@@ -348,18 +364,20 @@
         case 0:
         {
             [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
+                NSMutableArray* tmArray = [self.items mutableCopy];
                 
+                [tmArray removeObjectAtIndex:index];
+                NSString* strindex = [NSString stringWithFormat:@"%d",index];
+                self.items = [tmArray copy];
+                [[NSNotificationCenter defaultCenter] postNotificationName:DELETE_PRESELL_GOODS object:strindex];
+                [self.tableview reloadData];
                 
             } otherButtonBlock:^{
                 DLog(@"是");
                 
-                NSMutableArray* tmArray = [self.items mutableCopy];
                 
-                [tmArray removeObjectAtIndex:index];
-                self.items = [tmArray copy];
-                [self.tableview reloadData];
             }];
             
             [self.stAlertView show];
@@ -494,14 +512,14 @@
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
             
             [MMProgressHUD dismiss];
-            if (self.orderSaletype == SaleTypePickingGoods || self.orderSaletype == SaleTypeReturnGoods) {
-                OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
-                OrderManagementView.title = @"会员订单";
-                OrderManagementView.m_returnType = OrderReturnTypeAMember;
-                OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
-                [self.navigationController pushViewController:OrderManagementView animated:YES];
-            }
-            else
+//            if (self.orderSaletype == SaleTypePickingGoods || self.orderSaletype == SaleTypeReturnGoods) {
+//                OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+//                OrderManagementView.title = @"会员订单";
+//                OrderManagementView.m_returnType = OrderReturnTypeAMember;
+//                OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
+//                [self.navigationController pushViewController:OrderManagementView animated:YES];
+//            }
+//            else
             {
                 ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
                 ConfirmOrderView.Confirmsaletype = self.orderSaletype;

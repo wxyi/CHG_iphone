@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -16,11 +16,11 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="订单完成!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iyN-31-UWZ">
-                        <rect key="frame" x="145" y="60" width="124" height="30"/>
+                        <rect key="frame" x="145" y="60" width="145" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="124" id="qRu-Pi-qBc"/>
+                            <constraint firstAttribute="width" constant="145" id="qRu-Pi-qBc"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
                         <color key="textColor" red="0.0" green="0.25906345749999998" blue="0.5449538934" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -33,13 +33,16 @@
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="sWv-Fy-gmt" secondAttribute="bottom" constant="26" id="Fa4-Ik-nVx"/>
                     <constraint firstItem="sWv-Fy-gmt" firstAttribute="centerY" secondItem="iyN-31-UWZ" secondAttribute="centerY" id="IpP-oE-ok8"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="iyN-31-UWZ" secondAttribute="trailing" constant="43" id="KBo-d9-x5u"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="iyN-31-UWZ" secondAttribute="trailing" constant="22" id="KBo-d9-x5u"/>
                     <constraint firstItem="sWv-Fy-gmt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="22" id="W4M-ul-362"/>
                     <constraint firstItem="iyN-31-UWZ" firstAttribute="leading" secondItem="sWv-Fy-gmt" secondAttribute="trailing" constant="15" id="bEN-cC-z4V"/>
                     <constraint firstItem="iyN-31-UWZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="52" id="hUW-tT-YnI"/>
                     <constraint firstItem="sWv-Fy-gmt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="27" id="wUw-40-EhV"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="finishLab" destination="iyN-31-UWZ" id="xCf-Oh-uPV"/>
+            </connections>
             <point key="canvasLocation" x="289" y="266"/>
         </tableViewCell>
     </objects>

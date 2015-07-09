@@ -280,4 +280,11 @@
  *   忘记密码（登陆页面，还未登陆）
  */
 +(NSString*) ApiForgetPassword;
+
+
+/**
+ *   会员注册获取验证码并校验
+ */
++(NSString*) ApiCreateCustomerBefore;
+
 @end

@@ -13,8 +13,15 @@
 #import "HomePageViewController.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
+#import "WelcomePageViewController.h"
 #import "LoginViewController.h"
 #import "StoreManagementViewController.h"
+
+#import "MyUncaughtExceptionHandler.h"
+
+#import "PLCrashReporter.h"
+//#import <MessageUI/MFMailComposeViewController.h>;
+
 BMKMapManager* _mapManager;
 @interface AppDelegate ()
 
@@ -26,7 +33,27 @@ BMKMapManager* _mapManager;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(setupLoginViewController)
+                                                 name:ACCESS_TOKEN_FAILURE
+                                               object:nil];
+//     PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+//    NSError *error;
+//    // Check if we previously crashed
+//    
+//    if ([crashReporter hasPendingCrashReport])
+//        
+//        [self handleCrashReport];
+//    
+//    
+//    // Enable the Crash Reporter
+//    
+//    if (![crashReporter enableCrashReporterAndReturnError: &error])
+//    {
+//        NSLog(@"Warning: Could not enable crash reporter: %@", error);
+//    }
+//    [picker release];
+
     // 要使用百度地图，请先启动BaiduMapManager
     _mapManager = [[BMKMapManager alloc]init];
     BOOL ret = [_mapManager start:@"SKeSYmG89UjSAfaw9nh0fIIK" generalDelegate:self];
@@ -35,13 +62,11 @@ BMKMapManager* _mapManager;
         NSLog(@"manager start failed!");
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(setupLoginViewController)
-                                                 name:ACCESS_TOKEN_FAILURE
-                                               object:nil];
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+//    self.window.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"page_640.png"]];
 //    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"area" ofType:@"plist"];
 //   NSDictionary* areaDic = [NSDictionary dictionaryWithContentsOfFile:plistPath];
 //    DLog(@"areaDic = %@",[areaDic JSONString]);
@@ -62,60 +87,70 @@ BMKMapManager* _mapManager;
        
     }
     
-    
-    [[SUHelper sharedInstance] sysInit:^(BOOL success) {
-        
-        if(success) {
-            
-            DLog(@"success");
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
-                // 这里判断是否第一次
-                [[SUHelper sharedInstance] GetAddressInfo];
-                [[SUHelper sharedInstance] GetBankCodeInfo];
-                //                [[SUHelper sharedInstance] GetPromoList];
-                
-                [[SUHelper sharedInstance] GetRefreshCache:YES];
-                
-                
-            }
-            
-        }
-    }];
-    
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
-    }
-    else{
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
-    }
-    
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
-    {
-        [self setupLoginViewController];
-    }
-    else
-    {
-        if ([ConfigManager sharedInstance].access_token.length != 0) {
-            
-            [self httpGetUserConfig];
-//            [self setupHomePageViewController];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FREE_LOGIN
-//                                                                object:nil];
-        }
-        else
-        {
-            [self setupLoginViewController];
-        }
-    }
-    
-
-//    [[SUHelper sharedInstance] GetPromoList];
-    
-    
-    self.window.backgroundColor = [UIColor whiteColor];
+//    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+//        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+//    }
+//    else{
+//        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+//    }
+//    
+//    [[SUHelper sharedInstance] sysInit:^(BOOL success) {
+//        
+//        if(success) {
+//            
+//            DLog(@"success");
+//            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
+//                // 这里判断是否第一次
+//                [[SUHelper sharedInstance] GetAddressInfo];
+//                [[SUHelper sharedInstance] GetBankCodeInfo];
+//                //                [[SUHelper sharedInstance] GetPromoList];
+//                
+//                [[SUHelper sharedInstance] GetRefreshCache:YES];
+//                
+//                
+//            }
+//            
+//        }
+//    }];
+//    
+//    
+//    
+//    
+//    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
+//    {
+//        [self setupLoginViewController];
+//    }
+//    else
+//    {
+//       
+//        if ([ConfigManager sharedInstance].access_token.length != 0) {
+//            
+//            [self httpGetUserConfig];
+////            [self setupHomePageViewController];
+////            [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FREE_LOGIN
+////                                                                object:nil];
+//        }
+//        else
+//        {
+//            [self setupLoginViewController];
+//        }
+//    }
+//    
+//
+////    [[SUHelper sharedInstance] GetPromoList];
+//    
+//    
+//    self.window.backgroundColor = [UIColor whiteColor];
+    WelcomePageViewController * view = [[WelcomePageViewController alloc] initWithNibName:@"WelcomePageViewController" bundle:nil];
+    self.window.rootViewController = view;
     [self.window makeKeyAndVisible];
+    
+    
+    [MyUncaughtExceptionHandler setDefaultHandler];
+//    NSArray *array = [NSArray arrayWithObject:@"there is only one objective in this arary,call index one, app will crash and throw an exception!"];
+//    NSLog(@"%@", [array objectAtIndex:1]);
+    
     return YES;
 }
 
@@ -142,6 +177,8 @@ BMKMapManager* _mapManager;
     NSLog(@"---applicationDidBecomeActive----");
     //进入前台
     [BMKMapView didForeGround];
+    
+    [[SUHelper sharedInstance] GetRefreshCache:NO];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -150,14 +187,14 @@ BMKMapManager* _mapManager;
 
 
 
-
+//
 -(void)setupLoginViewController
 {
     LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
     
     self.window.rootViewController = loginview;
 }
- 
+//
 -(void)setupHomePageViewController
 {
     CHGNavigationController *navigationController = [[CHGNavigationController alloc] initWithRootViewController:[[HomePageViewController alloc] init]];
@@ -175,6 +212,13 @@ BMKMapManager* _mapManager;
     //
     self.window.rootViewController = frostedViewController;
 }
+-(void)setupStoreManagementViewController
+{
+    StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+    self.window.rootViewController = StoreManagementView;
+}
+
+
 - (void)onGetNetworkState:(int)iError
 {
     if (0 == iError) {
@@ -198,90 +242,105 @@ BMKMapManager* _mapManager;
 
 
 
--(void)httpGetUserConfig
-{
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    
-    
-    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetUserConfig] parameters:parameter];
-    
-    
-    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
-        //        [MMProgressHUD dismiss];
-        if (success) {
-            DLog(@"data = %@",data);
-            
-            //            [MMProgressHUD dismiss];
-            [ConfigManager sharedInstance].usercfg = [data JSONString];
-            
-            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-            
-            
-            if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] !=1 && [config.shopList count] != 0) {
-                
-                
-                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
-                self.window.rootViewController = StoreManagementView;
-            }
-            else if([config.shopList count] == 0)
-            {
-                [MMProgressHUD dismiss];
-                [self setupLoginViewController];
-            }
-            else
-            {
-                
-                
-                if ([config.Roles isEqualToString:@"PARTNER"]) {
-                    [ConfigManager sharedInstance].shopId = @"";
-                    [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
-                }
-                else
-                {
-                    if ([config.shopList count] != 0) {
-                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
-                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
-                        
-                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
-                    }
-                    
-                }
-                
-                
-                
-                if ([config.shopList count] == 0 || [config.Roles isEqualToString:@"PARTNER"]){
-                    [self setupHomePageViewController];
-                }
-                else
-                {
-                    [MMProgressHUD dismiss];
-                    [self setupLoginViewController];
-                    
-                }
+//-(void)httpGetUserConfig
+//{
+//    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+//    
+//    
+//    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetUserConfig] parameters:parameter];
+//    
+//    
+//    [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+//        //        [MMProgressHUD dismiss];
+//        if (success) {
+//            DLog(@"data = %@",data);
+////            [self removeLun];
+//            //            [MMProgressHUD dismiss];
+//            [ConfigManager sharedInstance].usercfg = [data JSONString];
+//            
+//            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+//            
+//            
+//            if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] !=1 && [config.shopList count] != 0) {
+//                
+//                
+//                StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
+//                self.window.rootViewController = StoreManagementView;
+//            }
+//            else if([config.shopList count] == 0)
+//            {
+//                [MMProgressHUD dismiss];
+//                [self setupLoginViewController];
+//            }
+//            else
+//            {
+//                
+//                
+//                if ([config.Roles isEqualToString:@"PARTNER"]) {
+//                    [ConfigManager sharedInstance].shopId = @"";
+//                    [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
+//                }
+//                else
+//                {
+//                    if ([config.shopList count] != 0) {
+//                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
+//                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+//                        
+//                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+//                    }
+//                    
+//                }
+//                
+//                
+//                
+//                if ([config.shopList count] == 0 || [config.Roles isEqualToString:@"PARTNER"]){
+//                    [self setupHomePageViewController];
+//                }
+//                else
+//                {
+//                    [MMProgressHUD dismiss];
+//                    [self setupLoginViewController];
+//                    
+//                }
+//            }
+//            
+//        }
+//        else
+//        {
+//            //            [MMProgressHUD dismissWithError:msg];
+////            [self removeLun];
+//            [MMProgressHUD dismiss];
+//            [self setupLoginViewController];
+//        }
+//    } failureBlock:^(NSString *description) {
+//        DLog(@"description = n%@",description);
+//        //        [MMProgressHUD dismissWithError:description];
+////        [self removeLun];
+//        [MMProgressHUD dismiss];
+//        [self setupLoginViewController];
+//    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+//        
+//    }];
+//}
 
-                
-            }
-            
-            
-            
-            
-            
-        }
-        else
-        {
-            //            [MMProgressHUD dismissWithError:msg];
-            [MMProgressHUD dismiss];
-            [self setupLoginViewController];
-        }
-    } failureBlock:^(NSString *description) {
-        DLog(@"description = n%@",description);
-        //        [MMProgressHUD dismissWithError:description];
-        [MMProgressHUD dismiss];
-        [self setupLoginViewController];
-    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        
-    }];
-}
+//-(void)handleCrashReport
+//{
+//    DLog(@"handleCrashReport");
+//    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+//    NSData *crashData;
+//    NSError *error;
+//    crashData = [crashReporter
+//                 loadPendingCrashReportDataAndReturnError:
+//                 &error];
+//    MFMailComposeViewController *picker =
+//    [[MFMailComposeViewController alloc] init];
+//    [picker addAttachmentData:crashData
+//                     mimeType:@"application/octet-stream"
+//                     fileName:@"crashfile.crash"];
+//    self.window.rootViewController = picker;
+////    [self.window presentModalViewController:picker
+////                            animated:YES];
+//}
 
 @end

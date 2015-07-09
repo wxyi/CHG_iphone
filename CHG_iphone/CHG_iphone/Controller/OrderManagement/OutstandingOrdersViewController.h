@@ -16,5 +16,6 @@
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property(nonatomic,assign)NSInteger m_nPageNumber;
+@property(nonatomic,assign)BOOL isRefresh;
 -(IBAction)Returngoods:(UIButton*)sender;
 @end

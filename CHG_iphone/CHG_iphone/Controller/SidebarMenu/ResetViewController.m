@@ -8,7 +8,7 @@
 
 #import "ResetViewController.h"
 
-@interface ResetViewController ()
+@interface ResetViewController ()<UITextFieldDelegate>
 
 @end
 
@@ -79,7 +79,7 @@
     textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.returnKeyType = UIReturnKeyDone;
     textField.clearButtonMode = UITextFieldViewModeWhileEditing; //编辑时会出现个修改X
-    
+    textField.delegate = self;
     [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [cell.contentView addSubview:textField];
     
@@ -159,8 +159,14 @@
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             
+//            [SGInfoAlert showInfo:@"密码修改成功"
+//                          bgColor:[[UIColor blackColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+//            sleep(1000);
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
             [self.navigationController popToRootViewControllerAnimated:YES];
+            
             
         }
         else
@@ -198,7 +204,17 @@
         [SGInfoAlert showInfo:@"密码不能大于16位"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.7];
+                     vertical:0.6];
+        [textField resignFirstResponder];
+    }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length < 6) {
+        [SGInfoAlert showInfo:@"密码不能小于6位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.6];
         [textField resignFirstResponder];
     }
 }

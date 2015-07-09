@@ -37,7 +37,7 @@
 -(void)setupView
 {
     
-    self.title = @"基本信息";
+    self.title = @"我的信息";
     self.items = [NSArray arrayWithObjects:@"姓名",@"手机号码",@"身份证号", nil];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;

@@ -65,7 +65,7 @@
     if (self.picktype == PickUpTypeDid) {
         goodNum = [[dict objectForKey:@"quantity"] intValue] -  [[dict objectForKey:@"remainQuantity"] intValue];
     }
-    else if(self.picktype == PickUpTypeFinish)
+    else if(self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop)
     {
         goodNum = [[dict objectForKey:@"quantity"] intValue];
     }
@@ -106,6 +106,9 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if (self.picktype == PickUpTypeStop) {
+        return 30;
+    }
     return 60;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -126,7 +129,7 @@
     namelab.textAlignment = NSTextAlignmentLeft;
     namelab.font = FONT(13);
     namelab.textColor = UIColorFromRGB(0x878787);
-    if (self.picktype == PickUpTypeFinish) {
+    if (self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop) {
         namelab.text = @"商品";
     }
     else if(self.picktype == PickUpTypeDidNot)
@@ -140,33 +143,35 @@
     
     [v_header addSubview:namelab];
     
-    
-    UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
-    orderstatus.textAlignment = NSTextAlignmentRight;
-    orderstatus.font = FONT(13);
-    orderstatus.textColor = UIColorFromRGB(0x878787);
-    if (self.picktype != PickUpTypeFinish)
-    {
-        orderstatus.text = [NSString stringWithFormat:@"制单人:%@",self.allitems[@"orderCreator"]];;
+    if (self.picktype != PickUpTypeStop) {
+        UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
+        orderstatus.textAlignment = NSTextAlignmentRight;
+        orderstatus.font = FONT(13);
+        orderstatus.textColor = UIColorFromRGB(0x878787);
+        if (self.picktype != PickUpTypeFinish)
+        {
+            orderstatus.text = [NSString stringWithFormat:@"制单人:%@",self.allitems[@"orderCreator"]];;
+        }
+        [v_header addSubview:orderstatus];
+        
+        //    NSDictionary* dict = [self.items objectAtIndex:section] ;
+        UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
+        datelab.textAlignment = NSTextAlignmentLeft;
+        datelab.font = FONT(13);
+        datelab.textColor = UIColorFromRGB(0x878787);;
+        datelab.text = self.allitems[@"orderDate"];
+        [v_header addSubview:datelab];
+        
+        
+        UILabel* Seriallab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
+        Seriallab.textAlignment = NSTextAlignmentRight;
+        Seriallab.font = FONT(13);
+        Seriallab.textColor = UIColorFromRGB(0x878787);;
+        Seriallab.text = [NSString stringWithFormat:@"订单编号:%d",[self.allitems[@"orderId"] intValue]];
+        
+        [v_header addSubview:Seriallab];
+
     }
-    [v_header addSubview:orderstatus];
-    
-//    NSDictionary* dict = [self.items objectAtIndex:section] ;
-    UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
-    datelab.textAlignment = NSTextAlignmentLeft;
-    datelab.font = FONT(13);
-    datelab.textColor = UIColorFromRGB(0x878787);;
-    datelab.text = self.allitems[@"orderDate"];
-    [v_header addSubview:datelab];
-    
-    
-    UILabel* Seriallab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
-    Seriallab.textAlignment = NSTextAlignmentRight;
-    Seriallab.font = FONT(13);
-    Seriallab.textColor = UIColorFromRGB(0x878787);;
-    Seriallab.text = [NSString stringWithFormat:@"订单编号:%d",[self.allitems[@"orderId"] intValue]];
-    
-    [v_header addSubview:Seriallab];
     
     return v_header;
 }

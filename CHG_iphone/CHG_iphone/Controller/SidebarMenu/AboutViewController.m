@@ -86,7 +86,7 @@
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
     
     
-    UIImageView* logoimage = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-80)/2, 10, 80, 80)];
+    UIImageView* logoimage = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-100)/2, 10, 100, 80)];
 //    logoimage.layer.masksToBounds =YES;
     
 //    logoimage.layer.cornerRadius =40;
@@ -105,7 +105,7 @@
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 35)];
-    title.text = @"客服务热线:400-8008-404";
+    title.text = @"客服热线:400-8008-404";
     title.textColor = UIColorFromRGB(0x323232);
     title.textAlignment = NSTextAlignmentCenter;
     [v_footer addSubview:title];

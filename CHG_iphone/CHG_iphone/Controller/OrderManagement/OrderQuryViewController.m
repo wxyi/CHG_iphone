@@ -56,6 +56,8 @@
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
     self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT-70);
+    self.bg_view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70);
+    
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -90,7 +92,7 @@
 -(void)setupQRadioButton
 {
     QRadioButton *radio1;
-    NSArray* items = [NSArray arrayWithObjects:@"全部订单",@"卖货订单",@"预定订单", nil];
+    NSArray* items = [NSArray arrayWithObjects:@"全部订单",@"卖货订单",@"预售订单", nil];
     for (int i = 0 ; i < items.count; i++) {
         
         radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:[NSString stringWithFormat:@"groupId%D",1]];
@@ -235,7 +237,7 @@
     }
     else if([dict[@"orderType"] isEqualToString:@"ShopEngage"])
     {
-        orderType = @"预订订单";
+        orderType = @"预售订单";
     }
     orderstatus.text = [NSString stringWithFormat:@"%@ %@",statue,orderType];
     [v_header addSubview:orderstatus];
@@ -270,10 +272,10 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付%.2f元",[dict[@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[dict[@"orderFactAmount"] doubleValue]]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[dict[@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:@"订单金额"];
     text = [[NSMutableAttributedString alloc] initWithString:string];
-    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
+    [text setTextColor:[UIColor redColor] range:rangeOfstart];
     
     
     
@@ -299,7 +301,7 @@
     [v_footer addSubview:line];
     
     UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    detailsbtn.tag = [[NSString stringWithFormat:@"10%d",section] intValue];
+    detailsbtn.tag = [[NSString stringWithFormat:@"100%d",section] intValue];
     [detailsbtn.layer setMasksToBounds:YES];
     [detailsbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
     [detailsbtn.layer setBorderWidth:1.0]; //边框
@@ -315,7 +317,7 @@
     if ([dict[@"orderStatus"] intValue] == 0 && self.ManagementTyep != OrderManagementTypeAll)
     {
         UIButton* Terminationbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        Terminationbtn.tag = [[NSString stringWithFormat:@"11%d",section] intValue];
+        Terminationbtn.tag = [[NSString stringWithFormat:@"110%d",section] intValue];
         [Terminationbtn.layer setMasksToBounds:YES];
         [Terminationbtn.layer setCornerRadius:4.0]; //设置矩形四个圆角半径
         [Terminationbtn.layer setBorderWidth:1.0]; //边框
@@ -335,11 +337,11 @@
 -(void)goskipdetails:(UIButton*)sender
 {
     NSString* strtag = [NSString stringWithFormat:@"%d",sender.tag];
-    NSInteger ntag = [[strtag substringFromIndex:2] intValue];
-    
-    NSDictionary* dictionary = [self.items objectAtIndex:ntag];
+    NSInteger index = [[strtag substringFromIndex:3] intValue];
+    NSInteger ntag = [[strtag substringToIndex:3] intValue];
+    NSDictionary* dictionary = [self.items objectAtIndex:index];
     DLog(@"dictionary = %@",dictionary);
-    if (ntag == 10) {
+    if (ntag == 100) {
         DLog(@"详情");
         if ([dictionary[@"orderStatus"] intValue] == 0) {
             DLog(@"未完成订单")
@@ -354,6 +356,7 @@
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = self.ManagementTyep;
+            CompletedOrderDetailsView.Comordertype = detailsOrder;
             [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
             
         }
@@ -376,7 +379,29 @@
     }
     else
     {
-        self.endtime.text = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
+        if ([self.starttime.text length] == 0) {
+            self.endtime.text = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
+        }
+        else
+        {
+            NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setDateFormat:@"yyyy-MM-dd"];
+            NSDate *startdate =[dateFormat dateFromString:self.starttime.text];
+            NSTimeInterval fitstDate = [startdate timeIntervalSince1970]*1;
+            
+            self.endtime.text = [NSString stringWithFormat:@"%@-%@-%@",year,month,day];
+            NSDate *enddate =[dateFormat dateFromString:self.endtime.text];
+            NSTimeInterval secondDate = [enddate timeIntervalSince1970]*1;
+            if(fitstDate > secondDate) {
+                [SGInfoAlert showInfo:@"结束时间不能小于开始时间"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.5];
+            }
+        }
+        
+        
+        
     }
     
     
@@ -562,4 +587,7 @@
         NSLog(@"locationString:%@",locationString);
     }
 }
+
+
+
 @end

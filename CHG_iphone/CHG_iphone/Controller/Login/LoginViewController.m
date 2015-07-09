@@ -8,7 +8,7 @@
 
 #import "LoginViewController.h"
 #import "LoginCell.h"
-
+#import "NSDownNetImage.h"
 #import "ResetPasswordViewController.h"
 #import "ForgotPasswordViewController.h"
 #import "StoreManagementViewController.h"
@@ -23,7 +23,7 @@
 #import "AreaInfo.h"
 #import "CityInfo.h"
 
-@interface LoginViewController ()
+@interface LoginViewController ()<UITextFieldDelegate>
 @property UINib* LoginNib;
 @end
 
@@ -72,7 +72,7 @@
     }
    
    [cell.passwordTextfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    
+    cell.passwordTextfield.delegate = self;
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -87,11 +87,11 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 220;
+    return (SCREEN_HEIGHT+ 64)* 0.4;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, (SCREEN_HEIGHT+ 64)* 0.4)];
     v_header.backgroundColor = [UIColor clearColor];
     UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
 
@@ -178,6 +178,7 @@
     
     
     [parameter setObject:[[NSObject md5:passfield.text] uppercaseString] forKey:@"password"];
+    [parameter setObject:[ConfigManager sharedInstance].identifier forKey:@"client_code"];
     [parameter setObject:@"app" forKey:@"client_id"];
     [parameter setObject:@"appSecret" forKey:@"client_secret"];
     
@@ -261,7 +262,20 @@
             
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             
-            
+            if ([config.Roles isEqualToString:@"PARTNER"]) {
+                [ConfigManager sharedInstance].shopId = @"";
+                [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
+            }
+            else
+            {
+                if ([config.shopList count] != 0) {
+                    [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
+                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                    
+                    [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+                }
+                
+            }
             
             if ([[data objectForKey:@"loginFirst"] intValue] != 0)
             {
@@ -282,36 +296,12 @@
                         [MMProgressHUD dismiss];
                     }];
                 }
-//                else if([config.shopList count] == 0)
-//                {
-//                    [MMProgressHUD dismiss];
-//                    [SGInfoAlert showInfo:@"门店老板没有门店"
-//                                  bgColor:[[UIColor blackColor] CGColor]
-//                                   inView:self.view
-//                                 vertical:0.7];
-//                }
                 else
                 {
-                    
-                    
-                    if ([config.Roles isEqualToString:@"PARTNER"]) {
-                        [ConfigManager sharedInstance].shopId = @"";
-                        [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
-                    }
-                    else
-                    {
-                        if ([config.shopList count] != 0) {
-                            [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
-                            [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
-                            
-                            [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
-                        }
-                        
-                    }
-                    
-                    
-                    
+
                     if ([config.shopList count] != 0 || ([config.shopList count] == 0 &&[config.Roles isEqualToString:@"PARTNER"])){
+                        
+                        [self DownStoreQrCode];
                         [self setupHomePageViewController];
                     }
                     else
@@ -322,9 +312,7 @@
                                        inView:self.view
                                      vertical:0.7];
                     }
-                    
-//                    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-                    
+
                 }
             }
             
@@ -333,7 +321,8 @@
         {
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            DLog(@"msg = %@",[data objectForKey:@"msg"]);
+            [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -447,8 +436,38 @@
         [SGInfoAlert showInfo:@"密码不能大于16位"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.7];
+                     vertical:0.6];
         [textField resignFirstResponder];
     }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    UITextField* textfie = (UITextField*)[self.view viewWithTag:1011];
+    if (textField.text.length < 6 && textfie.text.length != 0) {
+        [SGInfoAlert showInfo:@"密码不能小于6位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.6];
+        [textField resignFirstResponder];
+    }
+}
+
+-(void)DownStoreQrCode
+{
+    [HttpClient asynchronousDownLoadFileWithProgress:[ConfigManager sharedInstance].strdimensionalCodeUrl parameters:nil successBlock:^(NSURL *filePath) {
+        NSData *data = [NSData dataWithContentsOfURL:filePath];
+        UIImage * imageFromURL = [UIImage imageWithData:data];
+        [NSDownNetImage saveImage:imageFromURL withFileName:@"StoreQrCode" ofType:@"jpg" inDirectory:APPDocumentsDirectory];
+        
+        
+        NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:APPDocumentsDirectory];
+        NSLog(@"%@",file);
+        
+    } failureBlock:^(NSString *description) {
+        
+        DLog(@"下载失败error = %@",description);
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    }];
 }
 @end

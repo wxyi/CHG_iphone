@@ -22,6 +22,7 @@ extern NSString* const Q_SQL_BankCodeByNumber;
 extern NSString* const Q_SQL_BankCodeByCode;
 #pragma mark 删除BankCode相关数据
 extern NSString* const D_SQL_BankCodeByCode;
+
 #pragma mark 删除银行卡对照表所有数据
 extern NSString* const D_SQL_BankCode;
 

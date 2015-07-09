@@ -34,7 +34,7 @@
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="姓名:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHr-xc-DQK">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="会员姓名:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHr-xc-DQK">
                         <rect key="frame" x="0.0" y="91" width="120" height="35"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="35" id="8wR-An-nsU"/>
@@ -44,7 +44,7 @@
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="识别成功！已扫描到以下信息" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Pc-NTf">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Pc-NTf" customClass="NIAttributedLabel">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="320" id="Dam-wb-tZC"/>
@@ -81,6 +81,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
+                <outlet property="goodscountlab" destination="FpM-Pc-NTf" id="OgQ-MM-Nhk"/>
                 <outlet property="iphoneLab" destination="vVr-wz-mBg" id="Sfx-gb-g2i"/>
                 <outlet property="nameLab" destination="Mc3-Vi-cV6" id="7KI-XY-W3d"/>
             </connections>

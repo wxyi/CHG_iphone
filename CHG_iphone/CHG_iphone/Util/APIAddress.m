@@ -444,4 +444,9 @@
 {
     return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"forgetPassword"];
 }
+
++(NSString*) ApiCreateCustomerBefore
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"createCustomerBefore"];
+}
 @end

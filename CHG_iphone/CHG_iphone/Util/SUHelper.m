@@ -114,7 +114,7 @@ static SUHelper *sSharedInstance;
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         
         if (success) {
-            //            DLog(@"data = %@",data);
+            DLog(@"data = %@",data);
             //            if (![ConfigManager sharedInstance].strAddressCode) {
             //                [ConfigManager sharedInstance].strAddressCode = [data objectForKey:@"datas"];
             //            }
@@ -281,6 +281,7 @@ static SUHelper *sSharedInstance;
                     }
                     else
                     {
+                        
                         if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"]]) {
                             
                             [self GetAddressInfo];
@@ -306,4 +307,6 @@ static SUHelper *sSharedInstance;
                                        
     }];
 }
+
+
 @end

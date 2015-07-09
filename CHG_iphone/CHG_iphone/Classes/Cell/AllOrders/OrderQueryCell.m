@@ -22,7 +22,7 @@
 -(void)setupCell
 {
     QRadioButton *radio1;
-    NSArray* items = [NSArray arrayWithObjects:@"全部订单",@"卖货订单",@"预定订单", nil];
+    NSArray* items = [NSArray arrayWithObjects:@"全部订单",@"卖货订单",@"预售订单", nil];
     for (int i = 0 ; i < items.count; i++) {
         
         radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:[NSString stringWithFormat:@"groupId%D",1]];

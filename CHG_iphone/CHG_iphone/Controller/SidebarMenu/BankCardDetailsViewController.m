@@ -29,7 +29,8 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    if ([config.Roles isEqualToString:@"PARTNER"]&& config.nRoleType == 0) {
+    if (config.nRoleType != 1)
+    {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"解绑" style:UIBarButtonItemStylePlain target:(UINavigationController*)self.navigationController action:@selector(unbundlingbankCard)];
     }
     
@@ -82,7 +83,15 @@
     else if (indexPath.row == 1)
     {
         cell.namelab.text =@"银行卡号";
-        cell.Detailslab.text = self.items[@"cardNumber"];
+        NSString* cardnumber = self.items[@"cardNumber"] ;
+        
+        NSString* temp = @"";
+        for (int i = 0; i < cardnumber.length - 4; i ++) {
+           temp = [temp stringByAppendingString:@"*"];
+        }
+        
+        cardnumber = [NSString stringWithFormat:@"%@%@",temp,[cardnumber substringFromIndex:cardnumber.length -4]];
+        cell.Detailslab.text = cardnumber;
         
         
     }

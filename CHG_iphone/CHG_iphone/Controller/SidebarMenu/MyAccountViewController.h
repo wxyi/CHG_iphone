@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyAccountViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
+@interface MyAccountViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,UICollectionViewDataSource,UICollectionViewDelegate>
+@property(nonatomic,weak)IBOutlet UICollectionView* collection;
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,weak)IBOutlet UIImageView * line;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSArray* collonitems;
 @property(nonatomic,strong)NSDictionary* dictionary;
 @property(nonatomic,strong)UserConfig* config;
 

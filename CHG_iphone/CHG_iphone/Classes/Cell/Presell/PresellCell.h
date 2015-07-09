@@ -16,6 +16,8 @@ typedef void(^showOrderCount)(NSInteger count);
 @property(nonatomic,weak)IBOutlet TextStepperField* TextStepper;
 @property(nonatomic,assign)NSInteger counter;
 @property(nonatomic,strong)showOrderCount showCount;
+@property(nonatomic,strong)NSIndexPath * indexPath;
+@property(nonatomic,strong)NSString * operationPage;
 - (IBAction)ibStepperDidStep:(id)sender ;
 
 -(void)setupCell;

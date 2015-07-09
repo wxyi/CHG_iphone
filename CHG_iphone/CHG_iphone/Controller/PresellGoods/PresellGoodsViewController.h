@@ -20,6 +20,7 @@
 @property (strong,nonatomic)AVCaptureMetadataOutput * output;
 @property (strong,nonatomic)AVCaptureSession * session;
 @property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
+@property(nonatomic,assign)OrderReturnType m_returnType;
 @property (nonatomic, retain) UIImageView * line;
 
 @property(nonatomic,assign)BOOL isfinish;
@@ -28,7 +29,9 @@
 @property(nonatomic,weak)IBOutlet UIButton* confirmbtn;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)SaleType orderSaletype;
-@property(nonatomic,assign)OrderReturnType m_returnType;
+@property(nonatomic,strong)STAlertView* stAlertView;
+//@property(nonatomic,assign)OrderReturnType m_returnType;
+@property (nonatomic,assign)SkipType skiptype;
 -(IBAction)ConfirmInfo:(id)sender;
 
 @end

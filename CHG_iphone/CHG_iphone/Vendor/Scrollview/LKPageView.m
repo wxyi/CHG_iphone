@@ -75,7 +75,7 @@
         self.page_scroll = scrollView;
         [scrollView release];
         
-        UIPageControl* pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(120,frame.size.height -10,65,11)];
+        UIPageControl* pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake((SCREEN_WIDTH -65)/2,frame.size.height -10,65,11)];
         pageControl.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"banner_dot_bg.png"]];
         pageControl.currentPageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"banner_dot_click.png"]];
         

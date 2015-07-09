@@ -14,7 +14,7 @@
 #import "CHGNavigationController.h"
 #import "SidebarMenuTableViewController.h"
 #import "REFrostedViewController.h"
-@interface ResetPasswordViewController ()
+@interface ResetPasswordViewController ()<UITextFieldDelegate>
 @property UINib* ResetPasswordNib;
 @end
 
@@ -61,8 +61,9 @@
     }
     
     [cell.resetpasswordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    cell.resetpasswordField.delegate = self;
     [cell.confirmpasswordfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    
+    cell.confirmpasswordfield.delegate = self;
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -77,13 +78,13 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 220;
+    return (SCREEN_HEIGHT+ 64)* 0.4;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, ((SCREEN_HEIGHT+ 64)* 0.4)/3, 180, 112)];
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
@@ -136,6 +137,10 @@
     {
         info = @"密码必须小于16位";
     }
+    else if (passfield1.text.length < 6)
+    {
+        info = @"密码不能小于6位";
+    }
     else if(passfield2.text.length == 0)
     {
         info = @"请确认密码";
@@ -143,6 +148,10 @@
     else if (passfield2.text.length > 16)
     {
         info = @"密码必须小于16位";
+    }
+    else if (passfield2.text.length < 6)
+    {
+        info = @"密码不能小于6位";
     }
     else if (![passfield1.text isEqualToString:passfield2.text])
     {
@@ -182,6 +191,12 @@
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             DLog(@"msg = %@",[data objectForKey:@"msg"]);
+            
+//            [SGInfoAlert showInfo:@"密码修改成功"
+//                          bgColor:[[UIColor blackColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                                 object:nil];
 //            [MMProgressHUD dismiss];
@@ -254,7 +269,17 @@
         [SGInfoAlert showInfo:@"密码不能大于16位"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
-                     vertical:0.7];
+                     vertical:0.6];
+        [textField resignFirstResponder];
+    }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length < 6) {
+        [SGInfoAlert showInfo:@"密码不能小于6位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.6];
         [textField resignFirstResponder];
     }
 }

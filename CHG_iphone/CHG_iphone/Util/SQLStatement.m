@@ -41,9 +41,9 @@ NSString* const R_SQL_AddressAreaCode = @"REPLACE INTO tbl_addressarea( `AreaID`
 #pragma mark 查询省地址对照表
 NSString* const Q_SQL_AddressProvinceCode=@"SELECT * FROM tbl_addressprovince";;
 #pragma mark 查询省地址对照表
-NSString* const Q_SQL_AddressAreaCode=@"SELECT * FROM tbl_addresscity";
+NSString* const Q_SQL_AddressAreaCode=@"SELECT * FROM tbl_addressarea";
 #pragma mark 查询省地址对照表
-NSString* const Q_SQL_AddressCityCode=@"SELECT * FROM tbl_addressarea";
+NSString* const Q_SQL_AddressCityCode=@"SELECT * FROM tbl_addresscity";
 
 #pragma mark 查询银行卡某个Code
 NSString* const Q_SQL_AddressCitybyFatherID = @"SELECT * FROM tbl_addresscity where FatherID = ?";

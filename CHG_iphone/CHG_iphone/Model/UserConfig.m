@@ -7,7 +7,7 @@
 //
 
 #import "UserConfig.h"
-
+#import "NSDownNetImage.h"
 @implementation UserConfig
 @synthesize strMobile; //手机号码
 @synthesize strUsername; //用户名
@@ -62,6 +62,7 @@
             }
             else if([key isEqualToString:@"dimensionalCodeUrl"]){
                 self.strdimensionalCodeUrl=obj;
+      
             }
             
         }];

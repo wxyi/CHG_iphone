@@ -109,10 +109,10 @@
         DLog(@"是");
         
         
-        
+        [textField resignFirstResponder];
         sender.enabled = NO;
         sender.alpha=0.4;
-        sender.titleLabel.tintColor = [UIColor grayColor];
+        sender.titleLabel.tintColor = UIColorFromRGB(0xdddddd);
         [sender startWithSecond:60];
         
         [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {

@@ -65,7 +65,7 @@
     
     if (self.m_returnType == OrderReturnTypeAMember) {
         
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
     }
     else
     {
@@ -129,6 +129,7 @@
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
                 PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
                 PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
+                PickGoodsView.skiptype = SkipfromOrderManage;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
             }
             else
@@ -137,9 +138,21 @@
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
                 CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
                 CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+                CompletedOrderDetailsView.Comordertype = detailsOrder;
+                CompletedOrderDetailsView.skiptype = SkipfromOrderManage;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
             }
+        }
+        else if (ntag == 11) {
+            DLog(@"终止定单")
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+            CompletedOrderDetailsView.Comordertype = TerminationOrder;
+            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            
+            
         }
 
     };
@@ -173,10 +186,35 @@
                 DLog(@"已完成订单");
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
                 CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+                CompletedOrderDetailsView.Comordertype = detailsOrder;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
             }
 
+        }
+        else if (ntag == 11) {
+            DLog(@"终止定单")
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+            CompletedOrderDetailsView.Comordertype = TerminationOrder;
+            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+//            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+//                DLog(@"否");
+//                
+//                
+//            } otherButtonBlock:^{
+//                DLog(@"是");
+//                //            [self httpCancelOrder :dict];
+//                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+//                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+//                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+//                CompletedOrderDetailsView.Comordertype = TerminationOrder;
+//                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+//            }];
+//            
+//            [weakSelf.stAlertView show];
+            
         }
         else
         {
@@ -192,6 +230,7 @@
                 
             }
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
+            PresellGoodsView.skiptype = SkipFromPopPage;
             PresellGoodsView.orderSaletype = satype;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
@@ -222,6 +261,7 @@
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+            CompletedOrderDetailsView.Comordertype = detailsOrder;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
 
         }
@@ -230,6 +270,7 @@
             SaleType satype = SaleTypeReturnGoods;
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
+            PresellGoodsView.skiptype = SkipFromPopPage;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
     };

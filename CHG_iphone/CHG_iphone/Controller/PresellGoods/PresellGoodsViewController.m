@@ -11,7 +11,8 @@
 #import "OrdersGoodsCell.h"
 #import "OrderCounterViewController.h"
 #import "JTImageLabel.h"
-@interface PresellGoodsViewController ()
+#import "PresellOperation.h"
+@interface PresellGoodsViewController ()<SWTableViewCellDelegate>
 @property UINib* PresellNib;
 @property UINib* OrdersGoodsNib;
 @end
@@ -38,6 +39,15 @@
 //    [leftbtn addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
 ////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deletePresellGoods:)
+                                                 name:DELETE_PRESELL_GOODS
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(ClickSingleGoods:)
+                                                 name:DELETE_SINGLE_GOODS
+                                               object:nil];
     
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
@@ -45,13 +55,32 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    if (self.m_returnType == OrderReturnTypeAMember || self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods) {
+    if (self.m_returnType == OrderReturnTypeAMember && (self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods)) {
         
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+        if (self.skiptype != SkipFromPopPage && self.skiptype != SkipfromOrderManage && self.orderSaletype == SaleTypePickingGoods) {
+            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if (self.skiptype == SkipFromPopPage)
+        {
+            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
     }
     else
     {
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+        if(self.m_returnType == OrderReturnTypeAMember && (self.orderSaletype == SaleTypeSellingGoods || self.orderSaletype == SaleTypePresell))
+        {
+            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
     }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     self.items = [[NSMutableArray alloc] init];
@@ -136,14 +165,14 @@
     upOrdown = NO;
     num =0;
     _line = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 2)];
-    _line.image = [UIImage imageNamed:@"scan_laser.png"];
+    _line.image = [NSObject createImageWithColor:UIColorFromRGB(0xF5A541)];
     [self.view addSubview:_line];
     
     JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
     promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
     promptlabel.textLabel.text = @"扫描二维码识别商品信息";
     promptlabel.textLabel.font = FONT(12);
-    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+    promptlabel.textLabel.textColor = [UIColor whiteColor];
     promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
     //    promptlabel.backgroundColor = UIColorFromRGB(0xdddddd);
     [self.view addSubview:promptlabel];
@@ -165,7 +194,7 @@
 {
     [super viewWillAppear:animated];
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
-    timer1 = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
+    timer1 = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
     
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
@@ -357,10 +386,19 @@
         PresellCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PresellCell"];
         if(cell==nil){
             cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            NSMutableArray *rightUtilityButtons = [NSMutableArray new];
             
+            
+            [rightUtilityButtons sw_addUtilityButtonWithColor:
+             [UIColor colorWithRed:1.0f green:0.231f blue:0.188 alpha:1.0f]
+                                                         icon:[UIImage imageNamed:@"left_slide_delete.png"]];
+            [cell setRightUtilityButtons:rightUtilityButtons WithButtonWidth:60.0f];
+            cell.delegate = self;
         }
         [cell setupCell];
         
+        cell.indexPath = indexPath;
+        cell.operationPage = @"0";
         NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
 
         [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
@@ -368,7 +406,7 @@
         cell.pricelab.text = dict[@"productPrice"];
 
         
-        cell.TextStepper.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
+        cell.TextStepper.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.row] intValue];
         cell.counter = [dict[@"QrcList"] count];
         NSInteger Qrclistcount;
         if ([dict[@"QrcList"] count] > 60) {
@@ -701,6 +739,14 @@
             {
                 NSMutableArray *datas = [[NSMutableArray alloc] init];
                 datas = [Qrcfilter mutableCopy];
+                
+                if (datas.count == 60 && prodQrcfilter.count > 0) {
+                    [SGInfoAlert showInfo:@"该商量已超过销售数量限制，禁止添加商品！"
+                                  bgColor:[[UIColor blackColor] CGColor]
+                                   inView:self.view
+                                 vertical:0.7];
+                }
+                
                 if (prodQrcfilter.count != 0) {
                     for (int i = 0; i < prodQrcfilter.count; i++) {
 
@@ -915,6 +961,10 @@
                     [self httpQrCode:stringValue];
                 }
             }
+            else
+            {
+                [self httpQrCode:stringValue];
+            }
 
         }
 
@@ -947,5 +997,96 @@
     DLog(@"data = %@",[NSObject currentTime]);
 
     self.isfinish = YES;
+}
+
+-(void)deletePresellGoods:(NSNotification*)aNotification
+{
+    NSString* index = [aNotification object];
+    [self.items removeObjectAtIndex:[index intValue]];
+    [self.tableview reloadData];
+    
+}
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
+{
+    switch (index) {
+        case 0:
+        {
+            [cell hideUtilityButtonsAnimated:YES];
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                [self.items removeObjectAtIndex:index];
+                [self.tableview reloadData];
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                
+                
+            }];
+            
+            [self.stAlertView show];
+            
+            
+            break;
+        }
+        default:
+            break;
+    }
+}
+- (BOOL)swipeableTableViewCellShouldHideUtilityButtonsOnSwipe:(SWTableViewCell *)cell
+{
+    // allow just one cell's utility button to be open at once
+    return YES;
+}
+
+- (BOOL)swipeableTableViewCell:(SWTableViewCell *)cell canSwipeToState:(SWCellState)state
+{
+    switch (state) {
+        case 1:
+            // set to NO to disable all left utility buttons appearing
+            return YES;
+            break;
+        case 2:
+            // set to NO to disable all right utility buttons appearing
+            return YES;
+            break;
+        default:
+            break;
+    }
+    
+    return YES;
+}
+-(void)ClickSingleGoods:(NSNotification*)aNotification
+{
+    PresellOperation * operatino = [[PresellOperation alloc] init];
+   operatino = [aNotification object];
+    NSMutableDictionary* product = [NSMutableDictionary dictionary];
+    NSMutableArray* tempArray = [self.items mutableCopy];
+    product = tempArray[operatino.indexpath.row];
+    NSMutableArray *QrcArr = product[@"QrcList"];
+    DLog(@"clicktype = %@ indexpath.row = %d",operatino.strClickType,operatino.indexpath.row)
+//    NSMutableArray *prodQrcArr = product[@"QrcList"];
+    if([operatino.strClickType intValue] == 1)//减去一
+    {
+        DLog(@"减去一");
+        [QrcArr removeLastObject];
+    }
+    else if ([operatino.strClickType intValue] == 2)// 加一
+    {
+        DLog(@"增加一");
+        [QrcArr addObject:[QrcArr objectAtIndex:0]];
+    }
+    else
+    {
+        DLog(@"无操作");
+    }
+    [product setObject:QrcArr forKey:@"QrcList"];
+    [self.items replaceObjectAtIndex:operatino.indexpath.row withObject:product];
+    
+    
+    if ([operatino.operationPage intValue] == 1) {
+        [self.tableview reloadData];
+    }
 }
 @end

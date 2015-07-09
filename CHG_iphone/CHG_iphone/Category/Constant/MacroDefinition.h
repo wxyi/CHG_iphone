@@ -27,6 +27,12 @@
 #define ACCESS_TOKEN_FAILURE @"access_token_failure"
 #define ACCESS_TOKEN_FREE_LOGIN @"access_token_free_login"
 
+
+#define DELETE_PRESELL_GOODS @"delect_presell_goods"
+
+#define DELETE_SINGLE_GOODS @"delect_single_goods"
+
+#define REFRESH_ORDER @"Refresh_Order"
 // block self
 #define WEAKSELF typeof(self) __weak weakSelf = self;
 
@@ -300,6 +306,8 @@ typedef void(^TableViewCellSkipSelect)(NSDictionary* dictionary);
 typedef void(^ShowInfoAlert)(NSString* info);
 typedef void(^GetCheckCode)(NSString* checkcode);
 typedef void(^skipDetailsPage)(NSString* orderID);
+
+typedef void(^MyAccountSkip)(NSInteger index, NSString* strData);//index = 0 跳转动销奖励 1跳转分账奖励
 #define ZbarRead_With 170
 
 
@@ -318,7 +326,8 @@ typedef enum
     SaleTypePresell,      //预售
     SaleTypeReturnEngageGoods,//待提货退货
     SaleTypeReturnGoods,    //退货
-    SaleTypePickingGoods //提货
+    SaleTypePickingGoods, //提货
+    SaleTypeStopOrder //终止订单
 }SaleType;
 
 typedef enum
@@ -340,6 +349,7 @@ typedef enum
     PickUpTypeDidNot = 0,//未提货
     PickUpTypeDid, //已提货
     PickUpTypeFinish, //已提货
+    PickUpTypeStop, //已提货
 }PickUpType;
 
 typedef enum
@@ -356,4 +366,18 @@ typedef enum
     OrderReturnTypeHomePage, //会员订单管理
     
 }OrderReturnType;
+
+typedef enum
+{
+    TerminationOrder = 0,//终止定单
+    detailsOrder, //详情定单
+    
+}OrderType;
+
+typedef enum
+{
+    SkipfromOrderManage = 0,//从订单管理跳转
+    SkipFromOrderFinish, //从完成订单
+    SkipFromPopPage, //返回上一层
+}SkipType;
 #endif

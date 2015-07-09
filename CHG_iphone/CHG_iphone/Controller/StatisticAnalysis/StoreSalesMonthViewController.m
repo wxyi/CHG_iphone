@@ -38,7 +38,7 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            self.strtitle = @"本月合作商消费账奖励(元)";
+            self.strtitle = @"本月消费账奖励(元)";
             break;
         }
         default:
@@ -52,7 +52,7 @@
         self.pricelab.text = @"0";
     }
     else
-        self.pricelab.text = @"0.00";
+        self.pricelab.text = @"￥0.00";
     
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT - 70 -40;
@@ -66,7 +66,7 @@
     // Do any additional setup after loading the view from its nib.
     self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StatisticsNib = [UINib nibWithNibName:@"StatisticsCell" bundle:nil];
-    
+    self.isRefresh = YES;
     
     [self setupRefreshPage];
 }
@@ -79,8 +79,8 @@
 {
     NSLog(@"加载为当前视图 = %@",self.title);
     if ([self.items count] == 0 || self.isSkip) {
-        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
-        [MMProgressHUD showWithTitle:@"" status:@""];
+//        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
+//        [MMProgressHUD showWithTitle:@"" status:@""];
         [self httpGetStatisticAnalysis];
     }
     
@@ -231,7 +231,7 @@
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"sellCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"sellCount"] doubleValue]];
                     self.items = [data objectForKey:@"sellList"];
                     break;
                 }
@@ -243,13 +243,13 @@
                 }
                 case StatisticalTypePinRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardSalerCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardSalerCount"] doubleValue]];
                     self.items = [data objectForKey:@"awardSalerList"];
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"awardPartnerCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardPartnerCount"] doubleValue]];
                     self.items = [data objectForKey:@"awardPartnerList"];
                     break;
                 }
@@ -331,26 +331,34 @@
 */
 - (void)setupRefresh
 {
-    __weak __typeof(self) weakSelf = self;
-    
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
-    
-    // 设置自动切换透明度(在导航栏下面自动隐藏)
-    header.autoChangeAlpha = YES;
-    
-    // 隐藏时间
-    header.lastUpdatedTimeLabel.hidden = YES;
-    
-    // 马上进入刷新状态
-//    [header beginRefreshing];
-    
-    // 设置header
-    self.tableview.header = header;
-    
-    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [weakSelf loadMoreData];
-    }];
+    if (self.isRefresh) {
+        
+        self.isRefresh = NO;
+        __weak __typeof(self) weakSelf = self;
+        
+        MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+        
+        // 设置自动切换透明度(在导航栏下面自动隐藏)
+        header.autoChangeAlpha = YES;
+        
+        // 隐藏时间
+        header.lastUpdatedTimeLabel.hidden = YES;
+        
+        
+        
+        [header beginRefreshing];
+        
+        // 马上进入刷新状态
+        
+        
+        // 设置header
+        self.tableview.header = header;
+        
+        // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            [weakSelf loadMoreData];
+        }];
+    }
 }
 #pragma mark - 数据处理相关
 #pragma mark 下拉刷新数据
@@ -447,7 +455,7 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            title = @"合作商消费账奖励(元)";
+            title = @"消费账奖励(元)";
             break;
         }
         default:

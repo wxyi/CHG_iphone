@@ -187,6 +187,7 @@
     NSArray *keys = [NSArray arrayWithObjects:@"province",@"city",@"area", nil];
     NSArray *defaultName = [NSArray arrayWithObjects:selectedProvince,selectedCity,selectedArea, nil];
 //    NSArray* defName = [NSArray arrayWithObjects:selectedProvince,selectedCity,selectedArea, nil];
+    
     for(NSInteger i=0;i<[keys count];i++)
     {
         LMComBoxView *comBox = [[LMComBoxView alloc]initWithFrame:CGRectMake(80+((SCREEN_WIDTH - 123)/3)*i, 0, (SCREEN_WIDTH - 123)/3, 40)];
@@ -195,6 +196,8 @@
         NSMutableArray *itemsArray = [NSMutableArray arrayWithArray:[addressDict objectForKey:[keys objectAtIndex:i]]];
         
         NSMutableArray* items = [NSMutableArray array];
+        
+        
         for (int j = 0; j < [itemsArray count]; j++) {
             if (i == 0 ) {
                 ProvinceInfo* info = [[ProvinceInfo alloc] init];
@@ -219,7 +222,10 @@
             
         }
 
-        comBox.defaultIndex = [items indexOfObject:defaultName[i]];
+        if ([items count] != 0) {
+            comBox.defaultIndex = [items indexOfObject:defaultName[i]];
+        }
+        
         comBox.titlesList = items;
         comBox.delegate = self;
         comBox.supView = self.bgScrollView;
@@ -233,11 +239,15 @@
 #pragma mark -LMComBoxViewDelegate
 -(void)selectAtIndex:(int)index inCombox:(LMComBoxView *)_combox
 {
+    
     self.locationField.text = @"";
     NSInteger tag = _combox.tag - kDropDownListTag;
     switch (tag) {
         case 0:
         {
+            if ([[addressDict objectForKey:@"province"] count] == 0) {
+                break;
+            }
             ProvinceInfo* proinfo = [[addressDict objectForKey:@"province"]objectAtIndex:index];
             selectedProvince = proinfo.strProvince ;
             //字典操作
@@ -309,6 +319,10 @@
         }
         case 1:
         {
+            
+            if ([[addressDict objectForKey:@"city"] count] == 0) {
+                break;
+            }
             CityInfo* cityinfo = [[addressDict objectForKey:@"city"]objectAtIndex:index];
             selectedCity = cityinfo.strCityName;
             
@@ -354,6 +368,9 @@
         }
         case 2:
         {
+            if ([[addressDict objectForKey:@"area"] count] == 0) {
+                break;
+            }
             AreaInfo* Areainfo = [[addressDict objectForKey:@"area"]objectAtIndex:index];
             selectedArea = Areainfo.strAreaName;
             break;

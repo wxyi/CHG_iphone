@@ -28,6 +28,11 @@
 }
 - (IBAction)countDownXibTouched:(JKCountDownButton*)sender
 {
+    
+    [self.setpasswordField resignFirstResponder];
+    [self.confirmpasswordfield resignFirstResponder];
+    [self.Verificationfield resignFirstResponder];
+    
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     
     NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[config.strMobile substringFromIndex:7]];
@@ -47,8 +52,10 @@
     //button type要 设置成custom 否则会闪动
     [sender startWithSecond:60];
 //    __weak typeof(self) weakSelf = self;
+//    sender.titleLabel.textColor = UIColorFromRGB(0xdddddd);
+    [sender setTitleColor:UIColorFromRGB(0x646464) forState:UIControlStateNormal];
     sender.alpha=0.4;
-    sender.titleLabel.textColor = [UIColor grayColor];
+    
     
     [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
         NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
@@ -56,7 +63,8 @@
     }];
     [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
         sender.alpha=1;
-        sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
+//        sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
+        [sender setTitleColor:UIColorFromRGB(0x171C61) forState:UIControlStateNormal];
         countDownButton.enabled = YES;
         return @"点击重新获取";
         

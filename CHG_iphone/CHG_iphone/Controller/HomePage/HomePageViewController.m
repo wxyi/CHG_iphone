@@ -64,6 +64,8 @@
     self.menuArr = [[NSMutableArray alloc] init];
     self.menuArr = [self GetMenuArr];
     
+    
+//    NSLog(@"%@", [self.menuArr objectAtIndex:50]);
 //    CGRect rect = self.tableview.frame;
 //    
 //    rect.size.height = SCREEN_HEIGHT;
@@ -116,7 +118,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self httpGetAccountBrief];
+//    [self setupRefresh];
+}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -350,6 +357,7 @@
             {
                 IdentificationView.m_MenuType = MenuTypeOrderManagement;
             }
+            
             [self.navigationController pushViewController:IdentificationView animated:YES];
             
             break;

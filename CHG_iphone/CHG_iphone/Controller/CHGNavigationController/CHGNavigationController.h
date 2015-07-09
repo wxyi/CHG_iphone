@@ -14,7 +14,11 @@
 - (void)goback;
 - (void)gobacktoSuccess;
 - (void)gobackMemberCenter;
+-(void)gobacktoSuccessFulldentify;
 -(void)unbundlingbankCard;
 -(void)skipPage;
 -(void)RegisteSuccessful;
+
+-(void)gotoOrderManagement;
+
 @end

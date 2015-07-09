@@ -9,7 +9,7 @@
 #import "SetPasswordViewController.h"
 #import "SetPasswordCell.h"
 #import "StoreManagementViewController.h"
-@interface SetPasswordViewController ()
+@interface SetPasswordViewController ()<UITextFieldDelegate>
 @property UINib* SetPasswordNib;
 @end
 
@@ -56,7 +56,9 @@
         
     }
     [cell.setpasswordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    cell.setpasswordField.delegate = self;
     [cell.confirmpasswordfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    cell.confirmpasswordfield.delegate = self;
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -80,13 +82,13 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 220;
+    return (SCREEN_HEIGHT+ 64)* 0.4;;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, (SCREEN_HEIGHT+ 64)* 0.4)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, 75, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, ((SCREEN_HEIGHT+ 64)* 0.4)/3, 180, 112)];
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
@@ -135,6 +137,10 @@
     else if (passfield1.text.length > 16 )
     {
         info = @"密码必须小于16位";
+    }
+    else if (passfield1.text.length < 6)
+    {
+        info = @"密码不能小于6位";
     }
     else if(passfield2.text.length == 0)
     {
@@ -191,9 +197,19 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
+            
+            
+//            [SGInfoAlert showInfo:@"密码修改成功"
+//                          bgColor:[[UIColor blackColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
+            
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
             
+//            [ConfigManager sharedInstance].usercfg = [data JSONString];
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            
+            
             if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
                 
                 
@@ -243,6 +259,16 @@
 {
     if (textField.text.length > 16) {
         [SGInfoAlert showInfo:@"密码不能大于16位"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        [textField resignFirstResponder];
+    }
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (textField.text.length < 6) {
+        [SGInfoAlert showInfo:@"密码不能小于6位"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];

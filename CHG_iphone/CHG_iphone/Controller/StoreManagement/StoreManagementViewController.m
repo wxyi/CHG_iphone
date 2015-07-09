@@ -14,7 +14,7 @@
 #import "CHGNavigationController.h"
 #import "SidebarMenuTableViewController.h"
 #import "REFrostedViewController.h"
-
+#import "NSDownNetImage.h"
 @interface StoreManagementViewController (){
     NSMutableArray *chooseArray ;
 }
@@ -132,6 +132,10 @@
 {
     [ConfigManager sharedInstance].shopId = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopId"];
     [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndex:indexPath.row] objectForKey:@"dimensionalCodeUrl"] ;
+    
+    
+    [self DownStoreQrCode];
+    
     [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopName"] ;
     DLog(@"shopId= %@",[ConfigManager sharedInstance].shopId);
 //    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -162,6 +166,25 @@
     
     [self presentViewController:frostedViewController animated:YES completion:^{
         [MMProgressHUD dismiss];
+    }];
+}
+
+-(void)DownStoreQrCode
+{
+    [HttpClient asynchronousDownLoadFileWithProgress:[ConfigManager sharedInstance].strdimensionalCodeUrl parameters:nil successBlock:^(NSURL *filePath) {
+        NSData *data = [NSData dataWithContentsOfURL:filePath];
+        UIImage * imageFromURL = [UIImage imageWithData:data];
+        [NSDownNetImage saveImage:imageFromURL withFileName:@"StoreQrCode" ofType:@"jpg" inDirectory:APPDocumentsDirectory];
+        
+        
+        NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:APPDocumentsDirectory];
+        NSLog(@"%@",file);
+        
+    } failureBlock:^(NSString *description) {
+        
+        DLog(@"下载失败error = %@",description);
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
     }];
 }
 @end

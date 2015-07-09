@@ -10,4 +10,5 @@
 
 @interface BaseCell : UITableViewCell
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
+@property (nonatomic, copy) TableViewCellSkipSelect CellSkipSelect;
 @end

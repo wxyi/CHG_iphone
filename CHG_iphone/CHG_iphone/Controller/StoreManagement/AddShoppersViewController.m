@@ -61,6 +61,7 @@
     }
     cell.namelab.text = [self.items objectAtIndex:indexPath.row];
     cell.nametext.placeholder = @"必填";
+    [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     
     if (indexPath.row == 1) {
@@ -109,6 +110,7 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
     
     JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
+    promptlabel.tag = 103333;
     promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     promptlabel.textLabel.text = @"确认添加后信息不可修改";
     promptlabel.textLabel.font = FONT(12);
@@ -162,6 +164,10 @@
         else if (cardNum.length == 0)
         {
             info = @"请输入身份证号";
+        }
+        else if (cardNum.length != 15 ||cardNum.length != 18)
+        {
+            info = @"身份证格式不正确";
         }
         else if([Utils checkUserIdCard:cardNum])
         {
@@ -256,5 +262,47 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void) textFieldDidChange:(UITextField*) field {
 
+    NSString* info;
+    if (field.tag == 1010) {
+        if (field.text.length > 32) {
+            field.text = [field.text substringToIndex:32];
+//            [field resignFirstResponder];
+            info = @"姓名不能大于32位";
+        }
+    }
+    else if(field.tag == 1011)
+    {
+        if (field.text.length > 11 || (field.text.length == 11&&[[field.text substringToIndex:1] intValue] != 1)) {
+            field.text = [field.text substringToIndex:11];
+//            [field resignFirstResponder];
+            info = @"手机号格式不正确";
+        }
+    }
+    else if(field.tag == 1012)
+    {
+        if (field.text.length > 18 ) {
+            field.text = [field.text substringToIndex:18];
+//            [field resignFirstResponder];
+            info = @"身份证号不能大于18位";
+        }
+    }
+    
+    if (info.length > 0) {
+        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+        imagelabel.textLabel.text = info;
+        [imagelabel layoutSubviews];
+    }
+    else
+    {
+        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+        imagelabel.textLabel.text = @"确认添加后信息不可修改";
+        [imagelabel layoutSubviews];
+    }
+    
+    
+}
 @end

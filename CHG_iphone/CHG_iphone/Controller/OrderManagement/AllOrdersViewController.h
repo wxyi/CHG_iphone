@@ -13,6 +13,6 @@
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
-
+@property(nonatomic,assign)BOOL isRefresh;
 @property(nonatomic,assign)NSInteger m_nPageNumber;
 @end

@@ -34,7 +34,7 @@
     //        width=SCREEN_WIDTH>SCREEN_HEIGHT?SCREEN_WIDTH:SCREEN_HEIGHT;
     //    }
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setItemSize:CGSizeMake((SCREEN_WIDTH)/2, isPad?105.f:105.f)];
+    [flowLayout setItemSize:CGSizeMake((SCREEN_WIDTH)/2, isPad?SCREEN_WIDTH/3:SCREEN_WIDTH/3)];
     [flowLayout setMinimumLineSpacing:0.f];
     [flowLayout setMinimumInteritemSpacing:0.f];
     [self.RewardsView setCollectionViewLayout:flowLayout];

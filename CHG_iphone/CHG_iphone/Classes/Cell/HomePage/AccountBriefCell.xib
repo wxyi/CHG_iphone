@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -18,6 +18,10 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8v2-RO-EVL">
                         <rect key="frame" x="0.0" y="47" width="320" height="1"/>
                         <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="320" id="A3Z-8x-AU6"/>
+                            <constraint firstAttribute="height" constant="1" id="E4g-3O-pwW"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -35,14 +39,17 @@
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
+                    <constraint firstItem="8v2-RO-EVL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="1UQ-B5-9ri"/>
                     <constraint firstItem="8v2-RO-EVL" firstAttribute="leading" secondItem="HiD-vF-72T" secondAttribute="leading" id="4L0-Xb-Z7I"/>
                     <constraint firstItem="8v2-RO-EVL" firstAttribute="trailing" secondItem="HiD-vF-72T" secondAttribute="trailing" id="9Aq-mw-g6b"/>
                     <constraint firstItem="HiD-vF-72T" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="CEw-Ok-uPg"/>
                     <constraint firstItem="8v2-RO-EVL" firstAttribute="top" secondItem="HiD-vF-72T" secondAttribute="bottom" id="Cpb-Li-NaK"/>
                     <constraint firstAttribute="centerY" secondItem="HiD-vF-72T" secondAttribute="centerY" id="T5e-Co-oZc"/>
                     <constraint firstAttribute="bottomMargin" secondItem="8v2-RO-EVL" secondAttribute="bottom" constant="-9" id="Yio-Hi-g8P"/>
+                    <constraint firstAttribute="trailing" secondItem="8v2-RO-EVL" secondAttribute="trailing" id="ayz-SI-erG"/>
                     <constraint firstAttribute="centerX" secondItem="HiD-vF-72T" secondAttribute="centerX" id="dkC-Ut-Egw"/>
                     <constraint firstItem="HiD-vF-72T" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="tRr-GA-yaT"/>
+                    <constraint firstAttribute="bottom" secondItem="8v2-RO-EVL" secondAttribute="bottom" constant="-1" id="u3p-dV-mX3"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

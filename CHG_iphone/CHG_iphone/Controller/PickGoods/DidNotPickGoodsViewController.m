@@ -80,10 +80,12 @@
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
-    
-    if (self.BtnSkipSelect) {
-        self.BtnSkipSelect(sender.tag,self.items);
+    if ([[self.items objectForKey:@"productList"] count] != 0) {
+        if (self.BtnSkipSelect) {
+            self.BtnSkipSelect(sender.tag,self.items);
+        }
     }
+    
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -322,6 +324,9 @@
 }
 
 #pragma mark 上拉加载更多数据
-
+-(void)RefreshOrder
+{
+    [self httpGetOrder];
+}
 
 @end

@@ -137,18 +137,18 @@
 -(void)loginout
 {
     DLog(@"退出账号");
-    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定退出" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定退出" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
         DLog(@"否");
         
-        
-    } otherButtonBlock:^{
-        DLog(@"是");
         [ConfigManager sharedInstance].access_token = @"";
         LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
         
         [self presentViewController:loginview animated:YES completion:^{
             
         }];
+    } otherButtonBlock:^{
+        DLog(@"是");
+        
     }];
 
     [self.stAlertView show];

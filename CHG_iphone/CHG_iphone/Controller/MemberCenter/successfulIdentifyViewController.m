@@ -86,8 +86,23 @@
             cell = (successfulIdentifyCell*)[[self.successfulIdentifyNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.iphoneLab.text = self.m_CustDict[@"custMobile"];
-        cell.nameLab.text = self.m_CustDict[@"custName"];
+        
+        NSString* string = @"识别成功！已扫描到以下信息";
+        NSRange rangeOfstart = [string rangeOfString:@"识别成功！"];
+        NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
+        [text setTextColor:UIColorFromRGB(0x646464) range:rangeOfstart];
+        
+        
+//        cell.goodscountlab.font = FONT(17);
+        
+        cell.goodscountlab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
+        cell.goodscountlab.attributedText = text;
+        [cell.goodscountlab setFont:FONT(17)];
+        [cell.goodscountlab setTextAlignment:NSTextAlignmentCenter];
+        
+        
+        cell.iphoneLab.text = [ConfigManager sharedInstance].strcustMobile;
+        cell.nameLab.text = [ConfigManager sharedInstance].strcustName;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -104,7 +119,7 @@
                           [NSDictionary dictionaryWithObjectsAndKeys:@"presell.png",@"icon",@"预售",@"title", nil],
                           [NSDictionary dictionaryWithObjectsAndKeys:@"btn_Member_order.png",@"icon",@"会员订单",@"title", nil],
                           nil];
-        cell.height = 105;
+        cell.height = SCREEN_WIDTH/3;
         [cell setupView:[items mutableCopy]];
         
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -149,7 +164,7 @@
     }
     else
     {
-        return 106;
+        return SCREEN_WIDTH/3;
     }
 }
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

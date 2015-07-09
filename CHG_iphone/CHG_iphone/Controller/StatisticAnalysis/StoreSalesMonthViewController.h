@@ -17,6 +17,7 @@
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,assign)int custCount;
 @property (nonatomic, assign) BOOL isSkip;
+@property(nonatomic,assign)BOOL isRefresh;
 @property(nonatomic,assign)NSInteger nbaseData;
 @property (nonatomic, assign) StatisticalType statisticalType;
 

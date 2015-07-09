@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "NimbusAttributedLabel.h"
+#import "NSMutableAttributedString+NimbusAttributedLabel.h"
 @interface successfulIdentifyCell : UITableViewCell
+@property(nonatomic,weak)IBOutlet NIAttributedLabel* goodscountlab;
 @property(nonatomic,weak)IBOutlet UILabel* iphoneLab;
 @property(nonatomic,weak)IBOutlet UILabel* nameLab;
 @end

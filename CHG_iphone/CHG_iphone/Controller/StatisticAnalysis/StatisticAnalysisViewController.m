@@ -28,6 +28,8 @@
 
 -(void)setupView
 {
+    
+    [self getCurrentData];
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     if ([config.Roles isEqualToString:@"SHOP_OWNER"]){
         self.items = [NSArray arrayWithObjects:@"会员消费",@"会员增长",@"动销奖励",@"消费分账奖励", nil];
@@ -115,6 +117,9 @@
     }
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
     StoreSalesView.statisticalType = type;
+    StoreSalesView.strYear = self.strYear;
+    StoreSalesView.strMonth = self.strMonth;
+    StoreSalesView.strDay = self.strDay;
     StoreSalesView.title = [self.items objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:StoreSalesView animated:YES];
 
@@ -128,5 +133,20 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+-(void)getCurrentData
+{
+    NSDate *now = [NSDate date];
+    NSLog(@"now date is: %@", now);
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+    
+    
+    self.strYear = [NSString stringWithFormat:@"%ld",(long)[dateComponent year]];
+    self.strMonth = [NSString stringWithFormat:@"%d",[dateComponent month]];
+    self.strDay = [NSString stringWithFormat:@"%d",[dateComponent day]];
+    
+    
+}
 @end

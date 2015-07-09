@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -18,18 +17,27 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BMM-ie-Lnd">
                         <rect key="frame" x="10" y="10" width="40" height="40"/>
                         <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="SQH-w4-FfB"/>
+                            <constraint firstAttribute="height" constant="40" id="g1L-hY-fPX"/>
+                        </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOw-Nv-p5f">
                         <rect key="frame" x="60" y="10" width="150" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="J2k-ap-O17"/>
+                            <constraint firstAttribute="height" constant="40" id="ffN-xV-0rL"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttq-wp-Vws">
                         <rect key="frame" x="230" y="15" width="80" height="30"/>
                         <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="80" id="LfI-UE-GIV"/>
+                            <constraint firstAttribute="width" constant="80" id="WTN-ML-uCm"/>
+                            <constraint firstAttribute="height" constant="30" id="X3c-dD-9Gm"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="下载">
@@ -49,17 +57,15 @@
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="2iE-kk-0a6"/>
-                    <constraint firstItem="Ttq-wp-Vws" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="9TA-D8-bvY"/>
-                    <constraint firstItem="Ttq-wp-Vws" firstAttribute="leading" secondItem="sOw-Nv-p5f" secondAttribute="trailing" constant="20" id="Fyw-pD-eT1"/>
-                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="top" secondItem="sOw-Nv-p5f" secondAttribute="top" id="NKU-bM-UTH"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Ttq-wp-Vws" secondAttribute="trailing" constant="2" id="U4v-c7-4do"/>
-                    <constraint firstAttribute="centerY" secondItem="BMM-ie-Lnd" secondAttribute="centerY" constant="-1" id="aTG-tT-XX1"/>
-                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="centerY" secondItem="Ttq-wp-Vws" secondAttribute="centerY" id="gAd-Pl-VLZ"/>
-                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="mud-oU-m6H"/>
-                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="bottom" secondItem="sOw-Nv-p5f" secondAttribute="bottom" id="smh-X9-xhF"/>
-                    <constraint firstItem="sOw-Nv-p5f" firstAttribute="leading" secondItem="BMM-ie-Lnd" secondAttribute="trailing" constant="10" id="vGo-w1-adQ"/>
-                    <constraint firstAttribute="centerX" secondItem="BMM-ie-Lnd" secondAttribute="centerX" constant="130" id="yt4-oY-ee7"/>
+                    <constraint firstAttribute="bottom" secondItem="Ttq-wp-Vws" secondAttribute="bottom" constant="13" id="01X-d2-5WL"/>
+                    <constraint firstItem="sOw-Nv-p5f" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="53k-oL-oO1"/>
+                    <constraint firstItem="sOw-Nv-p5f" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="60" id="W4g-Hc-bLX"/>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="XwO-A2-uKg"/>
+                    <constraint firstAttribute="bottom" secondItem="sOw-Nv-p5f" secondAttribute="bottom" constant="8" id="YyO-C8-CGo"/>
+                    <constraint firstAttribute="trailing" secondItem="Ttq-wp-Vws" secondAttribute="trailing" constant="10" id="bbk-ga-yc2"/>
+                    <constraint firstItem="Ttq-wp-Vws" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="fjq-k1-gfl"/>
+                    <constraint firstAttribute="bottom" secondItem="BMM-ie-Lnd" secondAttribute="bottom" constant="8" id="oS7-YG-7yQ"/>
+                    <constraint firstItem="BMM-ie-Lnd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="xfA-bq-uJK"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

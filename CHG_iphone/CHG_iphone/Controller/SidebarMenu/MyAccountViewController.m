@@ -7,14 +7,20 @@
 //
 
 #import "MyAccountViewController.h"
-#import "RewardsCell.h"
-#import "SettlementCell.h"
-#import "GrowthCell.h"
+//#import "RewardsCell.h"
+//#import "SettlementCell.h"
+//#import "GrowthCell.h"
 #import "StoreSalesViewController.h"
+#import "MyAccountCell.h"
+#import "MyAccountPartnersCell.h"
+#import "RewardsCollectionCell.h"
 @interface MyAccountViewController ()
 @property UINib* RewardsNib;
 @property UINib* SettlementNib;
 @property UINib* GrowthNib;
+
+@property UINib* MyAccountNib;
+@property UINib* MyAccountPartnersNib;
 @end
 
 @implementation MyAccountViewController
@@ -36,6 +42,7 @@
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_return.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     
     [self setupView];
+    [self setupcollectionView];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -49,6 +56,7 @@
     
     
     self.config = [[SUHelper sharedInstance] currentUserConfig];
+    self.config.Roles = @"PARTNER";
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
@@ -56,20 +64,20 @@
     [self getCurrentData];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-    self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
-    self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
-    self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
-    
+//    self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
+//    self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
+//    self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
+//
+    self.MyAccountNib = [UINib nibWithNibName:@"MyAccountCell" bundle:nil];
+    self.MyAccountPartnersNib = [UINib nibWithNibName:@"MyAccountPartnersCell" bundle:nil];
     [self httpGetMyAccount];
     [self setupRefresh];
 
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if ([self.config.Roles isEqualToString:@"PARTNER"]) {
-        return 3;
-    }
-    return 4;
+    
+    return self.items.count;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -78,83 +86,36 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     __weak typeof(self) weakSelf = self;
-    if (indexPath.section == 0) {
-        RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
+    
+    if ([self.config.Roles isEqualToString:@"PARTNER"]) {
+        MyAccountPartnersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MyAccountPartnersCell"];
         if(cell==nil){
-            cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MyAccountPartnersCell*)[[self.MyAccountPartnersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
+        cell.dictionary = self.items[indexPath.section];
+        [cell setUpCell];
         
-        
-        
-        NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"可用奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.dictionary[@"awardUsing"] doubleValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.dictionary[@"awardTotal"] doubleValue]],@"count", nil], nil];
-        cell.RewardsView.backgroundColor = UIColorFromRGB(0xf0f0f0);
-        cell.isMy = YES;
-        [cell setupView:[itme mutableCopy]];
-        
-        cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
-            DLog(@"row = %ld",(long)indexPath.row);
-//            [weakSelf didSelectRewardsCell:indexPath];
+        cell.accountSkip = ^(NSInteger index, NSString* strData) {
+            
+            [weakSelf goskipdetails:index data:strData];
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
-    }
-    else if(indexPath.section == 1)
-    {
-        SettlementCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SettlementCell"];
-        if(cell==nil){
-            cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
-            
-        }
-//        cell.datelab.text = @"2015-06-15";
-//        cell.statelab.text = @"支出";
-//        cell.namelab.text = @"晨冠以结算";
-//        cell.pricelab.text = @"￥200";
-//        cell.BankCardlab.text = @"工商银行";
-//        cell.CardNumlab.text = @"6210*******79263";
         
-        
-        cell.datelab.text = [NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay];
-        cell.statelab.text = @"支出";
-        cell.namelab.text = @"晨冠已结算";
-        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardArrive"] doubleValue]];
-        cell.BankCardlab.text = self.dictionary[@"awardArriveBank"];
-        cell.CardNumlab.text = self.dictionary[@"awardAccount"];
-
-        
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
     }
     else
     {
-        GrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:@"GrowthCell"];
+        MyAccountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MyAccountCell"];
         if(cell==nil){
-            cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MyAccountCell*)[[self.MyAccountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        
-        if (indexPath.section == 2 && ![self.config.Roles isEqualToString:@"PARTNER"]) {
-            cell.datelab.text = [NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay];
-            cell.statelab.text = @"收入";
-            cell.namelab.text = @"动销奖励";
-            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardSaleAmount"] doubleValue]];
-            cell.skipbtn.tag = 101;
-        }
-        else
-        {
-            cell.datelab.text = [NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay];
-            cell.statelab.text = @"收入";
-            cell.namelab.text = @"消费分账奖励";
-            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardPartnerAmount"] doubleValue]];
-            cell.skipbtn.tag = 102;
-        }
-        
-        cell.iphonelab.textColor = UIColorFromRGB(0xf5a541);
-        cell.didSkipSubItem = ^(NSInteger tag){
+        cell.dictionary = self.items[indexPath.section];
+        [cell setUpCell];
+        cell.accountSkip = ^(NSInteger index, NSString* strData) {
             
-            [weakSelf goskipdetails:tag];
+            [weakSelf goskipdetails:index data:strData];
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -162,13 +123,6 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
-    else if(section == 1)
-    {
-        return 30;
-    }
     return 5;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -177,35 +131,22 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 75;
-    }
-    else if(indexPath.section == 1)
+    if ([self.config.Roles isEqualToString:@"PARTNER"])
     {
-        return 90;
+        return 202;
     }
     else
-        return 105;
-}
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == 1) {
-        UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-//        v_header.backgroundColor = UIColorFromRGB(0xdddddd);;
-        UILabel* detaillab = [[UILabel alloc] initWithFrame:v_header.frame];
-        detaillab.textAlignment = NSTextAlignmentCenter;
-        detaillab.textColor = [UIColor grayColor];
-        detaillab.text = @"账户明细";
-        detaillab.font = FONT(14);
-        [v_header addSubview:detaillab];
-        return v_header;
+    {
+        return 308;
     }
-    return nil;
 }
--(void)goskipdetails:(NSInteger)tag
+
+-(void)goskipdetails:(NSInteger)tag data:(NSString*)strData
 {
     
     DLog(@"详情");
+    NSArray *array = [strData componentsSeparatedByString:@"-"];
+    DLog(@"array = %@",array);
     StatisticalType statType;
     NSString* title;
     if (tag == 101) {
@@ -221,6 +162,9 @@
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
     StoreSalesView.statisticalType = statType;
     StoreSalesView.title = title;
+    StoreSalesView.strYear = [array objectAtIndex:0];
+    StoreSalesView.strMonth = [array objectAtIndex:1];
+    StoreSalesView.strDay = [array objectAtIndex:2];
     [self.navigationController pushViewController:StoreSalesView animated:YES];
     
 }
@@ -231,10 +175,11 @@
   
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [parameter setObject:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay] forKey:@"queryDate"];
+    [parameter setObject:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,@"1"] forKey:@"startDate"];
+    [parameter setObject:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay] forKey:@"endDate"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyAccount] parameters:parameter];
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
-    [MMProgressHUD showWithTitle:@"" status:@""];
+//    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
+//    [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
 //        [MMProgressHUD dismiss];
@@ -244,10 +189,21 @@
 //                NSIndexPath *indexPath=[NSIndexPath indexPathForRow:i inSection:0];
 //                [self.tableview reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
 //            }
-//            
+//
 
-            self.dictionary = data;
+//            NSMutableArray* tm_array = [[NSMutableArray alloc] init ];
+//            tm_array = [data objectForKey:@"assetDetail"];
+//            
+//            for (int i = 0 ; i < tm_array.count; i ++) {
+//                <#statements#>
+//            }
+            self.items = [data objectForKey:@"assetDetail"];
+            self.collonitems = [NSArray arrayWithObjects:
+                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[data[@"awardUsing"] doubleValue]],@"count", nil],
+                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[data[@"awardTotal"] doubleValue]],@"count", nil], nil];
+
             [self.tableview reloadData];
+            [self.collection reloadData];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
         }
@@ -328,17 +284,51 @@
         //        [self.tableView reloadData];
         
         // 拿到当前的下拉刷新控件，结束刷新状态
+//        NSDate *now = [NSDate date];
+//        NSLog(@"now date is: %@", now);
         
-        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue]- 1];
+//        NSCalendar *calendar = [NSCalendar currentCalendar];
+//        NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+//        NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+//        
+//        
+//        int year = [dateComponent year];
+//        int month = [dateComponent month];
+        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] - 1];
+        NSString* lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]];
         
-        NSString* lastYear =[NSString stringWithFormat:@"%d",[self.strYear intValue]];
+        NSArray* bigMonth = @[@"1",@"3",@"5",@"7",@"8",@"10",@"12"];
+        NSArray* smallMonth = @[@"4",@"6",@"9",@"11"];
+        
         if ([lastMonth intValue] == 0) {
+            lastYear  = [NSString stringWithFormat:@"%d",[self.strYear intValue] -1];
             lastMonth = @"12";
-            lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]- 1];
         }
+        
+        
+        if ([bigMonth containsObject:lastMonth]) {
+            self.strDay = @"31";
+        }
+        else if([smallMonth containsObject:lastMonth])
+        {
+            self.strDay = @"30";
+        }
+        else
+        {
+            if (([lastYear intValue] % 4  == 0 && [lastYear intValue] % 100 != 0)  || [lastYear intValue] % 400 == 0) {
+                self.strDay = @"29";
+            }
+            else
+            {
+                self.strDay = @"28";
+            }
+        }
+        
+        
         self.strYear = lastYear;
         self.strMonth = lastMonth;
         [self httpGetMyAccount];
+        
 //        [self httpGetStatisticAnalysis];
         //        [self.tableview.header endRefreshing];
         
@@ -355,12 +345,8 @@
         // 刷新表格
         //        [self.tableView reloadData];
         
-        
-        
-        
         NSDate *now = [NSDate date];
         NSLog(@"now date is: %@", now);
-        
         NSCalendar *calendar = [NSCalendar currentCalendar];
         NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
         NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
@@ -368,26 +354,51 @@
         
         int year = [dateComponent year];
         int month = [dateComponent month];
+        int day = [dateComponent day];
+        
         NSString *nextMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] + 1];
         NSString* nextYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]];
-        if ([nextMonth intValue] >= month ) {
-            if ([nextYear intValue] >= year) {
-                nextMonth = [NSString stringWithFormat:@"%d",month];
-                nextYear = [NSString stringWithFormat:@"%d",year];
+        
+        NSArray* bigMonth = @[@"1",@"3",@"5",@"7",@"8",@"10",@"12"];
+        NSArray* smallMonth = @[@"4",@"6",@"9",@"11"];
+        
+        if ([nextMonth intValue] < month && [nextYear intValue] <= year ) {
+            if ([nextMonth intValue] == 13) {
+                nextYear  = [NSString stringWithFormat:@"%d",[self.strYear intValue] + 1 ];
+                nextMonth = @"1";
+            }
+            
+            
+            if ([bigMonth containsObject:nextMonth]) {
+                self.strDay = @"31";
+            }
+            else if([smallMonth containsObject:nextMonth])
+            {
+                self.strDay = @"30";
             }
             else
             {
-                if ([nextMonth intValue] == 13) {
-                    nextMonth = @"1";
-                    nextYear = [NSString stringWithFormat:@"%d",[self.strYear intValue] + 1];
+                if (([nextYear intValue] % 4  == 0 && [nextYear intValue] % 100 != 0)  || [nextYear intValue] % 400 == 0) {
+                    self.strDay = @"29";
+                }
+                else
+                {
+                    self.strDay = @"28";
                 }
             }
         }
-        
+        else
+        {
+            nextMonth = [NSString stringWithFormat:@"%d",month];
+            nextYear = [NSString stringWithFormat:@"%d",year];
+            self.strDay = [NSString stringWithFormat:@"%d",day];
+        }
         
         self.strYear = nextYear;
         self.strMonth = nextMonth;
         [self httpGetMyAccount];
+        
+        
 //        [self httpGetStatisticAnalysis];
         // 拿到当前的上拉刷新控件，结束刷新状态
         //        [self.tableview.footer endRefreshing];
@@ -402,5 +413,43 @@
     // Pass the selected object to the new view controller.
 }
 */
+-(void)setupcollectionView
+{
+    
+    self.collonitems = [NSArray arrayWithObjects:
+                        [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",@"",@"count", nil],
+                        [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",@"",@"count", nil], nil];
+    [self modifyCollectionView:NO];
+    [self.collection registerNib:[UINib nibWithNibName:@"RewardsCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"Cell"];
+    self.collection.delegate = self;
+    self.collection.dataSource=self;
+    self.collection.scrollEnabled = NO;
+}
+-(void) modifyCollectionView:(BOOL) isH{
+    //    CGFloat width = SCREEN_WIDTH>SCREEN_HEIGHT?SCREEN_HEIGHT:SCREEN_WIDTH;
+    //    if(isH ){
+    //        width=SCREEN_WIDTH>SCREEN_HEIGHT?SCREEN_WIDTH:SCREEN_HEIGHT;
+    //    }
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setItemSize:CGSizeMake((SCREEN_WIDTH-1)/2, isPad?80.f:80.f)];
+    [flowLayout setMinimumLineSpacing:0.f];
+    [flowLayout setMinimumInteritemSpacing:0.f];
+    [self.collection setCollectionViewLayout:flowLayout];
+    
+}
 
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.collonitems.count;
+}
+
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    RewardsCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    
+    cell.RewardsAmountLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"count"];
+    
+    cell.RewardsNameLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"title"];
+    
+    return cell;
+}
 @end

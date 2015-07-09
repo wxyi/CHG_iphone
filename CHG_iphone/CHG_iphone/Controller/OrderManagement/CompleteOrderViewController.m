@@ -40,10 +40,11 @@
         rect.size.height = rect.size.height + 40;
         self.tableview.frame = rect;
     }
-    
+    self.isRefresh = YES;
 //    rect = self.returnBtn.frame;
 //    rect.origin.y = SCREEN_HEIGHT- 40;
 //    self.returnBtn.frame = rect;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,7 +133,7 @@
     }
     else if([dict[@"orderType"] isEqualToString:@"ShopEngage"])
     {
-        orderType = @"预订订单";
+        orderType = @"预售订单";
     }
     
     orderstatus.text = [NSString stringWithFormat:@"%@ %@",statue,orderType];
@@ -169,10 +170,10 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付%.2f元",[dict[@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[dict[@"orderFactAmount"] doubleValue]]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[dict[@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:@"订单金额"];
     text = [[NSMutableAttributedString alloc] initWithString:string];
-    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
+    [text setTextColor:[UIColor redColor] range:rangeOfstart];
     
     
     
@@ -240,8 +241,11 @@
 //    NSString* tag = [NSString stringWithFormat:@"%d",sender.tag];
 //    NSInteger section = [[tag substringFromIndex:2] intValue];
 //    NSDictionary* dict = [self.items objectAtIndex:section];
-    if (self.BtnSkipSelect) {
-        self.BtnSkipSelect(sender.tag,nil);
+    
+    if ([self.items count] != 0) {
+        if (self.BtnSkipSelect) {
+            self.BtnSkipSelect(sender.tag,nil);
+        }
     }
     
 }
@@ -270,6 +274,7 @@
         
         DLog(@"data = %@ msg = %@",data,msg);
         if (success) {
+            self.isRefresh = YES;
 //            [MMProgressHUD dismiss];
             NSArray* dataArr = [data objectForKey:@"datas"];
             for (int i = 0; i< dataArr.count; i++) {
@@ -313,26 +318,34 @@
 */
 - (void)setupRefresh
 {
-    __weak __typeof(self) weakSelf = self;
-    
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
-    
-    // 设置自动切换透明度(在导航栏下面自动隐藏)
-    header.autoChangeAlpha = YES;
-    
-    // 隐藏时间
-    header.lastUpdatedTimeLabel.hidden = YES;
-    
-    // 马上进入刷新状态
-    [header beginRefreshing];
-    
-    // 设置header
-    self.tableview.header = header;
-    
-    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [weakSelf loadMoreData];
-    }];
+    if (self.isRefresh) {
+        
+        self.isRefresh = NO;
+        __weak __typeof(self) weakSelf = self;
+        
+        MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+        
+        // 设置自动切换透明度(在导航栏下面自动隐藏)
+        header.autoChangeAlpha = YES;
+        
+        // 隐藏时间
+        header.lastUpdatedTimeLabel.hidden = YES;
+        
+        
+        
+        [header beginRefreshing];
+        
+        // 马上进入刷新状态
+        
+        
+        // 设置header
+        self.tableview.header = header;
+        
+        // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            [weakSelf loadMoreData];
+        }];
+    }
 }
 #pragma mark - 数据处理相关
 #pragma mark 下拉刷新数据

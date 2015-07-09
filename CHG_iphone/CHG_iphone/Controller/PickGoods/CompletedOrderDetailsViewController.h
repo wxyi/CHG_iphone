@@ -12,9 +12,11 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UIButton* returnBtn;
 @property(nonatomic,strong)NSDictionary* items;
-
+@property(nonatomic,strong)STAlertView* stAlertView;
 @property (nonatomic, strong) NSString *strOrderId;
 @property (nonatomic, assign) CGFloat m_height;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
+@property (nonatomic,assign)OrderType Comordertype;
+@property (nonatomic,assign)SkipType skiptype;
 -(IBAction)orderProcessing:(UIButton*)sender;
 @end

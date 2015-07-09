@@ -115,8 +115,11 @@
             cell.storeAddresslab.text = self.shopinfo[@"shopAddress"];
             cell.didSkipSubItem =^(NSInteger tag){
                 
-                
-                [self showQrCode:self.shopinfo[@"dimensionalCodeUrl"]];
+                NSString* dimensionalCodeUrl = self.shopinfo[@"dimensionalCodeUrl"];
+                if (dimensionalCodeUrl.length > 0) {
+                    [self showQrCode:dimensionalCodeUrl];
+                }
+//                [self showQrCode:self.shopinfo[@"dimensionalCodeUrl"]];
             };
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
@@ -136,7 +139,11 @@
             cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
             cell.didSkipSubItem =^(NSInteger tag){
                 
-                [self showQrCode:self.shopinfo[@"dimensionalCodeUrl"]];
+                NSString* dimensionalCodeUrl = self.shopinfo[@"dimensionalCodeUrl"];
+                if (dimensionalCodeUrl.length > 0) {
+                    [self showQrCode:dimensionalCodeUrl];
+                }
+                
             };
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             
@@ -158,6 +165,12 @@
             cell.positionlab.text = @"店长";
             
             cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
+            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            if ([config.Roles isEqualToString:@"SHOPLEADER"]) {
+                
+                cell.Disablebtn.userInteractionEnabled=NO;
+                cell.Disablebtn.alpha=0.4;
+            }
         }
         else{
             cell.positionlab.text = @"导购";
@@ -166,9 +179,29 @@
         cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
         cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
         cell.IndexPath = indexPath;
+        WEAKSELF
         cell.didselectDisable = ^(NSIndexPath* indexPath){
         
-            [self httpSetSellerStatus:indexPath];
+            NSString * info ;
+            
+            if ([dict[@"positionId"] intValue] == 2 ) {
+                info = @"是否确认停用此店长";
+            }
+            else{
+                info = @"是否确认停用此导购";
+            }
+            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:info message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+                DLog(@"否");
+                [self httpSetSellerStatus:indexPath];
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                
+            }];
+            
+            [self.stAlertView show];
+
+            
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -338,18 +371,24 @@
         type = StorePersonnelTypeShoppers;
     }
     
-    self.stAlertView = [[STAlertView alloc] initWithTitle:[NSString stringWithFormat:@"是否%@" ,info] message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-        DLog(@"否");
-        
-        
-    } otherButtonBlock:^{
-        DLog(@"是");
-        AddShoppersViewController* AddShoppersView = [[AddShoppersViewController alloc] initWithNibName:@"AddShoppersViewController" bundle:nil];
-        AddShoppersView.PersonnerType = type;
-        [self.navigationController pushViewController:AddShoppersView animated:YES];
-    }];
     
-    [self.stAlertView show];
+    AddShoppersViewController* AddShoppersView = [[AddShoppersViewController alloc] initWithNibName:@"AddShoppersViewController" bundle:nil];
+    AddShoppersView.PersonnerType = type;
+    [self.navigationController pushViewController:AddShoppersView animated:YES];
+    
+    
+//    self.stAlertView = [[STAlertView alloc] initWithTitle:[NSString stringWithFormat:@"是否%@" ,info] message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+//        DLog(@"否");
+//        
+//        
+//    } otherButtonBlock:^{
+//        DLog(@"是");
+//        AddShoppersViewController* AddShoppersView = [[AddShoppersViewController alloc] initWithNibName:@"AddShoppersViewController" bundle:nil];
+//        AddShoppersView.PersonnerType = type;
+//        [self.navigationController pushViewController:AddShoppersView animated:YES];
+//    }];
+//    
+//    [self.stAlertView show];
    
     
 }
@@ -367,7 +406,11 @@
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
     contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UIImageView* image = [[UIImageView alloc] initWithFrame:contentView.frame];
-    image.image = [QRCodeGenerator qrImageForString:strqr imageSize:contentView.bounds.size.width];
+    
+    NSString *newstr =[NSString stringWithFormat:@"%@/%@",APPDocumentsDirectory,@"StoreQrCode.jpg"] ;
+    NSLog(@"完整路径是:%@",newstr);
+    
+    image.image = [UIImage imageWithData:[NSData dataWithContentsOfFile:newstr]];
     [contentView addSubview:image];
     KGModal *modal = [KGModal sharedInstance];
     modal.showCloseButton = NO;

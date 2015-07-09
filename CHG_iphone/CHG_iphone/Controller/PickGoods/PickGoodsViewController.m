@@ -9,6 +9,9 @@
 #import "PickGoodsViewController.h"
 #import "PresellGoodsViewController.h"
 #import "GoodsDetailsViewController.h"
+#import "CompletedOrderDetailsViewController.h"
+
+
 @interface PickGoodsViewController ()
 
 @end
@@ -23,6 +26,20 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     // Do any additional setup after loading the view from its nib.
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    if (self.skiptype == SkipfromOrderManage) {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else
+    {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+    }
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
 }
 
@@ -54,14 +71,24 @@
         if (tag == 100)
         {
             DLog(@"终止定单")
-            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-                DLog(@"否");
-                
-                
-            } otherButtonBlock:^{
-                DLog(@"是");
-                [weakSelf httpCancelOrder :dictionary];
-            }];
+            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+            CompletedOrderDetailsView.Comordertype = TerminationOrder;
+            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+//            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+//                DLog(@"否");
+//                
+//                
+//            } otherButtonBlock:^{
+//                DLog(@"是");
+////                [weakSelf httpCancelOrder :dictionary];
+//                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+//                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+//                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+//                CompletedOrderDetailsView.Comordertype = TerminationOrder;
+//                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+//            }];
             
             [weakSelf.stAlertView show];
         }
@@ -70,6 +97,7 @@
             SaleType satype = SaleTypePickingGoods;
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
+            PresellGoodsView.skiptype = SkipfromOrderManage;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
         
@@ -86,6 +114,7 @@
             SaleType satype = SaleTypeReturnGoods;
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
+            PresellGoodsView.skiptype = SkipfromOrderManage;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
     };

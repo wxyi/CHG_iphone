@@ -33,17 +33,20 @@
 {
     CGRect frame = self.bgview.frame;
     
-    CGFloat scale = [self getShowData:baseData CurrentData:number];
+    CGFloat scale = [self getShowData:baseData CurrentData:abs(number)];
     frame.size.width = self.bottomview.frame.size.width * scale;
     frame.origin.x = 0;
     frame.size.height = 30;
     self.bgview.frame = frame;
     
 //    NSString * currentData = [NSObject currentTime];
-    if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
+    if (number < 0) {
+        self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
+    }
+    else if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
         self.bgview.backgroundColor = UIColorFromRGB(0xf5a541);
     else
-        self.bgview.backgroundColor = [UIColor grayColor];
+        self.bgview.backgroundColor = COLOR(100, 100, 100, 0.3);
     
     self.dateLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, CGRectGetWidth(self.bgview.frame)-10, CGRectGetHeight(self.bgview.frame))];
     self.dateLab.textAlignment = NSTextAlignmentLeft;

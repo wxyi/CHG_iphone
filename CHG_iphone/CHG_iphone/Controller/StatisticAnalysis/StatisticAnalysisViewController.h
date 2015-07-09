@@ -12,4 +12,7 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
 
+@property(nonatomic,strong)NSString* strYear;
+@property(nonatomic,strong)NSString* strMonth;
+@property(nonatomic,strong)NSString* strDay;
 @end

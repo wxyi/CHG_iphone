@@ -98,7 +98,7 @@
         cell = (BanKCardCell*)[[self.BanKCardNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
         UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-        if (![config.Roles isEqualToString:@"PARTNER"]||([config.Roles isEqualToString:@"PARTNER"] && config.nRoleType != 1))
+        if ( config.nRoleType != 1)
         {
             
             NSMutableArray *rightUtilityButtons = [NSMutableArray new];
@@ -147,15 +147,15 @@
         case 0:
         {
 //            [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
-                
+                [self httpDeleteBankCard];
             } otherButtonBlock:^{
                 DLog(@"是");
                 
                 // Delete button was pressed
-                [self httpDeleteBankCard];
+                
                 
             }];
             

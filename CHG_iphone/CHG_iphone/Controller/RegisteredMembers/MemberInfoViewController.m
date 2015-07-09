@@ -346,9 +346,11 @@
         NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
         
         [dateformatter setDateFormat:@"YYYY-MM-dd"];
-        
+        self.strBabyBirthday = [dateformatter stringFromDate:senddate];
+        [dateformatter setDateFormat:@"YYYY年MM月dd日"];
         NSString *  locationString=[dateformatter stringFromDate:senddate];
         textField.text = locationString;
+        self.strBabyBirthday = locationString;
         NSLog(@"locationString:%@",locationString);
     }
 }

@@ -40,7 +40,7 @@
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
     
-    self.items = [NSArray arrayWithObjects:@"登陆密码", nil];
+    self.items = [NSArray arrayWithObjects:@"登录密码", nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];

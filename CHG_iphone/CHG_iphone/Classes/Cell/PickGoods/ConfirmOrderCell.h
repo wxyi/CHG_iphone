@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ConfirmOrderCell : UITableViewCell
-
+@property(nonatomic,weak)IBOutlet UILabel* finishLab;
 @end

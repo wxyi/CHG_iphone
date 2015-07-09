@@ -21,7 +21,26 @@
     [super viewDidLoad];
     self.title = @"会员注册";
     // Do any additional setup after loading the view from its nib.
+    
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    
+    [leftButton addTarget:self action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
     [self setupView];
+}
+-(void)goback
+{
+    for (int i = 0; i < 3; i ++) {
+        UITextField* textfield = (UITextField*)[self.view viewWithTag:1010+i];
+        [textfield resignFirstResponder];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)setupView
 {
@@ -59,6 +78,12 @@
     cell.iphoneField.text = self.strIphone;
     cell.iphoneField.delegate = self;
     [cell.iphoneField becomeFirstResponder];// 2
+    [cell.iphoneField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+//    cell.nameField.delegate = self;
+    [cell.nameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+//    cell.codeField.delegate = self;
+    [cell.codeField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
     cell.didshowInfo = ^(NSString* info){
         [SGInfoAlert showInfo:info
                       bgColor:[[UIColor blackColor] CGColor]
@@ -94,7 +119,16 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 80)];
-   
+    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
+    promptlabel.tag = 103333;
+    
+    promptlabel.textLabel.text = @"";
+    promptlabel.textLabel.font = FONT(12);
+    promptlabel.textLabel.textColor = UIColorFromRGB(0x171c61);
+    promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
+
+    [v_footer addSubview:promptlabel];
+    
     UIButton* nextBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     nextBtn.frame = CGRectMake(6, 45, CGRectGetWidth(self.view.bounds)-12, 40);
     [nextBtn.layer setMasksToBounds:YES];
@@ -169,26 +203,116 @@
 }
 */
 
--(void)textFieldDidBeginEditing:(UITextField *)textField
+- (void) textFieldDidChange:(UITextField*) textField
 {
-    if (textField.text.length > 11) {
-        [SGInfoAlert showInfo:@"手机号输入有误"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.4];
+    
+    NSString * info;
+    if (textField.tag == 1010) {
+        
+//        DLog(@"%@",[textField.text substringToIndex:1]);
+        if (textField.text.length > 1 && [[textField.text substringToIndex:1] intValue]!= 1) {
+//            textField.text = @"";
+            info = @"手机号格式不正确";
+        }
+        if (textField.text.length > 11) {
+            textField.text = [textField.text substringToIndex:11];
+//            [textField resignFirstResponder];
+            info = @"手机号不能大于11位";
+        }
+        else
+        {
+            info = @"";
+        }
     }
+    else if(textField.tag == 1011)
+    {
+        if (textField.text.length > 32) {
+            textField.text = [textField.text substringToIndex:32];
+//            [textField resignFirstResponder];
+            info = @"会员姓名不能大于32位";
+        }
+        else
+        {
+            info = @"";
+        }
+    }
+    else if(textField.tag == 1012)
+    {
+        if (textField.text.length > 6) {
+            textField.text = [textField.text substringToIndex:6];
+//            [textField resignFirstResponder];
+            info = @"验证码不能大于6位";
+        }
+        else
+        {
+            info = @"";
+        }
+    }
+    
+    JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+    if (info.length != 0) {
+        
+        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+        imagelabel.textLabel.text = info;
+        [imagelabel layoutSubviews];
+    }
+    else
+    {
+        imagelabel.imageView.image = nil;
+        imagelabel.textLabel.text = @"";
+        [imagelabel layoutSubviews];
+    }
+//    if (textField.text.length > 11 || (textField.text.length>=1 &&[[textField.text substringToIndex:1] intValue] != 1)) {
+//        [SGInfoAlert showInfo:@"手机号输入有误"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.4];
+//    }
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
 //    NSString* info;
-    if (textField.text.length != 11 ) {
-
-        [SGInfoAlert showInfo:@"手机号输入有误"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.4];
+    
+    NSString * info ;
+    if (textField.tag == 1010) {
+        if (textField.text.length != 11 && textField.text.length > 0 && [[textField.text substringToIndex:1] intValue] != 1)
+        {
+            info = @"手机格式不正确";
+        }
+    }
+    else if(textField.tag == 1012)
+    {
+        if (textField.text.length != 6) {
+            info = @"验证码输入有误";
+        }
+    }
+    
+    if (info.length != 0) {
+        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+        imagelabel.textLabel.text = info;
+        [imagelabel layoutSubviews];
     }
     
 }
-
+//-(void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+//    if (textField.tag == 1010) {
+//        if (textField.text.length > 11) {
+//            [textField resignFirstResponder];
+//        }
+//    }
+//    else if(textField.tag == 1011)
+//    {
+//        if (textField.text.length > 32) {
+//            [textField resignFirstResponder];
+//        }
+//    }
+//    else if(textField.tag == 1012)
+//    {
+//        if (textField.text.length > 6) {
+//            [textField resignFirstResponder];
+//        }
+//    }
+//}
 @end

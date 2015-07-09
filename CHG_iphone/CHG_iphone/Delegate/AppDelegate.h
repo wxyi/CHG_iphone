@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+-(void)setupLoginViewController;
 -(void)setupHomePageViewController;
+-(void)setupStoreManagementViewController;
 @end
 

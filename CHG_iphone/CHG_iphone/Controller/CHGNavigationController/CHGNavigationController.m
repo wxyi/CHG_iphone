@@ -14,6 +14,7 @@
 #import "SuccessRegisterViewController.h"
 #import "successfulIdentifyViewController.h"
 #import "MemberCenterViewController.h"
+#import "OrderManagementViewController.h"
 @interface CHGNavigationController ()
 @property (strong, readwrite, nonatomic) SidebarMenuTableViewController *SidebarMenuController;
 @end
@@ -51,12 +52,76 @@
 - (void)gobackMemberCenter
 {
     MemberCenterViewController* memberView = [[MemberCenterViewController alloc] initWithNibName:@"MemberCenterViewController" bundle:nil];
-    [self pushViewController:memberView animated:YES];
+    
+    CATransition *transition = [CATransition animation];
+    
+    transition.duration = 0.3f;
+    
+//    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    transition.type = kCATransitionPush;
+    
+    transition.subtype = kCATransitionFromLeft;
+    
+//    transition.delegate = self;
+    
+    [self.view.superview.layer addAnimation:transition forKey:nil];
+    
+
+    
+    [self pushViewController:memberView animated:NO];
 //    [self popToRootViewControllerAnimated:YES];
 }
 -(void)gobacktoSuccess
 {
     [self popViewControllerAnimated:YES];
+}
+-(void)gotoOrderManagement
+{
+    OrderManagementViewController* OrderManagement = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+    OrderManagement.ManagementTyep = OrderManagementTypeSingle;
+    OrderManagement.m_returnType = OrderReturnTypeAMember;
+    OrderManagement.title = @"会员订单";
+    
+    CATransition *transition = [CATransition animation];
+    
+    transition.duration = 0.3f;
+    
+//    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    transition.type = kCATransitionPush;
+    
+    transition.subtype = kCATransitionFromLeft;
+    
+//    transition.delegate = self;
+    
+    [self.view.superview.layer addAnimation:transition forKey:nil];
+    
+
+
+    [self pushViewController:OrderManagement animated:NO];
+}
+-(void)gobacktoSuccessFulldentify
+{
+    successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
+    
+    CATransition *transition = [CATransition animation];
+    
+    transition.duration = 0.3f;
+    
+//    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    transition.type = kCATransitionPush;
+    
+    transition.subtype = kCATransitionFromLeft;
+    
+//    transition.delegate = self;
+    
+    [self.view.superview.layer addAnimation:transition forKey:nil];
+    
+
+    
+    [self pushViewController:successfulIdentifyView animated:NO];
 }
 #pragma mark -
 #pragma mark Gesture recognizer
@@ -140,15 +205,15 @@
 }
 -(void)unbundlingbankCard
 {
-    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
         DLog(@"否");
         
-        
+        [self httpDeleteBankCard];
     } otherButtonBlock:^{
         DLog(@"是");
         
         // Delete button was pressed
-        [self httpDeleteBankCard];
+        
         
     }];
     

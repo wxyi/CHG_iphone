@@ -21,8 +21,8 @@
 }
 -(IBAction)skipdetails:(UIButton*)sender
 {
-    if (self.skipdetails) {
-        self.skipdetails(self.strOrderId);
+    if (self.CellSkipSelect) {
+        self.CellSkipSelect(self.items);
     }
 }
 @end

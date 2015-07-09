@@ -25,7 +25,7 @@
         
         UIPageControl* pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0,frame.size.height - 36,frame.size.width,36)];
         [self addSubview:pageControl];
-        self.page_control = pageControl;
+        self.page_control = nil;
     }
     return self;
 }
@@ -49,11 +49,12 @@
             imageview.tag = i;
             if(i + 1==count)
             {   //如果是 最后一页 就加个按钮
-                UIButton* startBt = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                UIButton* startBt = [UIButton buttonWithType:UIButtonTypeCustom];
                 startBt.userInteractionEnabled = YES;
-                startBt.frame = CGRectMake(320/2-60, height-150, 120, 30);
-                [startBt.titleLabel setTextAlignment:UITextAlignmentCenter];
-                [startBt setTitle:@"进入女神的新衣" forState:UIControlStateNormal];
+                startBt.frame = CGRectMake((SCREEN_WIDTH -220)/2, height-50, 220, 30);
+                [startBt.titleLabel setTextAlignment:NSTextAlignmentCenter];
+//                [startBt setTitle:@"立即体验" forState:UIControlStateNormal];
+                [startBt setImage:[UIImage imageNamed:@"btn_start.png"] forState:UIControlStateNormal];
                 [startBt addTarget:self action:@selector(startbt_pressed:) forControlEvents:UIControlEventTouchUpInside];
                 [imageview addSubview:startBt];
                 self.lastImageView = imageview;

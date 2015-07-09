@@ -50,10 +50,13 @@
 //        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
         if (![self.config.Roles isEqualToString:@"PARTNER"]) {
             UIButton *Scanbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 95, 72, 72)];
-            Scanbtn.backgroundColor = [UIColor whiteColor];
+            Scanbtn.backgroundColor = [UIColor clearColor];
             Scanbtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
             
-            [Scanbtn setImage:[QRCodeGenerator qrImageForString:[ConfigManager sharedInstance].strdimensionalCodeUrl imageSize:72] forState:UIControlStateNormal];
+            NSString *newstr =[NSString stringWithFormat:@"%@/%@",APPDocumentsDirectory,@"StoreQrCode.jpg"] ;
+            NSLog(@"完整路径是:%@",newstr);
+            
+            [Scanbtn setImage:[UIImage imageWithData:[NSData dataWithContentsOfFile:newstr]] forState:UIControlStateNormal];
             Scanbtn.layer.rasterizationScale = [UIScreen mainScreen].scale;
             Scanbtn.layer.shouldRasterize = YES;
             Scanbtn.clipsToBounds = YES;
@@ -81,8 +84,9 @@
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
     contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UIImageView* image = [[UIImageView alloc] initWithFrame:contentView.frame];
-    
-    image.image = [QRCodeGenerator qrImageForString:[ConfigManager sharedInstance].strdimensionalCodeUrl  imageSize:contentView.bounds.size.width];
+    NSString *newstr =[NSString stringWithFormat:@"%@/%@",APPDocumentsDirectory,@"StoreQrCode.jpg"] ;
+    NSLog(@"完整路径是:%@",newstr);
+    image.image = [UIImage imageWithData:[NSData dataWithContentsOfFile:newstr]];
     [contentView addSubview:image];
     KGModal *modal = [KGModal sharedInstance];
     modal.showCloseButton = NO;

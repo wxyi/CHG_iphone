@@ -18,4 +18,5 @@
 @property (nonatomic, strong) NSString *strOrderId;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property(nonatomic,strong)STAlertView* stAlertView;
+@property (nonatomic,assign)SkipType skiptype;
 @end

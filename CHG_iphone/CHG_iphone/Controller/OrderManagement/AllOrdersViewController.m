@@ -12,6 +12,7 @@
 #import "OrdersGoodsCell.h"
 #import "NimbusAttributedLabel.h"
 #import "NSMutableAttributedString+NimbusAttributedLabel.h"
+#import "CompletedOrderDetailsViewController.h"
 @interface AllOrdersViewController ()
 //@property UINib* AllOrdersNib;
 @property UINib* OrdersGoodsNib;
@@ -27,6 +28,10 @@
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(RefreshOrder)
+                                                 name:REFRESH_ORDER
+                                               object:nil];
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -34,7 +39,7 @@
 //    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     // 1.注册cell
-
+    self.isRefresh = YES;
     self.items = [[NSMutableArray alloc] init];
     
 
@@ -139,7 +144,7 @@
     }
     else if([dict[@"orderType"] isEqualToString:@"ShopEngage"])
     {
-        orderType = @"预订订单";
+        orderType = @"预售订单";
     }
     orderstatus.text = [NSString stringWithFormat:@"%@ %@",statue,orderType];
     [v_header addSubview:orderstatus];
@@ -175,10 +180,10 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付%.2f元",[dict[@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[dict[@"orderFactAmount"] doubleValue]]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[dict[@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:@"订单金额"];
     text = [[NSMutableAttributedString alloc] initWithString:string];
-    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
+    [text setTextColor:[UIColor redColor] range:rangeOfstart];
     
     
     
@@ -253,21 +258,26 @@
     NSInteger ntag = [[tag substringToIndex:2] intValue];
     NSDictionary* dict = [self.items objectAtIndex:section];
     
-    if (ntag == 11) {
-        DLog(@"终止定单")
-        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-            DLog(@"否");
-            
-            
-        } otherButtonBlock:^{
-            DLog(@"是");
-            [self httpCancelOrder :dict];
-        }];
-        
-        [self.stAlertView show];
-    
-    }
-    else
+//    if (ntag == 11) {
+//        DLog(@"终止定单")
+//        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
+//            DLog(@"否");
+//            
+//            
+//        } otherButtonBlock:^{
+//            DLog(@"是");
+////            [self httpCancelOrder :dict];
+//            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+//            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dict[@"orderId"] intValue]];
+//            CompletedOrderDetailsView.ManagementTyep = self.ManagementTyep;
+//            CompletedOrderDetailsView.Comordertype = TerminationOrder;
+//            [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+//        }];
+//        
+//        [self.stAlertView show];
+//    
+//    }
+//    else
     {
         if (self.BtnSkipSelect) {
             self.BtnSkipSelect(sender.tag,dict);
@@ -304,6 +314,8 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if (success) {
 //            [MMProgressHUD dismiss];
+            
+            self.isRefresh = YES;
             NSArray* dataArr = [data objectForKey:@"datas"];
             for (int i = 0; i< dataArr.count; i++) {
                 [self.items addObject:dataArr[i]];
@@ -378,26 +390,34 @@
 */
 - (void)setupRefresh
 {
-    __weak __typeof(self) weakSelf = self;
-    
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
-    
-    // 设置自动切换透明度(在导航栏下面自动隐藏)
-    header.autoChangeAlpha = YES;
-    
-    // 隐藏时间
-    header.lastUpdatedTimeLabel.hidden = YES;
-    
-    // 马上进入刷新状态
-    [header beginRefreshing];
-    
-    // 设置header
-    self.tableview.header = header;
-    
-    // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [weakSelf loadMoreData];
-    }];
+    if (self.isRefresh) {
+        
+        self.isRefresh = NO;
+        __weak __typeof(self) weakSelf = self;
+        
+        MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+        
+        // 设置自动切换透明度(在导航栏下面自动隐藏)
+        header.autoChangeAlpha = YES;
+        
+        // 隐藏时间
+        header.lastUpdatedTimeLabel.hidden = YES;
+        
+        
+        
+        [header beginRefreshing];
+        
+        // 马上进入刷新状态
+        
+        
+        // 设置header
+        self.tableview.header = header;
+        
+        // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            [weakSelf loadMoreData];
+        }];
+    }
 }
 #pragma mark - 数据处理相关
 #pragma mark 下拉刷新数据
@@ -434,6 +454,11 @@
     });
 }
 
-
+-(void)RefreshOrder
+{
+    self.m_nPageNumber = 1;
+    [self.items removeAllObjects];
+    [self httpGetAllOrderList];
+}
 
 @end
