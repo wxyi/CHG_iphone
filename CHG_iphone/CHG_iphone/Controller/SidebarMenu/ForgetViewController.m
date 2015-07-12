@@ -9,7 +9,7 @@
 #import "ForgetViewController.h"
 #import "JKCountDownButton.h"
 #import "ResetViewController.h"
-@interface ForgetViewController ()
+@interface ForgetViewController ()<UITextFieldDelegate>
 
 @end
 
@@ -69,6 +69,7 @@
     textField.placeholder = @"动态验证码"; //默认显示的字
     textField.keyboardType = UIKeyboardTypeNumberPad;
     textField.tag = 101;
+    textField.delegate = self;
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.returnKeyType = UIReturnKeyDone;
@@ -82,7 +83,7 @@
     JKCountDownButton* countDownCode = [JKCountDownButton buttonWithType:UIButtonTypeCustom];
     countDownCode.backgroundColor = [UIColor clearColor];
     countDownCode.titleLabel.font = FONT(13);
-    countDownCode.titleLabel.textColor = UIColorFromRGB(0x646464);
+    countDownCode.titleLabel.textColor = UIColorFromRGB(0x171C61);
     countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
     [countDownCode setTitle:@"发送验证码" forState:UIControlStateNormal];
     
@@ -256,5 +257,16 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (string.length == 0) return YES;
+    
+    NSInteger existedLength = textField.text.length;
+    NSInteger selectedLength = range.length;
+    NSInteger replaceLength = string.length;
+    if (existedLength - selectedLength + replaceLength > 6) {
+        return NO;
+    }
+    return YES;
+}
 @end

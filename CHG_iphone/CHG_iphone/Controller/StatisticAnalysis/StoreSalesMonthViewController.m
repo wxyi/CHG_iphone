@@ -54,6 +54,8 @@
     else
         self.pricelab.text = @"￥0.00";
     
+    
+    self.items = [[NSMutableArray alloc] init];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT - 70 -40;
 //    rect.size.width = SCREEN_WIDTH;
@@ -66,7 +68,7 @@
     // Do any additional setup after loading the view from its nib.
     self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StatisticsNib = [UINib nibWithNibName:@"StatisticsCell" bundle:nil];
-    self.isRefresh = YES;
+    
     
     [self setupRefreshPage];
 }
@@ -81,7 +83,8 @@
     if ([self.items count] == 0 || self.isSkip) {
 //        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
 //        [MMProgressHUD showWithTitle:@"" status:@""];
-        [self httpGetStatisticAnalysis];
+//        [self httpGetStatisticAnalysis];
+        [self setupRefreshPage];
     }
     
 }
@@ -187,6 +190,7 @@
 
 -(void)setupRefreshPage
 {
+    self.isRefresh = YES;
     [self setupRefresh];
 }
 -(void)httpGetStatisticAnalysis
@@ -223,34 +227,61 @@
     }
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
+    [self.items removeAllObjects];
     [HttpClient asynchronousRequestWithProgress:self.strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
 //        [MMProgressHUD dismiss];
         DLog(@"data = %@",data);
         if (success) {
             [MMProgressHUD dismiss];
+            
+            NSArray* tm_item;
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"sellCount"] doubleValue]];
-                    self.items = [data objectForKey:@"sellList"];
+                    tm_item = [data objectForKey:@"sellList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"sellAmount"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 case StatisticalTypeMembershipGrowth:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
-                    self.items = [data objectForKey:@"custList"];
+//                    self.items = [data objectForKey:@"custList"];
+                    tm_item = [data objectForKey:@"custList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"count"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 case StatisticalTypePinRewards:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardSalerCount"] doubleValue]];
-                    self.items = [data objectForKey:@"awardSalerList"];
+//                    self.items = [data objectForKey:@"awardSalerList"];
+                  
+                    tm_item = [data objectForKey:@"awardSalerList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"awardSalerAmount"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardPartnerCount"] doubleValue]];
-                    self.items = [data objectForKey:@"awardPartnerList"];
+//                    self.items = [data objectForKey:@"awardPartnerList"];
+                    tm_item = [data objectForKey:@"awardPartnerList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"awardPartnerAmount"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 default:

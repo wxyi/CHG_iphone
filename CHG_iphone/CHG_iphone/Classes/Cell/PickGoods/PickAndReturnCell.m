@@ -13,6 +13,7 @@
 - (void)awakeFromNib {
     // Initialization code
     self.actualtext.delegate = self;
+    [self.actualtext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -23,16 +24,16 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     textField.backgroundColor = UIColorFromRGB(0xdddddd);
-    textField.text = @"";
+//    textField.text = @"";
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     DLog(@"textFieldDidEndEditing");
     
-    if (textField.text.length == 0) {
-        textField.text = self.receivableLab.text;
-        return;
-    }
+//    if (textField.text.length == 0) {
+//        textField.text = self.receivableLab.text;
+//        return;
+//    }
     
     
     
@@ -41,7 +42,7 @@
     DLog(@"price = %.1f Receivedlab = %.1f",[price doubleValue],[self.receivableLab.text doubleValue]);
     
     if ([self.receivableLab.text doubleValue] < [price doubleValue]) {
-        textField.text = @"";
+//        textField.text = @"";
         
 //        NSString* info;
 //        info = @"实退金额小于或等于应退金额";
@@ -108,5 +109,39 @@
         return YES;
     }
     
+}
+- (void) textFieldDidChange:(UITextField*) textField {
+    if ([textField.text rangeOfString:@"."].location==NSNotFound) {
+        _isHaveDian=NO;
+    }
+    if ([textField.text length]>0)
+    {
+        unichar single=[textField.text characterAtIndex:0];
+        if ((single>='0' && single<='9') || single=='.')
+        {
+            //数据格式正确
+            if (single=='.')
+            { //判断是否有小数点
+                if(!_isHaveDian)
+                {
+                    _isHaveDian=YES;
+                }
+            }
+            else
+            {
+                if (_isHaveDian)
+                {
+                    //判断小数点的位数
+                    NSLog(@"%@",textField.text);
+                    NSRange ran=[textField.text rangeOfString:@"."];
+                    int tt= textField.text.length - ran.location;
+                    NSLog(@"............%d......",tt);
+                    if (tt>2)
+                        textField.text = [textField.text substringToIndex:textField.text.length -1];
+                }
+            }
+        }
+        
+    }
 }
 @end

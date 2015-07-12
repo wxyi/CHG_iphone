@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -22,8 +21,8 @@
                             <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WwA-YP-ogE">
                                 <rect key="frame" x="50" y="25" width="80" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="OTK-Wz-hLR"/>
-                                    <constraint firstAttribute="width" constant="80" id="pkK-Xt-LKC"/>
+                                    <constraint firstAttribute="height" constant="80" id="ckk-kt-8wb"/>
+                                    <constraint firstAttribute="width" constant="80" id="kBz-9p-GR0"/>
                                 </constraints>
                                 <state key="normal" backgroundImage="icon_register_girl.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -35,8 +34,8 @@
                             <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WDE-Mg-ElB">
                                 <rect key="frame" x="180" y="25" width="80" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="5xZ-U8-l8e"/>
-                                    <constraint firstAttribute="width" constant="80" id="gOZ-AV-nz6"/>
+                                    <constraint firstAttribute="height" constant="80" id="7Gz-Go-nCm"/>
+                                    <constraint firstAttribute="width" constant="80" id="Xn8-Yo-BmZ"/>
                                 </constraints>
                                 <state key="normal" backgroundImage="icon_register_boy.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -45,11 +44,11 @@
                                     <action selector="selectRadio:" destination="KGk-i7-Jjw" eventType="touchDown" id="IJQ-Us-C8q"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="1001" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D1-7F-lBC" customClass="RadioButton">
+                            <button opaque="NO" tag="1001" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4D1-7F-lBC" userLabel="男宝宝" customClass="RadioButton">
                                 <rect key="frame" x="180" y="110" width="79" height="24"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="79" id="IYy-YZ-BEp"/>
-                                    <constraint firstAttribute="height" constant="24" id="MIq-qV-7ct"/>
+                                    <constraint firstAttribute="width" constant="79" id="FfT-ir-z5J"/>
+                                    <constraint firstAttribute="height" constant="24" id="nr1-v6-4EQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="   男宝宝" image="unchecked.png">
@@ -64,8 +63,8 @@
                             <button opaque="NO" tag="1000" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdC-DX-ljn" customClass="RadioButton">
                                 <rect key="frame" x="53" y="110" width="79" height="24"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="24" id="PZY-yt-F6z"/>
-                                    <constraint firstAttribute="width" constant="79" id="ZxK-vs-LZ4"/>
+                                    <constraint firstAttribute="width" constant="79" id="k97-jf-nan"/>
+                                    <constraint firstAttribute="height" constant="24" id="n8b-mz-Itp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="   女宝宝" image="unchecked.png">
@@ -81,22 +80,21 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="4D1-7F-lBC" firstAttribute="leading" secondItem="AdC-DX-ljn" secondAttribute="trailing" constant="48" id="D3C-D4-iUJ"/>
-                            <constraint firstItem="WwA-YP-ogE" firstAttribute="width" secondItem="WDE-Mg-ElB" secondAttribute="width" id="DDe-GF-u9n"/>
-                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="baseline" secondItem="WwA-YP-ogE" secondAttribute="baseline" id="In2-JU-BhE"/>
-                            <constraint firstAttribute="trailing" secondItem="AdC-DX-ljn" secondAttribute="trailing" constant="178" id="Oc7-7g-iUP"/>
-                            <constraint firstItem="AdC-DX-ljn" firstAttribute="baseline" secondItem="4D1-7F-lBC" secondAttribute="baseline" id="Opg-l3-TxI"/>
-                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="leading" secondItem="4D1-7F-lBC" secondAttribute="leading" id="byb-Vj-hH2"/>
-                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="top" secondItem="WwA-YP-ogE" secondAttribute="top" id="hgW-bR-Ugo"/>
-                            <constraint firstAttribute="trailing" secondItem="WDE-Mg-ElB" secondAttribute="trailing" constant="50" id="iiM-2T-LSj"/>
-                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="leading" secondItem="WwA-YP-ogE" secondAttribute="trailing" constant="50" id="kKd-Es-UDe"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WDE-Mg-ElB" secondAttribute="trailing" constant="50" id="l4A-yC-idn"/>
-                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="top" secondItem="yMd-42-ny1" secondAttribute="top" constant="25" id="mxL-wJ-LQb"/>
-                            <constraint firstItem="WwA-YP-ogE" firstAttribute="leading" secondItem="yMd-42-ny1" secondAttribute="leading" constant="50" id="nqZ-o6-c68"/>
-                            <constraint firstItem="AdC-DX-ljn" firstAttribute="width" secondItem="4D1-7F-lBC" secondAttribute="width" id="qRY-J0-lZI"/>
-                            <constraint firstItem="4D1-7F-lBC" firstAttribute="top" secondItem="WDE-Mg-ElB" secondAttribute="bottom" constant="5" id="vnN-Yt-x1X"/>
-                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="firstBaseline" secondItem="WwA-YP-ogE" secondAttribute="firstBaseline" id="xUe-67-ETO"/>
-                            <constraint firstItem="AdC-DX-ljn" firstAttribute="leading" secondItem="yMd-42-ny1" secondAttribute="leading" constant="53" id="z0O-eu-ALC"/>
+                            <constraint firstAttribute="width" constant="310" id="18l-Lq-Wau"/>
+                            <constraint firstAttribute="bottom" secondItem="4D1-7F-lBC" secondAttribute="bottom" constant="11" id="1LU-nX-swt"/>
+                            <constraint firstAttribute="height" constant="145" id="881-Rm-wZI"/>
+                            <constraint firstItem="AdC-DX-ljn" firstAttribute="leading" secondItem="yMd-42-ny1" secondAttribute="leading" constant="53" id="AKs-Id-gC9"/>
+                            <constraint firstAttribute="trailing" secondItem="WDE-Mg-ElB" secondAttribute="trailing" constant="50" id="Cgz-zc-bxp"/>
+                            <constraint firstAttribute="trailing" secondItem="4D1-7F-lBC" secondAttribute="trailing" constant="51" id="JxG-vi-9O4"/>
+                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="top" secondItem="yMd-42-ny1" secondAttribute="top" constant="25" id="MJw-PB-Dd4"/>
+                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="firstBaseline" secondItem="WwA-YP-ogE" secondAttribute="firstBaseline" id="Nki-01-bCV"/>
+                            <constraint firstItem="WwA-YP-ogE" firstAttribute="leading" secondItem="yMd-42-ny1" secondAttribute="leading" constant="50" id="bOP-A5-qPW"/>
+                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="leading" secondItem="WwA-YP-ogE" secondAttribute="trailing" constant="50" id="epb-x1-T1I"/>
+                            <constraint firstItem="4D1-7F-lBC" firstAttribute="leading" secondItem="AdC-DX-ljn" secondAttribute="trailing" constant="48" id="h01-gA-x9F"/>
+                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="top" secondItem="WwA-YP-ogE" secondAttribute="top" id="qoX-54-4bz"/>
+                            <constraint firstAttribute="bottom" secondItem="AdC-DX-ljn" secondAttribute="bottom" constant="11" id="voV-aB-95c"/>
+                            <constraint firstItem="WwA-YP-ogE" firstAttribute="width" secondItem="WDE-Mg-ElB" secondAttribute="width" id="wLj-c4-FGh"/>
+                            <constraint firstItem="WDE-Mg-ElB" firstAttribute="baseline" secondItem="WwA-YP-ogE" secondAttribute="baseline" id="yZ4-oR-KcP"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
@@ -107,9 +105,17 @@
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="eQw-NQ-iGH">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="Aav-5Q-dqz"/>
+                            <constraint firstAttribute="height" constant="40" id="xcU-F3-ACX"/>
+                        </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="宝宝性别" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lew-a3-8Aq">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="6Tg-Fk-CjN"/>
+                            <constraint firstAttribute="height" constant="40" id="cN8-P3-rcI"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -123,16 +129,16 @@
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="yMd-42-ny1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="12" id="9FT-LN-EaZ"/>
-                    <constraint firstItem="Lew-a3-8Aq" firstAttribute="top" secondItem="eQw-NQ-iGH" secondAttribute="top" id="B8D-l0-a8Q"/>
-                    <constraint firstItem="yMd-42-ny1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-3" id="Dqb-mZ-VOr"/>
-                    <constraint firstItem="yMd-42-ny1" firstAttribute="centerX" secondItem="Lew-a3-8Aq" secondAttribute="centerX" id="FqI-ya-pzd"/>
-                    <constraint firstItem="Lew-a3-8Aq" firstAttribute="bottom" secondItem="eQw-NQ-iGH" secondAttribute="bottom" id="PMD-QZ-O3W"/>
-                    <constraint firstItem="yMd-42-ny1" firstAttribute="centerX" secondItem="eQw-NQ-iGH" secondAttribute="centerX" id="PRD-oP-NT7"/>
-                    <constraint firstItem="Lew-a3-8Aq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Qf3-cc-zbB"/>
-                    <constraint firstItem="Lew-a3-8Aq" firstAttribute="leading" secondItem="eQw-NQ-iGH" secondAttribute="leading" id="bJ3-LR-Dyk"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="yMd-42-ny1" secondAttribute="bottom" constant="-14" id="rBA-BL-8rI"/>
-                    <constraint firstItem="yMd-42-ny1" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="tER-9Q-KO8"/>
+                    <constraint firstItem="Lew-a3-8Aq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="12H-xf-G72"/>
+                    <constraint firstAttribute="trailing" secondItem="eQw-NQ-iGH" secondAttribute="trailing" constant="85" id="1sp-N4-ceF"/>
+                    <constraint firstItem="eQw-NQ-iGH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="9o8-mE-vd2"/>
+                    <constraint firstItem="yMd-42-ny1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="JCi-ze-ctq"/>
+                    <constraint firstAttribute="trailing" secondItem="Lew-a3-8Aq" secondAttribute="trailing" constant="85" id="O2E-ve-jjz"/>
+                    <constraint firstAttribute="bottom" secondItem="yMd-42-ny1" secondAttribute="bottom" constant="-6" id="ZO1-lq-zmz"/>
+                    <constraint firstAttribute="trailing" secondItem="yMd-42-ny1" secondAttribute="trailing" constant="5" id="bPO-ek-eq9"/>
+                    <constraint firstItem="eQw-NQ-iGH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="85" id="cxy-VJ-RDy"/>
+                    <constraint firstItem="Lew-a3-8Aq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="85" id="jQa-zw-JpF"/>
+                    <constraint firstItem="yMd-42-ny1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="pOa-mp-9wP"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>

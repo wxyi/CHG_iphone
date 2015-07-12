@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginCell : UITableViewCell
+@interface LoginCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UIView* bgView;
 @property(nonatomic,weak)IBOutlet UITextField* userTextfield;
 @property(nonatomic,weak)IBOutlet UITextField* passwordTextfield;

@@ -47,6 +47,13 @@
             self.BtnSkipSelect(sender.tag,self.items);
         }
     }
+    else
+    {
+        [SGInfoAlert showInfo:@"无退货商品"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    }
     
 }
 -(void)setupView

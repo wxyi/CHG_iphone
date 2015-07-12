@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -25,8 +25,8 @@
                         <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" tag="1012" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bB9-nL-rqf">
-                        <rect key="frame" x="160" y="0.0" width="120" height="40"/>
+                    <label opaque="NO" userInteractionEnabled="NO" tag="1012" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bB9-nL-rqf">
+                        <rect key="frame" x="92" y="0.0" width="190" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="Dxt-Ki-k6c"/>
                             <constraint firstAttribute="width" constant="120" id="vhX-yy-ZnH"/>
@@ -34,6 +34,11 @@
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="vhX-yy-ZnH"/>
+                            </mask>
+                        </variation>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btn_right.png" translatesAutoresizingMaskIntoConstraints="NO" id="QAF-rh-9nF">
                         <rect key="frame" x="295" y="15" width="6" height="10"/>
@@ -46,11 +51,20 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="QAF-rh-9nF" secondAttribute="trailing" constant="19" id="3VK-Rr-ViX"/>
                     <constraint firstItem="QAF-rh-9nF" firstAttribute="centerY" secondItem="bB9-nL-rqf" secondAttribute="centerY" id="4jV-bq-Fpk"/>
+                    <constraint firstItem="bB9-nL-rqf" firstAttribute="leading" secondItem="eZK-Wh-NWl" secondAttribute="trailing" constant="12" id="W4X-5K-rNF"/>
                     <constraint firstAttribute="trailing" secondItem="bB9-nL-rqf" secondAttribute="trailing" constant="40" id="Z10-lS-g6z"/>
                     <constraint firstItem="eZK-Wh-NWl" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="m5d-5d-Blf"/>
+                    <constraint firstItem="bB9-nL-rqf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="80" id="mWK-JE-mqg"/>
                     <constraint firstItem="QAF-rh-9nF" firstAttribute="centerY" secondItem="eZK-Wh-NWl" secondAttribute="centerY" id="mze-6m-7fO"/>
+                    <constraint firstItem="QAF-rh-9nF" firstAttribute="leading" secondItem="bB9-nL-rqf" secondAttribute="trailing" constant="13" id="rZE-zd-HLA"/>
                     <constraint firstItem="QAF-rh-9nF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="xKU-l3-2an"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="Z10-lS-g6z"/>
+                        <exclude reference="mWK-JE-mqg"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>

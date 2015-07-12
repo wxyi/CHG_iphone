@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MemberInfoViewController">
@@ -16,21 +16,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Knv-uk-reF" customClass="TPKeyboardAvoidingTableView">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
-                    <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="528" id="Xx6-Hu-aAG"/>
-                        <constraint firstAttribute="width" constant="320" id="eUC-Cj-rib"/>
-                    </constraints>
-                    <color key="sectionIndexBackgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </tableView>
                 <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TbY-pZ-0mZ">
                     <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                     <color key="backgroundColor" red="0.090196078430000007" green="0.10980392160000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="320" id="RbN-38-Mhh"/>
-                        <constraint firstAttribute="height" constant="40" id="Ujz-Ap-YTH"/>
+                        <constraint firstAttribute="height" constant="40" id="dsb-fE-CSf"/>
+                        <constraint firstAttribute="width" constant="320" id="lIr-iW-bRJ"/>
                     </constraints>
                     <state key="normal" title="确认设置">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,18 +31,25 @@
                         <action selector="SubmitCompleted:" destination="-1" eventType="touchDown" id="KxO-QR-rSt"/>
                     </connections>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Knv-uk-reF" customClass="TPKeyboardAvoidingTableView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="498"/>
+                    <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="498" id="e2n-Ed-1lR"/>
+                        <constraint firstAttribute="width" constant="320" id="e3x-VH-ywH"/>
+                    </constraints>
+                    <color key="sectionIndexBackgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </tableView>
             </subviews>
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="TbY-pZ-0mZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="B6u-Kq-dxV"/>
-                <constraint firstAttribute="trailing" secondItem="TbY-pZ-0mZ" secondAttribute="trailing" id="Beg-Uf-YOz"/>
-                <constraint firstItem="Knv-uk-reF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="CPW-iK-ZWW"/>
-                <constraint firstItem="Knv-uk-reF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="J8A-VQ-sAi"/>
-                <constraint firstItem="Knv-uk-reF" firstAttribute="leading" secondItem="TbY-pZ-0mZ" secondAttribute="leading" id="KCD-Wm-PsS"/>
-                <constraint firstAttribute="trailing" secondItem="Knv-uk-reF" secondAttribute="trailing" id="b3w-gU-y6c"/>
-                <constraint firstItem="Knv-uk-reF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="u3o-ue-mid"/>
-                <constraint firstAttribute="bottom" secondItem="TbY-pZ-0mZ" secondAttribute="bottom" id="vXw-jg-OMU"/>
-                <constraint firstItem="TbY-pZ-0mZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="y3e-OX-yuy"/>
+                <constraint firstAttribute="bottom" secondItem="Knv-uk-reF" secondAttribute="bottom" constant="70" id="Gvz-LM-z2E"/>
+                <constraint firstItem="Knv-uk-reF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Lfj-ea-qfo"/>
+                <constraint firstAttribute="bottom" secondItem="TbY-pZ-0mZ" secondAttribute="bottom" id="TON-Ok-75d"/>
+                <constraint firstItem="Knv-uk-reF" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cDw-Ms-xbi"/>
+                <constraint firstItem="TbY-pZ-0mZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gM3-H4-hfZ"/>
+                <constraint firstAttribute="trailing" secondItem="Knv-uk-reF" secondAttribute="trailing" id="r9K-dT-0zh"/>
+                <constraint firstAttribute="trailing" secondItem="TbY-pZ-0mZ" secondAttribute="trailing" id="w8N-YZ-m8l"/>
             </constraints>
             <point key="canvasLocation" x="325" y="167"/>
         </view>

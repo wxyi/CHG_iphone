@@ -12,6 +12,9 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    self.setpasswordField.delegate = self;
+    self.confirmpasswordfield.delegate = self;
+    self.Verificationfield.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -102,4 +105,49 @@
         
     }];
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField == self.setpasswordField) {
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 16) {
+            return NO;
+        }
+    }
+    else if (textField == self.confirmpasswordfield) {
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 16) {
+            return NO;
+        }
+    }
+    else if (textField == self.Verificationfield) {
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 16) {
+            return NO;
+        }
+    }
+    return YES;
+}
+//-(void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    if (textField.text.length < 6) {
+//        [SGInfoAlert showInfo:@"密码不能小于6位"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self
+//                     vertical:0.7];
+//        [textField resignFirstResponder];
+//    }
+//}
 @end

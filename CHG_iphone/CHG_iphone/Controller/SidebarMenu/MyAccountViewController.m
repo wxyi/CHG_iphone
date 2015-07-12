@@ -294,56 +294,6 @@
 //        
 //        int year = [dateComponent year];
 //        int month = [dateComponent month];
-        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] - 1];
-        NSString* lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]];
-        
-        NSArray* bigMonth = @[@"1",@"3",@"5",@"7",@"8",@"10",@"12"];
-        NSArray* smallMonth = @[@"4",@"6",@"9",@"11"];
-        
-        if ([lastMonth intValue] == 0) {
-            lastYear  = [NSString stringWithFormat:@"%d",[self.strYear intValue] -1];
-            lastMonth = @"12";
-        }
-        
-        
-        if ([bigMonth containsObject:lastMonth]) {
-            self.strDay = @"31";
-        }
-        else if([smallMonth containsObject:lastMonth])
-        {
-            self.strDay = @"30";
-        }
-        else
-        {
-            if (([lastYear intValue] % 4  == 0 && [lastYear intValue] % 100 != 0)  || [lastYear intValue] % 400 == 0) {
-                self.strDay = @"29";
-            }
-            else
-            {
-                self.strDay = @"28";
-            }
-        }
-        
-        
-        self.strYear = lastYear;
-        self.strMonth = lastMonth;
-        [self httpGetMyAccount];
-        
-//        [self httpGetStatisticAnalysis];
-        //        [self.tableview.header endRefreshing];
-        
-        //        [self.tableview.header endRefreshing];
-    });
-}
-
-#pragma mark 上拉加载更多数据
-- (void)loadMoreData
-{
-    
-    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格
-        //        [self.tableView reloadData];
         
         NSDate *now = [NSDate date];
         NSLog(@"now date is: %@", now);
@@ -396,6 +346,58 @@
         
         self.strYear = nextYear;
         self.strMonth = nextMonth;
+        
+        [self httpGetMyAccount];
+        
+//        [self httpGetStatisticAnalysis];
+        //        [self.tableview.header endRefreshing];
+        
+        //        [self.tableview.header endRefreshing];
+    });
+}
+
+#pragma mark 上拉加载更多数据
+- (void)loadMoreData
+{
+    
+    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        //        [self.tableView reloadData];
+        NSString *lastMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] - 1];
+        NSString* lastYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]];
+        
+        NSArray* bigMonth = @[@"1",@"3",@"5",@"7",@"8",@"10",@"12"];
+        NSArray* smallMonth = @[@"4",@"6",@"9",@"11"];
+        
+        if ([lastMonth intValue] == 0) {
+            lastYear  = [NSString stringWithFormat:@"%d",[self.strYear intValue] -1];
+            lastMonth = @"12";
+        }
+        
+        
+        if ([bigMonth containsObject:lastMonth]) {
+            self.strDay = @"31";
+        }
+        else if([smallMonth containsObject:lastMonth])
+        {
+            self.strDay = @"30";
+        }
+        else
+        {
+            if (([lastYear intValue] % 4  == 0 && [lastYear intValue] % 100 != 0)  || [lastYear intValue] % 400 == 0) {
+                self.strDay = @"29";
+            }
+            else
+            {
+                self.strDay = @"28";
+            }
+        }
+        
+        
+        self.strYear = lastYear;
+        self.strMonth = lastMonth;
+        
         [self httpGetMyAccount];
         
         
@@ -447,6 +449,7 @@
     RewardsCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
     
     cell.RewardsAmountLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"count"];
+    cell.RewardsAmountLab.textColor = UIColorFromRGB(0xF5A541);
     
     cell.RewardsNameLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"title"];
     

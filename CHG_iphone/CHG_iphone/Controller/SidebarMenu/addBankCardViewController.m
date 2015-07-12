@@ -104,6 +104,7 @@
         }
         cell.namelab.text = [self.items objectAtIndex:indexPath.row];
         cell.selectBank.text = @"请选择银行";
+        cell.selectBank.textAlignment = NSTextAlignmentRight;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -368,10 +369,12 @@
             
             if (code.bankName.length != 0) {
                 textlab.text = code.bankName;
+                textlab.textAlignment = NSTextAlignmentLeft;
             }
             else
             {
                 textlab.text = @"请选择银行";
+                textlab.textAlignment = NSTextAlignmentRight;
             }
             
         }
@@ -383,6 +386,7 @@
         }
         else
         {
+            textlab.textAlignment = NSTextAlignmentRight;
             textlab.text = @"请选择银行";
         }
     }

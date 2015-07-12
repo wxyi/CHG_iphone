@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -20,6 +19,10 @@
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" tag="99" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="年   月   日" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nfb-dX-Flk">
                                 <rect key="frame" x="0.0" y="20" width="300" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="52B-WZ-shR"/>
+                                    <constraint firstAttribute="width" constant="300" id="t1N-Au-jCm"/>
+                                </constraints>
                                 <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -27,10 +30,11 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="nfb-dX-Flk" firstAttribute="top" secondItem="x2b-cy-itb" secondAttribute="top" constant="20" id="CV8-e9-rXa"/>
-                            <constraint firstItem="nfb-dX-Flk" firstAttribute="leading" secondItem="x2b-cy-itb" secondAttribute="leading" id="Ibr-L4-g5I"/>
-                            <constraint firstAttribute="bottom" secondItem="nfb-dX-Flk" secondAttribute="bottom" constant="5" id="Pxu-Ef-xs2"/>
-                            <constraint firstAttribute="trailing" secondItem="nfb-dX-Flk" secondAttribute="trailing" constant="10" id="lrU-qK-WDN"/>
+                            <constraint firstAttribute="trailing" secondItem="nfb-dX-Flk" secondAttribute="trailing" constant="10" id="UGK-3i-bTw"/>
+                            <constraint firstAttribute="height" constant="65" id="V36-Da-kwF"/>
+                            <constraint firstAttribute="width" constant="310" id="a5l-Je-eNJ"/>
+                            <constraint firstItem="nfb-dX-Flk" firstAttribute="leading" secondItem="x2b-cy-itb" secondAttribute="leading" id="gOY-Le-qjT"/>
+                            <constraint firstAttribute="bottom" secondItem="nfb-dX-Flk" secondAttribute="bottom" constant="5" id="hT4-81-eDH"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
@@ -41,9 +45,17 @@
                     </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="u3I-gj-o3h">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="3h1-9I-mIO"/>
+                            <constraint firstAttribute="width" constant="150" id="EYv-Bv-ttv"/>
+                        </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="宝宝生日/预产期" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEm-S1-99g">
                         <rect key="frame" x="85" y="0.0" width="150" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="ElB-Lu-6L0"/>
+                            <constraint firstAttribute="height" constant="40" id="u88-VD-0Oy"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -57,16 +69,16 @@
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="eEm-S1-99g" firstAttribute="bottom" secondItem="u3I-gj-o3h" secondAttribute="bottom" id="24j-cr-fIn"/>
-                    <constraint firstItem="x2b-cy-itb" firstAttribute="centerX" secondItem="eEm-S1-99g" secondAttribute="centerX" id="5Le-i4-O3t"/>
-                    <constraint firstItem="eEm-S1-99g" firstAttribute="top" secondItem="u3I-gj-o3h" secondAttribute="top" id="5RP-1X-F0p"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="x2b-cy-itb" secondAttribute="bottom" constant="-9" id="KkC-dB-Uqh"/>
-                    <constraint firstItem="x2b-cy-itb" firstAttribute="centerX" secondItem="u3I-gj-o3h" secondAttribute="centerX" id="RV6-DW-bHi"/>
-                    <constraint firstItem="x2b-cy-itb" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="bYg-Hd-wbf"/>
-                    <constraint firstItem="x2b-cy-itb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="12" id="cY9-hF-rcm"/>
-                    <constraint firstItem="x2b-cy-itb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-3" id="h1g-gG-IuQ"/>
-                    <constraint firstItem="eEm-S1-99g" firstAttribute="leading" secondItem="u3I-gj-o3h" secondAttribute="leading" id="u3f-Cs-fWf"/>
-                    <constraint firstItem="eEm-S1-99g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="wlu-0m-SM4"/>
+                    <constraint firstAttribute="trailing" secondItem="x2b-cy-itb" secondAttribute="trailing" constant="5" id="6FN-eR-3yv"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="G7c-Zw-Dk7"/>
+                    <constraint firstItem="u3I-gj-o3h" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="JWm-v9-t0w"/>
+                    <constraint firstItem="x2b-cy-itb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="M2U-Uc-okj"/>
+                    <constraint firstAttribute="trailing" secondItem="u3I-gj-o3h" secondAttribute="trailing" constant="85" id="Sca-mu-PuD"/>
+                    <constraint firstItem="u3I-gj-o3h" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="85" id="UpI-Wn-Z4Q"/>
+                    <constraint firstAttribute="trailing" secondItem="eEm-S1-99g" secondAttribute="trailing" constant="85" id="WH1-IG-yGF"/>
+                    <constraint firstItem="eEm-S1-99g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Zrk-Ze-FuG"/>
+                    <constraint firstAttribute="bottom" secondItem="x2b-cy-itb" secondAttribute="bottom" constant="-1" id="d2A-zi-KZ2"/>
+                    <constraint firstItem="eEm-S1-99g" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="85" id="pdy-gW-bfi"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>

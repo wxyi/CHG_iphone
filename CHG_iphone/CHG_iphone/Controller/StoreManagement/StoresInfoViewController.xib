@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StoresInfoViewController">
@@ -19,15 +19,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="kox-fb-4AV">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="510"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="320" id="bDP-aD-xSG"/>
-                        <constraint firstAttribute="height" constant="528" id="nMR-KC-nnQ"/>
+                        <constraint firstAttribute="height" constant="510" id="nMR-KC-nnQ"/>
                     </constraints>
                 </tableView>
                 <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pRj-M3-A13">
-                    <rect key="frame" x="10" y="528" width="144" height="40"/>
+                    <rect key="frame" x="10" y="521" width="144" height="40"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="7bV-8G-84Z"/>
@@ -47,7 +47,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" tag="101" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1n-Fq-Yud">
-                    <rect key="frame" x="166" y="528" width="145" height="40"/>
+                    <rect key="frame" x="166" y="521" width="145" height="40"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="145" id="mCp-XR-wlJ"/>
@@ -71,11 +71,12 @@
             <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="J1n-Fq-Yud" firstAttribute="leading" secondItem="pRj-M3-A13" secondAttribute="trailing" constant="12" id="0fG-CU-A9b"/>
-                <constraint firstAttribute="bottom" secondItem="J1n-Fq-Yud" secondAttribute="bottom" id="0hf-sx-SvP"/>
+                <constraint firstAttribute="bottom" secondItem="J1n-Fq-Yud" secondAttribute="bottom" constant="7" id="0hf-sx-SvP"/>
                 <constraint firstItem="J1n-Fq-Yud" firstAttribute="width" secondItem="pRj-M3-A13" secondAttribute="width" constant="1" id="5dD-vJ-QQz"/>
                 <constraint firstItem="kox-fb-4AV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Ami-Y2-ilL"/>
                 <constraint firstAttribute="trailing" secondItem="J1n-Fq-Yud" secondAttribute="trailing" constant="9" id="BCu-fI-lqF"/>
-                <constraint firstAttribute="bottom" secondItem="pRj-M3-A13" secondAttribute="bottom" id="HPL-aS-b7F"/>
+                <constraint firstAttribute="bottom" secondItem="pRj-M3-A13" secondAttribute="bottom" constant="7" id="HPL-aS-b7F"/>
+                <constraint firstAttribute="bottom" secondItem="kox-fb-4AV" secondAttribute="bottom" constant="58" id="RWm-fN-7u9"/>
                 <constraint firstItem="kox-fb-4AV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ceg-aF-l3m"/>
                 <constraint firstItem="pRj-M3-A13" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="qQ9-4z-7PJ"/>
                 <constraint firstAttribute="trailing" secondItem="kox-fb-4AV" secondAttribute="trailing" id="zkb-dn-gHH"/>

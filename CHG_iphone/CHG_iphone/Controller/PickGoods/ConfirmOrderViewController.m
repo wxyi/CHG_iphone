@@ -141,7 +141,7 @@
     else if (self.Confirmsaletype == SaleTypePresell)
     {
         UIButton* Pickupbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        Pickupbtn.frame = CGRectMake(5, 65, (CGRectGetWidth(self.view.bounds)-20)/2, 40);
+        Pickupbtn.frame = CGRectMake(5, 65, (SCREEN_WIDTH-20)/2, 40);
         Pickupbtn.tag = 101;
         [Pickupbtn.layer setMasksToBounds:YES];
         [Pickupbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
@@ -153,7 +153,7 @@
         
         UIButton* detailsbtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         detailsbtn.tag = 100;
-        detailsbtn.frame = CGRectMake(165, 65, (CGRectGetWidth(self.view.bounds)-20)/2, 40);
+        detailsbtn.frame = CGRectMake(SCREEN_WIDTH/2 + 5, 65, (SCREEN_WIDTH-20)/2, 40);
         [detailsbtn.layer setMasksToBounds:YES];
         [detailsbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
         [detailsbtn setBackgroundColor:UIColorFromRGB(0x171c61)];

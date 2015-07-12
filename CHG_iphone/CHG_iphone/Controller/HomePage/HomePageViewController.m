@@ -240,7 +240,7 @@
 
 
         
-        cell.height = self.menuArr.count/3 * 105;
+        cell.height = self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
         [cell setupView:self.menuArr];
         
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -258,7 +258,7 @@
         return SCREEN_WIDTH*0.4;
     }
     else if(indexPath.row == 1)
-        return 48;
+        return 49;
     else if(indexPath.row == 2)
     {
         if ([self.config.Roles isEqualToString:@"PARTNER"])
@@ -270,7 +270,8 @@
     else if (indexPath.row == 3)
         return 75;
     else
-        return self.menuArr.count/3 * ((SCREEN_WIDTH-2)/3);
+        
+        return self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
 }
 
 -(void)didSelectAccountBriefCell:(NSIndexPath*)indexPath
@@ -336,6 +337,7 @@
             DLog(@"会员注册");
             
             RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
+            RegisteredMembersView.ordertype = OrderReturnTypeHomePage;
             [self.navigationController pushViewController:RegisteredMembersView animated:YES];
             break;
         }

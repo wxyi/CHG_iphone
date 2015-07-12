@@ -170,10 +170,10 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"订单金额 %.2f元",[dict[@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:@"订单金额"];
+    string = [NSString stringWithFormat:@"实付 %.2f元",[dict[@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[dict[@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
-    [text setTextColor:[UIColor redColor] range:rangeOfstart];
+    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
     
     
@@ -246,6 +246,13 @@
         if (self.BtnSkipSelect) {
             self.BtnSkipSelect(sender.tag,nil);
         }
+    }
+    else
+    {
+        [SGInfoAlert showInfo:@"无退货商品"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     }
     
 }

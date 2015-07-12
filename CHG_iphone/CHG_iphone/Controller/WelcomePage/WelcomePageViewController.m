@@ -84,12 +84,12 @@
     if (count == 0) {
         [[SUHelper sharedInstance] GetBankCodeInfo];
     }
-    NSInteger countcity =  [[[SQLiteManager sharedInstance] getCityCodeData] count];
-    NSInteger countarea =  [[[SQLiteManager sharedInstance] getAreaCodeData] count];
-    NSInteger countProvince =  [[[SQLiteManager sharedInstance] getProvinceCodeData] count];
-    if (countcity == 0 ||countarea == 0 ||countProvince == 0) {
-        [[SUHelper sharedInstance] GetAddressInfo];
-    }
+//    NSInteger countcity =  [[[SQLiteManager sharedInstance] getCityCodeData] count];
+//    NSInteger countarea =  [[[SQLiteManager sharedInstance] getAreaCodeData] count];
+//    NSInteger countProvince =  [[[SQLiteManager sharedInstance] getProvinceCodeData] count];
+//    if (countcity == 0 ||countarea == 0 ||countProvince == 0) {
+//        [[SUHelper sharedInstance] GetAddressInfo];
+//    }
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
         // 这里判断是否第一次
         

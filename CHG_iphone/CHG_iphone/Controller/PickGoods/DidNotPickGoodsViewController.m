@@ -85,6 +85,21 @@
             self.BtnSkipSelect(sender.tag,self.items);
         }
     }
+    else
+    {
+        NSString* strinfo ;
+        if (sender.tag == 100) {
+            strinfo = @"无商品";
+        }
+        else
+        {
+            strinfo = @"无提货商品";
+        }
+        [SGInfoAlert showInfo:strinfo
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    }
     
     
 }

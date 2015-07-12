@@ -140,7 +140,7 @@
     }
     else
     {
-        return SCREEN_WIDTH/3;
+        return SCREEN_WIDTH/2 * 0.66;
     }
 }
 //-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

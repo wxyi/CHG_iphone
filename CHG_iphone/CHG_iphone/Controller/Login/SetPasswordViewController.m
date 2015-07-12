@@ -9,7 +9,7 @@
 #import "SetPasswordViewController.h"
 #import "SetPasswordCell.h"
 #import "StoreManagementViewController.h"
-@interface SetPasswordViewController ()<UITextFieldDelegate>
+@interface SetPasswordViewController ()
 @property UINib* SetPasswordNib;
 @end
 
@@ -56,9 +56,9 @@
         
     }
     [cell.setpasswordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    cell.setpasswordField.delegate = self;
+//    cell.setpasswordField.delegate = self;
     [cell.confirmpasswordfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    cell.confirmpasswordfield.delegate = self;
+//    cell.confirmpasswordfield.delegate = self;
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -141,6 +141,10 @@
     else if (passfield1.text.length < 6)
     {
         info = @"密码不能小于6位";
+    }
+    else if ([passfield1.text isEqualToString:@"000000"])
+    {
+        info = @"密码不能与初始密码一致";
     }
     else if(passfield2.text.length == 0)
     {
@@ -265,14 +269,5 @@
         [textField resignFirstResponder];
     }
 }
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField.text.length < 6) {
-        [SGInfoAlert showInfo:@"密码不能小于6位"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
-        [textField resignFirstResponder];
-    }
-}
+
 @end

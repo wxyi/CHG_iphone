@@ -193,6 +193,7 @@
             cell.titlelab.text = dict[@"productName"] ;
             cell.pricelab.text = dict[@"productPrice"];
             cell.TextStepper.Current = [dict[@"quantity"] doubleValue];
+            cell.TextStepper.tag = [[NSString stringWithFormat:@"1011%ld",(long)indexPath.row] intValue];
             cell.counter =  [dict[@"quantity"] intValue];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -484,8 +485,9 @@
             
                 NSMutableDictionary *product = [NSMutableDictionary dictionary];
                 [product setObject:self.items[i][@"productId"] forKey:@"productId"];
-                
-                [product setObject:[NSString stringWithFormat:@"%d",[self.items[i][@"quantity"]intValue]]  forKey:@"quantity"];
+                NSInteger tag  = [[NSString stringWithFormat:@"1011%d",i] intValue];
+                TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
+                [product setObject:[NSString stringWithFormat:@"%.0f", TextStepper.Current ]  forKey:@"quantity"];
                 
                 [productList addObject:product];
             }

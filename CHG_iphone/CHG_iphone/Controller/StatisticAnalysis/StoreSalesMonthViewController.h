@@ -14,7 +14,7 @@
 @property(nonatomic,weak)IBOutlet UILabel* nameLab;
 @property(nonatomic,weak)IBOutlet UILabel* pricelab;
 @property(nonatomic,weak)IBOutlet UIView* bgView;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)int custCount;
 @property (nonatomic, assign) BOOL isSkip;
 @property(nonatomic,assign)BOOL isRefresh;

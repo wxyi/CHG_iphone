@@ -61,9 +61,9 @@
     }
     
     [cell.resetpasswordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    cell.resetpasswordField.delegate = self;
+//    cell.resetpasswordField.delegate = self;
     [cell.confirmpasswordfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    cell.confirmpasswordfield.delegate = self;
+//    cell.confirmpasswordfield.delegate = self;
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -273,14 +273,14 @@
         [textField resignFirstResponder];
     }
 }
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField.text.length < 6) {
-        [SGInfoAlert showInfo:@"密码不能小于6位"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.6];
-        [textField resignFirstResponder];
-    }
-}
+//-(void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    if (textField.text.length < 6) {
+//        [SGInfoAlert showInfo:@"密码不能小于6位"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.6];
+//        [textField resignFirstResponder];
+//    }
+//}
 @end

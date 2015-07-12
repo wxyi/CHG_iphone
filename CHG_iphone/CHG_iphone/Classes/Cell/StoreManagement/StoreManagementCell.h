@@ -13,6 +13,7 @@
 
 @property(nonatomic,weak)IBOutlet UILabel* nameAndIphonelab;
 @property(nonatomic,weak)IBOutlet UILabel* positionlab;
+@property(nonatomic,weak)IBOutlet UILabel* CardNumlab;
 @property(nonatomic,weak)IBOutlet UIImageView* sconImage;
 -(IBAction)showQrcode:(UIButton*)sender;
 @end

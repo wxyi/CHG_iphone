@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JKCountDownButton.h"
-@interface ForgotPasswordCell : UITableViewCell
+@interface ForgotPasswordCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UIView* bgView;
 @property(nonatomic,weak)IBOutlet UIView* userbgView;
 @property(nonatomic,weak)IBOutlet UITextField* userField;

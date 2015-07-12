@@ -11,6 +11,7 @@
 @interface StoreManageCell : BaseCell
 @property(nonatomic,weak)IBOutlet UILabel* nameAndIphonelab;
 @property(nonatomic,weak)IBOutlet UILabel* positionlab;
+@property(nonatomic,weak)IBOutlet UILabel* CardNumlab;
 @property(nonatomic,weak)IBOutlet UIImageView* icon;
 @property(nonatomic,weak)IBOutlet UIButton* Disablebtn;
 @property(nonatomic,strong)NSIndexPath* IndexPath;

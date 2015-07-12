@@ -13,6 +13,6 @@
 	<key>PubServer_Token_BJ</key>
 	<string>http://111.202.33.27:9080/chg/</string>
 	<key>BelongsArea</key>
-	<string>0</string>
+	<string>1</string>
 </dict>
 </plist>

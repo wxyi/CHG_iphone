@@ -283,8 +283,8 @@
             cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.iphonelab.text = [NSString stringWithFormat:@"%@",self.dict[@"custMobile"]];
-        cell.namelab.text = [NSString stringWithFormat:@"%@",self.dict[@"custName"]];
+        cell.iphonelab.text = [NSString stringWithFormat:@"手机号码:%@",self.dict[@"custMobile"]];
+        cell.namelab.text = [NSString stringWithFormat:@"会员姓名:%@",self.dict[@"custName"]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -559,6 +559,7 @@
                     self.isfinish = YES;
                     UITextField* texield = (UITextField*)[self.view viewWithTag:100];
                     RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
+                    RegisteredMembersView.ordertype = OrderReturnTypeAMember;
                     RegisteredMembersView.strIphone = texield.text;
                     [self.navigationController pushViewController:RegisteredMembersView animated:YES];
                     //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];
@@ -922,6 +923,19 @@
     
     DLog(@"frame = %@",NSStringFromCGRect(self.nextbtn.frame));
     [UIView commitAnimations];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (string.length == 0) return YES;
+    
+    NSInteger existedLength = textField.text.length;
+    NSInteger selectedLength = range.length;
+    NSInteger replaceLength = string.length;
+    if (existedLength - selectedLength + replaceLength > 11) {
+        return NO;
+    }
+    return YES;
 }
 //-(void)httpScanInfo
 //{

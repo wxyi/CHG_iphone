@@ -144,8 +144,8 @@
     
     
     self.strYear = [NSString stringWithFormat:@"%ld",(long)[dateComponent year]];
-    self.strMonth = [NSString stringWithFormat:@"%d",[dateComponent month]];
-    self.strDay = [NSString stringWithFormat:@"%d",[dateComponent day]];
+    self.strMonth = [NSString stringWithFormat:@"%ld",(long)[dateComponent month]];
+    self.strDay = [NSString stringWithFormat:@"%ld",(long)[dateComponent day]];
     
     
 }

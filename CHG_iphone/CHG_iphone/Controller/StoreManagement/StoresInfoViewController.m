@@ -112,7 +112,7 @@
                 
             }
             cell.storeNameLab.text = self.shopinfo[@"shopName"];
-            cell.storeAddresslab.text = self.shopinfo[@"shopAddress"];
+            cell.storeAddresslab.text = [self.shopinfo[@"address"] objectForKey:@"address"];
             cell.didSkipSubItem =^(NSInteger tag){
                 
                 NSString* dimensionalCodeUrl = self.shopinfo[@"dimensionalCodeUrl"];
@@ -137,6 +137,7 @@
             NSDictionary* dict = [self.items objectAtIndex:indexPath.section ];
             cell.positionlab.text = @"门店老板";
             cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
+            cell.CardNumlab.text = @"";
             cell.didSkipSubItem =^(NSInteger tag){
                 
                 NSString* dimensionalCodeUrl = self.shopinfo[@"dimensionalCodeUrl"];
@@ -178,6 +179,7 @@
         }
         cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
         cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
+        cell.CardNumlab.text = dict[@"idCardNumber"];
         cell.IndexPath = indexPath;
         WEAKSELF
         cell.didselectDisable = ^(NSIndexPath* indexPath){
@@ -219,9 +221,9 @@
         if (indexPath.row == 0) {
             return 60;
         }
-        return 80;
+        return 100;
     }
-    return 115;
+    return 145;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {

@@ -100,6 +100,7 @@
     NSLog(@"加载为当前视图 = %@",self.title);
     
     if ([self.items count] == 0 || self.isSkip) {
+        
         [self setupRefreshPage];
     }
     
@@ -253,7 +254,7 @@
 {
 
    
-
+    self.isRefresh = YES;
     
     [self setupRefresh];
 }
@@ -443,8 +444,15 @@
         int month = [dateComponent month];
         int day = [dateComponent day];
 
+        NSString *nextDay;
+        if (self.isSkip) {
+            nextDay = [NSString stringWithFormat:@"%d",[self.strDay intValue]];
+        }
+        else
+        {
+            nextDay = [NSString stringWithFormat:@"%d",[self.strDay intValue] + 1];
+        }
         
-        NSString *nextDay = [NSString stringWithFormat:@"%d",[self.strDay intValue] + 1];
         NSString *nextMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue]];
         NSString* nextYear =[NSString stringWithFormat:@"%d",[self.strYear intValue]];
         

@@ -23,7 +23,7 @@
 #import "AreaInfo.h"
 #import "CityInfo.h"
 
-@interface LoginViewController ()<UITextFieldDelegate>
+@interface LoginViewController ()
 @property UINib* LoginNib;
 @end
 
@@ -72,7 +72,7 @@
     }
    
    [cell.passwordTextfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    cell.passwordTextfield.delegate = self;
+    
     cell.didSkipSubItem = ^(NSInteger tag){
         
         [weakSelf skipPage:tag];
@@ -153,6 +153,10 @@
     else if(passfield.text.length == 0)
     {
         info = @"请输入密码";
+    }
+    else if (passfield.text.length < 6)
+    {
+        info = @"密码不能小于6位";
     }
     else if (passfield.text.length > 16)
     {
@@ -430,6 +434,7 @@
         
     }];
 }
+
 - (void) textFieldDidChange:(UITextField *)textField
 {
     if (textField.text.length > 16) {
@@ -440,18 +445,6 @@
         [textField resignFirstResponder];
     }
 }
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    UITextField* textfie = (UITextField*)[self.view viewWithTag:1011];
-    if (textField.text.length < 6 && textfie.text.length != 0) {
-        [SGInfoAlert showInfo:@"密码不能小于6位"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.6];
-        [textField resignFirstResponder];
-    }
-}
-
 -(void)DownStoreQrCode
 {
     [HttpClient asynchronousDownLoadFileWithProgress:[ConfigManager sharedInstance].strdimensionalCodeUrl parameters:nil successBlock:^(NSURL *filePath) {

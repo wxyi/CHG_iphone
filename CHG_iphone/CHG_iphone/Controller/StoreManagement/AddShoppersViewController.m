@@ -61,7 +61,8 @@
     }
     cell.namelab.text = [self.items objectAtIndex:indexPath.row];
     cell.nametext.placeholder = @"必填";
-    [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    cell.nametext.delegate = self;
+//    [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     
     if (indexPath.row == 1) {
@@ -146,6 +147,7 @@
         [textfield resignFirstResponder];
         textfield = (UITextField*)[self.view viewWithTag:1012];
         NSString *cardNum = textfield.text;
+        
         [textfield resignFirstResponder];
         
         
@@ -165,8 +167,9 @@
         {
             info = @"请输入身份证号";
         }
-        else if (cardNum.length != 15 ||cardNum.length != 18)
+        else if (cardNum.length != 18)
         {
+            DLog(@"%d",cardNum.length);
             info = @"身份证格式不正确";
         }
         else if([Utils checkUserIdCard:cardNum])
@@ -262,47 +265,87 @@
     // Pass the selected object to the new view controller.
 }
 */
-- (void) textFieldDidChange:(UITextField*) field {
+//- (void) textFieldDidChange:(UITextField*) field {
+//
+//    NSString* info;
+//    if (field.tag == 1010) {
+//        if (field.text.length > 32) {
+//            field.text = [field.text substringToIndex:32];
+////            [field resignFirstResponder];
+//            info = @"姓名不能大于32位";
+//        }
+//    }
+//    else if(field.tag == 1011)
+//    {
+//        if (field.text.length > 11) {
+//            info = @"手机号不能大于11位";
+//        }
+//        else if ((field.text.length == 11&&[[field.text substringToIndex:1] intValue] != 1)) {
+//            field.text = [field.text substringToIndex:11];
+////            [field resignFirstResponder];
+//            info = @"手机号格式不正确";
+//        }
+//        field.text = [field.text substringToIndex:11];
+//    }
+//    else if(field.tag == 1012)
+//    {
+//        if (field.text.length > 18 ) {
+//            field.text = [field.text substringToIndex:18];
+////            [field resignFirstResponder];
+//            info = @"身份证号不能大于18位";
+//        }
+//    }
+//    
+//    if (info.length > 0) {
+//        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+//        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+//        imagelabel.textLabel.text = info;
+//        [imagelabel layoutSubviews];
+//    }
+//    else
+//    {
+//        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
+//        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
+//        imagelabel.textLabel.text = @"确认添加后信息不可修改";
+//        [imagelabel layoutSubviews];
+//    }
+//    
+//    
+//}
 
-    NSString* info;
-    if (field.tag == 1010) {
-        if (field.text.length > 32) {
-            field.text = [field.text substringToIndex:32];
-//            [field resignFirstResponder];
-            info = @"姓名不能大于32位";
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.tag == 1010) {
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 32) {
+            return NO;
         }
     }
-    else if(field.tag == 1011)
-    {
-        if (field.text.length > 11 || (field.text.length == 11&&[[field.text substringToIndex:1] intValue] != 1)) {
-            field.text = [field.text substringToIndex:11];
-//            [field resignFirstResponder];
-            info = @"手机号格式不正确";
+    else if (textField.tag == 1011) {
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 11) {
+            return NO;
         }
-    }
-    else if(field.tag == 1012)
-    {
-        if (field.text.length > 18 ) {
-            field.text = [field.text substringToIndex:18];
-//            [field resignFirstResponder];
-            info = @"身份证号不能大于18位";
-        }
-    }
-    
-    if (info.length > 0) {
-        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
-        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
-        imagelabel.textLabel.text = info;
-        [imagelabel layoutSubviews];
     }
     else
     {
-        JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
-        imagelabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
-        imagelabel.textLabel.text = @"确认添加后信息不可修改";
-        [imagelabel layoutSubviews];
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 18) {
+            return NO;
+        }
     }
-    
-    
+    return YES;
 }
 @end

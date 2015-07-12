@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WelcomePageViewController">
@@ -16,12 +16,21 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ceg-Ti-qfe">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ceg-Ti-qfe">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="PjL-6J-4Je"/>
+                        <constraint firstAttribute="height" constant="568" id="zew-WQ-b2r"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Ceg-Ti-qfe" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="03k-xe-k77"/>
+                <constraint firstItem="Ceg-Ti-qfe" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="4ky-VP-hng"/>
+                <constraint firstAttribute="bottom" secondItem="Ceg-Ti-qfe" secondAttribute="bottom" id="L41-cA-bwy"/>
+                <constraint firstAttribute="trailing" secondItem="Ceg-Ti-qfe" secondAttribute="trailing" id="yYP-OQ-HUJ"/>
+            </constraints>
             <point key="canvasLocation" x="399" y="195"/>
         </view>
     </objects>

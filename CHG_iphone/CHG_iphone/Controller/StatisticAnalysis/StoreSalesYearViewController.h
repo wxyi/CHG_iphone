@@ -16,7 +16,7 @@
 @property(nonatomic,assign)BOOL isRefresh;
 @property (nonatomic, assign) StatisticalType statisticalType;
 @property(nonatomic,assign)int custCount;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,strong)NSString* strtitle;
 @property(nonatomic,assign)NSInteger nbaseData;
 @property(nonatomic,strong)NSString* strUrl;

@@ -12,4 +12,5 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSString* strIphone;
 @property(nonatomic,strong)NSString* strCheckCode;
+@property(nonatomic,assign)OrderReturnType ordertype;
 @end

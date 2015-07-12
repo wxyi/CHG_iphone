@@ -10,7 +10,7 @@
 #import "JKCountDownButton.h"
 
 
-@interface SetPasswordCell : UITableViewCell
+@interface SetPasswordCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UIView* bgView;
 @property(nonatomic,weak)IBOutlet UITextField* setpasswordField;
 @property(nonatomic,weak)IBOutlet UITextField* confirmpasswordfield;

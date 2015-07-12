@@ -13,6 +13,7 @@
 - (void)awakeFromNib {
     // Initialization code
     self.Receivedlab.delegate = self;
+    [self.Receivedlab addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -24,16 +25,18 @@
 {
     textField.backgroundColor = UIColorFromRGB(0xdddddd);
    
-    textField.text = @"";
+    
+//    textField.text = @"";
     
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     
-    if (textField.text.length == 0) {
-        textField.text = self.receivablelab.text;
-        return;
-    }
+//    if (textField.text.length == 0) {
+//        textField.text = self.receivablelab.text;
+//        return;
+//    }
+    textField.text = [NSString stringWithFormat:@"%.2f",[textField.text doubleValue]];
     DLog(@"textFieldDidEndEditing");
     textField.backgroundColor = [UIColor clearColor];
     NSString* price = textField.text;
@@ -119,5 +122,39 @@
         return YES;
     }
     
+}
+- (void) textFieldDidChange:(UITextField*) textField {
+    if ([textField.text rangeOfString:@"."].location==NSNotFound) {
+        _isHaveDian=NO;
+    }
+    if ([textField.text length]>0)
+    {
+        unichar single=[textField.text characterAtIndex:0];
+        if ((single>='0' && single<='9') || single=='.')
+        {
+            //数据格式正确
+            if (single=='.')
+            { //判断是否有小数点
+                if(!_isHaveDian)
+                {
+                    _isHaveDian=YES;
+                }
+            }
+            else
+            {
+                if (_isHaveDian)
+                {
+                    //判断小数点的位数
+                    NSLog(@"%@",textField.text);
+                    NSRange ran=[textField.text rangeOfString:@"."];
+                    int tt= textField.text.length - ran.location;
+                    NSLog(@"............%d......",tt);
+                    if (tt>2)
+                        textField.text = [textField.text substringToIndex:textField.text.length -1];
+                }
+            }
+        }
+        
+    }
 }
 @end
