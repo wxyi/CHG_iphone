@@ -14,5 +14,5 @@
 @property(nonatomic,strong) UILabel* dateLab;
 @property(nonatomic,strong) UILabel* numlab;
 
--(void)setStatistics:(NSString*)date number:(NSInteger)number baseData:(NSInteger)baseData;
+-(void)setStatistics:(NSString*)date number:(NSString*)number baseData:(NSInteger)baseData;
 @end

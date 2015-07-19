@@ -14,7 +14,8 @@
 @property(nonatomic,weak)IBOutlet UIButton* Terminationbtn;
 @property(nonatomic,weak)IBOutlet UIImageView* line;
 @property(nonatomic,strong)NSDictionary* items;
-
+@property (nonatomic,assign)CGFloat quantity;
+@property (nonatomic,assign)CGFloat remainQuantity;
 @property (nonatomic, strong) NSString *strOrderId;
 @property (nonatomic, assign) CGFloat m_height;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;

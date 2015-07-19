@@ -77,8 +77,17 @@
     
     }
     if (indexPath.row == 0) {
-        cell.namelab.text =@"开户名";
+        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        if (config.nRoleType != 1){
+            cell.namelab.text =@"持卡人";
+        }
+        else
+        {
+            cell.namelab.text =@"开户名";
+        }
+        
         cell.Detailslab.text = self.items[@"accountName"];
+        cell.namelab.textAlignment = NSTextAlignmentRight;
     }
     else if (indexPath.row == 1)
     {

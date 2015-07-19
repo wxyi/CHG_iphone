@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="160" height="105"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jQU-y0-W9l">
-                        <rect key="frame" x="60" y="25" width="35" height="35"/>
+                        <rect key="frame" x="63" y="25" width="34" height="34"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wyB-H1-8ob">
                         <rect key="frame" x="0.0" y="67" width="160" height="21"/>
@@ -33,11 +33,11 @@
             <constraints>
                 <constraint firstItem="jQU-y0-W9l" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="25" id="DKy-IK-BK1"/>
                 <constraint firstItem="wyB-H1-8ob" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="H0g-dq-1d1"/>
-                <constraint firstItem="wyB-H1-8ob" firstAttribute="top" secondItem="jQU-y0-W9l" secondAttribute="bottom" constant="7" id="MYB-XL-zgY"/>
-                <constraint firstAttribute="trailing" secondItem="jQU-y0-W9l" secondAttribute="trailing" constant="65" id="XlK-VF-vtC"/>
+                <constraint firstItem="wyB-H1-8ob" firstAttribute="top" secondItem="jQU-y0-W9l" secondAttribute="bottom" constant="8" id="MYB-XL-zgY"/>
+                <constraint firstAttribute="trailing" secondItem="jQU-y0-W9l" secondAttribute="trailing" constant="63" id="XlK-VF-vtC"/>
                 <constraint firstAttribute="trailing" secondItem="wyB-H1-8ob" secondAttribute="trailing" id="gwR-Wl-ted"/>
                 <constraint firstAttribute="bottom" secondItem="wyB-H1-8ob" secondAttribute="bottom" constant="17" id="u3S-vm-rnK"/>
-                <constraint firstItem="jQU-y0-W9l" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="60" id="xYN-b7-HlK"/>
+                <constraint firstItem="jQU-y0-W9l" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="63" id="xYN-b7-HlK"/>
             </constraints>
             <connections>
                 <outlet property="imageName" destination="wyB-H1-8ob" id="0wz-D0-vkj"/>

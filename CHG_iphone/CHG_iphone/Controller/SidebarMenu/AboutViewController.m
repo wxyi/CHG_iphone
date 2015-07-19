@@ -106,7 +106,7 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 35)];
     title.text = @"客服热线:400-8008-404";
-    title.textColor = UIColorFromRGB(0x323232);
+    title.textColor = UIColorFromRGB(0xbcbcbc);
     title.textAlignment = NSTextAlignmentCenter;
     [v_footer addSubview:title];
     return v_footer;

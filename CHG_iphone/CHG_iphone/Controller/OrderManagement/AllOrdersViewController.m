@@ -63,7 +63,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[self.items objectAtIndex:section] objectForKey:@"productList"] count];
+    return [[[self.items objectAtIndexSafe:section] objectForKey:@"productList"] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -73,7 +73,7 @@
         
     }
 
-    NSArray* array = [[self.items objectAtIndex:indexPath.section] objectForKey:@"productList"];
+    NSArray* array = [[self.items objectAtIndexSafe:indexPath.section] objectForKey:@"productList"];
     NSDictionary* dict = [array objectAtIndex:indexPath.row];
     
 //    NSString* strurl = @"http://111.202.33.27:9080/chg/pic/qrc/wx/100790.jpg";
@@ -120,7 +120,7 @@
     line.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_header addSubview:line];
     
-    NSDictionary* dict = [self.items objectAtIndex:section] ;
+    NSDictionary* dict = [self.items objectAtIndexSafe:section] ;
     UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
@@ -161,15 +161,15 @@
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 65)];
     v_footer.backgroundColor = [UIColor clearColor];
-    NSDictionary* dict = [self.items objectAtIndex:section] ;
+    NSDictionary* dict = [self.items objectAtIndexSafe:section] ;
     
     NSArray* productList = dict[@"productList"];
     NSInteger count = 0;
     for (int i = 0; i< [productList count]; i++) {
         count += [productList[i][@"quantity"] intValue];
     }
-    NSString* string = [NSString stringWithFormat:@"共%d件商品",count];
-    NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",count]];
+    NSString* string = [NSString stringWithFormat:@"共%ld件商品",(long)count];
+    NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%ld",(long)count]];
     NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -245,7 +245,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* dict  = [self.items objectAtIndex:indexPath.section];
+    NSDictionary* dict  = [self.items objectAtIndexSafe:indexPath.section];
     if (self.CellSkipSelect) {
         self.CellSkipSelect([[dict objectForKey:@"productList"] objectAtIndex:indexPath.row]);
     }
@@ -256,7 +256,7 @@
     NSString* tag = [NSString stringWithFormat:@"%d",sender.tag];
     NSInteger section = [[tag substringFromIndex:2] intValue];
     NSInteger ntag = [[tag substringToIndex:2] intValue];
-    NSDictionary* dict = [self.items objectAtIndex:section];
+    NSDictionary* dict = [self.items objectAtIndexSafe:section];
     
 //    if (ntag == 11) {
 //        DLog(@"终止定单")
@@ -318,7 +318,7 @@
             self.isRefresh = YES;
             NSArray* dataArr = [data objectForKey:@"datas"];
             for (int i = 0; i< dataArr.count; i++) {
-                [self.items addObject:dataArr[i]];
+                [self.items addObjectSafe:dataArr[i]];
             }
             
             [self.tableview reloadData];
@@ -342,6 +342,8 @@
         [self.tableview.footer endRefreshing];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetAllOrderList];
     }];
 }
 
@@ -377,6 +379,8 @@
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpCancelOrder:dict];
     }];
 }
 /*

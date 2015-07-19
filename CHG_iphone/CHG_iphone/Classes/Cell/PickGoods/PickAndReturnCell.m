@@ -46,6 +46,7 @@
         
 //        NSString* info;
 //        info = @"实退金额小于或等于应退金额";
+        textField.text = @"";
         [SGInfoAlert showInfo:@"实退金额小于或等于应退金额"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self
@@ -61,87 +62,74 @@
     }
     if ([string length]>0)
     {
-        unichar single=[string characterAtIndex:0];
-        if ((single>='0' && single<='9') || single=='.')
+        unichar single=[string characterAtIndex:0];//当前输入的字符
+        if ((single >='0' && single<='9') || single=='.')//数据格式正确
         {
-            //数据格式正确
+            //首字母不能为0和小数点
+            if([textField.text length]==0){
+                if(single == '.'){
+                    //                    [self alertView:@"亲，第一个数字不能为小数点"];
+                    [textField.text stringByReplacingCharactersInRange:range withString:@""];
+                    return NO;
+                    
+                }
+                if (single == '0') {
+                    //                    [self alertView:@"亲，第一个数字不能为0"];
+                    [textField.text stringByReplacingCharactersInRange:range withString:@""];
+                    return NO;
+                    
+                }
+            }
             if (single=='.')
-            { //判断是否有小数点
-                if(!_isHaveDian)
+            {
+                if(!_isHaveDian)//text中还没有小数点
                 {
                     _isHaveDian=YES;
                     return YES;
-                }
-                else
+                }else
                 {
+                    //                    [self alertView:@"亲，您已经输入过小数点了"];
                     [textField.text stringByReplacingCharactersInRange:range withString:@""];
                     return NO;
                 }
             }
             else
             {
-                if (_isHaveDian)
+                if (_isHaveDian)//存在小数点
                 {
                     //判断小数点的位数
-                    NSLog(@"%@",textField.text);
                     NSRange ran=[textField.text rangeOfString:@"."];
                     int tt=range.location-ran.location;
-                    NSLog(@"............%d......",tt);
-                    if (tt<=2)
+                    if (tt <= 2){
                         return YES;
-                    else
+                    }else{
+                        //                        [self alertView:@"亲，您最多输入两位小数"];
                         return NO;
+                    }
                 }
                 else
                 {
                     return YES;
                 }
             }
-        }
-        else
-        {
+        }else{//输入的数据格式不正确
+            //            [self alertView:@"亲，您输入的格式不正确"];
             [textField.text stringByReplacingCharactersInRange:range withString:@""];
             return NO;
         }
     }
     else
-    {
-        return YES;
+    {  
+        return YES;  
     }
-    
 }
 - (void) textFieldDidChange:(UITextField*) textField {
-    if ([textField.text rangeOfString:@"."].location==NSNotFound) {
-        _isHaveDian=NO;
-    }
-    if ([textField.text length]>0)
-    {
-        unichar single=[textField.text characterAtIndex:0];
-        if ((single>='0' && single<='9') || single=='.')
-        {
-            //数据格式正确
-            if (single=='.')
-            { //判断是否有小数点
-                if(!_isHaveDian)
-                {
-                    _isHaveDian=YES;
-                }
-            }
-            else
-            {
-                if (_isHaveDian)
-                {
-                    //判断小数点的位数
-                    NSLog(@"%@",textField.text);
-                    NSRange ran=[textField.text rangeOfString:@"."];
-                    int tt= textField.text.length - ran.location;
-                    NSLog(@"............%d......",tt);
-                    if (tt>2)
-                        textField.text = [textField.text substringToIndex:textField.text.length -1];
-                }
-            }
-        }
-        
+    if ([textField.text rangeOfString:@"."].location!=NSNotFound) {
+        NSRange ran=[textField.text rangeOfString:@"."];
+        int tt=textField.text.length-ran.location;
+        NSLog(@"............%d......",tt);
+        if (tt > 3)
+            textField.text = [textField.text substringToIndex:textField.text.length - 1];
     }
 }
 @end

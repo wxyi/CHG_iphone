@@ -7,12 +7,12 @@
 //
 
 #import "MyAccountViewController.h"
-//#import "RewardsCell.h"
-//#import "SettlementCell.h"
-//#import "GrowthCell.h"
+#import "RewardsCell.h"
+#import "SettlementCell.h"
+#import "GrowthCell.h"
 #import "StoreSalesViewController.h"
-#import "MyAccountCell.h"
-#import "MyAccountPartnersCell.h"
+//#import "MyAccountCell.h"
+//#import "MyAccountPartnersCell.h"
 #import "RewardsCollectionCell.h"
 @interface MyAccountViewController ()
 @property UINib* RewardsNib;
@@ -56,7 +56,7 @@
     
     
     self.config = [[SUHelper sharedInstance] currentUserConfig];
-    self.config.Roles = @"PARTNER";
+//    self.config.Roles = @"PARTNER";
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
@@ -64,12 +64,12 @@
     [self getCurrentData];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-//    self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
-//    self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
-//    self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
+    self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
+    self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
+    self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
 //
-    self.MyAccountNib = [UINib nibWithNibName:@"MyAccountCell" bundle:nil];
-    self.MyAccountPartnersNib = [UINib nibWithNibName:@"MyAccountPartnersCell" bundle:nil];
+//    self.MyAccountNib = [UINib nibWithNibName:@"MyAccountCell" bundle:nil];
+//    self.MyAccountPartnersNib = [UINib nibWithNibName:@"MyAccountPartnersCell" bundle:nil];
     [self httpGetMyAccount];
     [self setupRefresh];
 
@@ -87,39 +87,101 @@
 {
     __weak typeof(self) weakSelf = self;
     
-    if ([self.config.Roles isEqualToString:@"PARTNER"]) {
-        MyAccountPartnersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MyAccountPartnersCell"];
+    NSDictionary* dict = self.items[indexPath.section];
+    if([dict[@"state"] intValue ] == 0)
+    {
+        SettlementCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SettlementCell"];
         if(cell==nil){
-            cell = (MyAccountPartnersCell*)[[self.MyAccountPartnersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.dictionary = self.items[indexPath.section];
-        [cell setUpCell];
+        //        cell.CardNumlab.text = @"6210*******79263";
         
-        cell.accountSkip = ^(NSInteger index, NSString* strData) {
-            
-            [weakSelf goskipdetails:index data:strData];
-        };
+        
+        cell.datelab.text = dict[@"amountDate"];
+        cell.statelab.text = @"支出";
+        cell.namelab.text = @"晨冠已结算";
+        
+        
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[dict[@"awardcount"] doubleValue]];
+        cell.BankCardlab.text = dict[@"awardArriveBank"];
+        cell.CardNumlab.text = dict[@"awardAccount"];
+        
+        
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
-        
     }
     else
     {
-        MyAccountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MyAccountCell"];
+        GrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:@"GrowthCell"];
         if(cell==nil){
-            cell = (MyAccountCell*)[[self.MyAccountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.dictionary = self.items[indexPath.section];
-        [cell setUpCell];
-        cell.accountSkip = ^(NSInteger index, NSString* strData) {
+        
+        if ([dict[@"state"] intValue ] == 2 ) {
+            cell.datelab.text = dict[@"amountDate"];;
+            cell.statelab.text = @"收入";
+            cell.namelab.text = @"动销奖励";
             
-            [weakSelf goskipdetails:index data:strData];
+            
+            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[dict[@"awardcount"] doubleValue]];;
+            
+            cell.skipbtn.tag = 101;
+        }
+        else
+        {
+            cell.datelab.text = dict[@"amountDate"];;
+            cell.statelab.text = @"收入";
+            cell.namelab.text = @"消费分账奖励";
+            
+            
+            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[dict[@"awardcount"] doubleValue]];
+            
+            cell.skipbtn.tag = 102;
+        }
+        
+        cell.iphonelab.textColor = UIColorFromRGB(0xf5a541);
+        cell.didSkipSubItem = ^(NSInteger tag){
+            
+            [weakSelf goskipdetails:tag data:dict[@"amountDate"]];
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
+//    if ([self.config.Roles isEqualToString:@"PARTNER"]) {
+//        MyAccountPartnersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MyAccountPartnersCell"];
+//        if(cell==nil){
+//            cell = (MyAccountPartnersCell*)[[self.MyAccountPartnersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        cell.dictionary = self.items[indexPath.section];
+//        [cell setUpCell];
+//        
+//        cell.accountSkip = ^(NSInteger index, NSString* strData) {
+//            
+//            [weakSelf goskipdetails:index data:strData];
+//        };
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//        
+//    }
+//    else
+//    {
+//        MyAccountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MyAccountCell"];
+//        if(cell==nil){
+//            cell = (MyAccountCell*)[[self.MyAccountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+//            
+//        }
+//        cell.dictionary = self.items[indexPath.section];
+//        [cell setUpCell];
+//        cell.accountSkip = ^(NSInteger index, NSString* strData) {
+//            
+//            [weakSelf goskipdetails:index data:strData];
+//        };
+//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//        return cell;
+//    }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -131,14 +193,21 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.config.Roles isEqualToString:@"PARTNER"])
-    {
-        return 202;
+    NSDictionary* dict = self.items[indexPath.section];
+    if ([dict[@"state"] intValue] == 0) {
+        return 90;
     }
-    else
-    {
-        return 308;
+    else {
+        return 105;
     }
+//    if ([self.config.Roles isEqualToString:@"PARTNER"])
+//    {
+//        return 202;
+//    }
+//    else
+//    {
+//        return 308;
+//    }
 }
 
 -(void)goskipdetails:(NSInteger)tag data:(NSString*)strData
@@ -162,6 +231,7 @@
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
     StoreSalesView.statisticalType = statType;
     StoreSalesView.title = title;
+    StoreSalesView.isSkip = YES;
     StoreSalesView.strYear = [array objectAtIndex:0];
     StoreSalesView.strMonth = [array objectAtIndex:1];
     StoreSalesView.strDay = [array objectAtIndex:2];
@@ -197,12 +267,14 @@
 //            for (int i = 0 ; i < tm_array.count; i ++) {
 //                <#statements#>
 //            }
-            self.items = [data objectForKey:@"assetDetail"];
+//            self.items = [data objectForKey:@"assetDetail"];
+            
+            [self createMyAccountData:[data objectForKey:@"assetDetail"]];
             self.collonitems = [NSArray arrayWithObjects:
                                                        [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[data[@"awardUsing"] doubleValue]],@"count", nil],
                                                        [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[data[@"awardTotal"] doubleValue]],@"count", nil], nil];
 
-            [self.tableview reloadData];
+            [self reLoadView];
             [self.collection reloadData];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
@@ -229,6 +301,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetMyAccount];
     }];
 }
 
@@ -454,5 +528,86 @@
     cell.RewardsNameLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"title"];
     
     return cell;
+}
+
+-(void)createMyAccountData:(NSArray*)items;
+{
+    NSMutableArray* tm_array = [[NSMutableArray alloc] init];
+    [tm_array removeAllObjects];
+    if ([self.config.Roles isEqualToString:@"PARTNER"]) {
+//        NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+        for (int i = 0; i < items.count; i ++) {
+            NSDictionary* dict = items[i];
+            if ([[dict objectForKey:@"awardArrive"] intValue] != 0)
+            {
+                
+                NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+                [dictionary setObject:dict[@"awardArrive"] forKey:@"awardcount"];
+                [dictionary setObject:dict[@"awardArriveBank"] forKey:@"awardArriveBank"];
+                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObject:@"0" forKey:@"state"];
+                [tm_array addObject:dictionary];
+            }
+            if([[dict objectForKey:@"awardPartnerAmount"] intValue] != 0)
+            {
+                NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+                [dictionary setObject:dict[@"awardPartnerAmount"] forKey:@"awardcount"];
+                [dictionary setObject:@"" forKey:@"awardArriveBank"];
+                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObject:@"1" forKey:@"state"];
+                [tm_array addObject:dictionary];
+            }
+        }
+    }
+    else
+    {
+        
+        for (int i = 0; i < items.count; i ++) {
+            NSDictionary* dict = items[i];
+            if ([[dict objectForKey:@"awardArrive"] intValue] != 0)
+            {
+                NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+//                [dictionary removeAllObjects];
+                [dictionary setObject:dict[@"awardArrive"] forKey:@"awardcount"];
+                [dictionary setObject:dict[@"awardArriveBank"] forKey:@"awardArriveBank"];
+                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObject:@"0" forKey:@"state"];
+                [tm_array addObject:dictionary];
+            }
+            if([[dict objectForKey:@"awardPartnerAmount"] intValue] != 0)
+            {
+                NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+                [dictionary setObject:dict[@"awardPartnerAmount"] forKey:@"awardcount"];
+                [dictionary setObject:@"" forKey:@"awardArriveBank"];
+                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObject:@"1" forKey:@"state"];
+                [tm_array addObject:dictionary];
+            }
+            if ([[dict objectForKey:@"awardSaleAmount"] intValue] != 0)
+            {
+                NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+                [dictionary setObject:dict[@"awardSaleAmount"] forKey:@"awardcount"];
+                [dictionary setObject:@"" forKey:@"awardArriveBank"];
+                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObject:@"2" forKey:@"state"];
+                [tm_array addObject:dictionary];
+            }
+        }
+    }
+    
+    DLog(@"tm_array = %@",tm_array);
+    self.items = [tm_array copy];
+}
+
+- (void)reLoadView {
+    [self.tableview reloadData];
+    if (self.items != nil && [self.items count] > 0) {
+        [self.tableview setContentOffset:CGPointMake(0,0 ) animated:NO];
+    }
 }
 @end

@@ -17,6 +17,7 @@
 @property (nonatomic,strong) UIImageView *left;
 @property (nonatomic,strong) UIImageView *right;
 @property(strong,nonatomic) UIImageView* lastImageView;
+@property(assign,nonatomic)int count;
 -(id)initWithFrame:(CGRect)frame andPathArray:(NSArray*)array;
 @property(strong,nonatomic)void(^endEvent)(void);
 @end

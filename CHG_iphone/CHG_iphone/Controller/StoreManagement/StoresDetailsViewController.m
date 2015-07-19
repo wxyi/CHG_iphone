@@ -37,16 +37,16 @@
     }
     self.title = @"门店详情";
     
-    
+//    self.bgScrollView.scrollEnabled = NO;
 //    _locService = [[BMKLocationService alloc]init];
     
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     _geocodeSearchOption = [[BMKGeoCodeSearchOption alloc]init];
-//    _mapView.zoomEnabled = YES;
-//    _mapView.zoomEnabledWithTap = YES;
-//    _mapView.scrollEnabled = YES;
-    [_mapView setZoomLevel:14];
     
+    [_mapView setZoomLevel:15];
+    _mapView.zoomEnabled = YES;
+    _mapView.zoomEnabledWithTap = YES;
+    _mapView.scrollEnabled = YES;
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -486,8 +486,8 @@
 
 -(void)searchCityByCityName
 {
-    _geocodeSearchOption.city= selectedProvince;
-    _geocodeSearchOption.address = [NSString stringWithFormat:@"%@%@%@",self.address.strCityName,self.address.strDistrictName,self.locationField.text];
+    _geocodeSearchOption.city= self.address.strProvinceName;
+    _geocodeSearchOption.address = [NSString stringWithFormat:@"%@",self.locationField.text];
     BOOL flag = [_geocodesearch geoCode:_geocodeSearchOption];
     if(flag)
     {
@@ -532,6 +532,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpAddressCode];
     }];
 }
 

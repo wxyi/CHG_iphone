@@ -13,6 +13,7 @@
 #import "DidPickGoodsViewController.h"
 #import "CompletedOrderDetailsViewController.h"
 #import "successfulIdentifyViewController.h"
+#import "OrderQuryViewController.h"
 @interface OrderManagementViewController ()
 
 @end
@@ -74,7 +75,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(skipPage)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:self action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
     
@@ -82,8 +83,9 @@
 -(void)skipPage
 {
     DLog(@"搜索");
-//    OrderQueryViewController* OrderQueryView = [[OrderQueryViewController alloc] initWithNibName:@"OrderQueryViewController" bundle:nil];
-//    [self.navigationController pushViewController:OrderQueryView animated:YES];
+    OrderQuryViewController* OrderQueryView = [[OrderQuryViewController alloc] initWithNibName:@"OrderQuryViewController" bundle:nil];
+    OrderQueryView.ManagementTyep = self.ManagementTyep;
+    [self.navigationController pushViewController:OrderQueryView animated:YES];
 }
 //-(void)gobacktoSuccess
 //{

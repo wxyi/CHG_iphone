@@ -16,6 +16,7 @@
 #import "PresellGoodsViewController.h"
 #import "PickAndReturnCell.h"
 #import "ConfirmOrderViewController.h"
+#import "OrderManagementViewController.h"
 @interface CompletedOrderDetailsViewController ()
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderAmountNib;
@@ -52,14 +53,38 @@
     }
     else
     {
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
     }
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
     
 }
-
+-(void)gotoOrderManagement
+{
+    OrderManagementViewController* OrderManagement = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+    OrderManagement.ManagementTyep = OrderManagementTypeSingle;
+    OrderManagement.m_returnType = self.m_returnType;
+    OrderManagement.title = @"会员订单";
+    
+    CATransition *transition = [CATransition animation];
+    
+    transition.duration = 0.3f;
+    
+    //    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    transition.type = kCATransitionPush;
+    
+    transition.subtype = kCATransitionFromLeft;
+    
+    //    transition.delegate = self;
+    
+    [self.view.superview.layer addAnimation:transition forKey:nil];
+    
+    
+    
+    [self.navigationController pushViewController:OrderManagement animated:NO];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -139,14 +164,14 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.Comordertype == TerminationOrder){
-        if (section == 0) {
-            return [[self.items objectForKey:@"productList"] count];
-        }
-    }
-    if (section == 1) {
-        return [[self.items objectForKey:@"productList"] count];
-    }
+//    if (self.Comordertype == TerminationOrder){
+//        if (section == 0) {
+//            return [[self.items objectForKey:@"productList"] count];
+//        }
+//    }
+//    if (section == 1) {
+//        return [[self.items objectForKey:@"productList"] count];
+//    }
     return 1;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -162,12 +187,23 @@
                 
             }
             
-            cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",self.items[@"orderCreator"]];
+            if ([self.items[@"orderCreator"] length] == 0) {
+                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",@""];
+            }
+            else
+            {
+                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",self.items[@"orderCreator"]];
+            }
+            
             
             NSString* custName= self.items[@"custName"];
             DLog(@"wxy -custName = %@",custName);
             if (custName.length != 0) {
                 custName = [custName substringToIndex:custName.length - 1];
+            }
+            else
+            {
+                custName = @"";
             }
             
             cell.priceLab.text = [NSString stringWithFormat:@"会员:%@*",custName];
@@ -363,12 +399,12 @@
         DLog(@"data = %@,msg = %@",data,msg);
         if (success) {
 //            [MMProgressHUD dismiss];
-            self.items = [data objectForKey:@"order"] ;
+            self.items = [data objectForKeySafe:@"order"] ;
             if (self.Comordertype == TerminationOrder){
-                self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5 ;
+                self.m_height = ([[self.items objectForKeySafe:@"productList"] count] + 1)*65 - 5 ;
             }
             else{
-                self.m_height = ([[self.items objectForKey:@"productList"] count] + 1)*65 - 5 + 35;
+                self.m_height = ([[self.items objectForKeySafe:@"productList"] count] + 1)*65 - 5 + 35;
             }
             
             [self.tableview reloadData];
@@ -393,6 +429,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetOrder];
     }];
 }
 /*
@@ -479,6 +517,8 @@
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpCancelOrder:dict];
     }];
 }
 @end

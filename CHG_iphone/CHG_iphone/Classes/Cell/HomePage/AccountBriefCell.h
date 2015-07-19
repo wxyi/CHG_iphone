@@ -11,6 +11,6 @@ typedef void(^AccountBriefSelect)(NSIndexPath* indexPath);
 
 @interface AccountBriefCell : MyTableViewCell<UICollectionViewDataSource,UICollectionViewDelegate>
 @property(nonatomic,weak)IBOutlet UICollectionView* AccountBriefView;
-
+@property(nonatomic,weak)IBOutlet UIImageView* line;
 
 @end

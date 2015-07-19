@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IdentUserInfoCell : UITableViewCell
-@property(nonatomic,weak)IBOutlet UILabel* iphonelab;
+@interface IdentUserInfoCell : UITableViewCell<UITextFieldDelegate>
+@property(nonatomic,weak)IBOutlet UITextField* iphonelab;
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
+@property (nonatomic, copy) GetCheckCode didGetCode;
 @end

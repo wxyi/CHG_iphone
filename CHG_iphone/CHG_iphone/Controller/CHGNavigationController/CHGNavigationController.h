@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CHGNavigationController : UINavigationController
+#import "APBaseNavigationController.h"
+@interface CHGNavigationController : APBaseNavigationController
 @property (nonatomic,strong)STAlertView* stAlertView;
 - (void)showMenu;
 - (void)goback;
@@ -21,4 +21,6 @@
 
 -(void)gotoOrderManagement;
 
+
+-(void)gobacktolastpage;
 @end

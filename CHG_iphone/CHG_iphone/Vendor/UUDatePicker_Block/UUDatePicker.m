@@ -96,8 +96,8 @@
 //进行初始化
 - (void)drawRect:(CGRect)rect
 {
-    if (self.frame.size.height<216 || self.frame.size.width<320)
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, 320, 216);
+    if (self.frame.size.height<216 || self.frame.size.width<SCREEN_WIDTH)
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, SCREEN_WIDTH, 216);
 
     yearArray   = [self ishave:yearArray];
     monthArray  = [self ishave:monthArray];
@@ -198,7 +198,7 @@
 
 - (void)addLabelWithNames:(NSString *)name withPointX:(NSInteger)point_x
 {
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(point_x, 99, 20, 20)];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(point_x* (SCREEN_WIDTH/320), 99, 20, 20)];
     label.text = name;
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont systemFontOfSize:18];
@@ -294,9 +294,9 @@
         }
             break;
         case UUDateStyle_YearMonthDay:{
-            if (component==0) return 70;
-            if (component==1) return 100;
-            if (component==2) return 50;
+            if (component==0) return 70* (SCREEN_WIDTH/320);
+            if (component==1) return 100*(SCREEN_WIDTH/320);
+            if (component==2) return 50*(SCREEN_WIDTH/320);
         }
             break;
         case UUDateStyle_MonthDayHourMinute:{

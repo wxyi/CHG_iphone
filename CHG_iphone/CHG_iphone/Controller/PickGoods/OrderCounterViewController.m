@@ -123,6 +123,33 @@
     {
         [self.button setTitle:@"确认订单" forState:UIControlStateNormal];
     }
+//    //测试
+//    
+//    double allPrice;
+//    double price;
+//    int count;
+//    [SGInfoAlert showInfo:[NSString stringWithFormat:@"allPrice = %.2f count = %d price = %.2f",allPrice,count,price]
+//                  bgColor:[[UIColor blackColor] CGColor]
+//                   inView:self.view
+//                 vertical:0.2];
+//    for (int i = 0; i< self.items.count; i++) {
+//        price = [[self.items[i] objectForKey:@"productPrice"] doubleValue];
+//        
+//        if (self.orderSaletype == SaleTypeSellingGoods) {
+//            count = [[self.items[i] objectForKey:@"QrcList"] count];
+//        }
+//        else
+//        {
+//            count = [[self.items[i] objectForKey:@"quantity"] intValue];
+//        }
+//        
+//        allPrice += price * count;
+//        
+//    }
+//    [SGInfoAlert showInfo:[NSString stringWithFormat:@"allPrice = %.2f count = %d price = %.2f",allPrice,count,price]
+//                  bgColor:[[UIColor blackColor] CGColor]
+//                   inView:self.view
+//                 vertical:0.7];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -147,7 +174,7 @@
                 
             }
             
-            NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+            NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
             
             
             [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
@@ -179,7 +206,7 @@
            [cell setupCell];
             cell.indexPath = indexPath;
             cell.operationPage = @"1";
-            NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+            NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
             
             cell.showCount =^(NSInteger count){
                 UILabel* label = (UILabel*)[self.view viewWithTag:1010];
@@ -213,16 +240,16 @@
                 cell.receivableNameLab.text =@"应收金额";
                 cell.actualNameLab.text = @"实收金额";
                 [cell.actualtext setEnabled:NO];
-                cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[self.priceDict[@"ssMoney"] doubleValue]] ;
+                cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[self.priceDict[@"ssMoney"] floatValue]] ;
             }
             else
             {
                 cell.receivableNameLab.text =@"应退金额";
                 cell.actualNameLab.text = @"实退金额";
-                cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] doubleValue]] ;
+                cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] floatValue]] ;
                 
             }
-            cell.receivableLab.text =[NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] doubleValue]] ;
+            cell.receivableLab.text =[NSString stringWithFormat:@"%.2f",[self.priceDict[@"ysMoney"] floatValue]] ;
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -234,17 +261,17 @@
                 cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
                 
             }
-            double allPrice;
+            CGFloat allPrice = 0.0;
             cell.orderSaletype = self.orderSaletype;
             for (int i = 0; i< self.items.count; i++) {
-                double price = [[self.items[i] objectForKey:@"productPrice"] doubleValue];
-                int count;
+                CGFloat price = [[self.items[i] objectForKeySafe:@"productPrice"] floatValue];
+                NSInteger count;
                 if (self.orderSaletype == SaleTypeSellingGoods) {
-                    count = [[self.items[i] objectForKey:@"QrcList"] count];
+                    count = [[self.items[i] objectForKeySafe:@"QrcList"] count];
                 }
                 else
                 {
-                    count = [[self.items[i] objectForKey:@"quantity"] intValue];
+                    count = [[self.items[i] objectForKeySafe:@"quantity"] intValue];
                 }
                 
                 allPrice += price * count;
@@ -353,7 +380,18 @@
         {
             DLog(@"确认提货");
             
-            [self httpOrderCounter];
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认提货" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                [self httpOrderCounter];
+                
+            } otherButtonBlock:^{
+                DLog(@"是");
+                
+                
+                
+            }];
+            [self.stAlertView show];
         }
         
     }
@@ -466,17 +504,17 @@
         for (int i = 0; i < self.items.count; i ++) {
             if (self.orderSaletype == SaleTypeSellingGoods||self.orderSaletype == SaleTypePickingGoods||self.orderSaletype == SaleTypeReturnGoods)
             {
-                NSArray* qrcArr = [self.items[i] objectForKey:@"QrcList"];
+                NSArray* qrcArr = [self.items[i] objectForKeySafe:@"QrcList"];
                 
                 for (int j = 0; j < qrcArr.count; j++) {
                     
                     NSMutableDictionary *product = [NSMutableDictionary dictionary];
-                    [product setObject:[self.items[i] objectForKey:@"productId"] forKey:@"productId"];
-                    [product setObject:qrcArr[j] forKey:@"productCode"];
+                    [product setObjectSafe:[self.items[i] objectForKey:@"productId"] forKey:@"productId"];
+                    [product setObjectSafe:qrcArr[j] forKey:@"productCode"];
                     
-                    [product setObject:@"1"forKey:@"quantity"];
+                    [product setObjectSafe:@"1"forKey:@"quantity"];
 
-                    [productList addObject:product];
+                    [productList addObjectSafe:product];
                 }
                 
             }
@@ -484,12 +522,12 @@
             {
             
                 NSMutableDictionary *product = [NSMutableDictionary dictionary];
-                [product setObject:self.items[i][@"productId"] forKey:@"productId"];
+                [product setObjectSafe:self.items[i][@"productId"] forKey:@"productId"];
                 NSInteger tag  = [[NSString stringWithFormat:@"1011%d",i] intValue];
                 TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
-                [product setObject:[NSString stringWithFormat:@"%.0f", TextStepper.Current ]  forKey:@"quantity"];
+                [product setObjectSafe:[NSString stringWithFormat:@"%.0f", TextStepper.Current ]  forKey:@"quantity"];
                 
-                [productList addObject:product];
+                [productList addObjectSafe:product];
             }
             
         }
@@ -525,6 +563,7 @@
             {
                 ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
                 ConfirmOrderView.Confirmsaletype = self.orderSaletype;
+                ConfirmOrderView.returnType = self.returnType;
                 ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"orderId"] intValue]];
                 [self.navigationController pushViewController:ConfirmOrderView animated:YES];
             }
@@ -548,6 +587,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpOrderCounter];
     }];
     
     

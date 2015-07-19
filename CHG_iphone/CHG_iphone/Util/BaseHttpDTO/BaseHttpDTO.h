@@ -13,7 +13,7 @@ typedef void (^RequestSuccessBlock)(BOOL success, id data, NSString *msg);
 typedef void (^RequestFailedBlock)(NSString *description);
 typedef void (^BodyWithBlock)(id <AFMultipartFormData>formData);
 typedef void (^progressBlock)(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead);
-
+typedef void (^Refresh_tokenBlock)(BOOL success);
 /**
  *  modle层的基类
  */

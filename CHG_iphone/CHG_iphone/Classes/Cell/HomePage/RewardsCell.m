@@ -50,11 +50,11 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     RewardsCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-    cell.RewardsAmountLab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"count"];
+    cell.RewardsAmountLab.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"count"];
     if (self.isMy) {
         cell.RewardsAmountLab.textColor = UIColorFromRGB(0xF5A541);
     }
-    cell.RewardsNameLab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"title"];
+    cell.RewardsNameLab.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"title"];
 
     return cell;
 }

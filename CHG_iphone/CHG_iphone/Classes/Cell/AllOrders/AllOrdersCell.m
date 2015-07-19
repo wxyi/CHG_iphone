@@ -9,6 +9,8 @@
 #import "AllOrdersCell.h"
 #import "OrdersGoodsCell.h"
 #import "OrderGiftCell.h"
+#import "NimbusAttributedLabel.h"
+#import "NSMutableAttributedString+NimbusAttributedLabel.h"
 @interface AllOrdersCell ()
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderGiftNib;
@@ -61,9 +63,9 @@
         cell.titlelab.text = dict[@"productName"];
         cell.pricelab.text = dict[@"productPrice"];
     
-    int goodNum ;
+    int goodNum = 0;
     if (self.picktype == PickUpTypeDid) {
-        goodNum = [[dict objectForKey:@"quantity"] intValue] -  [[dict objectForKey:@"remainQuantity"] intValue];
+        goodNum = [[dict objectForKey:@"quantity"] intValue] -  [[dict objectForKey:@"remainQuantity"] intValue] - [[dict objectForKey:@"returnQuantity"] intValue];
     }
     else if(self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop)
     {
@@ -74,7 +76,7 @@
         goodNum = [[dict objectForKey:@"remainQuantity"] intValue];
     }
     
-    if ([dict[@"returnQuantity"] intValue] != 0) {
+    if ([dict[@"returnQuantity"] intValue] != 0 && self.picktype != PickUpTypeDidNot) {
         cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[dict[@"returnQuantity"] intValue]];
     }
         cell.countlab.text = [NSString stringWithFormat:@"x %d",goodNum ];
@@ -179,18 +181,61 @@
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
     v_footer.backgroundColor = [UIColor clearColor];
-    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+//    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
     NSArray* productList = self.allitems[@"productList"];
     NSInteger count = 0;
-    for (int i = 0; i< [productList count]; i++) {
-        count += [productList[i][@"quantity"] intValue];
+    if (self.picktype == PickUpTypeDid)
+    {
+        for (int i = 0; i< [productList count]; i++) {
+            NSInteger remainQuantity= [productList[i][@"remainQuantity"] integerValue];
+            NSInteger quantity= [productList[i][@"quantity"] integerValue];
+            NSInteger returnQuantity= [productList[i][@"returnQuantity"] integerValue];
+            count += quantity - remainQuantity - returnQuantity;
+        }
     }
-    NSString* string = [NSString stringWithFormat:@"共%d件商品",count];
-    goodscountlab.text =string;
-    goodscountlab.font = FONT(13);
-    goodscountlab.textAlignment = NSTextAlignmentLeft;
+    else
+    {
+        for (int i = 0; i< [productList count]; i++) {
+            count += [productList[i][@"remainQuantity"] intValue];
+        }
+    }
+    
+    
+    NSString* string = [NSString stringWithFormat:@"共%ld件商品",(long)count];
+    NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%ld",(long)count]];
+    NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
+    [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
+    
+    NIAttributedLabel* goodscountlab = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
+    goodscountlab.font = FONT(15);
+    goodscountlab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
+    goodscountlab.attributedText = text;
     [v_footer addSubview:goodscountlab];
     
+
+    if (self.picktype == PickUpTypeDid) {
+        string = [NSString stringWithFormat:@"共提货%d次",[self.allitems[@"getGoodsNum"] intValue]];
+        rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[self.allitems[@"getGoodsNum"] intValue]]];
+        text = [[NSMutableAttributedString alloc] initWithString:string];
+        [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
+        
+        
+        
+        
+        //设置一个行高上限
+        CGSize size = CGSizeMake(320,2000);
+        //计算实际frame大小，并将label的frame变成实际大小
+        CGSize labelsize = [string sizeWithFont:FONT(15) constrainedToSize:size];
+        
+        
+        NIAttributedLabel* pricelab = [[NIAttributedLabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - labelsize.width+5, 0, labelsize.width, 30)];
+        
+        pricelab.font = FONT(15);
+        pricelab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
+        pricelab.textAlignment = NSTextAlignmentRight;
+        pricelab.attributedText = text;
+        [v_footer addSubview:pricelab];
+    }
     return v_footer;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

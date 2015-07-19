@@ -23,7 +23,7 @@
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            self.strtitle = @"本年销售额(元)";
+            self.strtitle = @"本年会员消费(元)";
             break;
         }
         case StatisticalTypeMembershipGrowth:
@@ -38,7 +38,7 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            self.strtitle = @"本年消费账奖励(元)";
+            self.strtitle = @"本年消费分账奖励(元)";
             break;
         }
         default:
@@ -54,7 +54,7 @@
     }
     else
     {
-        self.pricelab.text = @"￥0.00";
+        self.pricelab.text = @"0.00";
     }
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT - 70 - 40;
@@ -84,7 +84,8 @@
     if ([self.items count] == 0|| self.isSkip) {
 //        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
 //        [MMProgressHUD showWithTitle:@"" status:@""];
-        [self httpGetStatisticAnalysis];
+//        [self httpGetStatisticAnalysis];
+        [self setupRefreshPage];
     }
     
 }
@@ -109,22 +110,25 @@
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+//            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"sellAmount"] intValue] baseData:self.nbaseData];
+            [cell setStatistics:dictionary[@"year"] number:[NSString stringWithFormat:@"%.2f",[dictionary[@"sellAmount"] doubleValue]]  baseData:self.nbaseData];
             break;
         }
         case StatisticalTypeMembershipGrowth:
         {
-            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"count"] intValue] baseData:self.nbaseData];
+            [cell setStatistics:dictionary[@"year"] number:[NSString stringWithFormat:@"%d",[dictionary[@"count"] intValue]] baseData:self.nbaseData];
             break;
         }
         case StatisticalTypePinRewards:
         {
-            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"awardSalerAmount"] intValue] baseData:self.nbaseData];
+//            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"awardSalerAmount"] intValue] baseData:self.nbaseData];
+            [cell setStatistics:dictionary[@"year"] number:[NSString stringWithFormat:@"%.2f",[dictionary[@"awardSalerAmount"] doubleValue]] baseData:self.nbaseData];
             break;
         }
         case StatisticalTypePartnersRewards:
         {
-            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"awardPartnerAmount"] intValue] baseData:self.nbaseData];
+//            [cell setStatistics:dictionary[@"year"] number:[dictionary[@"awardPartnerAmount"] intValue] baseData:self.nbaseData];
+            [cell setStatistics:dictionary[@"year"] number:[NSString stringWithFormat:@"%.2f",[dictionary[@"awardPartnerAmount"] doubleValue]] baseData:self.nbaseData];
             break;
         }
         default:
@@ -180,7 +184,7 @@
 }
 -(void)setupRefreshPage
 {
-     self.isRefresh = YES;
+//     self.isRefresh = YES;
     
     [self setupRefresh];
     
@@ -220,7 +224,7 @@
     }
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
-    [self.items removeAllObjects];
+    
     [HttpClient asynchronousRequestWithProgress:self.strUrl parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
 //        [MMProgressHUD dismiss];
         DLog(@"data = %@",data);
@@ -231,10 +235,11 @@
             self.nbaseData = [data[@"baseData"] intValue];
             
             NSArray* tm_item;
+            [self.items removeAllObjects];
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"sellCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"sellCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"sellList"];
                     tm_item = [data objectForKey:@"sellList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
@@ -259,9 +264,9 @@
                 }
                 case StatisticalTypePinRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardSalerCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardSalerCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"awardSalerList"];
-                    tm_item = [data objectForKey:@"custList"];
+                    tm_item = [data objectForKey:@"awardSalerList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
                         if ([tm_item[i][@"awardSalerAmount"] intValue ] != 0) {
                             [self.items addObject:tm_item[i]];
@@ -271,7 +276,7 @@
                 }
                 case StatisticalTypePartnersRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardPartnerCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardPartnerCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"awardPartnerList"];
                     tm_item = [data objectForKey:@"awardPartnerList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
@@ -300,7 +305,7 @@
             {
                 self.nameLab.text = self.strtitle;
             }
-            [self.tableview reloadData];
+            [self reLoadView];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
         }
@@ -327,6 +332,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetStatisticAnalysis];
     }];
 }
 /*
@@ -425,7 +432,7 @@
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            title = @"销售额(元)";
+            title = @"会员消费(元)";
             break;
         }
         case StatisticalTypeMembershipGrowth:
@@ -440,12 +447,18 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            title = @"消费账奖励(元)";
+            title = @"消费分账奖励(元)";
             break;
         }
         default:
             break;
     }
     return title;
+}
+- (void)reLoadView {
+    [self.tableview reloadData];
+    if (self.items != nil && [self.items count] > 0) {
+        [self.tableview setContentOffset:CGPointMake(0,0 ) animated:NO];
+    }
 }
 @end

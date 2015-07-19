@@ -13,11 +13,22 @@
 		2E307DA81B4C303300E0ECD4 /* MyAccountPartnersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA61B4C303300E0ECD4 /* MyAccountPartnersCell.m */; };
 		2E307DA91B4C303300E0ECD4 /* MyAccountPartnersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E307DA71B4C303300E0ECD4 /* MyAccountPartnersCell.xib */; };
 		2E3B4C151B2228CF00D4C34F /* QRadioButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3B4BF91B2228CF00D4C34F /* QRadioButton.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2E3B86911B54111B003BC694 /* APBaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3B868E1B54111B003BC694 /* APBaseNavigationController.m */; };
+		2E3B86921B54111B003BC694 /* UIViewController+APSafeTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3B86901B54111B003BC694 /* UIViewController+APSafeTransition.m */; };
 		2E3D118D1B1E91CB00180782 /* JKCountDownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3D118C1B1E91CB00180782 /* JKCountDownButton.m */; };
 		2E3D11981B1ECED300180782 /* OrderCounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3D11961B1ECED300180782 /* OrderCounterViewController.m */; };
 		2E3D11991B1ECED300180782 /* OrderCounterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E3D11971B1ECED300180782 /* OrderCounterViewController.xib */; };
 		2E3D119D1B1ED53400180782 /* OrderAmountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E3D119B1B1ED53400180782 /* OrderAmountCell.m */; };
 		2E3D119E1B1ED53400180782 /* OrderAmountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E3D119C1B1ED53400180782 /* OrderAmountCell.xib */; };
+		2E4E41341B57B425006E2A57 /* icon_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E412B1B57B425006E2A57 /* icon_29.png */; };
+		2E4E41351B57B425006E2A57 /* icon_44.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E412C1B57B425006E2A57 /* icon_44.png */; };
+		2E4E41361B57B425006E2A57 /* icon_48.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E412D1B57B425006E2A57 /* icon_48.png */; };
+		2E4E41371B57B425006E2A57 /* icon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E412E1B57B425006E2A57 /* icon_58.png */; };
+		2E4E41381B57B425006E2A57 /* icon_60.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E412F1B57B425006E2A57 /* icon_60.png */; };
+		2E4E41391B57B425006E2A57 /* icon_80.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E41301B57B425006E2A57 /* icon_80.png */; };
+		2E4E413A1B57B425006E2A57 /* icon_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E41311B57B425006E2A57 /* icon_120.png */; };
+		2E4E413B1B57B425006E2A57 /* icon_144.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E41321B57B425006E2A57 /* icon_144.png */; };
+		2E4E413C1B57B425006E2A57 /* icon_1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E4E41331B57B425006E2A57 /* icon_1024.png */; };
 		2E547D321B1FF88500E148C2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D311B1FF88500E148C2 /* AVFoundation.framework */; };
 		2E547D341B1FF88D00E148C2 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D331B1FF88D00E148C2 /* CoreMedia.framework */; };
 		2E547D361B1FF89500E148C2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D351B1FF89500E148C2 /* CoreVideo.framework */; };
@@ -387,6 +398,10 @@
 		2E307DA71B4C303300E0ECD4 /* MyAccountPartnersCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyAccountPartnersCell.xib; path = Cell/SidebarMenu/MyAccountPartnersCell.xib; sourceTree = "<group>"; };
 		2E3B4BF81B2228CF00D4C34F /* QRadioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRadioButton.h; sourceTree = "<group>"; };
 		2E3B4BF91B2228CF00D4C34F /* QRadioButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRadioButton.m; sourceTree = "<group>"; };
+		2E3B868D1B54111B003BC694 /* APBaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APBaseNavigationController.h; sourceTree = "<group>"; };
+		2E3B868E1B54111B003BC694 /* APBaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APBaseNavigationController.m; sourceTree = "<group>"; };
+		2E3B868F1B54111B003BC694 /* UIViewController+APSafeTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+APSafeTransition.h"; sourceTree = "<group>"; };
+		2E3B86901B54111B003BC694 /* UIViewController+APSafeTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+APSafeTransition.m"; sourceTree = "<group>"; };
 		2E3D118B1B1E91CB00180782 /* JKCountDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKCountDownButton.h; sourceTree = "<group>"; };
 		2E3D118C1B1E91CB00180782 /* JKCountDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKCountDownButton.m; sourceTree = "<group>"; };
 		2E3D11951B1ECED300180782 /* OrderCounterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrderCounterViewController.h; path = PickGoods/OrderCounterViewController.h; sourceTree = "<group>"; };
@@ -395,6 +410,15 @@
 		2E3D119A1B1ED53400180782 /* OrderAmountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrderAmountCell.h; path = Cell/PickGoods/OrderAmountCell.h; sourceTree = "<group>"; };
 		2E3D119B1B1ED53400180782 /* OrderAmountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OrderAmountCell.m; path = Cell/PickGoods/OrderAmountCell.m; sourceTree = "<group>"; };
 		2E3D119C1B1ED53400180782 /* OrderAmountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OrderAmountCell.xib; path = Cell/PickGoods/OrderAmountCell.xib; sourceTree = "<group>"; };
+		2E4E412B1B57B425006E2A57 /* icon_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_29.png; sourceTree = "<group>"; };
+		2E4E412C1B57B425006E2A57 /* icon_44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_44.png; sourceTree = "<group>"; };
+		2E4E412D1B57B425006E2A57 /* icon_48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_48.png; sourceTree = "<group>"; };
+		2E4E412E1B57B425006E2A57 /* icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_58.png; sourceTree = "<group>"; };
+		2E4E412F1B57B425006E2A57 /* icon_60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_60.png; sourceTree = "<group>"; };
+		2E4E41301B57B425006E2A57 /* icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_80.png; sourceTree = "<group>"; };
+		2E4E41311B57B425006E2A57 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
+		2E4E41321B57B425006E2A57 /* icon_144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_144.png; sourceTree = "<group>"; };
+		2E4E41331B57B425006E2A57 /* icon_1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_1024.png; sourceTree = "<group>"; };
 		2E547D311B1FF88500E148C2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2E547D331B1FF88D00E148C2 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		2E547D351B1FF89500E148C2 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -1023,6 +1047,17 @@
 			path = QRadioButton;
 			sourceTree = "<group>";
 		};
+		2E3B868C1B54111B003BC694 /* SafeTransition */ = {
+			isa = PBXGroup;
+			children = (
+				2E3B868D1B54111B003BC694 /* APBaseNavigationController.h */,
+				2E3B868E1B54111B003BC694 /* APBaseNavigationController.m */,
+				2E3B868F1B54111B003BC694 /* UIViewController+APSafeTransition.h */,
+				2E3B86901B54111B003BC694 /* UIViewController+APSafeTransition.m */,
+			);
+			path = SafeTransition;
+			sourceTree = "<group>";
+		};
 		2E3D118A1B1E91CB00180782 /* JKCountDownButton */ = {
 			isa = PBXGroup;
 			children = (
@@ -1268,6 +1303,7 @@
 		2E7D77771B097CDC00222C1E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2E3B868C1B54111B003BC694 /* SafeTransition */,
 				2EBAE8B01B4A5883002E1C39 /* MyUncaughtExceptionHandler */,
 				2EFD84D21B43CCA400E5A915 /* YRClassSafeCategory */,
 				2EFD84CC1B42ABEF00E5A915 /* UIPopoverListView */,
@@ -1714,6 +1750,15 @@
 		2ED84AA41B12BFE80086992D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2E4E412B1B57B425006E2A57 /* icon_29.png */,
+				2E4E412C1B57B425006E2A57 /* icon_44.png */,
+				2E4E412D1B57B425006E2A57 /* icon_48.png */,
+				2E4E412E1B57B425006E2A57 /* icon_58.png */,
+				2E4E412F1B57B425006E2A57 /* icon_60.png */,
+				2E4E41301B57B425006E2A57 /* icon_80.png */,
+				2E4E41311B57B425006E2A57 /* icon_120.png */,
+				2E4E41321B57B425006E2A57 /* icon_144.png */,
+				2E4E41331B57B425006E2A57 /* icon_1024.png */,
 				2EDC35141B4E13CF008AB922 /* btn_start.png */,
 				2EDC35121B4D4D76008AB922 /* splash1.png */,
 				2EDC350B1B4D4D20008AB922 /* splash2.png */,
@@ -2237,6 +2282,7 @@
 				2ED474A01B187122005543AC /* BaseCell.xib in Resources */,
 				2EDC35081B4D49C2008AB922 /* page_750.png in Resources */,
 				2E7B0A411B1EF2F3007C78CA /* ConfirmOrderViewController.xib in Resources */,
+				2E4E413A1B57B425006E2A57 /* icon_120.png in Resources */,
 				2ED84C731B17F95A0086992D /* StoreSalesViewController.xib in Resources */,
 				2EE9F2781B21F5E8006EB46B /* AddShoppersCell.xib in Resources */,
 				2ED84B731B158C730086992D /* amountCell.xib in Resources */,
@@ -2246,11 +2292,13 @@
 				2EDC35101B4D4D20008AB922 /* splash3.png in Resources */,
 				2ED84ABB1B12C3330086992D /* AccountBriefCollectionCell.xib in Resources */,
 				2E7B0A501B1F1FAF007C78CA /* PickAndReturnCell.xib in Resources */,
+				2E4E41351B57B425006E2A57 /* icon_44.png in Resources */,
 				2E761B3F1B207C6C0028FDF9 /* MemberRewardsCell.xib in Resources */,
 				2ED84B7F1B1598110086992D /* PresellCell.xib in Resources */,
 				2ED475141B1C883E005543AC /* StoreManagementCell.xib in Resources */,
 				2ED84AAC1B12BFE80086992D /* image1.jpg in Resources */,
 				2ED84B5A1B1556900086992D /* PickGoodsViewController.xib in Resources */,
+				2E4E413B1B57B425006E2A57 /* icon_144.png in Resources */,
 				2EDD3D6E1B1F4C4800D19EA0 /* DetailsCell.xib in Resources */,
 				2ED84C6E1B17F6FE0086992D /* StatisticAnalysisViewController.xib in Resources */,
 				2EE9F2651B21DB85006EB46B /* StoreManageCell.xib in Resources */,
@@ -2263,11 +2311,13 @@
 				2EDC35011B4D4749008AB922 /* WelcomePageViewController.xib in Resources */,
 				2ED474FF1B1C621D005543AC /* VersionUpdateViewController.xib in Resources */,
 				2ED84C131B15C84B0086992D /* SetPasswordViewController.xib in Resources */,
+				2E4E41371B57B425006E2A57 /* icon_58.png in Resources */,
 				2ED84B001B131E630086992D /* RegisteredMembersCell.xib in Resources */,
 				2ED84B351B143D140086992D /* OrderGiftCell.xib in Resources */,
 				2ED474F01B1C4D40005543AC /* AccountAndSecurityViewController.xib in Resources */,
 				2E761B531B2083950028FDF9 /* MemberMenuColCell.xib in Resources */,
 				2ED84AB01B12BFE80086992D /* image5.jpg in Resources */,
+				2E4E413C1B57B425006E2A57 /* icon_1024.png in Resources */,
 				2EE9F2951B221F41006EB46B /* .gitkeep in Resources */,
 				2EFD84D11B43886600E5A915 /* btn_black_back.png in Resources */,
 				2ED17EE01B2AE27700F96595 /* icon.png in Resources */,
@@ -2285,6 +2335,7 @@
 				2ED474911B186B18005543AC /* pinCell.xib in Resources */,
 				2EDC3A911B3A5A680080E9E5 /* btn_back_hl.png in Resources */,
 				2ED84C221B15D1000086992D /* ForgotPasswordCell.xib in Resources */,
+				2E4E41381B57B425006E2A57 /* icon_60.png in Resources */,
 				2ED474F51B1C525B005543AC /* ChangePasswordViewController.xib in Resources */,
 				2ED84B101B1334C80086992D /* OutstandingOrdersViewController.xib in Resources */,
 				2ED84AAE1B12BFE80086992D /* image3.jpg in Resources */,
@@ -2348,12 +2399,14 @@
 				2ED84B301B1438BB0086992D /* OrdersGoodsCell.xib in Resources */,
 				2E3D11991B1ECED300180782 /* OrderCounterViewController.xib in Resources */,
 				2EDC350F1B4D4D20008AB922 /* splash2.png in Resources */,
+				2E4E41361B57B425006E2A57 /* icon_48.png in Resources */,
 				2ED475191B1CA0FB005543AC /* StoresDetailsViewController.xib in Resources */,
 				2E81FF6A1B3C2907006189A9 /* LaunchScreen.xib in Resources */,
 				2ED17EE61B300EEB00F96595 /* icon_register_boy.png in Resources */,
 				2ED474961B186C69005543AC /* GrowthCell.xib in Resources */,
 				2EDC35061B4D49C2008AB922 /* page_320.png in Resources */,
 				2EDC35071B4D49C2008AB922 /* page_640.png in Resources */,
+				2E4E41341B57B425006E2A57 /* icon_29.png in Resources */,
 				2ED84ACF1B12DF2B0086992D /* RewardsCell.xib in Resources */,
 				2EE9F2491B214C89006EB46B /* registeredMenuCell.xib in Resources */,
 				2ED84C311B15DD4C0086992D /* IdentificationViewController.xib in Resources */,
@@ -2376,6 +2429,7 @@
 				2E7B0A4B1B1F109C007C78CA /* StopViewController.xib in Resources */,
 				2ED474DC1B1C347D005543AC /* BankCardDetailsCell.xib in Resources */,
 				2ED84B0B1B13342F0086992D /* AllOrdersViewController.xib in Resources */,
+				2E4E41391B57B425006E2A57 /* icon_80.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2424,6 +2478,7 @@
 				2E7EB5DB1B22F1C800D386C2 /* UIProgressView+AFNetworking.m in Sources */,
 				2ED17F3A1B31CD4C00F96595 /* ResetViewController.m in Sources */,
 				2E7EB5D21B22F1C800D386C2 /* AFURLConnectionOperation.m in Sources */,
+				2E3B86911B54111B003BC694 /* APBaseNavigationController.m in Sources */,
 				2E7EB5F81B25879E00D386C2 /* MMProgressHUD.m in Sources */,
 				2E761B431B207D270028FDF9 /* MemberRewardsColCell.m in Sources */,
 				2ED4750D1B1C860D005543AC /* StoresInfoViewController.m in Sources */,
@@ -2537,6 +2592,7 @@
 				2EFD84E01B43CCA400E5A915 /* NSNumber+YRSafeCategory.m in Sources */,
 				2ED84AFF1B131E630086992D /* RegisteredMembersCell.m in Sources */,
 				2ED84ACE1B12DF2B0086992D /* RewardsCell.m in Sources */,
+				2E3B86921B54111B003BC694 /* UIViewController+APSafeTransition.m in Sources */,
 				2ED84AA21B12BD3C0086992D /* LKWelcomeView.m in Sources */,
 				2EE089301B39833500A1B02B /* NSDownNetImage.m in Sources */,
 				2ED84C0D1B15BD170086992D /* LoginCell.m in Sources */,
@@ -2732,7 +2788,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: zhaoguang zheng (LX2KSR4FFP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhaoguang zheng (3REG4YRAP2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2749,8 +2805,6 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-l\"Pods-AFNetworking\"",
-					"-l\"Pods-AFViewShaker\"",
 					"-l\"Pods-BlocksKit\"",
 					"-l\"Pods-FMDB\"",
 					"-l\"Pods-HMSegmentedControl\"",
@@ -2810,7 +2864,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "02901a5c-9b17-42b7-b9ec-f377eeb4da97";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -2822,7 +2876,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: zhaoguang zheng (LX2KSR4FFP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhaoguang zheng (3REG4YRAP2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2839,8 +2893,6 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-l\"Pods-AFNetworking\"",
-					"-l\"Pods-AFViewShaker\"",
 					"-l\"Pods-BlocksKit\"",
 					"-l\"Pods-FMDB\"",
 					"-l\"Pods-HMSegmentedControl\"",
@@ -2900,7 +2952,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "02901a5c-9b17-42b7-b9ec-f377eeb4da97";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;

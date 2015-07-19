@@ -104,7 +104,7 @@
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-    
+    self.tableview.scrollEnabled = NO;
 //    self.tableview.tableHeaderView = v_header;
     self.IdentificationNib = [UINib nibWithNibName:@"IdentificationCell" bundle:nil];
     self.IdentUserInfoNib = [UINib nibWithNibName:@"IdentUserInfoCell" bundle:nil];
@@ -283,8 +283,17 @@
             cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.iphonelab.text = [NSString stringWithFormat:@"手机号码:%@",self.dict[@"custMobile"]];
-        cell.namelab.text = [NSString stringWithFormat:@"会员姓名:%@",self.dict[@"custName"]];
+        cell.iphonelab.text = self.dict[@"custMobile"];
+        cell.iphonelab.delegate = self;
+        cell.namelab.text = self.dict[@"custName"];
+        [cell.iphonelab addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        cell.didGetCode = ^(NSString* checkcode)
+        {
+            [SGInfoAlert showInfo:checkcode
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -348,7 +357,7 @@
     
     JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
     promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
-    promptlabel.textLabel.text = @"扫描二维码识别商品信息";
+    promptlabel.textLabel.text = @"扫描二维码识别会员信息";
     promptlabel.textLabel.font = FONT(12);
     promptlabel.textLabel.textColor = [UIColor whiteColor];
     promptlabel.textLabel.textAlignment = NSTextAlignmentCenter;
@@ -437,6 +446,7 @@
 {
 
     if (self.isScan) {
+        
         [self skipVariousPages];
     }
     else
@@ -606,6 +616,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpValidateMobile:custMobile];
     }];
 }
 -(void)skipVariousPages
@@ -880,7 +892,7 @@
     }
     else
     {
-        rect.origin.y = rect.origin.y - self.keyHeight;
+        rect.origin.y = rect.origin.y - 100;
     }
     
     self.tableview.frame = rect;
@@ -911,7 +923,7 @@
     }
     else
     {
-        rect.origin.y = rect.origin.y + self.keyHeight;
+        rect.origin.y = rect.origin.y + 100;
         
     }
 //    rect.origin.y = rect.origin.y + self.keyHeight;
@@ -928,7 +940,9 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (string.length == 0) return YES;
-    
+    if ([NSObject stringContainsEmoji:string]) {
+        return NO;
+    }
     NSInteger existedLength = textField.text.length;
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
@@ -936,6 +950,19 @@
         return NO;
     }
     return YES;
+}
+
+- (void) textFieldDidChange:(UITextField*) field {
+    
+  
+    if (field.tag == 100) {
+        UILabel* label = (UILabel*)[self.view viewWithTag:101];
+        label.text = @"";
+        self.isScan = NO;
+        [self.nextbtn setTitle:@"下一步" forState:UIControlStateNormal];
+    }
+    
+    
 }
 //-(void)httpScanInfo
 //{

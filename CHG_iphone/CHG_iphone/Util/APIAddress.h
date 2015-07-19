@@ -287,4 +287,14 @@
  */
 +(NSString*) ApiCreateCustomerBefore;
 
+/**
+ *  4.5.1.2.	初次设置密码
+ */
++(NSString*) ApiFirstSetPassword;
+
+/**
+ *  4.2.2.5.	验证手机验证码是否正确
+ */
++(NSString*) ApiValidateCheckCode;
+
 @end

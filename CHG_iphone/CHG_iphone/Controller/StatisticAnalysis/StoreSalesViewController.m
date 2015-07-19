@@ -30,8 +30,8 @@
 {
 //    self.title = [self pagetitle];
     
-    self.isSkip = NO;
-    
+//    self.isSkip = NO;
+    self.isRefresh = YES;
     self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     self.slideSwitchView = [[QCSlideSwitchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)) ];
     self.slideSwitchView.backgroundColor = UIColorFromRGB(0x171c61);
@@ -55,6 +55,7 @@
     self.StoreSalesDay.strMonth = self.strMonth;
     self.StoreSalesDay.strDay = self.strDay;
     self.StoreSalesDay.statisticalType = self.statisticalType;
+    self.StoreSalesDay.isRefresh = YES;
     self.StoreSalesDay.CellSkipSelect =^(NSDictionary* dictionary){
         DLog(@"跳转详情");
         if ([dictionary[@"orderStatus"] intValue] == 0) {
@@ -87,6 +88,7 @@
     self.StoreSalesMonth = [[StoreSalesMonthViewController alloc] initWithNibName:@"StoreSalesMonthViewController" bundle:nil];
     self.StoreSalesMonth.strYear = self.strYear;
     self.StoreSalesMonth.strMonth = self.strMonth;
+    self.StoreSalesMonth.isRefresh = YES;
     self.StoreSalesMonth.statisticalType = self.statisticalType;
     self.StoreSalesMonth.didSkipSubItem =^(NSInteger tag){
 
@@ -99,11 +101,13 @@
         weakSelf.strYear = [data substringToIndex:4];
         weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
         weakSelf.strDay = [data substringFromIndex:6];
+        weakSelf.isRefresh = YES;
         [weakSelf.slideSwitchView selectNameButton:button];
     };
    
     self.StoreSalesYear = [[StoreSalesYearViewController alloc] initWithNibName:@"StoreSalesYearViewController" bundle:nil];
     self.StoreSalesYear.strYear = self.strYear;
+    self.StoreSalesYear.isRefresh = YES;
     self.StoreSalesYear.statisticalType = self.statisticalType;
     self.StoreSalesYear.didSkipSubItem =^(NSInteger tag){
 
@@ -115,10 +119,14 @@
         NSString* data = dictionary[@"year"];
         weakSelf.strYear = [data substringToIndex:4];
         weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
+        weakSelf.isRefresh = YES;
         [weakSelf.slideSwitchView selectNameButton:button];
     };
     [self.slideSwitchView buildUI];
     [self.view addSubview:self.slideSwitchView];
+    
+    
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -152,19 +160,23 @@
         self.StoreSalesDay.strMonth= self.strMonth;
         self.StoreSalesDay.strDay= self.strDay;
         self.StoreSalesDay.isSkip= self.isSkip;
+        self.StoreSalesDay.isRefresh = self.isRefresh;
         self.vcAll = self.StoreSalesDay;
     } else if (number == 1) {
         self.StoreSalesMonth.strYear= self.strYear;
         self.StoreSalesMonth.strMonth= self.strMonth;
         self.StoreSalesMonth.isSkip= self.isSkip;
+        self.StoreSalesMonth.isRefresh = self.isRefresh;
         self.vcAll = self.StoreSalesMonth;
     } else if (number == 2) {
         self.StoreSalesYear.strYear= self.strYear;
         self.StoreSalesYear.isSkip= self.isSkip;
+        self.StoreSalesYear.isRefresh = self.isRefresh;
         self.vcAll = self.StoreSalesYear;
     }
     [self.vcAll viewDidCurrentView];
     self.isSkip = NO;
+    self.isRefresh = NO;
 }
 
 -(NSString*)pagetitle

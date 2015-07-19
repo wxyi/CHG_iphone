@@ -15,6 +15,7 @@
 @dynamic deviceName;
 @dynamic currentUserInfo;
 @dynamic access_token;
+@dynamic refresh_token;
 @dynamic identifier;
 @dynamic usercfg;
 @dynamic shopId;

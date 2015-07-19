@@ -15,6 +15,8 @@
 #import "successfulIdentifyViewController.h"
 #import "MemberCenterViewController.h"
 #import "OrderManagementViewController.h"
+
+#import "HomePageViewController.h"
 @interface CHGNavigationController ()
 @property (strong, readwrite, nonatomic) SidebarMenuTableViewController *SidebarMenuController;
 @end
@@ -101,6 +103,7 @@
 
     [self pushViewController:OrderManagement animated:NO];
 }
+
 -(void)gobacktoSuccessFulldentify
 {
     successfulIdentifyViewController* successfulIdentifyView = [[successfulIdentifyViewController alloc] initWithNibName:@"successfulIdentifyViewController" bundle:nil];
@@ -201,6 +204,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpCreateCustomer];
     }];
 }
 -(void)unbundlingbankCard
@@ -255,6 +260,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpDeleteBankCard];
     }];
 }
 @end

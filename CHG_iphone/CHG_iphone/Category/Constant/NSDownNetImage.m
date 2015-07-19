@@ -37,4 +37,36 @@
     
     return result;
 }
+
+// 删除沙盒里的文件
++(void)deleteFile
+{
+    
+    
+    NSString *path = [NSObject CreateDocumentsfileManager:@"image"];
+    //文件名
+    NSArray *file = [[[NSFileManager alloc] init] subpathsAtPath:path];
+    DLog(@"file = %@",file);
+    for (int i = 0; i <file.count; i ++) {
+        NSString *newstr =[NSString stringWithFormat:@"%@/%@",[APPDocumentsDirectory stringByAppendingString:@"/image"],[file objectAtIndex:i]] ;
+        DLog(@"newstr = %@",newstr);
+        BOOL blHave=[[NSFileManager defaultManager] fileExistsAtPath:newstr];
+        if (!blHave) {
+            NSLog(@"no  have");
+            return ;
+        }else {
+            NSLog(@" have");
+            BOOL blDele= [[NSFileManager defaultManager] removeItemAtPath:newstr error:nil];
+            if (blDele) {
+                NSLog(@"dele success");
+            }else {
+                NSLog(@"dele fail");
+            }
+            
+        }
+    }
+    
+    
+}
+
 @end

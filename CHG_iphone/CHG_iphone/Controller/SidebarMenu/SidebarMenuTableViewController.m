@@ -48,7 +48,8 @@
         [view addSubview:imageView];
         
 //        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-        if (![self.config.Roles isEqualToString:@"PARTNER"]) {
+//        if (![self.config.Roles isEqualToString:@"PARTNER"])
+        {
             UIButton *Scanbtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 95, 72, 72)];
             Scanbtn.backgroundColor = [UIColor clearColor];
             Scanbtn.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
@@ -110,12 +111,12 @@
         BasicInfoViewController* BasicInfo = [[BasicInfoViewController alloc] initWithNibName:@"BasicInfoViewController" bundle:nil];
         [navigationController pushViewController:BasicInfo animated:YES];
     }
-    else if (indexPath.row == 1 &&![self.config.Roles isEqualToString:@"SHOPSELLER"]) {
+    else if (indexPath.row == 1 &&![self.config.Roles isEqualToString:@"SHOPSELLER"]&&![self.config.Roles isEqualToString:@"SHOPLEADER"]) {
         DLog(@"银行卡");
         BankCardViewController* BankCardView = [[BankCardViewController alloc] initWithNibName:@"BankCardViewController" bundle:nil];
         [navigationController pushViewController:BankCardView animated:YES];
     }
-    else if (indexPath.row == 2&& ![self.config.Roles isEqualToString:@"SHOPSELLER"]) {
+    else if (indexPath.row == 2&& ![self.config.Roles isEqualToString:@"SHOPSELLER"]&&![self.config.Roles isEqualToString:@"SHOPLEADER"]) {
         DLog(@"我的账户");
         MyAccountViewController* MyAccountView = [[MyAccountViewController alloc] initWithNibName:@"MyAccountViewController" bundle:nil];
 //        navigationController.viewControllers = @[BasicInfo];
@@ -145,7 +146,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
 {
-    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]){
+    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]||[self.config.Roles isEqualToString:@"SHOPLEADER"]){
         return 2;
     }
     return 4;
@@ -162,7 +163,7 @@
     }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
     NSArray *titles;
-    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]){
+    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]||[self.config.Roles isEqualToString:@"SHOPLEADER"]){
         titles = @[@"我的信息", @"设置"];
     }
     else

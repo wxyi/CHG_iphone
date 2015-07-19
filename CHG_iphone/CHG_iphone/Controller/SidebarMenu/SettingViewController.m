@@ -12,6 +12,7 @@
 #import "VersionUpdateViewController.h"
 #import "AboutViewController.h"
 #import "LoginViewController.h"
+#import "NSDownNetImage.h"
 @interface SettingViewController ()
 
 @end
@@ -71,7 +72,7 @@
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
     title.textColor = UIColorFromRGB(0x323232);
     title.font = FONT(15);
-    title.text = [self.items objectAtIndex:indexPath.row];
+    title.text = [self.items objectAtIndexSafe:indexPath.row];
     [cell.contentView addSubview:title];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -125,8 +126,8 @@
     }
     else if (indexPath.row == 1)
     {
-        VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
-        [self.navigationController pushViewController:VersionUpdateView animated:YES];
+        [self httpVersionUpdate];
+        
     }
     else if(indexPath.row == 2)
     {
@@ -140,7 +141,9 @@
     self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定退出" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
         DLog(@"否");
         
+        [NSDownNetImage deleteFile];
         [ConfigManager sharedInstance].access_token = @"";
+        [ConfigManager sharedInstance].refresh_token = @"";
         LoginViewController* loginview = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
         
         [self presentViewController:loginview animated:YES completion:^{
@@ -152,6 +155,38 @@
     }];
 
     [self.stAlertView show];
+}
+
+-(void)httpVersionUpdate
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCheckVersion] parameters:parameter];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:@"IOS" forKey:@"appType"];
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@" data = %@",data );
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
+            if (![[ConfigManager sharedInstance].sysVersion isEqualToString:[data objectForKey:@"datas"][@"appVersion"]]) {
+                VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
+                VersionUpdateView.items = [data objectForKey:@"datas"];
+                [self.navigationController pushViewController:VersionUpdateView animated:YES];
+            }
+            
+        }
+    } failureBlock:^(NSString *description) {
+        
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpVersionUpdate];
+    }];
+    
+    
+    
 }
 /*
 #pragma mark - Navigation

@@ -12,6 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+//    self.iphonelab.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

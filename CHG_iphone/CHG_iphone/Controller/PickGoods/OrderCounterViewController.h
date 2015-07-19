@@ -17,6 +17,7 @@
 @property(nonatomic,strong)NSDictionary* priceDict;
 @property(nonatomic,assign)SaleType orderSaletype;
 @property(nonatomic,strong)STAlertView* stAlertView;
+@property(nonatomic,assign)OrderReturnType returnType;
 -(IBAction)OrderCounterView:(id)sender;
 
 @end

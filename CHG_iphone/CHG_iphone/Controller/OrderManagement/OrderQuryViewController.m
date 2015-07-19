@@ -46,8 +46,10 @@
 */
 -(void)setupView
 {
- 
+    self.isFirst = YES;
+    self.ispulldown = YES;
     [self setupQRadioButton];
+    
     
     self.items = [[NSMutableArray alloc] init];
     
@@ -114,11 +116,26 @@
 - (void)didSelectedRadioButton:(QRadioButton *)radio groupId:(NSString *)groupId {
     NSLog(@"did selected radio:%@ groupId:%@", radio.titleLabel.text, groupId);
     
-    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
+    if (!self.isFirst) {
+        
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
         [MMProgressHUD showWithTitle:@"" status:@""];
+    }
+    self.isFirst = NO;
+    self.ispulldown = NO;
     [self.items removeAllObjects];
     
-    self.strOrderType = radio.titleLabel.text;
+//    self.strOrderType = radio.titleLabel.text;
+    if ([radio.titleLabel.text isEqualToString:@"全部订单"]) {
+        self.strOrderType = @"2";
+    }
+    else if ([radio.titleLabel.text isEqualToString:@"卖货订单"]) {
+        self.strOrderType = @"0";
+    }
+    else  {
+        self.strOrderType = @"1";
+    }
+    
     self.m_nPageNumber = 1;
     [self checkDatas];
 }
@@ -133,7 +150,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray* itme = [[self.items objectAtIndex:section] objectForKey:@"productList"] ;
+    NSArray* itme = [[self.items objectAtIndexSafe:section] objectForKey:@"productList"] ;
     return  [itme count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -170,14 +187,16 @@
         //    NSDictionary* dict =  [[self.items objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] ;
         
         //    cell.GoodImage.image = [UIImage imageNamed:[dict objectForKey:@"image"]];
-        NSArray* array = [[self.items objectAtIndex:indexPath.section] objectForKey:@"productList"];
+        NSArray* array = [[self.items objectAtIndexSafe:indexPath.section] objectForKey:@"productList"];
         NSDictionary* dict = [array objectAtIndex:indexPath.row];
         
         [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = dict[@"productName"];
         cell.pricelab.text = dict[@"productPrice"];;
         cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKey:@"quantity"] intValue] ];
-        
+        if ([dict[@"returnQuantity"] intValue] != 0) {
+            cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[dict[@"returnQuantity"] intValue]];
+        }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -213,7 +232,7 @@
     line.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_header addSubview:line];
     
-    NSDictionary* dict = [self.items objectAtIndex:section ] ;
+    NSDictionary* dict = [self.items objectAtIndexSafe:section ] ;
     UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
@@ -259,7 +278,7 @@
 //    }
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 65)];
     v_footer.backgroundColor = [UIColor clearColor];
-    NSDictionary* dict = [self.items objectAtIndex:section ] ;
+    NSDictionary* dict = [self.items objectAtIndexSafe:section ] ;
     NSString* string = [NSString stringWithFormat:@"共%d件商品",[dict[@"productList"] count]];
     NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[dict[@"productList"] count]]];
     NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
@@ -336,10 +355,13 @@
 
 -(void)goskipdetails:(UIButton*)sender
 {
+    if ([self.items count]== 0) {
+        return;
+    }
     NSString* strtag = [NSString stringWithFormat:@"%d",sender.tag];
     NSInteger index = [[strtag substringFromIndex:3] intValue];
     NSInteger ntag = [[strtag substringToIndex:3] intValue];
-    NSDictionary* dictionary = [self.items objectAtIndex:index];
+    NSDictionary* dictionary = [self.items objectAtIndexSafe:index];
     DLog(@"dictionary = %@",dictionary);
     if (ntag == 100) {
         DLog(@"详情");
@@ -393,6 +415,7 @@
             NSDate *enddate =[dateFormat dateFromString:self.endtime.text];
             NSTimeInterval secondDate = [enddate timeIntervalSince1970]*1;
             if(fitstDate > secondDate) {
+                self.endtime.text = @"";
                 [SGInfoAlert showInfo:@"结束时间不能小于开始时间"
                               bgColor:[[UIColor blackColor] CGColor]
                                inView:self.view
@@ -427,23 +450,31 @@
         for (int i = 0 ; i < 3 ; i++) {
             QRadioButton* radionbtn = (QRadioButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"11%d",i] intValue]];
             if (radionbtn.selected) {
-                
-                self.strOrderType = radionbtn.titleLabel.text;
+
+                if ([radionbtn.titleLabel.text isEqualToString:@"全部订单"]) {
+                    self.strOrderType = @"2";
+                }
+                else if ([radionbtn.titleLabel.text isEqualToString:@"卖货订单"]) {
+                    self.strOrderType = @"0";
+                }
+                else  {
+                    self.strOrderType = @"1";
+                }
                 break;
             }
             
         }
     }
     DLog(@"self.strOrderType = %@",self.strOrderType);
-    if ([self.strOrderType isEqualToString:@"全部订单"]) {
-        self.strOrderType = @"2";
-    }
-    else if ([self.strOrderType isEqualToString:@"卖货订单"]) {
-        self.strOrderType = @"0";
-    }
-    else  {
-        self.strOrderType = @"1";
-    }
+//    if ([self.strOrderType isEqualToString:@"全部订单"]) {
+//        self.strOrderType = @"2";
+//    }
+//    else if ([self.strOrderType isEqualToString:@"卖货订单"]) {
+//        self.strOrderType = @"0";
+//    }
+//    else  {
+//        self.strOrderType = @"1";
+//    }
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
@@ -475,9 +506,18 @@
             
             NSArray* dataArr = [data objectForKey:@"datas"];
             for (int i = 0; i< dataArr.count; i++) {
-                [self.items addObject:dataArr[i]];
+                [self.items addObjectSafe:dataArr[i]];
             }
-            [self.tableview reloadData];
+            if (self.ispulldown) {
+                
+                [self.tableview reloadData];
+            }
+            else
+            {
+                self.ispulldown = YES;
+                [self reLoadView];
+            }
+            
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
         }
@@ -505,6 +545,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpQueryOrderList:parame];
     }];
 }
 
@@ -514,7 +556,18 @@
     [self.endtime resignFirstResponder];
     [self.items removeAllObjects];
     self.m_nPageNumber = 1;
-    [self checkDatas];
+    self.ispulldown = NO;
+    if (self.endtime.text.length != 0) {
+        [self checkDatas];
+    }
+    else
+    {
+        [SGInfoAlert showInfo:@"请输入结束时间"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    }
+    
 }
 - (void)setupRefresh
 {
@@ -529,7 +582,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-//    [header beginRefreshing];
+    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;
@@ -588,6 +641,11 @@
     }
 }
 
-
+- (void)reLoadView {
+    [self.tableview reloadData];
+    if (self.items != nil && [self.items count] > 0) {
+        [self.tableview setContentOffset:CGPointMake(0,0 ) animated:NO];
+    }
+}
 
 @end

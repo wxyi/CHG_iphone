@@ -44,11 +44,11 @@
                         <color key="textColor" red="0.52941176470588236" green="0.52941176470588236" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Pc-NTf" customClass="NIAttributedLabel">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="会员信息成功识别！" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Pc-NTf" customClass="NIAttributedLabel">
+                        <rect key="frame" x="0.0" y="20" width="320" height="40"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="320" id="Dam-wb-tZC"/>
-                            <constraint firstAttribute="height" constant="80" id="P3w-we-EAZ"/>
+                            <constraint firstAttribute="height" constant="40" id="P3w-we-EAZ"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.19607843137254902" green="0.19607843137254902" blue="0.19607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -73,7 +73,7 @@
                     <constraint firstItem="FpM-Pc-NTf" firstAttribute="leading" secondItem="mWE-s8-Kh0" secondAttribute="leading" id="T0T-BU-FhR"/>
                     <constraint firstItem="vVr-wz-mBg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="125" id="UNJ-wm-sJN"/>
                     <constraint firstAttribute="trailing" secondItem="vVr-wz-mBg" secondAttribute="trailing" constant="15" id="Vv4-es-Rjf"/>
-                    <constraint firstItem="FpM-Pc-NTf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="cIv-9T-3AN"/>
+                    <constraint firstItem="FpM-Pc-NTf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="cIv-9T-3AN"/>
                     <constraint firstItem="mWE-s8-Kh0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="65" id="mE9-PJ-Y2N"/>
                     <constraint firstItem="Mc3-Vi-cV6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="125" id="ovZ-eL-jg1"/>
                     <constraint firstAttribute="bottom" secondItem="YHr-xc-DQK" secondAttribute="bottom" constant="23" id="rGX-nG-N3v"/>
@@ -83,7 +83,6 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
-                <outlet property="goodscountlab" destination="FpM-Pc-NTf" id="OgQ-MM-Nhk"/>
                 <outlet property="iphoneLab" destination="vVr-wz-mBg" id="Sfx-gb-g2i"/>
                 <outlet property="nameLab" destination="Mc3-Vi-cV6" id="7KI-XY-W3d"/>
             </connections>

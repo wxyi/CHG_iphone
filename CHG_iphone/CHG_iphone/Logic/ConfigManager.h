@@ -43,7 +43,8 @@
 @property(nonatomic,assign) NSString * strUserName;
 //token
 @property(nonatomic,assign) NSString * access_token;
-
+//刷新token
+@property(nonatomic,assign) NSString * refresh_token;
 //获取设备的唯一标示符
 @property(nonatomic,assign) NSString * identifier;
 

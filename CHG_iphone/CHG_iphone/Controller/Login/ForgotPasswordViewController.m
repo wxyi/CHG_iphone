@@ -88,13 +88,35 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (SCREEN_HEIGHT+ 64)* 0.4;
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    return width;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, (SCREEN_HEIGHT+ 64)* 0.4)];
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, width)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, ((SCREEN_HEIGHT+ 64)* 0.4)/3, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, (width-112)/2, 180, 112)];
+
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
@@ -168,10 +190,10 @@
     {
         info = @"验证码不能大于6位";
     }
-    else if ([checkcodefield.text intValue] != [self.strCheckCode intValue])
-    {
-        info = @"验证码不正确";
-    }
+//    else if ([checkcodefield.text intValue] != [self.strCheckCode intValue])
+//    {
+//        info = @"验证码不正确";
+//    }
 
     if (info.length != 0) {
         
@@ -182,14 +204,9 @@
         return ;
     }
 
-    ResetPasswordViewController *ResetPassword = [[ResetPasswordViewController alloc] initWithNibName:@"ResetPasswordViewController" bundle:nil];
-    ResetPassword.strmobile = namefield.text;
-    ResetPassword.strcheckCode = checkcodefield.text;
-    [self presentViewController:ResetPassword animated:YES completion:^{
-        
-    }];
     
     
+    [self httpValidateCheckCode];
 
     
 }
@@ -203,5 +220,47 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+-(void)httpValidateCheckCode
+{
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* checkcodefield = (UITextField*)[self.view viewWithTag:1012];
+    [param setObject:namefield.text forKey:@"mobile"];
+    [param setObject:checkcodefield.text forKey:@"checkCode"];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@",data);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            ResetPasswordViewController *ResetPassword = [[ResetPasswordViewController alloc] initWithNibName:@"ResetPasswordViewController" bundle:nil];
+            ResetPassword.strmobile = namefield.text;
+            ResetPassword.strcheckCode = checkcodefield.text;
+            [self presentViewController:ResetPassword animated:YES completion:^{
+                
+            }];
+            
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpValidateCheckCode];
+    }];
+}
 @end

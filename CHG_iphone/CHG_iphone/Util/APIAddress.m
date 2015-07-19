@@ -449,4 +449,13 @@
 {
     return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"createCustomerBefore"];
 }
++(NSString*) ApiFirstSetPassword
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"firstSetPassword"];
+}
+
++(NSString*) ApiValidateCheckCode
+{
+    return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"validateCheckCode"];
+}
 @end

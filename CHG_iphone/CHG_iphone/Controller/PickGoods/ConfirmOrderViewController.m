@@ -45,7 +45,15 @@
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
-    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (self.returnType == OrderReturnTypeAMember) {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else
+    {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     
     [self setupView];
@@ -176,6 +184,7 @@
             PickGoodsView.strOrderId = self.strOrderId;
             PickGoodsView.ManagementTyep = OrderManagementTypeSingle;
             PickGoodsView.skiptype = SkipFromOrderFinish;
+            PickGoodsView.m_returnType = self.returnType;
             [self.navigationController pushViewController:PickGoodsView animated:YES];
         }
         else
@@ -185,7 +194,7 @@
                 ||self.Confirmsaletype == SaleTypeStopOrder) {
                 OrderManagementViewController* OrderManagementView = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
                 OrderManagementView.title = @"会员订单";
-                OrderManagementView.m_returnType = OrderReturnTypeAMember;
+                OrderManagementView.m_returnType = self.returnType;
                 OrderManagementView.ManagementTyep = OrderManagementTypeSingle;
                 [self.navigationController pushViewController:OrderManagementView animated:YES];
             }
@@ -197,6 +206,7 @@
                 CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeSingle;
                 CompletedOrderDetailsView.skiptype = SkipFromOrderFinish;
                 CompletedOrderDetailsView.Comordertype = detailsOrder;
+                CompletedOrderDetailsView.m_returnType = self.returnType;
                 [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
             }
             

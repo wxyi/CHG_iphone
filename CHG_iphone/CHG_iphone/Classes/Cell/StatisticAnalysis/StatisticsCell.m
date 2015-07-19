@@ -29,22 +29,33 @@
 
     // Configure the view for the selected state
 }
--(void)setStatistics:(NSString*)date number:(NSInteger)number baseData:(NSInteger)baseData;
+-(void)setStatistics:(NSString*)date number:(NSString*)number baseData:(NSInteger)baseData;
 {
     CGRect frame = self.bgview.frame;
     
-    CGFloat scale = [self getShowData:baseData CurrentData:abs(number)];
+    CGFloat scale = [self getShowData:baseData CurrentData:abs([number doubleValue])];
     frame.size.width = self.bottomview.frame.size.width * scale;
     frame.origin.x = 0;
     frame.size.height = 30;
     self.bgview.frame = frame;
     
 //    NSString * currentData = [NSObject currentTime];
-    if (number < 0) {
-        self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
+    
+    if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
+    {
+        if ([number doubleValue] < 0) {
+            self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
+        }
+//        else
+//        if(scale == 1)
+//        {
+//            self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
+//        }
+        else
+        {
+            self.bgview.backgroundColor = UIColorFromRGB(0xf5a541);
+        }
     }
-    else if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
-        self.bgview.backgroundColor = UIColorFromRGB(0xf5a541);
     else
         self.bgview.backgroundColor = COLOR(100, 100, 100, 0.3);
     
@@ -60,7 +71,7 @@
     self.numlab.textAlignment = NSTextAlignmentRight;
     self.numlab.font = FONT(12);
     self.numlab.textColor = [UIColor whiteColor];
-    self.numlab.text = [NSString stringWithFormat:@"%d",number];
+    self.numlab.text = number;
     [self.bgview addSubview:self.numlab];
     
 }

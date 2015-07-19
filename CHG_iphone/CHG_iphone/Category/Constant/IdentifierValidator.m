@@ -116,10 +116,11 @@ BOOL isNumber (char ch)
     {
         return FALSE;
     }
-    NSString *preString = [[NSString stringWithFormat:@"%@",value] substringToIndex:2];
-    if ([preString isEqualToString:@"13"] ||
-        [preString isEqualToString: @"15"] ||
-        [preString isEqualToString: @"18"])
+    NSString *preString = [[NSString stringWithFormat:@"%@",value] substringToIndex:1];
+//    if ([preString isEqualToString:@"13"] ||
+//        [preString isEqualToString: @"15"] ||
+//        [preString isEqualToString: @"18"])
+    if ([preString isEqualToString:@"1"])
     {
         return TRUE;
     }
@@ -311,7 +312,8 @@ const int checktable[] = { 1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2 };//校验值对应�
     //     15         * 中国联通：China Unicom
     //     16         * 130,131,132,152,155,156,185,186
     //     17         */
-    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+//    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
+    NSString * CU = @"^1\\d{8}$";
     //    /**
     //     20         * 中国电信：China Telecom
     //     21         * 133,1349,153,180,189

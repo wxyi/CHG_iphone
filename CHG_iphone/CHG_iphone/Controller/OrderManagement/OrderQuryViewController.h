@@ -14,16 +14,17 @@
 @property(nonatomic,weak)IBOutlet UIView* bg_view;
 @property(nonatomic,weak)IBOutlet UITextField* starttime;
 @property(nonatomic,weak)IBOutlet UITextField* endtime;
-
+@property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property(nonatomic,assign)NSInteger m_nPageNumber;
 
-
+@property(nonatomic,assign)BOOL isFirst;
+@property(nonatomic,assign)BOOL ispulldown;
 @property(nonatomic,strong)UUDatePicker *startdatePicker;
 @property(nonatomic,strong)UUDatePicker *enddatePicker;
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)CGFloat m_height;
 @property(nonatomic,strong)NSString* strOrderType;
-@property (nonatomic,assign)OrderManagementType ManagementTyep;
+//@property (nonatomic,assign)OrderManagementType ManagementTyep;
 
 -(IBAction)QueryOrderBtn:(UIButton*)sender;
 @end

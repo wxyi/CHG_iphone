@@ -66,7 +66,7 @@
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 200, 44)];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     textField.textColor = UIColorFromRGB(0x646464);
-    textField.placeholder = @"动态验证码"; //默认显示的字
+    textField.placeholder = @"验证码"; //默认显示的字
     textField.keyboardType = UIKeyboardTypeNumberPad;
     textField.tag = 101;
     textField.delegate = self;
@@ -83,10 +83,10 @@
     JKCountDownButton* countDownCode = [JKCountDownButton buttonWithType:UIButtonTypeCustom];
     countDownCode.backgroundColor = [UIColor clearColor];
     countDownCode.titleLabel.font = FONT(13);
-    countDownCode.titleLabel.textColor = UIColorFromRGB(0x171C61);
+    countDownCode.titleLabel.textColor = UIColorFromRGB(0x00428B);
     countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
-    [countDownCode setTitle:@"发送验证码" forState:UIControlStateNormal];
-    
+    [countDownCode setTitle:@"点击获取" forState:UIControlStateNormal];
+    countDownCode.tag = 1000111;
     [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 //    countDownCode.backgroundColor = [UIColor whiteColor];
 
@@ -122,7 +122,7 @@
         }];
         [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
             countDownButton.enabled = YES;
-            sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
+            sender.titleLabel.tintColor = UIColorFromRGB(0x00428B);
             return @"点击重新获取";
             
         }];
@@ -170,7 +170,7 @@
     [confirmbtn.layer setCornerRadius:4]; //设置矩形四个圆角半径
     //    [loginout.layer setBorderWidth:1.0]; //边框
     confirmbtn.frame = CGRectMake(5, 40, SCREEN_WIDTH-10 , 40);
-    [confirmbtn setTitle:@"确认" forState:UIControlStateNormal];
+    [confirmbtn setTitle:@"下一步" forState:UIControlStateNormal];
     [confirmbtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [confirmbtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
     [v_footer addSubview:confirmbtn];
@@ -185,10 +185,7 @@
     if (textfield.text.length == 0) {
         info = @"请输入验证码";
     }
-    else if(![textfield.text isEqualToString:self.strCheckCode])
-    {
-        info = @"验证码不正确,请重新输入";
-    }
+    
     if (info.length != 0) {
         
         [SGInfoAlert showInfo:info
@@ -246,6 +243,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        
     }];
 }
 /*
@@ -260,7 +259,9 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (string.length == 0) return YES;
-    
+    if ([NSObject stringContainsEmoji:string]) {
+        return NO;
+    }
     NSInteger existedLength = textField.text.length;
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
@@ -268,5 +269,44 @@
         return NO;
     }
     return YES;
+}
+
+-(void)httpValidateCheckCode
+{
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:101];
+    UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
+    [param setObject:cfg.strMobile forKey:@"mobile"];
+    [param setObject:textfield.text forKey:@"checkCode"];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@",data);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            
+            
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpValidateCheckCode];
+    }];
 }
 @end

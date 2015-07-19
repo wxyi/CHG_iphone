@@ -42,18 +42,22 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
-    if ([[self.items objectForKey:@"productList"] count] != 0) {
-        if (self.BtnSkipSelect) {
-            self.BtnSkipSelect(sender.tag,self.items);
-        }
+    if (self.BtnSkipSelect) {
+        self.BtnSkipSelect(sender.tag,self.items);
     }
-    else
-    {
-        [SGInfoAlert showInfo:@"无退货商品"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
-    }
+
+//    if ([[self.items objectForKey:@"productList"] count] != 0) {
+//        if (self.BtnSkipSelect) {
+//            self.BtnSkipSelect(sender.tag,self.items);
+//        }
+//    }
+//    else
+//    {
+//        [SGInfoAlert showInfo:@"无退货商品"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.7];
+//    }
     
 }
 -(void)setupView
@@ -78,7 +82,11 @@
         self.returnbtn.hidden = YES;
         self.line.hidden = YES;
     }
-    
+    else
+    {
+        self.returnbtn.hidden = NO;
+        self.line.hidden = NO;
+    }
 //    rect = self.returnbtn.frame;
 //    rect.origin.y = SCREEN_HEIGHT -80;
 //    self.returnbtn.frame = rect;
@@ -134,12 +142,58 @@
         }
         
         
-        cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", [self.items[@"orderAmount"] doubleValue]];
-        cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", [self.items[@"orderFactAmount"] doubleValue]];
+        NSArray* prolist = [self.items objectForKeySafe:@"productList"];
+//        CGFloat orderAmount = 0.0;
+//        CGFloat orderFactAmount = 0.0;
+//
+//        for (int i = 0; i < [prolist count]; i ++) {
+//            CGFloat price = [prolist[i][@"productPrice"] floatValue];
+//            NSInteger number = [prolist[i][@"quantity"] intValue] - [prolist[i][@"remainQuantity"] intValue] - [prolist[i][@"returnQuantity"] intValue];
+//            orderAmount += price * number;
+//
+//        }
+//        orderFactAmount = [[self.items objectForKey:@"orderFactAmount"] floatValue]/self.quantity*self.pickQuantity;
+//        orderFactAmount += price * number;
+        CGFloat orderAmountYth = [[self.items objectForKeySafe:@"orderAmountYth"] floatValue];
+        CGFloat orderFactAmountYth = [[self.items objectForKeySafe:@"orderFactAmountYth"] floatValue];
+        cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", orderAmountYth];
+        cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", orderFactAmountYth];
+        //            cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", [self.items[@"orderAmount"] doubleValue]];
+        //            cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", [self.items[@"orderFactAmount"] doubleValue]];
         [cell.Receivedlab setEnabled:NO];
-        cell.favorablelab.text = [NSString stringWithFormat:@"%.2f", [self.items[@"orderDiscount"] doubleValue]];
-
+        cell.favorablelab.text = [NSString stringWithFormat:@"%.2f", orderAmountYth - orderFactAmountYth ];
+        
         [cell.Receivedlab setEnabled:NO];
+//        if ([self.items[@"getGoodsNum"] intValue] == 0) {
+//            cell.receivablelab.text =@"0.00";
+//            cell.Receivedlab.text = @"0.00";
+//            [cell.Receivedlab setEnabled:NO];
+//            cell.favorablelab.text = @"0.00";
+//            
+//            [cell.Receivedlab setEnabled:NO];
+//        }
+//        else
+//        {
+//            NSArray* prolist = [self.items objectForKey:@"productList"];
+//            CGFloat orderAmount;
+//            CGFloat orderFactAmount;
+//            for (int i = 0; i < [prolist count]; i ++) {
+//                CGFloat price = [prolist[i][@"productPrice"] doubleValue];
+//                orderAmount += price * [prolist[i][@"remainQuantity"] doubleValue];
+//                orderFactAmount += price * [prolist[i][@"remainQuantity"] doubleValue];
+//            }
+//            
+//            
+//            cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", orderAmount];
+//            cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", orderFactAmount];
+////            cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", [self.items[@"orderAmount"] doubleValue]];
+////            cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", [self.items[@"orderFactAmount"] doubleValue]];
+//            [cell.Receivedlab setEnabled:NO];
+//            cell.favorablelab.text = [NSString stringWithFormat:@"%.2f", [self.items[@"orderDiscount"] doubleValue]];
+//            
+//            [cell.Receivedlab setEnabled:NO];
+//        }
+        
 
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -209,7 +263,7 @@
 //    Pickuplab.font = FONT(14);
 //    Pickuplab.textAlignment = NSTextAlignmentRight;
 //    [v_footer addSubview:Pickuplab];
-//    
+//
 //    return v_footer;
 //}
 -(void)httpGetOrder
@@ -234,14 +288,17 @@
             NSArray* prolist = [tmitem objectForKey:@"productList"];
             
             NSMutableArray* productList = [[NSMutableArray alloc] init];
+            self.quantity = 0.0;
+            self.pickQuantity = 0.0;
             for (int i = 0; i < [prolist count]; i++) {
                 
-                NSInteger quantity = [[[prolist objectAtIndex:i] objectForKey:@"quantity"] integerValue] ;
-                NSInteger remainQuantity = [[[prolist objectAtIndex:i] objectForKey:@"remainQuantity"] integerValue] ;
-                if (quantity - remainQuantity > 0) {
+               
+
+                if ([[[prolist objectAtIndex:i] objectForKey:@"pickQuantity"] intValue] > 0) {
                     [productList addObject:[prolist objectAtIndex:i]];
                 }
-                
+                self.pickQuantity += [[[prolist objectAtIndex:i] objectForKey:@"pickQuantity"] floatValue];
+                self.quantity += [[[prolist objectAtIndex:i] objectForKey:@"quantity"] floatValue];
             }
             
             NSMutableDictionary* testdict = [tmitem mutableCopy];
@@ -274,6 +331,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetOrder];
     }];
 }
 /*

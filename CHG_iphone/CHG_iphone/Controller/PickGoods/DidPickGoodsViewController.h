@@ -15,6 +15,8 @@
 @property (nonatomic, strong) NSString *strOrderId;
 @property(nonatomic,strong)NSDictionary* items;
 @property (nonatomic, assign) CGFloat m_height;
+@property (nonatomic,assign)CGFloat quantity;
+@property (nonatomic,assign)CGFloat pickQuantity;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 -(IBAction)orderProcessing:(UIButton*)sender;
 

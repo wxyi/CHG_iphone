@@ -11,7 +11,7 @@
 @interface UpdateVersionViCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UIImageView* image;
 @property(nonatomic,weak)IBOutlet UILabel* VersionNum;
-//@property(nonatomic,weak)IBOutlet UIButton* DownBtn;
+@property(nonatomic,strong) NSString* VersionUrl;
 //-(void)setUpdateVersionCell;
 //-(IBAction)DownVersion:(id)sender;
 @end

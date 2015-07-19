@@ -181,7 +181,7 @@
                 PresellGoodsView.orderSaletype = SaleTypePresell;
             }
             
-            PresellGoodsView.m_returnType = OrderReturnTypeAMember;
+            PresellGoodsView.m_returnType = OrderReturnTypeHomePage;
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }

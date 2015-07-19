@@ -30,19 +30,26 @@
 }
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    
     if (textField == self.userTextfield) {
         if (string.length == 0) return YES;
         
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 32) {
+        if (existedLength - selectedLength + replaceLength > 20) {
             return NO;
         }
     }
     else if (textField == self.passwordTextfield) {
         if (string.length == 0) return YES;
         
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;

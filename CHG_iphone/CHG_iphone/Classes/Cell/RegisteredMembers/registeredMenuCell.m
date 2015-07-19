@@ -48,8 +48,8 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     registeredMenuColCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-    cell.imageName.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"title"];
-    cell.imageView.image = [UIImage imageNamed:[[self.items objectAtIndex:indexPath.row] objectForKey:@"icon"]];
+    cell.imageName.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"title"];
+    cell.imageView.image = [UIImage imageNamed:[[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"icon"]];
     
     return cell;
 }

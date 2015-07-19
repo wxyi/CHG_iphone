@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JKCountDownButton.h"
-@interface RegisteredMembersCell : UITableViewCell
+@interface RegisteredMembersCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UITextField* iphoneField;
 @property(nonatomic,weak)IBOutlet UITextField* nameField;
 @property(nonatomic,weak)IBOutlet UITextField* codeField;

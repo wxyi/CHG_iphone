@@ -66,7 +66,7 @@
         sender.enabled = NO;
         
 //        sender.titleLabel.textColor = ;
-        [sender setTitleColor:UIColorFromRGB(0x646464) forState:UIControlStateNormal];
+        [sender setTitleColor:UIColorFromRGB(0x878787) forState:UIControlStateNormal];
         //button type要 设置成custom 否则会闪动
         [sender startWithSecond:60];
         sender.alpha=0.4;
@@ -131,13 +131,17 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        
     }];
 }
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (textField == self.Verificationfield) {
         if (string.length == 0) return YES;
-        
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;

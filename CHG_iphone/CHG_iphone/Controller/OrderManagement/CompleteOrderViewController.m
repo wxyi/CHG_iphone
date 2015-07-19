@@ -67,7 +67,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[self.items objectAtIndex:section] objectForKey:@"productList"] count];
+    return [[[self.items objectAtIndexSafe:section] objectForKey:@"productList"] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -76,7 +76,7 @@
         cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
         
     }
-    NSArray* array = [[self.items objectAtIndex:indexPath.section] objectForKey:@"productList"];
+    NSArray* array = [[self.items objectAtIndexSafe:indexPath.section] objectForKey:@"productList"];
     NSDictionary* dict = [array objectAtIndex:indexPath.row];
     
     [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
@@ -107,7 +107,7 @@
     UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
     line.backgroundColor = UIColorFromRGB(0xdddddd);
     [v_header addSubview:line];
-     NSDictionary* dict = [self.items objectAtIndex:section] ;
+     NSDictionary* dict = [self.items objectAtIndexSafe:section] ;
     UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.bounds)-20, 30)];
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
@@ -152,7 +152,7 @@
 //    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
     v_footer.backgroundColor = [UIColor clearColor];
     
-    NSDictionary* dict = [self.items objectAtIndex:section] ;
+    NSDictionary* dict = [self.items objectAtIndexSafe:section] ;
     NSArray* productList = dict[@"productList"];
     NSInteger count = 0;
     for (int i = 0; i< [productList count]; i++) {
@@ -230,7 +230,7 @@
     
     NSString* tag = [NSString stringWithFormat:@"%d",sender.tag];
     NSInteger section = [[tag substringFromIndex:2] intValue];
-    NSDictionary* dict = [self.items objectAtIndex:section];
+    NSDictionary* dict = [self.items objectAtIndexSafe:section];
     if (self.BtnSkipSelect) {
         self.BtnSkipSelect(sender.tag,dict);
     }
@@ -285,7 +285,7 @@
 //            [MMProgressHUD dismiss];
             NSArray* dataArr = [data objectForKey:@"datas"];
             for (int i = 0; i< dataArr.count; i++) {
-                [self.items addObject:dataArr[i]];
+                [self.items addObjectSafe:dataArr[i]];
             }
             [self.tableview reloadData];
             [self.tableview.header endRefreshing];
@@ -312,6 +312,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetCompleteOrderList];
     }];
 }
 /*

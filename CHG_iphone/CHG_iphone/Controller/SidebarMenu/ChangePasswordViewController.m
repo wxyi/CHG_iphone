@@ -36,7 +36,7 @@
 }
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:@"原密码",@"新密码",@"重复密码" ,nil];
+    self.items = [NSArray arrayWithObjects:@"原密码",@"重置密码",@"确认密码" ,nil];
     
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
@@ -66,13 +66,13 @@
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
     title.textColor = UIColorFromRGB(0x323232);
     title.font = FONT(15);
-    title.text = [self.items objectAtIndex:indexPath.row];
+    title.text = [self.items objectAtIndexSafe:indexPath.row];
     [cell.contentView addSubview:title];
 
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
 //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     
-    textField.placeholder = [self.items objectAtIndex:indexPath.row]; //默认显示的字
+    textField.placeholder = [self.items objectAtIndexSafe:indexPath.row]; //默认显示的字
     textField.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     textField.secureTextEntry = YES; //密码
     
@@ -92,7 +92,7 @@
         forgetbtn.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
         [forgetbtn setTitle:@"忘记密码" forState:UIControlStateNormal];
         forgetbtn.titleLabel.font = FONT(15);
-        [forgetbtn setTitleColor:UIColorFromRGB(0x323232) forState:UIControlStateNormal];
+        [forgetbtn setTitleColor:UIColorFromRGB(0x171C61) forState:UIControlStateNormal];
         [forgetbtn addTarget:self action:@selector(ChangePassword:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:forgetbtn];
 
@@ -241,6 +241,7 @@
 //                         vertical:0.7];
             
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
             [self.navigationController popToRootViewControllerAnimated:YES];
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
             [delegate setupHomePageViewController];
@@ -265,6 +266,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpResetPassWord];
     }];
 }
 /*

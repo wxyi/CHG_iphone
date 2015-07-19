@@ -90,7 +90,8 @@
 //    if (countcity == 0 ||countarea == 0 ||countProvince == 0) {
 //        [[SUHelper sharedInstance] GetAddressInfo];
 //    }
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
+    {
         // 这里判断是否第一次
         
         NSMutableArray* dataArray = [NSMutableArray array];
@@ -177,7 +178,7 @@
                 
                 if ([config.Roles isEqualToString:@"PARTNER"]) {
                     [ConfigManager sharedInstance].shopId = @"";
-                    [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
+                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [data objectForKey:@"dimensionalCodeUrl"];
                 }
                 else
                 {
@@ -219,6 +220,8 @@
         [self setupLoginViewController];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetUserConfig];
     }];
 }
 /*

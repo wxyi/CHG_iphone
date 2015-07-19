@@ -168,9 +168,9 @@
             cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             if ([config.Roles isEqualToString:@"SHOPLEADER"]) {
-                
-                cell.Disablebtn.userInteractionEnabled=NO;
-                cell.Disablebtn.alpha=0.4;
+                cell.Disablebtn.hidden = YES;
+//                cell.Disablebtn.userInteractionEnabled=NO;
+//                cell.Disablebtn.alpha=0.4;
             }
         }
         else{
@@ -274,6 +274,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetShop];
     }];
 }
 -(void)httpGetSellerList
@@ -318,7 +320,7 @@
             
             if ([[manager allKeys] count] != 0) {
                 
-                [self.items insertObject:manager atIndex:1];
+                [self.items insertObjectSafe:manager atIndex:1];
                 self.addbtn.userInteractionEnabled=NO;
                 self.addbtn.alpha=0.4;
             }
@@ -355,6 +357,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetSellerList];
     }];
 }
 -(IBAction)addStoresInfo:(UIButton*)sender
@@ -432,7 +436,7 @@
     
     [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
-    NSDictionary* dict = [self.items objectAtIndex:indexpath.section ];
+    NSDictionary* dict = [self.items objectAtIndexSafe:indexpath.section ];
     
     
     
@@ -471,6 +475,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpSetSellerStatus:indexpath];
     }];
 }
 /*

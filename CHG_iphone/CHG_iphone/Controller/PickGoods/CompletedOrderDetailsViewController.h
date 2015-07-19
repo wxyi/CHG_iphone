@@ -18,5 +18,6 @@
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property (nonatomic,assign)OrderType Comordertype;
 @property (nonatomic,assign)SkipType skiptype;
+@property(nonatomic,assign)OrderReturnType m_returnType;
 -(IBAction)orderProcessing:(UIButton*)sender;
 @end

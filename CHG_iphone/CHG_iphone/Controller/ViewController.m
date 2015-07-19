@@ -169,7 +169,8 @@
                 
                 if ([config.Roles isEqualToString:@"PARTNER"]) {
                     [ConfigManager sharedInstance].shopId = @"";
-                    [ConfigManager sharedInstance].strdimensionalCodeUrl = config.strdimensionalCodeUrl;
+                    
+                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [data objectForKey:@"dimensionalCodeUrl"];
                 }
                 else
                 {
@@ -211,6 +212,8 @@
         [self setupLoginViewController];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetUserConfig];
     }];
 }
 @end

@@ -34,6 +34,11 @@
 //获取当前时间
 +(NSString*)currentTime;
 
+//
++(BOOL)stringContainsEmoji:(NSString *)string;
+
+// 计算转换后字符的个数
++(NSUInteger)lenghtWithString:(NSString *)string;
 /*!
  * @brief 把格式化的JSON格式的字符串转换成字典
  * @param jsonString JSON格式的字符串

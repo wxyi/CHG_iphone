@@ -78,13 +78,35 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (SCREEN_HEIGHT+ 64)* 0.4;
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    return width;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 220)];
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, width)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, ((SCREEN_HEIGHT+ 64)* 0.4)/3, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, (width-112)/2, 180, 112)];
+
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
@@ -234,6 +256,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpResetPassWord];
     }];
 }
 -(void)setupHomePageViewController

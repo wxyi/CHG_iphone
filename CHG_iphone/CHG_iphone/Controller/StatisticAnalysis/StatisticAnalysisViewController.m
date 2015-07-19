@@ -72,7 +72,7 @@
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
     title.textColor = UIColorFromRGB(0x323232);
     title.font = FONT(15);
-    title.text = [self.items objectAtIndex:indexPath.row];
+    title.text = [self.items objectAtIndexSafe:indexPath.row];
     [cell.contentView addSubview:title];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -117,10 +117,11 @@
     }
     StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
     StoreSalesView.statisticalType = type;
+    StoreSalesView.isSkip = NO;
     StoreSalesView.strYear = self.strYear;
     StoreSalesView.strMonth = self.strMonth;
     StoreSalesView.strDay = self.strDay;
-    StoreSalesView.title = [self.items objectAtIndex:indexPath.row];
+    StoreSalesView.title = [self.items objectAtIndexSafe:indexPath.row];
     [self.navigationController pushViewController:StoreSalesView animated:YES];
 
 }

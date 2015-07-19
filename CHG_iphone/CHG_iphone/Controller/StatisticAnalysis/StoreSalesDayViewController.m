@@ -26,7 +26,7 @@
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            self.strtitle = @"今日销售额(元)";
+            self.strtitle = @"今日会员消费(元)";
             self.width = 120;
             self.strNibName = @"StoresInfoCell";
             
@@ -50,7 +50,7 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            self.strtitle = @"今日消费账奖励(元)";
+            self.strtitle = @"今日消费分账奖励(元)";
             self.width = 120;
             self.strNibName = @"PartnersCell";
 
@@ -70,9 +70,9 @@
     }
     else
     {
-        self.pricelab.text = @"￥0.00";
+        self.pricelab.text = @"0.00";
     }
-    
+    self.items = [[NSMutableArray alloc] init];
     self.isSkip = NO;
     self.isRefresh = YES;
 //    CGRect rect = self.tableview.frame;
@@ -151,11 +151,11 @@
                 
             }
             cell.datelab.text = self.items[indexPath.section][@"joinDate"];
-            cell.statelab.text = self.items[indexPath.section][@"joinType"];
+            cell.statelab.text = self.items[indexPath.section][@"comeFrom"];
             
             
             cell.namelab.text = self.items[indexPath.section][@"name"];
-            cell.iphonelab.text = [NSString stringWithFormat:@"%d",[[self.items[indexPath.section] objectForKey:@"mobile"] intValue]];
+            cell.iphonelab.text = self.items[indexPath.section][@"mobile"];
             
             
             
@@ -254,7 +254,7 @@
 {
 
    
-    self.isRefresh = YES;
+//    self.isRefresh = YES;
     
     [self setupRefresh];
 }
@@ -305,30 +305,52 @@
             self.nameLab.text = self.strtitle;
 //            self.pricelab.text = [NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
 //            self.items = [data objectForKey:@"custList"];
-            
+            NSArray* tm_item;
+            [self.items removeAllObjects];
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"custCount"] doubleValue]];
-                    self.items = [data objectForKey:@"custList"];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"custCount"] doubleValue]];
+//                    self.items = [data objectForKey:@"custList"];
+                    tm_item = [data objectForKey:@"custList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"orderAmount"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 case StatisticalTypeMembershipGrowth:
                 {
                     self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
                     self.items = [data objectForKey:@"custList"];
+                    
                     break;
                 }
                 case StatisticalTypePinRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardSalerCount"] doubleValue]];
-                    self.items = [data objectForKey:@"awardSalerList"];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardSalerCount"] doubleValue]];
+//                    self.items = [data objectForKey:@"awardSalerList"];
+                    
+                    tm_item = [data objectForKey:@"awardSalerList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"awardSalerMoney"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"￥%.2f",[data[@"awardPartnerCount"] doubleValue]];
-                    self.items = [data objectForKey:@"awardPartnerList"];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardPartnerAmount"] doubleValue]];
+                    
+                    
+                    tm_item = [data objectForKey:@"awardPartnerList"];
+                    for (int i = 0; i < [tm_item count]; i ++) {
+                        if ([tm_item[i][@"awardSalerMoney"] intValue ] != 0) {
+                            [self.items addObject:tm_item[i]];
+                        }
+                    }
                     break;
                 }
                 default:
@@ -352,7 +374,7 @@
                 self.nameLab.text = [NSString stringWithFormat:@"%@年%@月%@日%@",self.strYear,self.strMonth,self.strDay,[self GetCurrentTitle]];
                 
             }
-            [self.tableview reloadData];
+            [self reLoadView];
             [self.tableview.header endRefreshing];
             [self.tableview.footer endRefreshing];
         }
@@ -380,6 +402,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetStatisticAnalysis];
     }];
 }
 /*
@@ -446,6 +470,7 @@
 
         NSString *nextDay;
         if (self.isSkip) {
+            self.isSkip = NO;
             nextDay = [NSString stringWithFormat:@"%d",[self.strDay intValue]];
         }
         else
@@ -585,7 +610,7 @@
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            title = @"销售额(元)";
+            title = @"会员消费(元)";
             break;
         }
         case StatisticalTypeMembershipGrowth:
@@ -600,12 +625,18 @@
         }
         case StatisticalTypePartnersRewards:
         {
-            title = @"消费账奖励(元)";
+            title = @"消费分账奖励(元)";
             break;
         }
         default:
             break;
     }
     return title;
+}
+- (void)reLoadView {
+    [self.tableview reloadData];
+    if (self.items != nil && [self.items count] > 0) {
+        [self.tableview setContentOffset:CGPointMake(0,0 ) animated:NO];
+    }
 }
 @end

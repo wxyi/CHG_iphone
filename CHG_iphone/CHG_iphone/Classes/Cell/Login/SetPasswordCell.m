@@ -103,6 +103,8 @@
         
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetCheckCode];
     }];
 }
 
@@ -110,7 +112,9 @@
 {
     if (textField == self.setpasswordField) {
         if (string.length == 0) return YES;
-        
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
@@ -120,7 +124,9 @@
     }
     else if (textField == self.confirmpasswordfield) {
         if (string.length == 0) return YES;
-        
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
@@ -130,7 +136,9 @@
     }
     else if (textField == self.Verificationfield) {
         if (string.length == 0) return YES;
-        
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;

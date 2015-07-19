@@ -82,13 +82,35 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (SCREEN_HEIGHT+ 64)* 0.4;;
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    return width;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, (SCREEN_HEIGHT+ 64)* 0.4)];
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, width)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, ((SCREEN_HEIGHT+ 64)* 0.4)/3, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, (width-112)/2, 180, 112)];
+
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big.png"];
     [v_header addSubview:imageview];
@@ -158,11 +180,7 @@
     {
         info = @"请输入验证码";
     }
-    else if(![checkcode.text isEqualToString:self.strCheckCode])
-    {
-        info = @"验证码错误";
-    }
-        
+    
     
     if (info.length != 0) {
         
@@ -192,7 +210,7 @@
 //    [param setObject:config.strUsername forKey:@"userName"];
     [param setObject:[[NSObject md5:passfield1.text] uppercaseString]forKey:@"newPwd"];
     [param setObject:self.strCheckCode forKey:@"checkCode"];
-    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiFirstSetPassword] parameters:parameter];
     
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
@@ -209,12 +227,12 @@
 //                         vertical:0.7];
             
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
 //            [ConfigManager sharedInstance].usercfg = [data JSONString];
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             
             
-            if ([config.Roles isEqualToString:@"SHOP_OWNER"]) {
+            if ([config.Roles isEqualToString:@"SHOP_OWNER"]&&[config.shopList count] > 1) {
                 
                 
                 StoreManagementViewController* StoreManagementView = [[StoreManagementViewController alloc] initWithNibName:@"StoreManagementViewController" bundle:nil];
@@ -247,6 +265,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpResetPassWord];
     }];
 }
 
@@ -269,5 +289,42 @@
         [textField resignFirstResponder];
     }
 }
-
+-(void)httpValidateCheckCode
+{
+    
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
+    [param setObject:iphonefield.text forKey:@"mobile"];
+    [param setObject:checkfield.text forKey:@"checkCode"];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@",data);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpValidateCheckCode];
+    }];
+}
 @end

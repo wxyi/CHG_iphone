@@ -113,9 +113,9 @@
    
     }
     
-    NSDictionary* dict = [self.items objectAtIndex:indexPath.row];
-    [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
-    
+    NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.row];
+//    [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
+    cell.BankImage.image = [UIImage imageNamed:@"icon.png"];
     BanKCode* code = [[BanKCode alloc] init];
 //    DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
     code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:dict[@"bankCode"]];
@@ -138,7 +138,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BankCardDetailsViewController* BankCardDetailsView = [[BankCardDetailsViewController alloc] initWithNibName:@"BankCardDetailsViewController" bundle:nil];
-    BankCardDetailsView.items = [self.items objectAtIndex:indexPath.row];
+    BankCardDetailsView.items = [self.items objectAtIndexSafe:indexPath.row];
     [self.navigationController pushViewController:BankCardDetailsView animated:YES];
 }
 - (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
@@ -214,7 +214,7 @@
             else
             {
                 [self.items removeAllObjects];
-                [self.items addObject:data];
+                [self.items addObjectSafe:data];
                 self.tableview.hidden = NO;
                 self.addbtn.hidden = YES;
                 [self.tableview reloadData];
@@ -240,6 +240,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetBankCardList];
     }];
 }
 
@@ -277,6 +279,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpDeleteBankCard];
     }];
 }
 /*

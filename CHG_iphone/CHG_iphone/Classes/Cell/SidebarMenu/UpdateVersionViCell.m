@@ -40,9 +40,9 @@
 -(IBAction)DownVersion:(id)sender
 {
     DLog(@"下载");
-    NSString *str = [NSString stringWithFormat:@"http://itunes.apple.com/us/app/id%d",111];
+    NSString *str = [self.VersionUrl substringToIndex:self.VersionUrl.length -2];
     
     
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",str,@"1019667891"]]];
 }
 @end

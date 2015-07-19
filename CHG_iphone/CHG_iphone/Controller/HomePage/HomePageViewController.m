@@ -65,6 +65,7 @@
     self.menuArr = [self GetMenuArr];
     
     
+    
 //    NSLog(@"%@", [self.menuArr objectAtIndex:50]);
 //    CGRect rect = self.tableview.frame;
 //    
@@ -73,7 +74,7 @@
 //    self.tableview.frame = rect;
 //    NSInteger count;
     self.config = [[SUHelper sharedInstance] currentUserConfig];
-    if ([self.config.Roles isEqualToString:@"SHOPSELLER"])
+    if ([self.config.Roles isEqualToString:@"SHOPSELLER"]||[self.config.Roles isEqualToString:@"SHOPLEADER"])
     {
         self.cellCount = 3;
     }
@@ -174,7 +175,7 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
-    else if((indexPath.row == 2 && ![self.config.Roles isEqualToString:@"SHOPSELLER"]))
+    else if((indexPath.row == 2 && ![self.config.Roles isEqualToString:@"SHOPSELLER"] && ![self.config.Roles isEqualToString:@"SHOPLEADER"]))
     {
         
         if ([self.config.Roles isEqualToString:@"PARTNER"]) {
@@ -210,7 +211,7 @@
         }
         
     }
-    else if(indexPath.row == 3 && ![self.config.Roles isEqualToString:@"SHOPSELLER"]&& ![self.config.Roles isEqualToString:@"PARTNER"])
+    else if(indexPath.row == 3 && ![self.config.Roles isEqualToString:@"SHOPSELLER"]&& ![self.config.Roles isEqualToString:@"PARTNER"]&& ![self.config.Roles isEqualToString:@"SHOPLEADER"])
     {
         RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
         if(cell==nil){
@@ -233,7 +234,8 @@
     else
     {
         MenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MenuCell"];
-        if(cell==nil){
+        if(cell==nil)
+        {
             cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
@@ -258,7 +260,7 @@
         return SCREEN_WIDTH*0.4;
     }
     else if(indexPath.row == 1)
-        return 49;
+        return 48;
     else if(indexPath.row == 2)
     {
         if ([self.config.Roles isEqualToString:@"PARTNER"])
@@ -487,6 +489,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetPromoList];
     }];
     
 }
@@ -539,6 +543,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetAccountBrief];
     }];
 }
 

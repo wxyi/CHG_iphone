@@ -33,12 +33,12 @@
 {
     self = [self initWithFrame:frame];
     if (self) {
-        int count = array.count;
-        self.page_control.numberOfPages = count;
+        self.count = array.count;
+        self.page_control.numberOfPages = self.count;
         width = frame.size.width;
         int height = frame.size.height;
 
-        for (int i=0;i<count;i++) {
+        for (int i=0;i<self.count;i++) {
             
             NSString* path = [array objectAtIndex:i];
             UIImageView* imageview = [[UIImageView alloc] init];
@@ -47,8 +47,9 @@
             imageview.frame = CGRectMake(i*width, 0, width, height);
             imageview.image = [UIImage imageWithContentsOfFile:path];
             imageview.tag = i;
-            if(i + 1==count)
+            if(i + 1==self.count)
             {   //如果是 最后一页 就加个按钮
+//                page_scroll.scrollEnabled = NO;
                 UIButton* startBt = [UIButton buttonWithType:UIButtonTypeCustom];
                 startBt.userInteractionEnabled = YES;
                 startBt.frame = CGRectMake((SCREEN_WIDTH -220)/2, height-50, 220, 30);
@@ -61,7 +62,7 @@
             }
             [page_scroll addSubview:imageview];
         }
-        page_scroll.contentSize  = CGSizeMake(count*width,height);
+        page_scroll.contentSize  = CGSizeMake(self.count*width,height);
         page_scroll.contentOffset  = CGPointMake(0, 0);
         
     }
@@ -121,6 +122,9 @@
     int offsetX = scrollView.contentOffset.x;
     int pageindex = offsetX / width;
     self.page_control.currentPage = pageindex;
+    if (pageindex == self.count - 1) {
+        self.page_scroll.scrollEnabled = NO;
+    }
 }
 -(void)dealloc
 {

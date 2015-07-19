@@ -63,7 +63,8 @@
         
     }
     cell.image.image = [UIImage imageNamed:@"icon.png"];
-    cell.VersionNum.text = [NSString stringWithFormat:@"版本号:%@",[ConfigManager sharedInstance].sysVersion];
+    cell.VersionNum.text = [NSString stringWithFormat:@"版本号:%@",self.items[@"appVersion"]];
+    cell.VersionUrl = self.items[@"url"];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -89,10 +90,25 @@
     titlelab.textColor = [UIColor grayColor];
     [v_footer addSubview:titlelab];
     
+    UITextView* textview = [[UITextView alloc] initWithFrame:CGRectMake(30, 40, SCREEN_WIDTH-60, 120)];
+    textview.textColor = [UIColor grayColor];//设置textview里面的字体颜色
     
-    UIImageView* image = [[UIImageView alloc] initWithFrame:CGRectMake(30, 40, SCREEN_WIDTH-60, 120)];
-    image.image = [UIImage imageNamed:@"image1.jpg"];
-    [v_footer addSubview:image];
+    textview.font = [UIFont fontWithName:@"Arial" size:15.0];//设置字体名字和字体大小
+
+//    textview.delegate = self;//设置它的委托方法
+
+    textview.backgroundColor = UIColorFromRGB(0xf0f0f0);//设置它的背景颜色
+    textview.text = self.items[@"appDes"];//设置它显示的内容
+
+//    textview.returnKeyType = UIReturnKeyDefault;//返回键的类型
+//    textview.keyboardType = UIKeyboardTypeDefault;//键盘类型
+//    textview.scrollEnabled = YES;//是否可以拖动
+    textview.editable = NO;
+    textview.autoresizingMask = UIViewAutoresizingFlexibleHeight;//自适应高度
+    [v_footer addSubview: textview];//加入到整个页面中
+//    UIImageView* image = [[UIImageView alloc] initWithFrame:CGRectMake(30, 40, SCREEN_WIDTH-60, 120)];
+//    image.image = [UIImage imageNamed:@"image1.jpg"];
+//    [v_footer addSubview:image];
     return v_footer;
 }
 /*

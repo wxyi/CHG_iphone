@@ -87,19 +87,19 @@
             
         }
         
-        NSString* string = @"识别成功！已扫描到以下信息";
-        NSRange rangeOfstart = [string rangeOfString:@"识别成功！"];
-        NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
-        [text setTextColor:UIColorFromRGB(0x646464) range:rangeOfstart];
+//        NSString* string = @"会员信息成功识别！";
+//        NSRange rangeOfstart = [string rangeOfString:@"识别成功！"];
+//        NSMutableAttributedString* text = [[NSMutableAttributedString alloc] initWithString:string];
+//        [text setTextColor:UIColorFromRGB(0x646464) range:rangeOfstart];
         
         
 //        cell.goodscountlab.font = FONT(17);
         
-        cell.goodscountlab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
-        cell.goodscountlab.attributedText = text;
-        [cell.goodscountlab setFont:FONT(17)];
-        [cell.goodscountlab setTextAlignment:NSTextAlignmentCenter];
-        
+//        cell.goodscountlab.verticalTextAlignment = NIVerticalTextAlignmentMiddle;
+//        cell.goodscountlab.attributedText = string;
+//        [cell.goodscountlab setFont:FONT(17)];
+//        [cell.goodscountlab setTextAlignment:NSTextAlignmentCenter];
+//        
         
         cell.iphoneLab.text = [ConfigManager sharedInstance].strcustMobile;
         cell.nameLab.text = [ConfigManager sharedInstance].strcustName;

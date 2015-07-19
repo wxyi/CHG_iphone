@@ -182,6 +182,8 @@ static SUHelper *sSharedInstance;
         [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self GetAddressInfo];
     }];
 }
 -(NSArray*)AddressIDSort:(NSDictionary*)IdList
@@ -235,6 +237,8 @@ static SUHelper *sSharedInstance;
 //        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self GetBankCodeInfo];
     }];
 }
 -(void)GetPromoList
@@ -262,6 +266,8 @@ static SUHelper *sSharedInstance;
         //        [MMProgressHUD dismissWithError:description];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self GetPromoList];
     }];
     
 }
@@ -305,6 +311,8 @@ static SUHelper *sSharedInstance;
                                        
         } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
                                        
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self GetRefreshCache:isFirst];
     }];
 }
 

@@ -7,12 +7,32 @@
 //
 
 #import "HttpClient.h"
-
+static BOOL isFirst = NO;
+static BOOL canCHeckNetwork = NO;
 @implementation HttpClient
 
-+(void)asynchronousRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
++(void)asynchronousRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock Refresh_tokenBlock:(Refresh_tokenBlock)refreshBlack
 {
     
+    
+    if (isFirst == NO) {
+        //网络只有在startMonitoring完成后才可以使用检查网络状态
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        [[AFNetworkReachabilityManager sharedManager]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            canCHeckNetwork = YES;
+        }];
+        isFirst = YES;
+    }
+    
+    //只能在监听完善之后才可以调用
+    BOOL isOK = [[AFNetworkReachabilityManager sharedManager] isReachable];
+
+    //网络有问题
+    if(isOK == NO && canCHeckNetwork == YES){
+//        NSError *error = [NSError errorWithDomain:@"网络不可用" code:100 userInfo:nil];
+        failureBlock(@"网络不可用");
+        return;
+    }
 //    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     DLog(@"url = %@",url);
     NSError *error;
@@ -43,13 +63,27 @@
         if(!error){
 //            successBlock(YES,json,@"");
             if([json objectForKey:@"code"] &&[[json objectForKey:@"code"]  intValue]==200){
+
                 successBlock(YES,[json objectForKey:@"datas"],@"");
             }
-            else if([[json objectForKey:@"code"] intValue] == 401)
+            else if([[json objectForKey:@"code"] intValue] == 402)
             {
                 [MMProgressHUD dismiss];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                                     object:nil];
+            }
+            else if([[json objectForKey:@"code"] intValue] == 401)
+            {
+                [MMProgressHUD dismiss];
+                [HttpClient httpRefresh_token:^(BOOL success, id data, NSString *msg) {
+                    if (success) {
+                        DLog(@"刷新成功");
+                        refreshBlack(YES);
+                    }
+                } failureBlock:^(NSString *description) {
+                    DLog(@"刷新成功");
+                }];
+                
             }
             else{
                 successBlock(NO,nil,[json objectForKey:@"msg"]);
@@ -63,17 +97,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
         DLog(@"error = %d",error.code);
-        if (error.code == -1004) {
-            failureBlock(@"网络不可用");
-        }
-        else if(error.code == -1001)
-        {
-            failureBlock(@"网络超时");
-        }
-        else
-        {
-            failureBlock(error.localizedDescription);
-        }
+        failureBlock(@"网络异常");
         
         
     }];
@@ -85,6 +109,27 @@
 
 +(void)asynchronousRequestUploadWithProgress:(NSString *)url parameters:(NSDictionary *)parameters files:(NSArray *)files successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
 {
+    
+    
+    if (isFirst == NO) {
+        //网络只有在startMonitoring完成后才可以使用检查网络状态
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        [[AFNetworkReachabilityManager sharedManager]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            canCHeckNetwork = YES;
+        }];
+        isFirst = YES;
+    }
+    
+    //只能在监听完善之后才可以调用
+    BOOL isOK = [[AFNetworkReachabilityManager sharedManager] isReachable];
+    
+    //网络有问题
+    if(isOK == NO && canCHeckNetwork == YES){
+        //        NSError *error = [NSError errorWithDomain:@"网络不可用" code:100 userInfo:nil];
+        failureBlock(@"网络不可用");
+        return;
+    }
+    
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:url parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         for(NSObject * obj in files){
             MImageFile * file = (MImageFile * )obj;
@@ -125,17 +170,7 @@
         [operation cancel];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
-        if (error.code == -1004) {
-            failureBlock(@"网络不可用");
-        }
-        else if(error.code == -1001)
-        {
-            failureBlock(@"网络超时");
-        }
-        else
-        {
-            failureBlock(error.localizedDescription);
-        }
+        failureBlock(@"网络异常");
         
     }];
     [operation start];
@@ -143,8 +178,29 @@
     
     
 }
-+(void)asynchronousCommonJsonRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
++(void)asynchronousCommonJsonRequestWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(RequestSuccessBlock)successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock Refresh_tokenBlock:(Refresh_tokenBlock)refreshBlack
 {
+    
+    
+    
+    if (isFirst == NO) {
+        //网络只有在startMonitoring完成后才可以使用检查网络状态
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        [[AFNetworkReachabilityManager sharedManager]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            canCHeckNetwork = YES;
+        }];
+        isFirst = YES;
+    }
+    
+    //只能在监听完善之后才可以调用
+    BOOL isOK = [[AFNetworkReachabilityManager sharedManager] isReachable];
+    
+    //网络有问题
+    if(isOK == NO && canCHeckNetwork == YES){
+        //        NSError *error = [NSError errorWithDomain:@"网络不可用" code:100 userInfo:nil];
+        failureBlock(@"网络不可用");
+        return;
+    }
     
     NSError *error;
     AFJSONRequestSerializer *requestSerializer=[[AFJSONRequestSerializer alloc] init];
@@ -170,14 +226,27 @@
 //        NSDictionary *
         json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
         if(!error){
-            if([[json objectForKey:@"code"] intValue] == 401)
+            if([[json objectForKey:@"code"] intValue] == 402)
             {
                 [MMProgressHUD dismiss];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                     object:nil];
             }
+            else if([[json objectForKey:@"code"] intValue] == 401)
+            {
+//                [MMProgressHUD dismiss];
+                [HttpClient httpRefresh_token:^(BOOL success, id data, NSString *msg) {
+                    if (success) {
+                        DLog(@"刷新成功");
+                        refreshBlack(YES);
+                    }
+                } failureBlock:^(NSString *description) {
+                    DLog(@"刷新失败");
+                }];
+            }
             else
             {
+                
                successBlock(YES,json,@"");
             }
             
@@ -190,17 +259,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [operation cancel];
         DLog(@"error = %@",error)
-        if (error.code == -1004) {
-            failureBlock(@"网络不可用");
-        }
-        else if(error.code == -1001)
-        {
-            failureBlock(@"网络超时");
-        }
-        else
-        {
-            failureBlock(error.localizedDescription);
-        }
+        failureBlock(@"网络异常");
     
     }];
     [operation start];
@@ -208,6 +267,24 @@
 
 +(void)asynchronousDownLoadFileWithProgress:(NSString *)url parameters:(NSDictionary *)parameters successBlock:(void (^)(NSURL *))successBlock failureBlock:(RequestFailedBlock)failureBlock progressBlock:(progressBlock)progressBlock
 {
+    if (isFirst == NO) {
+        //网络只有在startMonitoring完成后才可以使用检查网络状态
+        [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+        [[AFNetworkReachabilityManager sharedManager]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            canCHeckNetwork = YES;
+        }];
+        isFirst = YES;
+    }
+    
+    //只能在监听完善之后才可以调用
+    BOOL isOK = [[AFNetworkReachabilityManager sharedManager] isReachable];
+    
+    //网络有问题
+    if(isOK == NO && canCHeckNetwork == YES){
+        //        NSError *error = [NSError errorWithDomain:@"网络不可用" code:100 userInfo:nil];
+        failureBlock(@"网络不可用");
+        return;
+    }
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSArray *paths = [url componentsSeparatedByString:@"/"];
@@ -234,17 +311,7 @@
         successBlock([NSURL fileURLWithPath:downloadPath]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DLog(@"下载失败 error ");
-        if (error.code == -1004) {
-            failureBlock(@"网络不可用");
-        }
-        else if(error.code == -1001)
-        {
-            failureBlock(@"网络超时");
-        }
-        else
-        {
-            failureBlock(error.localizedDescription);
-        }
+        failureBlock(@"网络异常");
     }];
     [operation start];
 }
@@ -266,5 +333,48 @@
     securityPolicy.allowInvalidCertificates = YES;
     [AFHTTPRequestOperationManager manager].securityPolicy = securityPolicy;
 
+}
++(void)httpRefresh_token:(RequestSuccessBlock) successBlock failureBlock:(RequestFailedBlock)failureBlock
+{
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+    [parameter setObject:@"refresh_token" forKey:@"grant_type"];
+    [parameter setObject:[ConfigManager sharedInstance].identifier forKey:@"client_code"];
+    if ([ConfigManager sharedInstance].refresh_token.length == 0) {
+        [ConfigManager sharedInstance].refresh_token = @"";
+    }
+    [parameter setObject:[ConfigManager sharedInstance].refresh_token forKey:@"refresh_token"];
+    [parameter setObject:@"app" forKey:@"client_id"];
+    [parameter setObject:@"appSecret" forKey:@"client_secret"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOauthToken] parameters:parameter];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
+        
+        DLog(@"data = %@",data);
+        
+        //        if ([ConfigManager sharedInstance].access_token.length == 0)
+        //            self.isfrist = NO;
+        //        else
+        //            self.isfrist = YES;
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            
+            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
+            successBlock(YES,data,@"");
+            
+        }
+        else
+        {
+            successBlock(NO,nil,[data objectForKey:@"msg"]);
+        }
+    } failureBlock:^(NSString *description) {
+        DLog(@"description = %@",description);
+        failureBlock(@"网络异常");
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    } Refresh_tokenBlock:^(BOOL success) {
+        
+    }];
 }
 @end

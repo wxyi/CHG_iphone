@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomePageViewController">
@@ -19,16 +19,20 @@
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1qv-Wx-WgI">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="568" id="bby-6c-f3Q"/>
+                        <constraint firstAttribute="width" constant="320" id="k9h-xc-StI"/>
+                    </constraints>
                     <color key="separatorColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="sectionIndexBackgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="1qv-Wx-WgI" secondAttribute="centerY" id="WZH-f0-rT2"/>
-                <constraint firstItem="1qv-Wx-WgI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Y5P-vk-lW4"/>
-                <constraint firstAttribute="centerX" secondItem="1qv-Wx-WgI" secondAttribute="centerX" id="dM3-m6-fky"/>
-                <constraint firstItem="1qv-Wx-WgI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lTX-B5-AzH"/>
+                <constraint firstAttribute="bottom" secondItem="1qv-Wx-WgI" secondAttribute="bottom" id="VYE-VL-1Dx"/>
+                <constraint firstAttribute="trailing" secondItem="1qv-Wx-WgI" secondAttribute="trailing" id="W0M-W5-SC1"/>
+                <constraint firstItem="1qv-Wx-WgI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="uhx-yd-R57"/>
+                <constraint firstItem="1qv-Wx-WgI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wxz-ys-9DO"/>
             </constraints>
             <point key="canvasLocation" x="305" y="349"/>
         </view>

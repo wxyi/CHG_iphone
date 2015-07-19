@@ -72,10 +72,11 @@
             cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.namelab.text = [self.items objectAtIndex:indexPath.row];
+        cell.namelab.text = [self.items objectAtIndexSafe:indexPath.row];
+        
         cell.namelab.textAlignment = NSTextAlignmentRight;
-        cell.nametext.placeholder = [self.items objectAtIndex:indexPath.row];
-        cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
+        cell.nametext.placeholder = [self.items objectAtIndexSafe:indexPath.row];
+//        cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
         cell.nametext.delegate = self;
         [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         if (indexPath.row == 0) {
@@ -102,7 +103,7 @@
             cell = (SelectBankCardCell*)[[self.SelectBankCardNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        cell.namelab.text = [self.items objectAtIndex:indexPath.row];
+        cell.namelab.text = [self.items objectAtIndexSafe:indexPath.row];
         cell.selectBank.text = @"请选择银行";
         cell.selectBank.textAlignment = NSTextAlignmentRight;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -262,6 +263,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpAddBankCard];
     }];
 }
 /*
@@ -339,6 +342,7 @@
     self.bank = [self.bankitems objectAtIndex:indexPath.row];
     UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
     textlab.text = self.bank.bankName;
+    textlab.textAlignment = NSTextAlignmentLeft;
 }
 
 - (CGFloat)popoverListView:(UIPopoverListView *)popoverListView
@@ -352,10 +356,10 @@
     UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
     NSString* info;
     if (field.tag == 1010) {
-        if (field.text.length > 32) {
-            field.text = [field.text substringToIndex:32];
+        if (field.text.length > 15) {
+            field.text = [field.text substringToIndex:15];
 //            [field resignFirstResponder];
-            info = @"持卡人姓名不能大于32位";
+            info = @"持卡人姓名不能大于20位";
         }
     }
     else if(field.tag == 1011)
@@ -416,4 +420,35 @@
 //        }
 //    }
 //}
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.tag == 1010) {
+        if (string.length == 0) return YES;
+        
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 15) {
+            return NO;
+        }
+    }
+    else if (textField.tag == 1011) {
+        if (string.length == 0) return YES;
+        
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 19) {
+            return NO;
+        }
+    }
+    
+    return YES;
+}
 @end

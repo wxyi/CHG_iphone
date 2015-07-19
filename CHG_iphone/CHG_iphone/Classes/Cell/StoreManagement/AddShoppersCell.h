@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddShoppersCell : UITableViewCell
+@interface AddShoppersCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
 @property(nonatomic,weak)IBOutlet UITextField* nametext;
 @end

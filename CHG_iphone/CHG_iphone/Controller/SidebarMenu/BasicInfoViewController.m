@@ -71,7 +71,7 @@
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
     title.textColor = UIColorFromRGB(0x323232);
     title.font = FONT(15);
-    title.text = [self.items objectAtIndex:indexPath.row];
+    title.text = [self.items objectAtIndexSafe:indexPath.row];
     [cell.contentView addSubview:title];
     
     //if (indexPath.row != 2)
@@ -187,6 +187,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    }Refresh_tokenBlock:^(BOOL success) {
+        [self httpGetMyProfile];
     }];
 }
 /*

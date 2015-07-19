@@ -11,6 +11,8 @@
 #import "MemberInfoViewController.h"
 
 #import "UIViewController+REFrostedViewController.h"
+
+
 @interface RegisteredMembersViewController ()
 @property UINib* RegisteredMembersNib;
 @end
@@ -40,6 +42,15 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     
     [self setupView];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
 }
 -(void)goback
 {
@@ -83,7 +94,7 @@
         
     }
     cell.iphoneField.text = self.strIphone;
-    cell.iphoneField.delegate = self;
+//    cell.iphoneField.delegate = self;
     [cell.iphoneField becomeFirstResponder];// 2
     [cell.iphoneField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 //    cell.nameField.delegate = self;
@@ -176,10 +187,7 @@
     {
         info = @"验证码不能大于6位";
     }
-    else if(![checkfield.text isEqualToString:self.strCheckCode])
-    {
-        info = @"验证码错误";
-    }
+    
     if (info.length != 0) {
         
         [SGInfoAlert showInfo:info
@@ -189,15 +197,9 @@
         return ;
     }
     
+    [self httpValidateCheckCode];
     
     
-    MemberInfoViewController* MemberInfoView= [[MemberInfoViewController alloc] initWithNibName:@"MemberInfoViewController" bundle:nil];
-    [ConfigManager sharedInstance].strcustMobile = iphonefield.text;
-    [ConfigManager sharedInstance].strcustName = namefield.text;
-    [ConfigManager sharedInstance].strcheckCode = checkfield.text;
-    
-    
-    [self.navigationController pushViewController:MemberInfoView animated:YES];
 }
 
 /*
@@ -212,7 +214,10 @@
 
 - (void) textFieldDidChange:(UITextField*) textField
 {
-    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:kAlphaNum options:NSRegularExpressionCaseInsensitive error:nil];
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:textField.text options:0 range:NSMakeRange(0, [textField.text length]) withTemplate:@""];
+    DLog(@"modifiedString = %@ textField.text = %@",modifiedString,textField.text)
+//    textField.text = modifiedString;
     NSString * info;
     if (textField.tag == 1010) {
         
@@ -233,10 +238,10 @@
     }
     else if(textField.tag == 1011)
     {
-        if (textField.text.length > 32) {
-            textField.text = [textField.text substringToIndex:32];
+        if (textField.text.length > 15) {
+            textField.text = [textField.text substringToIndex:15];
 //            [textField resignFirstResponder];
-            info = @"会员姓名不能大于32位";
+            info = @"会员姓名不能大于15位";
         }
         else
         {
@@ -322,4 +327,49 @@
 //        }
 //    }
 //}
+
+-(void)httpValidateCheckCode
+{
+   
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
+//    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    
+    NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
+    [param setObject:iphonefield.text forKey:@"mobile"];
+    [param setObject:checkfield.text forKey:@"checkCode"];
+    
+    [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
+        DLog(@"data = %@",data);
+        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        {
+            MemberInfoViewController* MemberInfoView= [[MemberInfoViewController alloc] initWithNibName:@"MemberInfoViewController" bundle:nil];
+            [ConfigManager sharedInstance].strcustMobile = iphonefield.text;
+            [ConfigManager sharedInstance].strcustName = namefield.text;
+            [ConfigManager sharedInstance].strcheckCode = checkfield.text;
+            
+            
+            [self.navigationController pushViewController:MemberInfoView animated:YES];
+        }
+        else
+        {
+            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
+    } failureBlock:^(NSString *description) {
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpValidateCheckCode];
+    }];
+}
 @end

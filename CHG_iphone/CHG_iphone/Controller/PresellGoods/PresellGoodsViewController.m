@@ -371,7 +371,7 @@
             cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
             
         }
-        NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+        NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
 
 
          [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
@@ -399,7 +399,7 @@
         
         cell.indexPath = indexPath;
         cell.operationPage = @"0";
-        NSDictionary* dict =  [self.items objectAtIndex:indexPath.row];
+        NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
 
         [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = dict[@"productName"] ;
@@ -531,6 +531,13 @@
 }
 -(IBAction)ConfirmInfo:(id)sender
 {
+    if ([self.items count] == 0) {
+        [SGInfoAlert showInfo:@"未扫描到商品"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return;
+    }
     DLog(@"确认信息");
     if (self.orderSaletype == SaleTypePickingGoods|| self.orderSaletype == SaleTypeReturnGoods) {
         [self httpValidateOrderProduct];
@@ -539,7 +546,7 @@
     {
         OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
         OrderCounterView.orderSaletype = self.orderSaletype;
-        
+        OrderCounterView.returnType = self.m_returnType;
         if (self.orderSaletype == SaleTypeSellingGoods ) {
             OrderCounterView.items = self.items;
         }
@@ -550,9 +557,9 @@
                 TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
                 DLog(@"textstepper = %.f",TextStepper.Current);
                 NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
-                anotherDict = [self.items objectAtIndex:i];
+                anotherDict = [self.items objectAtIndexSafe:i];
                 [anotherDict setObject:[NSString stringWithFormat:@"%.2f", TextStepper.Current ] forKey:@"quantity"];
-                [self.items replaceObjectAtIndex:i withObject:anotherDict];
+                [self.items replaceObjectAtIndexSafe:i withObject:anotherDict];
             }
             OrderCounterView.items = self.items;
         }
@@ -627,6 +634,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpQrCode:parame];
     }];
 }
 
@@ -661,7 +670,7 @@
 
         }
         if (!isSameId) {
-            [self.items addObject:product];
+            [self.items addObjectSafe:product];
         }
         else
         {
@@ -681,7 +690,7 @@
                 [QrcArr addObject:prodQrcArr[i]];
             }
             [product setObject:QrcArr forKey:@"QrcList"];
-            [self.items replaceObjectAtIndex:index withObject:product];
+            [self.items replaceObjectAtIndexSafe:index withObject:product];
         }
     }
     
@@ -696,7 +705,7 @@
         return;
     }
     if (self.items.count == 0 ) {
-        [self.items addObject:product];
+        [self.items addObjectSafe:product];
     }
     else
     {
@@ -716,7 +725,7 @@
         }
 
         if (!isSameId) {
-            [self.items addObject:product];
+            [self.items addObjectSafe:product];
         }
         else
         {
@@ -733,7 +742,7 @@
             
             
             if (prodQrcfilter.count == 0 && Qrcfilter.count == 0) {
-                [self.items removeObjectAtIndex:index];
+                [self.items removeObjectAtIndexSafe:index];
             }
             else
             {
@@ -757,7 +766,7 @@
                     }
                 }
                 [product setObject:datas forKey:@"QrcList"];
-                [self.items replaceObjectAtIndex:index withObject:product];
+                [self.items replaceObjectAtIndexSafe:index withObject:product];
                 
             }
             
@@ -850,7 +859,7 @@
                 OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
                 OrderCounterView.orderSaletype = weakSelf.orderSaletype;
                 OrderCounterView.items = weakSelf.items;
-                OrderCounterView.priceDict = [data objectForKey:@"datas"];
+                OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
                 [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
             }
             [MMProgressHUD dismiss];
@@ -868,6 +877,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpValidateOrderProduct];
     }];
 }
 /*
@@ -890,8 +901,16 @@
     // Output
     _output = [[AVCaptureMetadataOutput alloc]init];
     [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+//    [_output setRectOfInterest:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 170)];
+    CGFloat width = self.view.frame.size.width;
+    CGFloat height = self.view.frame.size.height;
+    CGFloat tm_X = 15.0/height;
+    CGFloat tm_Y = ((width - 170.0)/2)/width;
+    CGFloat tm_Width = 170.0/height;
+    CGFloat tm_Height = 170.0/width;
+    [_output setRectOfInterest:CGRectMake(tm_X,tm_Y,tm_Width ,tm_Height)];    // Session
+    DLog(@"cgrectmake = %@",NSStringFromCGRect(_output.rectOfInterest));
     
-    // Session
     _session = [[AVCaptureSession alloc]init];
     [_session setSessionPreset:AVCaptureSessionPresetHigh];
     if ([_session canAddInput:self.input])
@@ -910,7 +929,8 @@
     // Preview
     _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
     _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+//    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+    _preview.frame =self.view.layer.bounds;
     [self.view.layer insertSublayer:self.preview atIndex:0];
     
     
@@ -960,6 +980,13 @@
                 if (self.orderSaletype != SaleTypeReturnGoods && self.orderSaletype != SaleTypeReturnEngageGoods) {
                     [self httpQrCode:stringValue];
                 }
+                else
+                {
+                    [SGInfoAlert showInfo:@"不支持扫箱码退货"
+                                  bgColor:[[UIColor blackColor] CGColor]
+                                   inView:self.view
+                                 vertical:0.7];
+                }
             }
             else
             {
@@ -1002,8 +1029,11 @@
 -(void)deletePresellGoods:(NSNotification*)aNotification
 {
     NSString* index = [aNotification object];
-    [self.items removeObjectAtIndex:[index intValue]];
-    [self.tableview reloadData];
+    if ([self.items count] != 0 && [self.items count] > ([index intValue]-1)) {
+        [self.items removeObjectAtIndexSafe:[index intValue]];
+        [self.tableview reloadData];
+    }
+    
     
 }
 
@@ -1016,7 +1046,7 @@
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
-                [self.items removeObjectAtIndex:index];
+                [self.items removeObjectAtIndexSafe:index];
                 [self.tableview reloadData];
                 
             } otherButtonBlock:^{
@@ -1082,7 +1112,7 @@
         DLog(@"无操作");
     }
     [product setObject:QrcArr forKey:@"QrcList"];
-    [self.items replaceObjectAtIndex:operatino.indexpath.row withObject:product];
+    [self.items replaceObjectAtIndexSafe:operatino.indexpath.row withObject:product];
     
     
     if ([operatino.operationPage intValue] == 1) {

@@ -48,8 +48,8 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     MemberRewardsColCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-    cell.RewardsAmountLab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"count"];
-    cell.RewardsNameLab.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"title"];
+    cell.RewardsAmountLab.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"count"];
+    cell.RewardsNameLab.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"title"];
     
     return cell;
 }

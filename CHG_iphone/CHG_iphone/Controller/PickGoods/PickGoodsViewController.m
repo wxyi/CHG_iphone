@@ -10,7 +10,7 @@
 #import "PresellGoodsViewController.h"
 #import "GoodsDetailsViewController.h"
 #import "CompletedOrderDetailsViewController.h"
-
+#import "OrderManagementViewController.h"
 
 @interface PickGoodsViewController ()
 
@@ -37,7 +37,7 @@
     }
     else
     {
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
     }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
@@ -46,6 +46,31 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(void)gotoOrderManagement
+{
+    OrderManagementViewController* OrderManagement = [[OrderManagementViewController alloc] initWithNibName:@"OrderManagementViewController" bundle:nil];
+    OrderManagement.ManagementTyep = OrderManagementTypeSingle;
+    OrderManagement.m_returnType = self.m_returnType;
+    OrderManagement.title = @"会员订单";
+    
+    CATransition *transition = [CATransition animation];
+    
+    transition.duration = 0.3f;
+    
+    //    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    transition.type = kCATransitionPush;
+    
+    transition.subtype = kCATransitionFromLeft;
+    
+    //    transition.delegate = self;
+    
+    [self.view.superview.layer addAnimation:transition forKey:nil];
+    
+    
+    
+    [self.navigationController pushViewController:OrderManagement animated:NO];
 }
 -(void)setupView
 {
@@ -74,6 +99,7 @@
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
             CompletedOrderDetailsView.Comordertype = TerminationOrder;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
 //            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
@@ -98,6 +124,7 @@
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
             PresellGoodsView.skiptype = SkipfromOrderManage;
+            PresellGoodsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
         
@@ -115,6 +142,7 @@
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
             PresellGoodsView.skiptype = SkipfromOrderManage;
+            PresellGoodsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
     };
@@ -191,6 +219,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpCancelOrder:dict];
     }];
 }
 

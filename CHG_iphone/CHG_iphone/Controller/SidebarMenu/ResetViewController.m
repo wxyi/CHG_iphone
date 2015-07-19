@@ -40,7 +40,7 @@
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    self.items = [NSArray arrayWithObjects:@"新密码",@"重复密码" ,nil];
+    self.items = [NSArray arrayWithObjects:@"重置密码",@"确认密码" ,nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -65,13 +65,13 @@
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
     title.textColor = UIColorFromRGB(0x323232);
     title.font = FONT(15);
-    title.text = [self.items objectAtIndex:indexPath.row];
+    title.text = [self.items objectAtIndexSafe:indexPath.row];
     [cell.contentView addSubview:title];
     
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     textField.frame = CGRectMake(90, 2, SCREEN_WIDTH - 90, 40);
-    textField.placeholder = [self.items objectAtIndex:indexPath.row]; //默认显示的字
+    textField.placeholder = [self.items objectAtIndexSafe:indexPath.row]; //默认显示的字
     textField.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     textField.secureTextEntry = YES; //密码
     
@@ -165,6 +165,7 @@
 //                         vertical:0.7];
 //            sleep(1000);
             [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
             [self.navigationController popToRootViewControllerAnimated:YES];
             
             
@@ -187,6 +188,8 @@
                      vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
+    } Refresh_tokenBlock:^(BOOL success) {
+        [self httpResetPassword];
     }];
 }
 /*

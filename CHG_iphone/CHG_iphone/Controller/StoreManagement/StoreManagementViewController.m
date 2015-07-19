@@ -82,7 +82,7 @@
     [title.layer setMasksToBounds:YES];
     title.font = FONT(14);
     title.textAlignment = NSTextAlignmentCenter;
-    title.text = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopName"];
+    title.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"shopName"];
     [cell.contentView addSubview:title];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -133,7 +133,7 @@
     [ConfigManager sharedInstance].shopId = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopId"];
     [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndex:indexPath.row] objectForKey:@"dimensionalCodeUrl"] ;
     
-    
+    [NSDownNetImage deleteFile];
     [self DownStoreQrCode];
     
     [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopName"] ;
