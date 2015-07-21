@@ -51,9 +51,7 @@
 //    self.navigationController.navigationBar.layer.contents = (id)[NSObject createImageWithColor:UIColorFromRGB(0x171c61)].CGImage;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_btn.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(showMenu)];
     
-    
-    
-    
+  
     
     [self setupView];
 }
@@ -93,6 +91,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.PromoListNib = [UINib nibWithNibName:@"PromoListCell" bundle:nil];
     self.AccountBriefNib = [UINib nibWithNibName:@"AccountBriefCell" bundle:nil];
     self.awardTotalAmountNib = [UINib nibWithNibName:@"awardTotalAmountCell" bundle:nil];
@@ -154,16 +153,16 @@
     {
         AccountBriefCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AccountBriefCell"];
         if(cell==nil){
-            cell = (AccountBriefCell*)[[self.AccountBriefNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (AccountBriefCell*)[[self.AccountBriefNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
         
         
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKey:@"custTotalCount"] intValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKey:@"custMonthCount"] intValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKey:@"custDayCount"] intValue]],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custTotalCount"] intValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custMonthCount"] intValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custDayCount"] intValue]],@"count", nil], nil];
         
         [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -181,12 +180,12 @@
         if ([self.config.Roles isEqualToString:@"PARTNER"]) {
             RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
             if(cell==nil){
-                cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             
             NSArray* itme = [NSArray arrayWithObjects:
-                             [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardPartnerAmount"] doubleValue]],@"count", nil], nil];
+                             [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[[self.AccountBriefDict objectForKeySafe: @"awardPartnerAmount"] doubleValue]],@"count", nil], nil];
             cell.line.hidden = YES;
             [cell setupView:[itme mutableCopy]];
             cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -200,12 +199,12 @@
         {
             awardTotalAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"awardTotalAmountCell"];
             if(cell==nil){
-                cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             //        cell.backgroundColor = UIColorFromRGB(0x646464);
             cell.nameLab.text = @"奖励余额(元)";
-            cell.amountLab.text = [NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardTotalAmount"] doubleValue]];
+            cell.amountLab.text = [NSString stringWithFormat:@"%.2f",[[self.AccountBriefDict objectForKeySafe: @"awardTotalAmount"] doubleValue]];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
@@ -215,13 +214,13 @@
     {
         RewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RewardsCell"];
         if(cell==nil){
-            cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (RewardsCell*)[[self.RewardsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
 
         NSArray* itme = [NSArray arrayWithObjects:
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardSaleAmount"] doubleValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.AccountBriefDict[@"awardPartnerAmount"] doubleValue]],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"动销奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[[self.AccountBriefDict objectForKeySafe: @"awardSaleAmount"] doubleValue]],@"count", nil],
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"消费分账奖励(元)",@"title",[NSString stringWithFormat:@"%.2f",[[self.AccountBriefDict objectForKeySafe: @"awardPartnerAmount"] doubleValue]],@"count", nil], nil];
 
         [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -236,7 +235,7 @@
         MenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MenuCell"];
         if(cell==nil)
         {
-            cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
 
@@ -325,7 +324,7 @@
 }
 -(void)didSelectMenuCell:(NSIndexPath*)indexPath
 {
-    NSInteger selectType = [[[self.menuArr objectAtIndex:indexPath.row] objectForKey:@"type"] intValue];
+    NSInteger selectType = [[[self.menuArr objectAtIndexSafe:indexPath.row] objectForKeySafe:@"type"] intValue];
     switch (selectType) {
         case 0:
         {
@@ -405,8 +404,8 @@
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
 //    UserConfig *cfg = [[SUHelper sharedInstance] currentUserConfig];
 //    [NSString stringWithFormat:@"%d"]
-    [parameter setObject:@"1"forKey:@"type"];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:@"1"forKey:@"type"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetPromoList] parameters:parameter];
     
@@ -416,9 +415,11 @@
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         if (success) {
 //            [MMProgressHUD dismiss];
-            NSArray* datas = [data objectForKey:@"datas"];
-            [self.pagearray removeAllObjects];
-            
+            NSArray* datas = [data objectForKeySafe:@"datas"];
+//            [self.pagearray removeAllObjects];
+            if ([self.pagearray count] != 0) {
+                [self.pagearray removeAllObjects];
+            }
 
             NSString *path = [NSObject CreateDocumentsfileManager:@"image"];
 
@@ -431,7 +432,7 @@
                 
 //                NSString *filePath = path;
                 //Save Image to Directory
-                [HttpClient asynchronousDownLoadFileWithProgress:[datas[i]objectForKey:@"promoPath"] parameters:nil successBlock:^(NSURL *filePath) {
+                [HttpClient asynchronousDownLoadFileWithProgress:[datas[i]objectForKeySafe:@"promoPath"] parameters:nil successBlock:^(NSURL *filePath) {
                     NSData *data = [NSData dataWithContentsOfURL:filePath];
                     UIImage * imageFromURL = [UIImage imageWithData:data];
                     [NSDownNetImage saveImage:imageFromURL withFileName:[NSString stringWithFormat:@"activilist_%d",i ] ofType:@"jpg" inDirectory:path];
@@ -498,8 +499,8 @@
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetAccountBrief] parameters:parameter];
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
@@ -559,8 +560,8 @@
         
         NSMutableArray* SellerArr = [NSMutableArray array];
         for (int i = 0 ; i < menuArr.count; i++) {
-            if ([[menuArr[i] objectForKey:@"level"] intValue]== 1) {
-                [SellerArr addObject:menuArr[i]];
+            if ([[menuArr[i] objectForKeySafe:@"level"] intValue]== 1) {
+                [SellerArr addObjectSafe:menuArr[i]];
             }
         }
         menuArr = SellerArr;
@@ -569,8 +570,8 @@
     {
         NSMutableArray* PartnerArr = [NSMutableArray array];
         for (int i = 0 ; i < menuArr.count; i++) {
-            if ([[menuArr[i] objectForKey:@"level"] intValue]== 3) {
-                [PartnerArr addObject:menuArr[i]];
+            if ([[menuArr[i] objectForKeySafe:@"level"] intValue]== 3) {
+                [PartnerArr addObjectSafe:menuArr[i]];
             }
         }
         menuArr = PartnerArr;
@@ -579,12 +580,12 @@
     
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:@"",@"icon",@"",@"title", nil];
     if (menuArr.count%3 == 1) {
-        [menuArr addObject:dict];
-        [menuArr addObject:dict];
+        [menuArr addObjectSafe:dict];
+        [menuArr addObjectSafe:dict];
     }
     else if(menuArr.count%3 == 2)
     {
-        [menuArr addObject:dict];
+        [menuArr addObjectSafe:dict];
     }
     
     return menuArr;

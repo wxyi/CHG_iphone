@@ -27,26 +27,26 @@ static SUHelper *sSharedInstance;
     DLog(@"identifier:%@",[[[UIDevice currentDevice] identifierForVendor] UUIDString]);
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"sysconfig" ofType:@"plist"];
     NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
-    [ConfigManager sharedInstance].sysVersion =[dictionary objectForKey:@"clientVersion"];
+    [ConfigManager sharedInstance].sysVersion =[dictionary objectForKeySafe:@"clientVersion"];
     
     
     if (![ConfigManager sharedInstance].PubServer_URL) {
-        if ([[dictionary objectForKey:@"BelongsArea"] intValue] == 0) {
-            [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKey:@"PubServer_HOST_ShH"];
+        if ([[dictionary objectForKeySafe:@"BelongsArea"] intValue] == 0) {
+            [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKeySafe:@"PubServer_HOST_ShH"];
         }
         else
         {
-            [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKey:@"PubServer_HOST_BJ"];
+            [ConfigManager sharedInstance].PubServer_URL = [dictionary objectForKeySafe:@"PubServer_HOST_BJ"];
         }
         
     }
     if (![ConfigManager sharedInstance].PubServer_TokenUrl) {
-        if ([[dictionary objectForKey:@"BelongsArea"] intValue] == 0) {
-            [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token_ShH"];
+        if ([[dictionary objectForKeySafe:@"BelongsArea"] intValue] == 0) {
+            [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKeySafe:@"PubServer_Token_ShH"];
         }
         else
         {
-            [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKey:@"PubServer_Token_BJ"];
+            [ConfigManager sharedInstance].PubServer_TokenUrl = [dictionary objectForKeySafe:@"PubServer_Token_BJ"];
         }
         
     }
@@ -122,7 +122,7 @@ static SUHelper *sSharedInstance;
             [[SQLiteManager sharedInstance] deleteAreaCodeData];
             [[SQLiteManager sharedInstance] deleteCityCodeData];
             [[SQLiteManager sharedInstance] deleteProvinceCodeData];
-            NSDictionary* datas = [data objectForKey:@"datas"] ;
+            NSDictionary* datas = [data objectForKeySafe:@"datas"] ;
             //            NSMutableArray* bankArr = [[NSMutableArray alloc] init];
             //            NSArray *components = [datas allKeys];
             
@@ -131,36 +131,36 @@ static SUHelper *sSharedInstance;
             NSMutableArray *provinceList = [NSMutableArray array];
             
             for (int i=0; i<[sortedArray count]; i++) {
-                NSString *index = [sortedArray objectAtIndex:i];
-                NSString *ProvinceName = [[datas objectForKey: index] objectForKey:@"addressName"];
+                NSString *index = [sortedArray objectAtIndexSafe:i];
+                NSString *ProvinceName = [[datas objectForKeySafe: index] objectForKeySafe:@"addressName"];
                 
                 ProvinceInfo* Province = [[ProvinceInfo alloc] init];
                 Province.strProvinceID = index;
                 Province.strProvince = ProvinceName;
-                [provinceList addObject:Province];
+                [provinceList addObjectSafe:Province];
                 
-                NSDictionary* cityDict = [[datas objectForKey: index] objectForKey:@"addressDatas"];
+                NSDictionary* cityDict = [[datas objectForKeySafe: index] objectForKeySafe:@"addressDatas"];
                 NSArray* cityArray = [self AddressIDSort:cityDict];
                 NSMutableArray *CityList = [NSMutableArray array];
                 for (int i=0; i<[cityArray count]; i++) {
                     CityInfo* cityinfo = [[CityInfo alloc] init];
-                    cityinfo.strCityID = [cityArray objectAtIndex:i];
-                    cityinfo.strCityName = [[cityDict objectForKey: cityinfo.strCityID] objectForKey:@"addressName"];
+                    cityinfo.strCityID = [cityArray objectAtIndexSafe:i];
+                    cityinfo.strCityName = [[cityDict objectForKeySafe: cityinfo.strCityID] objectForKeySafe:@"addressName"];
                     cityinfo.strFatherID = index;
                     
-                    [CityList addObject:cityinfo];
+                    [CityList addObjectSafe:cityinfo];
                     
                     
-                    NSDictionary* AreaDict = [[cityDict objectForKey: cityinfo.strCityID] objectForKey:@"addressDatas"];;
+                    NSDictionary* AreaDict = [[cityDict objectForKeySafe: cityinfo.strCityID] objectForKeySafe:@"addressDatas"];;
                     NSArray* AreaArray = [self AddressIDSort:AreaDict];
                     NSMutableArray *AreaList = [NSMutableArray array];
                     for (int i=0; i<[AreaArray count]; i++) {
                         AreaInfo* areainfo = [[AreaInfo alloc] init];
-                        areainfo.strAreaID = [AreaArray objectAtIndex:i];
-                        areainfo.strAreaName = [[AreaDict objectForKey: areainfo.strAreaID] objectForKey:@"addressName"];
+                        areainfo.strAreaID = [AreaArray objectAtIndexSafe:i];
+                        areainfo.strAreaName = [[AreaDict objectForKeySafe: areainfo.strAreaID] objectForKeySafe:@"addressName"];
                         areainfo.strFatherID = cityinfo.strCityID;
                         
-                        [AreaList addObject:areainfo];
+                        [AreaList addObjectSafe:areainfo];
                         DLog(@"cityid = %@ cityname = %@ strFatherID = %@",areainfo.strAreaID,areainfo.strAreaName,areainfo.strFatherID)
                     }
                     [[SQLiteManager sharedInstance] saveOrUpdateAreaCodeData:AreaList];
@@ -215,7 +215,7 @@ static SUHelper *sSharedInstance;
         if (success) {
             DLog(@"data = %@",data);
             //            [MMProgressHUD dismiss];
-            NSArray* datas = [data objectForKey:@"datas"] ;
+            NSArray* datas = [data objectForKeySafe:@"datas"] ;
             NSMutableArray* bankArr = [[NSMutableArray alloc] init];
             for (int i = 0; i < [datas count]; i++) {
                 BanKCode* code = [[BanKCode alloc] init];
@@ -225,7 +225,7 @@ static SUHelper *sSharedInstance;
                 list = [list stringByReplacingOccurrencesOfString:@"[" withString:@""];
                 list = [list stringByReplacingOccurrencesOfString:@"]" withString:@""];
                 code.cardCodeList = list;
-                [bankArr addObject:code];
+                [bankArr addObjectSafe:code];
             }
             [[SQLiteManager sharedInstance] saveOrUpdateBankCodeData:bankArr];
         }
@@ -244,8 +244,8 @@ static SUHelper *sSharedInstance;
 -(void)GetPromoList
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:@"1"forKey:@"type"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:@"1"forKey:@"type"];
     
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetPromoList] parameters:parameter];
@@ -253,7 +253,7 @@ static SUHelper *sSharedInstance;
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         if (success) {
             //            [MMProgressHUD dismiss];
-            NSArray* datas = [data objectForKey:@"datas"];
+            NSArray* datas = [data objectForKeySafe:@"datas"];
      
         }
         else
@@ -281,29 +281,29 @@ static SUHelper *sSharedInstance;
                 DLog(@"data = %@",data);
                                        
                 if (isFirst) {
-                    [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"];
-                    [ConfigManager sharedInstance].bankCodeUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"bankCodeUpdateTime" ];
-                    [ConfigManager sharedInstance].promoListUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"promoListUpdateTime"];
+                    [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"adressUpdateTime"];
+                    [ConfigManager sharedInstance].bankCodeUpdateTime = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"bankCodeUpdateTime" ];
+                    [ConfigManager sharedInstance].promoListUpdateTime = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"promoListUpdateTime"];
                     }
                     else
                     {
                         
-                        if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"]]) {
+                        if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKeySafe:@"datas"] objectForKeySafe:@"adressUpdateTime"]]) {
                             
                             [self GetAddressInfo];
-                            [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"adressUpdateTime"];
+                            [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"adressUpdateTime"];
                         }
-                        if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"bankCodeUpdateTime"]]) {
+                        if ([[ConfigManager sharedInstance].adressUpdateTime isEqualToString:[[data objectForKeySafe:@"datas"] objectForKeySafe:@"bankCodeUpdateTime"]]) {
                             
                             [self GetBankCodeInfo];
-                            [ConfigManager sharedInstance].bankCodeUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"bankCodeUpdateTime"];
+                            [ConfigManager sharedInstance].bankCodeUpdateTime = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"bankCodeUpdateTime"];
                         }
-                        if ([[ConfigManager sharedInstance].promoListUpdateTime isEqualToString:[[data objectForKey:@"datas"] objectForKey:@"promoListUpdateTime"]]) {
+                        if ([[ConfigManager sharedInstance].promoListUpdateTime isEqualToString:[[data objectForKeySafe:@"datas"] objectForKeySafe:@"promoListUpdateTime"]]) {
                             
 //                            [self GetBankCodeInfo];
                             [self GetPromoList];
                             
-                            [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKey:@"datas"] objectForKey:@"promoListUpdateTime"];
+                            [ConfigManager sharedInstance].adressUpdateTime = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"promoListUpdateTime"];
                         }
                         
                     }

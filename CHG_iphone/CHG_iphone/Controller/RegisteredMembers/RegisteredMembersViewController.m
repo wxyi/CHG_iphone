@@ -68,6 +68,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.scrollEnabled = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -90,7 +91,7 @@
     __weak typeof(self) weakSelf = self;
     RegisteredMembersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"RegisteredMembersCell"];
     if(cell==nil){
-        cell = (RegisteredMembersCell*)[[self.RegisteredMembersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (RegisteredMembersCell*)[[self.RegisteredMembersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     cell.iphoneField.text = self.strIphone;
@@ -161,41 +162,41 @@
 -(void)nextBtn
 {
     DLog(@"下一步");
-    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
-    [iphonefield resignFirstResponder];
-    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
-    [namefield resignFirstResponder];
-    UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
-    [checkfield resignFirstResponder];
-    NSString* info ;
-    if (iphonefield.text.length == 0) {
-        info = @"请输入手机号码";
-    }
-    else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphonefield.text ])
-    {
-        info = @"手机格式不正确";
-    }
-    else if(namefield.text.length == 0)
-    {
-        info = @"请输入姓名";
-    }
-    else if (checkfield.text.length == 0)
-    {
-        info = @"请输入验证码";
-    }
-    else if (checkfield.text.length > 6)
-    {
-        info = @"验证码不能大于6位";
-    }
-    
-    if (info.length != 0) {
-        
-        [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
-        return ;
-    }
+//    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+//    [iphonefield resignFirstResponder];
+//    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+//    [namefield resignFirstResponder];
+//    UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
+//    [checkfield resignFirstResponder];
+//    NSString* info ;
+//    if (iphonefield.text.length == 0) {
+//        info = @"请输入手机号码";
+//    }
+//    else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphonefield.text ])
+//    {
+//        info = @"手机格式不正确";
+//    }
+//    else if(namefield.text.length == 0)
+//    {
+//        info = @"请输入姓名";
+//    }
+//    else if (checkfield.text.length == 0)
+//    {
+//        info = @"请输入验证码";
+//    }
+//    else if (checkfield.text.length > 6)
+//    {
+//        info = @"验证码不能大于6位";
+//    }
+//    
+//    if (info.length != 0) {
+//        
+//        [SGInfoAlert showInfo:info
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.7];
+//        return ;
+//    }
     
     [self httpValidateCheckCode];
     
@@ -339,12 +340,12 @@
     UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
     UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
-    [param setObject:iphonefield.text forKey:@"mobile"];
-    [param setObject:checkfield.text forKey:@"checkCode"];
+    [param setObjectSafe:iphonefield.text forKey:@"mobile"];
+    [param setObjectSafe:checkfield.text forKey:@"checkCode"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             MemberInfoViewController* MemberInfoView= [[MemberInfoViewController alloc] initWithNibName:@"MemberInfoViewController" bundle:nil];
             [ConfigManager sharedInstance].strcustMobile = iphonefield.text;
@@ -356,7 +357,7 @@
         }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

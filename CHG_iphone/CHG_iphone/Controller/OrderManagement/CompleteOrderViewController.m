@@ -30,6 +30,7 @@
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-80);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.items = [[NSMutableArray alloc] init];
     
@@ -39,6 +40,7 @@
         CGRect rect = self.tableview.frame;
         rect.size.height = rect.size.height + 40;
         self.tableview.frame = rect;
+        self.returnBtn.hidden = YES;
     }
     self.isRefresh = YES;
 //    rect = self.returnBtn.frame;
@@ -67,25 +69,25 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[self.items objectAtIndexSafe:section] objectForKey:@"productList"] count];
+    return [[[self.items objectAtIndexSafe:section] objectForKeySafe:@"productList"] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
     if(cell==nil){
-        cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
-    NSArray* array = [[self.items objectAtIndexSafe:indexPath.section] objectForKey:@"productList"];
-    NSDictionary* dict = [array objectAtIndex:indexPath.row];
+    NSArray* array = [[self.items objectAtIndexSafe:indexPath.section] objectForKeySafe:@"productList"];
+    NSDictionary* dict = [array objectAtIndexSafe:indexPath.row];
     
-    [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
-    cell.titlelab.text = dict[@"productName"];
-    cell.pricelab.text = dict[@"productPrice"];;
-    cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKey:@"quantity"] intValue] ];
+    [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
+    cell.titlelab.text = [dict objectForKeySafe:@"productName"];
+    cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+    cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKeySafe:@"quantity"] intValue] ];
     
-    if ([dict[@"returnQuantity"] intValue] != 0) {
-        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[dict[@"returnQuantity"] intValue]];
+    if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0) {
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -101,8 +103,8 @@
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
-//    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    v_header.backgroundColor = [UIColor clearColor];
+    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//    v_header.backgroundColor = [UIColor clearColor];
     
     UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
     line.backgroundColor = UIColorFromRGB(0xdddddd);
@@ -112,7 +114,7 @@
     datelab.textAlignment = NSTextAlignmentLeft;
     datelab.font = FONT(13);
     datelab.textColor = UIColorFromRGB(0x878787);;
-    datelab.text = dict[@"orderDate"];
+    datelab.text = [dict objectForKeySafe:@"orderDate"];
     [v_header addSubview:datelab];
     
     
@@ -122,16 +124,16 @@
     orderstatus.textColor = UIColorFromRGB(0x878787);
     
     NSString* statue;
-    if ([dict[@"orderStatus"] intValue] == 1)
+    if ([[dict objectForKeySafe:@"orderStatus"] intValue] == 1)
         statue = @"已完成";
-    else if ([dict[@"orderStatus"] intValue] == 0)
+    else if ([[dict objectForKeySafe:@"orderStatus"] intValue] == 0)
         statue = @"未完成";
     NSString* orderType;
     
-    if ([dict[@"orderType"] isEqualToString:@"ShopSale"]) {
+    if ([[dict objectForKeySafe:@"orderType"] isEqualToString:@"ShopSale"]) {
         orderType = @"卖货订单";
     }
-    else if([dict[@"orderType"] isEqualToString:@"ShopEngage"])
+    else if([[dict objectForKeySafe:@"orderType"] isEqualToString:@"ShopEngage"])
     {
         orderType = @"预售订单";
     }
@@ -149,14 +151,14 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 65)];
-//    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    v_footer.backgroundColor = [UIColor clearColor];
+    v_footer.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//    v_footer.backgroundColor = [UIColor clearColor];
     
     NSDictionary* dict = [self.items objectAtIndexSafe:section] ;
-    NSArray* productList = dict[@"productList"];
+    NSArray* productList = [dict objectForKeySafe:@"productList"];
     NSInteger count = 0;
     for (int i = 0; i< [productList count]; i++) {
-        count += [productList[i][@"quantity"] intValue];
+        count += [[[productList objectAtIndexSafe: i] objectForKeySafe: @"quantity"] intValue];
     }
     NSString* string = [NSString stringWithFormat:@"共%d件商品",count];
     NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",count]];
@@ -170,8 +172,8 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付 %.2f元",[dict[@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[dict[@"orderFactAmount"] doubleValue] ]];
+    string = [NSString stringWithFormat:@"实付 ￥%.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -241,15 +243,24 @@
 //    NSString* tag = [NSString stringWithFormat:@"%d",sender.tag];
 //    NSInteger section = [[tag substringFromIndex:2] intValue];
 //    NSDictionary* dict = [self.items objectAtIndex:section];
+    NSInteger pickQuantity = 0;
+    for (int i = 0; i < self.items.count; i++) {
+        NSArray* productList = [[self.items objectAtIndexSafe:i] objectForKeySafe:@"productList"];
+        for (int j = 0; j < productList.count; j++) {
+            NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"pickQuantity"] integerValue];
+            pickQuantity += pickcount;
+        }
+        
+    }
     
-    if ([self.items count] != 0) {
+    if ([self.items count] != 0 && pickQuantity  != 0) {
         if (self.BtnSkipSelect) {
             self.BtnSkipSelect(sender.tag,nil);
         }
     }
     else
     {
-        [SGInfoAlert showInfo:@"无退货商品"
+        [SGInfoAlert showInfo:@"没有可退货的商品"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
@@ -259,19 +270,19 @@
 -(void)httpGetCompleteOrderList
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     if (self.ManagementTyep == OrderManagementTypeAll) {
-        [parameter setObject:@""  forKey:@"custId"];
+        [parameter setObjectSafe:@""  forKey:@"custId"];
     }
     else
     {
-        [parameter setObject:[ConfigManager sharedInstance].strCustId  forKey:@"custId"];
+        [parameter setObjectSafe:[ConfigManager sharedInstance].strCustId  forKey:@"custId"];
     }
-    [parameter setObject:@"1" forKey:@"orderStatus"];
+    [parameter setObjectSafe:@"1" forKey:@"orderStatus"];
     
-    [parameter setObject:PAGESIZE forKey:@"pageSize"];
-    [parameter setObject:[NSString stringWithFormat:@"%d",self.m_nPageNumber] forKey:@"pageNumber"];
+    [parameter setObjectSafe:PAGESIZE forKey:@"pageSize"];
+    [parameter setObjectSafe:[NSString stringWithFormat:@"%d",self.m_nPageNumber] forKey:@"pageNumber"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];
     
@@ -283,19 +294,19 @@
         if (success) {
             self.isRefresh = YES;
 //            [MMProgressHUD dismiss];
-            NSArray* dataArr = [data objectForKey:@"datas"];
+            NSArray* dataArr = [data objectForKeySafe:@"datas"];
             for (int i = 0; i< dataArr.count; i++) {
                 [self.items addObjectSafe:dataArr[i]];
             }
             [self.tableview reloadData];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
         }
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
             
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
@@ -369,10 +380,13 @@
         // 拿到当前的下拉刷新控件，结束刷新状态
         
         self.m_nPageNumber = 1;
-        [self.items removeAllObjects];
+//        [self.items removeAllObjects];
+        if ([self.items count] != 0) {
+            [self.items removeAllObjects];
+        }
         [self httpGetCompleteOrderList];
         
-//        [self.tableview.header endRefreshing];
+        [self.tableview.header endRefreshing];
     });
 }
 
@@ -387,7 +401,7 @@
         self.m_nPageNumber ++;
         [self httpGetCompleteOrderList];
         // 拿到当前的上拉刷新控件，结束刷新状态
-//        [self.tableview.footer endRefreshing];
+        [self.tableview.footer endRefreshing];
     });
 }
 @end

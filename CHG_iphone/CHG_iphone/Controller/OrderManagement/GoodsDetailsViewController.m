@@ -35,6 +35,7 @@
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.DetailsNib = [UINib nibWithNibName:@"DetailsCell" bundle:nil];
     
@@ -63,7 +64,7 @@
     if (indexPath.section == 0) {
         DetailsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"DetailsCell"];
         if(cell==nil){
-            cell = (DetailsCell*)[[self.DetailsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (DetailsCell*)[[self.DetailsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.imageview.image = [UIImage imageNamed:@"default_small.png"];
@@ -213,9 +214,9 @@
 -(void)httpGetProduct
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [parameter setObject:self.strProductId forKey:@"productId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:self.strProductId forKey:@"productId"];
     
     DLog(@"parameter = %@",parameter);
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOrderList] parameters:parameter];

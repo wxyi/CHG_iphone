@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f6s-l0-5rx">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="f6s-l0-5rx">
                         <rect key="frame" x="0.0" y="29" width="320" height="1"/>
                         <color key="backgroundColor" red="0.73725490199999999" green="0.73725490199999999" blue="0.73725490199999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -38,6 +38,7 @@
                             <constraint firstAttribute="width" constant="150" id="Y7u-WN-zU7"/>
                             <constraint firstAttribute="height" constant="30" id="ZYI-M5-H7N"/>
                         </constraints>
+                        <color key="textColor" red="0.52941176469999995" green="0.52941176469999995" blue="0.52941176469999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                         <userDefinedRuntimeAttributes>
@@ -63,7 +64,7 @@
                             <constraint firstAttribute="width" constant="150" id="TqF-nG-GB8"/>
                             <constraint firstAttribute="height" constant="30" id="X16-T5-iJ9"/>
                         </constraints>
-                        <color key="textColor" red="0.3921568627" green="0.3921568627" blue="0.3921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="textColor" red="0.0" green="0.25882352941176467" blue="0.54509803921568623" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -73,6 +74,7 @@
                     <constraint firstItem="M4z-TN-X4A" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="LOx-K1-8nj"/>
                     <constraint firstAttribute="trailing" secondItem="mbs-An-uUd" secondAttribute="trailing" constant="10" id="MRC-Hd-4XW"/>
                     <constraint firstItem="f6s-l0-5rx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="TOo-Gu-Z8P"/>
+                    <constraint firstItem="f6s-l0-5rx" firstAttribute="bottom" secondItem="G9I-IE-xI8" secondAttribute="bottom" id="UET-Fe-XYw"/>
                     <constraint firstAttribute="trailing" secondItem="G9I-IE-xI8" secondAttribute="trailing" constant="10" id="ZWt-By-xZ5"/>
                     <constraint firstAttribute="trailing" secondItem="f6s-l0-5rx" secondAttribute="trailing" id="aQB-iE-t9e"/>
                     <constraint firstItem="DIO-8U-DMh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="cHW-W7-ACt"/>

@@ -47,6 +47,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -65,7 +66,34 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = @"文字介绍";
+//    [cell.contentView setBackgroundColor:[UIColor clearColor]] ;
+    UITextView* textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -270)]; //初始化大小并自动释放
+    
+    textView.textColor = [UIColor blackColor];//设置textview里面的字体颜色
+    
+    textView.font = [UIFont fontWithName:@"Arial" size:17.0];//设置字体名字和字体大小
+    
+//    self.textView.delegate = self;//设置它的委托方法
+    
+    textView.backgroundColor = UIColorFromRGB(0xdddddd);//设置它的背景颜色
+    
+    
+    
+    textView.text = @"    “晨冠珍爱宝贝”是一款门店管理专用APP，旨在为门店建立会员信息数据库，快速扩大门店会员规模。\r\n    晨冠 ，凝聚爱的力量！";//设置它显示的内容
+    
+//    self.textView.returnKeyType = UIReturnKeyDefault;//返回键的类型
+//    
+//    self.textView.keyboardType = UIKeyboardTypeDefault;//键盘类型
+    
+    textView.scrollEnabled = NO;//是否可以拖动
+    
+    
+    
+    textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;//自适应高度
+    
+    
+    
+    [cell.contentView addSubview:textView];//加入到整个页面中
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -95,7 +123,7 @@
     
 
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 90, SCREEN_WIDTH, 35)];
-    title.text = @"晨冠";
+    title.text = [NSString stringWithFormat:@"当前版本:%@",[ConfigManager sharedInstance].sysVersion];
     title.textColor = UIColorFromRGB(0x323232);
     title.textAlignment = NSTextAlignmentCenter;
     [v_header addSubview:title];
@@ -104,11 +132,23 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, 35)];
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 35)];
     title.text = @"客服热线:400-8008-404";
-    title.textColor = UIColorFromRGB(0xbcbcbc);
+    title.textColor = UIColorFromRGB(0x878787);
     title.textAlignment = NSTextAlignmentCenter;
     [v_footer addSubview:title];
+    
+    UILabel* title1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 35, SCREEN_WIDTH, 35)];
+    title1.text = @"官方网站：www.chgry.com";
+    title1.textColor = UIColorFromRGB(0x878787);
+    title1.textAlignment = NSTextAlignmentCenter;
+    [v_footer addSubview:title1];
+    
+    UILabel* title2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, SCREEN_WIDTH, 35)];
+    title2.text = @"版权所有：上海晨冠乳业有限公司";
+    title2.textColor = UIColorFromRGB(0x878787);
+    title2.textAlignment = NSTextAlignmentCenter;
+    [v_footer addSubview:title2];
     return v_footer;
 }
 /*

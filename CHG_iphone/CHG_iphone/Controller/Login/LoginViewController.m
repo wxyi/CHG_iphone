@@ -46,6 +46,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.tableview.scrollEnabled = NO;
 //    self.tableview.backgroundColor = [UIColor whiteColor];
     self.LoginNib = [UINib nibWithNibName:@"LoginCell" bundle:nil];
@@ -67,7 +68,7 @@
     __weak typeof(self) weakSelf = self;
     LoginCell *cell=[tableView dequeueReusableCellWithIdentifier:@"LoginCell"];
     if(cell==nil){
-        cell = (LoginCell*)[[self.LoginNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (LoginCell*)[[self.LoginNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
    
@@ -197,16 +198,16 @@
     }
      
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"password" forKey:@"grant_type"];
+    [parameter setObjectSafe:@"password" forKey:@"grant_type"];
     
     
-    [parameter setObject:namefield.text forKey:@"username"];
+    [parameter setObjectSafe:namefield.text forKey:@"username"];
     
     
-    [parameter setObject:[[NSObject md5:passfield.text] uppercaseString] forKey:@"password"];
-    [parameter setObject:[ConfigManager sharedInstance].identifier forKey:@"client_code"];
-    [parameter setObject:@"app" forKey:@"client_id"];
-    [parameter setObject:@"appSecret" forKey:@"client_secret"];
+    [parameter setObjectSafe:[[NSObject md5:passfield.text] uppercaseString] forKey:@"password"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].identifier forKey:@"client_code"];
+    [parameter setObjectSafe:@"app" forKey:@"client_id"];
+    [parameter setObjectSafe:@"appSecret" forKey:@"client_secret"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOauthToken] parameters:parameter];
     
@@ -233,11 +234,11 @@
 //            self.isfrist = NO;
 //        else
 //            self.isfrist = YES;
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
 
-            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
+            [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
             DLog(@"access_token = %@",[ConfigManager sharedInstance].access_token);
             DLog(@"refresh_token = %@",[ConfigManager sharedInstance].refresh_token);
 //            if (![ConfigManager sharedInstance].strAddressCode)
@@ -253,7 +254,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -275,7 +276,7 @@
 -(void)httpGetUserConfig
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetUserConfig] parameters:parameter];
@@ -293,20 +294,20 @@
             
             if ([config.Roles isEqualToString:@"PARTNER"]) {
                 [ConfigManager sharedInstance].shopId = @"";
-                [ConfigManager sharedInstance].strdimensionalCodeUrl = [data objectForKey:@"dimensionalCodeUrl"];
+                [ConfigManager sharedInstance].strdimensionalCodeUrl = [data objectForKeySafe:@"dimensionalCodeUrl"];
             }
             else
             {
                 if ([config.shopList count] != 0) {
-                    [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
-                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                    [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndexSafe:0] objectForKeySafe:@"shopId"] intValue]];
+                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndexSafe:0] objectForKeySafe:@"dimensionalCodeUrl"] ;
                     
-                    [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+                    [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndexSafe:0] objectForKeySafe:@"shopName"] ;
                 }
                 
             }
             
-            if ([[data objectForKey:@"loginFirst"] intValue] != 0)
+            if ([[data objectForKeySafe:@"loginFirst"] intValue] != 0)
             {
                 SetPasswordViewController* ResetPasswordView = [[SetPasswordViewController alloc] initWithNibName:@"SetPasswordViewController" bundle:nil];
                 [self presentViewController:ResetPasswordView animated:YES completion:^{
@@ -350,7 +351,7 @@
         {
 //            [MMProgressHUD dismissWithError:msg];
             [MMProgressHUD dismiss];
-            DLog(@"msg = %@",[data objectForKey:@"msg"]);
+            DLog(@"msg = %@",[data objectForKeySafe:@"msg"]);
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
@@ -410,7 +411,7 @@
     
     UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
     
-    [parameter setObject:textfield.text forKey:@"userName"];
+    [parameter setObjectSafe:textfield.text forKey:@"userName"];
     NSString *url = [NSObject URLWithBaseString:[APIAddress ApiGetMobileByUserName] parameters:parameter];
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
@@ -419,7 +420,7 @@
     [HttpClient asynchronousRequestWithProgress:url parameters:nil successBlock:^(BOOL success, id data, NSString *msg) {
         if (success) {
             
-            NSString* mobile = [data objectForKey:@"mobile"];
+            NSString* mobile = [data objectForKeySafe:@"mobile"];
             if (mobile.length) {
                 [MMProgressHUD dismiss];
                 [ConfigManager sharedInstance].strUserName = textfield.text;

@@ -33,6 +33,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.scrollEnabled = NO;
 //    self.tableview.backgroundColor = [UIColor whiteColor];
@@ -52,7 +53,7 @@
     __weak typeof(self) weakSelf = self;
     SetPasswordCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SetPasswordCell"];
     if(cell==nil){
-        cell = (SetPasswordCell*)[[self.SetPasswordNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (SetPasswordCell*)[[self.SetPasswordNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     [cell.setpasswordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -146,6 +147,7 @@
 
 -(void)ConfirmTheChange
 {
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1010];
     [passfield1 resignFirstResponder];
     UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1011];
@@ -164,7 +166,11 @@
     {
         info = @"密码不能小于6位";
     }
-    else if ([passfield1.text isEqualToString:@"000000"])
+    else if ([passfield1.text isEqualToString:@"000000"] && ![config.Roles isEqualToString:@"PARTNER"])
+    {
+        info = @"密码不能与初始密码一致";
+    }
+    else if([config.Roles isEqualToString:@"PARTNER"] && [passfield1.text isEqualToString:[config.strMobile substringFromIndex:5]])
     {
         info = @"密码不能与初始密码一致";
     }
@@ -192,7 +198,7 @@
     }
     else
     {
-        [self httpResetPassWord];
+        [self httpValidateCheckCode];
     }
     
     
@@ -202,14 +208,14 @@
     UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
 //    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
 //    [param setObject:config.strUsername forKey:@"userName"];
-    [param setObject:[[NSObject md5:passfield1.text] uppercaseString]forKey:@"newPwd"];
-    [param setObject:self.strCheckCode forKey:@"checkCode"];
+    [param setObjectSafe:[[NSObject md5:passfield1.text] uppercaseString]forKey:@"newPwd"];
+    [param setObjectSafe:self.strCheckCode forKey:@"checkCode"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiFirstSetPassword] parameters:parameter];
     
     
@@ -217,7 +223,7 @@
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             
             
@@ -226,8 +232,8 @@
 //                           inView:self.view
 //                         vertical:0.7];
             
-            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
+            [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
 //            [ConfigManager sharedInstance].usercfg = [data JSONString];
             UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
             
@@ -251,7 +257,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -297,21 +303,22 @@
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
-    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+//    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+//    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
     UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
-    [param setObject:iphonefield.text forKey:@"mobile"];
-    [param setObject:checkfield.text forKey:@"checkCode"];
+    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+    [param setObjectSafe:config.strMobile forKey:@"mobile"];
+    [param setObjectSafe:checkfield.text forKey:@"checkCode"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
-            
+            [self httpResetPassWord];
         }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

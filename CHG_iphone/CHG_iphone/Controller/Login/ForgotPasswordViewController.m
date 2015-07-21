@@ -30,6 +30,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.tableview.scrollEnabled = NO;
 //    self.tableview.backgroundColor = [UIColor whiteColor];
     self.ForgotPasswordNib = [UINib nibWithNibName:@"ForgotPasswordCell" bundle:nil];
@@ -51,7 +52,7 @@
     __weak typeof(self) weakSelf = self;
     ForgotPasswordCell *cell=[tableView dequeueReusableCellWithIdentifier:@"ForgotPasswordCell"];
     if(cell==nil){
-        cell = (ForgotPasswordCell*)[[self.ForgotPasswordNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (ForgotPasswordCell*)[[self.ForgotPasswordNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     
@@ -230,12 +231,12 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
     UITextField* checkcodefield = (UITextField*)[self.view viewWithTag:1012];
-    [param setObject:namefield.text forKey:@"mobile"];
-    [param setObject:checkcodefield.text forKey:@"checkCode"];
+    [param setObjectSafe:namefield.text forKey:@"mobile"];
+    [param setObjectSafe:checkcodefield.text forKey:@"checkCode"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             ResetPasswordViewController *ResetPassword = [[ResetPasswordViewController alloc] initWithNibName:@"ResetPasswordViewController" bundle:nil];
             ResetPassword.strmobile = namefield.text;
@@ -247,7 +248,7 @@
         }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

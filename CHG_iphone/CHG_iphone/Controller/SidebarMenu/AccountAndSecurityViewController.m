@@ -43,6 +43,7 @@
     self.items = [NSArray arrayWithObjects:@"登录密码", nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -97,7 +97,7 @@
         {
             DLog(@"终止定单")
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe: @"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
             CompletedOrderDetailsView.Comordertype = TerminationOrder;
@@ -184,28 +184,28 @@
 -(void)httpCancelOrder:(NSDictionary*)dict
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCancelOrder] parameters:parameter];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:dict[@"orderId"] forKey:@"orderId"];
-    [param setObject:dict[@"orderFactAmount"] forKey:@"factAmount"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:dict[@"orderId"] forKey:@"orderId"];
+    [param setObjectSafe:dict[@"orderFactAmount"] forKey:@"factAmount"];
     
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
-        DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
+        DLog(@"data = %@ msg = %@",[data objectForKeySafe:@"datas"],[data objectForKeySafe:@"msg"]);
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"] intValue]==200){
             [MMProgressHUD dismiss];
         }
         else
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

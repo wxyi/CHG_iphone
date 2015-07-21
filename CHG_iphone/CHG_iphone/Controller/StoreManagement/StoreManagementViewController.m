@@ -29,7 +29,7 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     DLog(@"self.navigationController.navigationBarHidden = %d",self.navigationController.navigationBarHidden);
-    self.title = @"门店管理";
+    self.title = @"门店选择";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -50,6 +50,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.tableview.backgroundColor = UIColorFromRGB(0xdddddd);
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
 
@@ -82,7 +83,7 @@
     [title.layer setMasksToBounds:YES];
     title.font = FONT(14);
     title.textAlignment = NSTextAlignmentCenter;
-    title.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"shopName"];
+    title.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopName"];
     [cell.contentView addSubview:title];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -97,7 +98,17 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 230;
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    return width;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -108,21 +119,32 @@
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 230)];
+    
+    NSString* deviceName = [ConfigManager sharedInstance].deviceName;
+    CGFloat width;
+    if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"])
+    {
+        width= 227.0;
+    }
+    else
+    {
+        width= (SCREEN_HEIGHT+ 64)* 0.4;
+    }
+    UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, width)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-135)/2, 60, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, (width-112)/2, 180, 112)];
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big"];
     [v_header addSubview:imageview];
     
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, 175, SCREEN_WIDTH, 20)];
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(0, (width-112)/2 + CGRectGetHeight(imageview.frame) + 20, SCREEN_WIDTH, 20)];
     title.text = @"门店选择";
     title.textColor = UIColorFromRGB(0x171c61);
     title.font = FONT(14);
     title.textAlignment = NSTextAlignmentCenter;
     [v_header addSubview:title];
     
-    UIImageView *line = [[UIImageView alloc] initWithFrame:CGRectMake(10, 205, SCREEN_WIDTH-20, 1)];
+    UIImageView *line = [[UIImageView alloc] initWithFrame:CGRectMake(0, (width-112)/2 + CGRectGetHeight(imageview.frame) + 40, SCREEN_WIDTH, 1)];
     line.image = [UIImage imageNamed:@"line_x"];
     [v_header addSubview:line];
     
@@ -130,13 +152,13 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [ConfigManager sharedInstance].shopId = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopId"];
-    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndex:indexPath.row] objectForKey:@"dimensionalCodeUrl"] ;
+    [ConfigManager sharedInstance].shopId = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopId"];
+    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"dimensionalCodeUrl"] ;
     
     [NSDownNetImage deleteFile];
     [self DownStoreQrCode];
     
-    [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndex:indexPath.row] objectForKey:@"shopName"] ;
+    [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopName"] ;
     DLog(@"shopId= %@",[ConfigManager sharedInstance].shopId);
 //    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     [self setupHomePageViewController];

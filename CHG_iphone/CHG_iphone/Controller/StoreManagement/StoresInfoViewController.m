@@ -59,6 +59,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.StoreManagementNib = [UINib nibWithNibName:@"StoreManagementCell" bundle:nil];
     self.StoreManageNib = [UINib nibWithNibName:@"StoreManageCell" bundle:nil];
@@ -82,7 +83,8 @@
     if ([config.Roles isEqualToString:@"SHOPLEADER"])
     {
         self.addbtn.userInteractionEnabled=NO;
-        self.addbtn.alpha=0.4;
+//        self.addbtn.alpha=0.4;
+        self.addbtn.backgroundColor = UIColorFromRGB(0x878787);
     }
     
     
@@ -108,14 +110,14 @@
             
             StoreCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StoreCell"];
             if(cell== nil){
-                cell = (StoreCell*)[[self.StoreNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (StoreCell*)[[self.StoreNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            cell.storeNameLab.text = self.shopinfo[@"shopName"];
-            cell.storeAddresslab.text = [self.shopinfo[@"address"] objectForKey:@"address"];
+            cell.storeNameLab.text = [self.shopinfo objectForKeySafe: @"shopName"];
+            cell.storeAddresslab.text = [[self.shopinfo objectForKeySafe:@"address"] objectForKeySafe:@"address"];
             cell.didSkipSubItem =^(NSInteger tag){
                 
-                NSString* dimensionalCodeUrl = self.shopinfo[@"dimensionalCodeUrl"];
+                NSString* dimensionalCodeUrl = [self.shopinfo objectForKeySafe:@"dimensionalCodeUrl"];
                 if (dimensionalCodeUrl.length > 0) {
                     [self showQrCode:dimensionalCodeUrl];
                 }
@@ -131,16 +133,16 @@
         {
             StoreManagementCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StoreManagementCell"];
             if(cell== nil){
-                cell = (StoreManagementCell*)[[self.StoreManagementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (StoreManagementCell*)[[self.StoreManagementNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            NSDictionary* dict = [self.items objectAtIndex:indexPath.section ];
+            NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section ];
             cell.positionlab.text = @"门店老板";
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe: @"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
             cell.CardNumlab.text = @"";
             cell.didSkipSubItem =^(NSInteger tag){
                 
-                NSString* dimensionalCodeUrl = self.shopinfo[@"dimensionalCodeUrl"];
+                NSString* dimensionalCodeUrl = [self.shopinfo objectForKeySafe: @"dimensionalCodeUrl"];
                 if (dimensionalCodeUrl.length > 0) {
                     [self showQrCode:dimensionalCodeUrl];
                 }
@@ -156,13 +158,13 @@
     {
         StoreManageCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StoreManageCell"];
         if(cell== nil){
-            cell = (StoreManageCell*)[[self.StoreManageNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (StoreManageCell*)[[self.StoreManageNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
 
         
-        NSDictionary* dict = [self.items objectAtIndex:indexPath.section ];
-        if ([dict[@"positionId"] intValue] == 2) {
+        NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section ];
+        if ([[dict objectForKeySafe: @"positionId"] intValue] == 2) {
             cell.positionlab.text = @"店长";
             
             cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
@@ -177,16 +179,16 @@
             cell.positionlab.text = @"导购";
             cell.icon.image = [UIImage imageNamed:@"icon_shopping_guide.png"];
         }
-        cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",dict[@"sellerName"],dict[@"sellerMobile"]];
+        cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
         cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
-        cell.CardNumlab.text = dict[@"idCardNumber"];
+        cell.CardNumlab.text = [dict objectForKeySafe:@"idCardNumber"];
         cell.IndexPath = indexPath;
         WEAKSELF
         cell.didselectDisable = ^(NSIndexPath* indexPath){
         
             NSString * info ;
             
-            if ([dict[@"positionId"] intValue] == 2 ) {
+            if ([[dict objectForKeySafe:@"positionId"] intValue] == 2 ) {
                 info = @"是否确认停用此店长";
             }
             else{
@@ -237,8 +239,8 @@
 -(void)httpGetShop
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetShop] parameters:parameter];
     
@@ -250,8 +252,11 @@
         DLog(@"data = %@",data);
         if (success) {
             [MMProgressHUD dismiss];
-            self.shopinfo = [data objectForKey:@"shop"];
-            [self.items removeAllObjects];
+            self.shopinfo = [data objectForKeySafe:@"shop"];
+//            [self.items removeAllObjects];
+            if ([self.items count] != 0) {
+                [self.items removeAllObjects];
+            }
             
             [self httpGetSellerList];
         }
@@ -281,8 +286,8 @@
 -(void)httpGetSellerList
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetSellerList] parameters:parameter];
     
@@ -295,40 +300,42 @@
 //        self.items = data;
         if (success) {
             [MMProgressHUD dismiss];
-            NSArray* datas = [data objectForKey:@"datas"];
+            NSArray* datas = [data objectForKeySafe:@"datas"];
             
             NSDictionary* boss;
             NSDictionary* manager;
             for (int i = 0; i < datas.count; i ++) {
-                DLog(@"%d",[[datas[i] objectForKey:@"positionId"] intValue]);
-                if ([[datas[i] objectForKey:@"positionId"] intValue] == 0) {
+                DLog(@"%d",[[datas[i] objectForKeySafe:@"positionId"] intValue]);
+                if ([[datas[i] objectForKeySafe:@"positionId"] intValue] == 0) {
                     boss = datas[i];
                 }
-                else if ([[datas[i] objectForKey:@"positionId"] intValue] == 2)
+                else if ([[datas[i] objectForKeySafe:@"positionId"] intValue] == 2)
                 {
                     manager = datas[i];
                 }
                 else
                 {
-                    [self.items addObject:datas[i]];
+                    [self.items addObjectSafe:datas[i]];
                 }
                 
             }
             if ([[boss allKeys] count] != 0) {
-                [self.items insertObject:boss atIndex:0];
+                [self.items insertObjectSafe:boss atIndex:0];
             }
             
             if ([[manager allKeys] count] != 0) {
                 
                 [self.items insertObjectSafe:manager atIndex:1];
                 self.addbtn.userInteractionEnabled=NO;
-                self.addbtn.alpha=0.4;
+//                self.addbtn.alpha=0.4;
+                self.addbtn.backgroundColor = UIColorFromRGB(0x878787);
             }
             else
             {
                 UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
                 if (![config.Roles isEqualToString:@"SHOPLEADER"]) {
                     self.addbtn.userInteractionEnabled=YES;
+                    self.addbtn.backgroundColor = UIColorFromRGB(0x171c61);
                     self.addbtn.alpha=1;
                 }
                 
@@ -426,7 +433,7 @@
 -(void)httpSetSellerStatus:(NSIndexPath*)indexpath
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
 
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiSetSellerStatus] parameters:parameter];
@@ -434,15 +441,15 @@
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
     NSDictionary* dict = [self.items objectAtIndexSafe:indexpath.section ];
     
     
     
-    [param setObject:dict[@"sellerId"] forKey:@"sellerId"];
+    [param setObjectSafe:dict[@"sellerId"] forKey:@"sellerId"];
     
-    NSInteger tag = [[NSString stringWithFormat:@"101%d",indexpath.section] intValue];
+//    NSInteger tag = [[NSString stringWithFormat:@"101%d",indexpath.section] intValue];
     
     
     DLog(@"url = %@",url);
@@ -450,18 +457,21 @@
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             
             [MMProgressHUD dismiss];
-            [self.items removeAllObjects];
+//            [self.items removeAllObjects];
+            if ([self.items count] != 0) {
+                [self.items removeAllObjects];
+            }
             [self httpGetSellerList];
         }
         else
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

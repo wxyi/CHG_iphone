@@ -54,15 +54,15 @@
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     MenuCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-    cell.imageName.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"title"];
-    cell.imageView.image = [UIImage imageNamed:[[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"icon"]];
+    cell.imageName.text = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"title"];
+    cell.imageView.image = [UIImage imageNamed:[[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"icon"]];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    NSString *title = [[self.items objectAtIndexSafe:indexPath.row] objectForKey:@"icon"];
+    NSString *title = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"icon"];
     if (self.didSelectedSubItemAction && title.length > 0) {
         self.didSelectedSubItemAction(indexPath);
     }

@@ -64,6 +64,7 @@
     [self getCurrentData];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
     self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
     self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
@@ -87,25 +88,25 @@
 {
     __weak typeof(self) weakSelf = self;
     
-    NSDictionary* dict = self.items[indexPath.section];
+    NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section];
     if([dict[@"state"] intValue ] == 0)
     {
         SettlementCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SettlementCell"];
         if(cell==nil){
-            cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         //        cell.CardNumlab.text = @"6210*******79263";
         
         
-        cell.datelab.text = dict[@"amountDate"];
+        cell.datelab.text = [dict objectForKeySafe: @"amountDate"];
         cell.statelab.text = @"支出";
         cell.namelab.text = @"晨冠已结算";
         
         
-        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[dict[@"awardcount"] doubleValue]];
-        cell.BankCardlab.text = dict[@"awardArriveBank"];
-        cell.CardNumlab.text = dict[@"awardAccount"];
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"awardcount"] doubleValue]];
+        cell.BankCardlab.text = [dict objectForKeySafe:@"awardArriveBank"];
+        cell.CardNumlab.text = [dict objectForKeySafe:@"awardAccount"];
         
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -115,28 +116,28 @@
     {
         GrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:@"GrowthCell"];
         if(cell==nil){
-            cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
-        if ([dict[@"state"] intValue ] == 2 ) {
+        if ([[dict objectForKeySafe:@"state"] intValue ] == 2 ) {
             cell.datelab.text = dict[@"amountDate"];;
             cell.statelab.text = @"收入";
             cell.namelab.text = @"动销奖励";
             
             
-            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[dict[@"awardcount"] doubleValue]];;
+            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"awardcount"] doubleValue]];;
             
             cell.skipbtn.tag = 101;
         }
         else
         {
-            cell.datelab.text = dict[@"amountDate"];;
+            cell.datelab.text = [dict objectForKeySafe:@"amountDate"];;
             cell.statelab.text = @"收入";
             cell.namelab.text = @"消费分账奖励";
             
             
-            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[dict[@"awardcount"] doubleValue]];
+            cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"awardcount"] doubleValue]];
             
             cell.skipbtn.tag = 102;
         }
@@ -144,7 +145,7 @@
         cell.iphonelab.textColor = UIColorFromRGB(0xf5a541);
         cell.didSkipSubItem = ^(NSInteger tag){
             
-            [weakSelf goskipdetails:tag data:dict[@"amountDate"]];
+            [weakSelf goskipdetails:tag data:[dict objectForKeySafe:@"amountDate"]];
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -193,8 +194,8 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* dict = self.items[indexPath.section];
-    if ([dict[@"state"] intValue] == 0) {
+    NSDictionary* dict = [self.items objectAtIndexSafe: indexPath.section];
+    if ([[dict objectForKeySafe:@"state"] intValue] == 0) {
         return 90;
     }
     else {
@@ -232,9 +233,9 @@
     StoreSalesView.statisticalType = statType;
     StoreSalesView.title = title;
     StoreSalesView.isSkip = YES;
-    StoreSalesView.strYear = [array objectAtIndex:0];
-    StoreSalesView.strMonth = [array objectAtIndex:1];
-    StoreSalesView.strDay = [array objectAtIndex:2];
+    StoreSalesView.strYear = [array objectAtIndexSafe:0];
+    StoreSalesView.strMonth = [array objectAtIndexSafe:1];
+    StoreSalesView.strDay = [array objectAtIndexSafe:2];
     [self.navigationController pushViewController:StoreSalesView animated:YES];
     
 }
@@ -243,10 +244,10 @@
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
   
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [parameter setObject:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,@"1"] forKey:@"startDate"];
-    [parameter setObject:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay] forKey:@"endDate"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,@"1"] forKey:@"startDate"];
+    [parameter setObjectSafe:[NSString stringWithFormat:@"%@-%@-%@",self.strYear,self.strMonth,self.strDay] forKey:@"endDate"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyAccount] parameters:parameter];
 //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
 //    [MMProgressHUD showWithTitle:@"" status:@""];
@@ -269,20 +270,20 @@
 //            }
 //            self.items = [data objectForKey:@"assetDetail"];
             
-            [self createMyAccountData:[data objectForKey:@"assetDetail"]];
+            [self createMyAccountData:[data objectForKeySafe:@"assetDetail"]];
             self.collonitems = [NSArray arrayWithObjects:
-                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[data[@"awardUsing"] doubleValue]],@"count", nil],
-                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[data[@"awardTotal"] doubleValue]],@"count", nil], nil];
+                                [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"awardUsing"] doubleValue]],@"count", nil],
+                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe:@"awardTotal"] doubleValue]],@"count", nil], nil];
 
             [self reLoadView];
             [self.collection reloadData];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
         }
         else
         {
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor blackColor] CGColor]
@@ -292,8 +293,8 @@
         
     } failureBlock:^(NSString *description) {
 //        [MMProgressHUD dismissWithError:description];
-        [self.tableview.header endRefreshing];
-        [self.tableview.footer endRefreshing];
+//        [self.tableview.header endRefreshing];
+//        [self.tableview.footer endRefreshing];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
                       bgColor:[[UIColor blackColor] CGColor]
@@ -424,7 +425,7 @@
         [self httpGetMyAccount];
         
 //        [self httpGetStatisticAnalysis];
-        //        [self.tableview.header endRefreshing];
+        [self.tableview.header endRefreshing];
         
         //        [self.tableview.header endRefreshing];
     });
@@ -477,7 +478,7 @@
         
 //        [self httpGetStatisticAnalysis];
         // 拿到当前的上拉刷新控件，结束刷新状态
-        //        [self.tableview.footer endRefreshing];
+        [self.tableview.footer endRefreshing];
     });
 }
 /*
@@ -522,10 +523,10 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     RewardsCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
     
-    cell.RewardsAmountLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"count"];
+    cell.RewardsAmountLab.text = [[self.collonitems objectAtIndexSafe:indexPath.row] objectForKeySafe:@"count"];
     cell.RewardsAmountLab.textColor = UIColorFromRGB(0xF5A541);
     
-    cell.RewardsNameLab.text = [[self.collonitems objectAtIndex:indexPath.row] objectForKey:@"title"];
+    cell.RewardsNameLab.text = [[self.collonitems objectAtIndexSafe:indexPath.row] objectForKeySafe:@"title"];
     
     return cell;
 }
@@ -533,31 +534,34 @@
 -(void)createMyAccountData:(NSArray*)items;
 {
     NSMutableArray* tm_array = [[NSMutableArray alloc] init];
-    [tm_array removeAllObjects];
+//    [tm_array removeAllObjects];
+    if ([tm_array count] != 0) {
+        [tm_array removeAllObjects];
+    }
     if ([self.config.Roles isEqualToString:@"PARTNER"]) {
 //        NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
         for (int i = 0; i < items.count; i ++) {
             NSDictionary* dict = items[i];
-            if ([[dict objectForKey:@"awardArrive"] intValue] != 0)
+            if ([[dict objectForKeySafe:@"awardArrive"] intValue] != 0)
             {
                 
                 NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
-                [dictionary setObject:dict[@"awardArrive"] forKey:@"awardcount"];
-                [dictionary setObject:dict[@"awardArriveBank"] forKey:@"awardArriveBank"];
-                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
-                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObject:@"0" forKey:@"state"];
-                [tm_array addObject:dictionary];
+                [dictionary setObjectSafe:[dict objectForKeySafe: @"awardArrive"] forKey:@"awardcount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardArriveBank"] forKey:@"awardArriveBank"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObjectSafe:@"0" forKey:@"state"];
+                [tm_array addObjectSafe:dictionary];
             }
-            if([[dict objectForKey:@"awardPartnerAmount"] intValue] != 0)
+            if([[dict objectForKeySafe:@"awardPartnerAmount"] intValue] != 0)
             {
                 NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
-                [dictionary setObject:dict[@"awardPartnerAmount"] forKey:@"awardcount"];
-                [dictionary setObject:@"" forKey:@"awardArriveBank"];
-                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
-                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObject:@"1" forKey:@"state"];
-                [tm_array addObject:dictionary];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardPartnerAmount"] forKey:@"awardcount"];
+                [dictionary setObjectSafe:@"" forKey:@"awardArriveBank"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObjectSafe:@"1" forKey:@"state"];
+                [tm_array addObjectSafe:dictionary];
             }
         }
     }
@@ -566,36 +570,36 @@
         
         for (int i = 0; i < items.count; i ++) {
             NSDictionary* dict = items[i];
-            if ([[dict objectForKey:@"awardArrive"] intValue] != 0)
+            if ([[dict objectForKeySafe:@"awardArrive"] intValue] != 0)
             {
                 NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
 //                [dictionary removeAllObjects];
-                [dictionary setObject:dict[@"awardArrive"] forKey:@"awardcount"];
-                [dictionary setObject:dict[@"awardArriveBank"] forKey:@"awardArriveBank"];
-                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
-                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObject:@"0" forKey:@"state"];
-                [tm_array addObject:dictionary];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardArrive"] forKey:@"awardcount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardArriveBank"] forKey:@"awardArriveBank"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObjectSafe:@"0" forKey:@"state"];
+                [tm_array addObjectSafe:dictionary];
             }
-            if([[dict objectForKey:@"awardPartnerAmount"] intValue] != 0)
+            if([[dict objectForKeySafe:@"awardPartnerAmount"] intValue] != 0)
             {
                 NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
-                [dictionary setObject:dict[@"awardPartnerAmount"] forKey:@"awardcount"];
-                [dictionary setObject:@"" forKey:@"awardArriveBank"];
-                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
-                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObject:@"1" forKey:@"state"];
-                [tm_array addObject:dictionary];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardPartnerAmount"] forKey:@"awardcount"];
+                [dictionary setObjectSafe:@"" forKey:@"awardArriveBank"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObjectSafe:@"1" forKey:@"state"];
+                [tm_array addObjectSafe:dictionary];
             }
-            if ([[dict objectForKey:@"awardSaleAmount"] intValue] != 0)
+            if ([[dict objectForKeySafe:@"awardSaleAmount"] intValue] != 0)
             {
                 NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
-                [dictionary setObject:dict[@"awardSaleAmount"] forKey:@"awardcount"];
-                [dictionary setObject:@"" forKey:@"awardArriveBank"];
-                [dictionary setObject:dict[@"awardAccount"] forKey:@"awardAccount"];
-                [dictionary setObject:dict[@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObject:@"2" forKey:@"state"];
-                [tm_array addObject:dictionary];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardSaleAmount"] forKey:@"awardcount"];
+                [dictionary setObjectSafe:@"" forKey:@"awardArriveBank"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
+                [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
+                [dictionary setObjectSafe:@"2" forKey:@"state"];
+                [tm_array addObjectSafe:dictionary];
             }
         }
     }
@@ -605,8 +609,9 @@
 }
 
 - (void)reLoadView {
-    [self.tableview reloadData];
+    
     if (self.items != nil && [self.items count] > 0) {
+        [self.tableview reloadData];
         [self.tableview setContentOffset:CGPointMake(0,0 ) animated:NO];
     }
 }

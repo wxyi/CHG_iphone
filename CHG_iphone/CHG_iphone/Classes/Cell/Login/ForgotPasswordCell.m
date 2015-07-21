@@ -72,7 +72,7 @@
         sender.alpha=0.4;
         
         [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-            NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+            NSString *title = [NSString stringWithFormat:@"%d秒后重发",second];
             return title;
         }];
         [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
@@ -92,7 +92,7 @@
 //    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
-    [parameter setObject:self.userField.text forKey:@"mobile"];
+    [parameter setObjectSafe:self.userField.text forKey:@"mobile"];
 //    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
@@ -106,7 +106,7 @@
         if (success) {
             [MMProgressHUD dismiss];
             if (self.didGetCode) {
-                self.didGetCode([data objectForKey:@"checkCode"]);
+                self.didGetCode([data objectForKeySafe:@"checkCode"]);
             }
         }
         else

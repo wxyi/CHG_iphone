@@ -28,6 +28,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.scrollEnabled = NO;
 //    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
    
@@ -170,7 +171,7 @@
     {
         titles = @[@"我的信息", @"银行卡", @"我的账户", @"设置"];
     }
-    cell.textLabel.text = titles[indexPath.row];
+    cell.textLabel.text = [titles objectAtIndexSafe: indexPath.row];
     cell.textLabel.textColor = UIColorFromRGB(0x646464);
     cell.textLabel.font = FONT(16);
     

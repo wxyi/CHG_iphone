@@ -14,6 +14,7 @@
 #import "CompletedOrderDetailsViewController.h"
 #import "successfulIdentifyViewController.h"
 #import "OrderQuryViewController.h"
+#import "SuccessRegisterViewController.h"
 @interface OrderManagementViewController ()
 
 @end
@@ -68,6 +69,10 @@
         
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if (self.m_returnType == OrderReturnTypePopPage)
+    {
+        [leftButton addTarget:self action:@selector(gobackRegistePage) forControlEvents:UIControlEventTouchUpInside];
+    }
     else
     {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
@@ -86,6 +91,14 @@
     OrderQuryViewController* OrderQueryView = [[OrderQuryViewController alloc] initWithNibName:@"OrderQuryViewController" bundle:nil];
     OrderQueryView.ManagementTyep = self.ManagementTyep;
     [self.navigationController pushViewController:OrderQueryView animated:YES];
+}
+-(void)gobackRegistePage
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[SuccessRegisterViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
 }
 //-(void)gobacktoSuccess
 //{
@@ -126,10 +139,10 @@
          DLog(@"dictionary = %@",dictionary);
         if (ntag == 10) {
             DLog(@"详情");
-            if ([dictionary[@"orderStatus"] intValue] == 0) {
+            if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
                 DLog(@"未完成订单")
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
                 PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
                 PickGoodsView.skiptype = SkipfromOrderManage;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
@@ -138,7 +151,7 @@
             {
                 DLog(@"已完成订单");
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
                 CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
                 CompletedOrderDetailsView.Comordertype = detailsOrder;
                 CompletedOrderDetailsView.skiptype = SkipfromOrderManage;
@@ -149,7 +162,7 @@
         else if (ntag == 11) {
             DLog(@"终止定单")
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.Comordertype = TerminationOrder;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
@@ -176,10 +189,10 @@
         NSString* strtag = [NSString stringWithFormat:@"%d",tag];
         NSInteger ntag = [[strtag substringToIndex:2] intValue];
         if (ntag == 10 ) {
-            if ([dictionary[@"orderStatus"] intValue] == 0) {
+            if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
                 DLog(@"未完成订单")
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
                 PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
             }
@@ -197,7 +210,7 @@
         else if (ntag == 11) {
             DLog(@"终止定单")
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.Comordertype = TerminationOrder;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
@@ -261,7 +274,7 @@
             DLog(@"订单详情");
             DLog(@"已完成订单");
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.Comordertype = detailsOrder;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];

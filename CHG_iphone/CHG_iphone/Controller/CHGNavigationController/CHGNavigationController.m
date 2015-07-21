@@ -154,20 +154,20 @@
 -(void)httpCreateCustomer
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomer] parameters:parameter];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[ConfigManager sharedInstance].strcustMobile forKey:@"custMobile"];
-    [param setObject:[ConfigManager sharedInstance].strcheckCode forKey:@"checkCode"];
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:[ConfigManager sharedInstance].strcustName forKey:@"custName"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strcustMobile forKey:@"custMobile"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strcheckCode forKey:@"checkCode"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strcustName forKey:@"custName"];
 
-    [param setObject:@"" forKey:@"babyBirthday"];
-    [param setObject:@"" forKey:@"babyRelation"];
-    [param setObject:@"" forKey:@"babyGender"];
+    [param setObjectSafe:@"" forKey:@"babyBirthday"];
+    [param setObjectSafe:@"" forKey:@"babyRelation"];
+    [param setObjectSafe:@"" forKey:@"babyGender"];
 
     
     DLog(@"param = %@",param);
@@ -177,10 +177,10 @@
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             
-            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"custId"] intValue]];
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[data objectForKeySafe:@"datas"] objectForKeySafe:@"custId"] intValue]];
             SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
             
             [self pushViewController:SuccessRegisterView animated:YES];
@@ -189,7 +189,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -228,8 +228,8 @@
 -(void)httpDeleteBankCard
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].strBankId forKey:@"bankId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].strBankId forKey:@"bankId"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiDeleteBankCard] parameters:parameter];
     

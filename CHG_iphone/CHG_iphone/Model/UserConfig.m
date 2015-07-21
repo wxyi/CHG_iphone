@@ -30,20 +30,20 @@
                 NSArray* roleslist = obj;
                 
                 for (int i = 0; i < roleslist.count; i++) {
-                    if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOP_OWNER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopOwner"])
+                    if ([[roleslist objectAtIndexSafe:i] isEqualToString:@"SHOP_OWNER"]||[[roleslist objectAtIndexSafe:i] isEqualToString:@"ShopOwner"])
                     {
                         self.Roles = @"SHOP_OWNER";
                         break;
                     }
-                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPLEADER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopLeader"]) {
+                    else if ([[roleslist objectAtIndexSafe:i] isEqualToString:@"SHOPLEADER"]||[[roleslist objectAtIndexSafe:i] isEqualToString:@"ShopLeader"]) {
                         self.Roles = @"SHOPLEADER";
                         break;
                     }
-                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"SHOPSELLER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ShopSeller"]) {
+                    else if ([[roleslist objectAtIndexSafe:i] isEqualToString:@"SHOPSELLER"]||[[roleslist objectAtIndexSafe:i] isEqualToString:@"ShopSeller"]) {
                         self.Roles = @"SHOPSELLER";
                         break;
                     }
-                    else if ([[roleslist objectAtIndex:i] isEqualToString:@"CHGSELLER"]||[[roleslist objectAtIndex:i] isEqualToString:@"ChgSeller"]) {
+                    else if ([[roleslist objectAtIndexSafe:i] isEqualToString:@"CHGSELLER"]||[[roleslist objectAtIndexSafe:i] isEqualToString:@"ChgSeller"]) {
                         self.Roles = @"CHGSELLER";
                         break;
                     }

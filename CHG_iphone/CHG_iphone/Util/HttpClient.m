@@ -62,17 +62,17 @@ static BOOL canCHeckNetwork = NO;
         DLog(@"json = %@",json);
         if(!error){
 //            successBlock(YES,json,@"");
-            if([json objectForKey:@"code"] &&[[json objectForKey:@"code"]  intValue]==200){
+            if([json objectForKeySafe:@"code"] &&[[json objectForKeySafe:@"code"]  intValue]==200){
 
-                successBlock(YES,[json objectForKey:@"datas"],@"");
+                successBlock(YES,[json objectForKeySafe:@"datas"],@"");
             }
-            else if([[json objectForKey:@"code"] intValue] == 402)
+            else if([[json objectForKeySafe:@"code"] intValue] == 402)
             {
                 [MMProgressHUD dismiss];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                                     object:nil];
             }
-            else if([[json objectForKey:@"code"] intValue] == 401)
+            else if([[json objectForKeySafe:@"code"] intValue] == 401)
             {
                 [MMProgressHUD dismiss];
                 [HttpClient httpRefresh_token:^(BOOL success, id data, NSString *msg) {
@@ -86,7 +86,7 @@ static BOOL canCHeckNetwork = NO;
                 
             }
             else{
-                successBlock(NO,nil,[json objectForKey:@"msg"]);
+                successBlock(NO,nil,[json objectForKeySafe:@"msg"]);
             }
             
         }else{
@@ -158,11 +158,11 @@ static BOOL canCHeckNetwork = NO;
             
             DLog(@"json = %@",json);
         if(!nsError){
-            if([json objectForKey:@"code"] &&[[[json objectForKey:@"code"] substringFromIndex:2] intValue]==1){
-                successBlock(YES,[json objectForKey:@"data"],@"");
+            if([json objectForKeySafe:@"code"] &&[[[json objectForKeySafe:@"code"] substringFromIndex:2] intValue]==1){
+                successBlock(YES,[json objectForKeySafe:@"data"],@"");
             }
             else{
-                successBlock(NO,nil,[json objectForKey:@"msg"]);
+                successBlock(NO,nil,[json objectForKeySafe:@"msg"]);
             }
         }else{
             successBlock(NO,nil,nsError.description);
@@ -226,13 +226,13 @@ static BOOL canCHeckNetwork = NO;
 //        NSDictionary *
         json=[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:&error];
         if(!error){
-            if([[json objectForKey:@"code"] intValue] == 402)
+            if([[json objectForKeySafe:@"code"] intValue] == 402)
             {
                 [MMProgressHUD dismiss];
                 [[NSNotificationCenter defaultCenter] postNotificationName:ACCESS_TOKEN_FAILURE
                                                     object:nil];
             }
-            else if([[json objectForKey:@"code"] intValue] == 401)
+            else if([[json objectForKeySafe:@"code"] intValue] == 401)
             {
 //                [MMProgressHUD dismiss];
                 [HttpClient httpRefresh_token:^(BOOL success, id data, NSString *msg) {
@@ -337,14 +337,14 @@ static BOOL canCHeckNetwork = NO;
 +(void)httpRefresh_token:(RequestSuccessBlock) successBlock failureBlock:(RequestFailedBlock)failureBlock
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:@"refresh_token" forKey:@"grant_type"];
-    [parameter setObject:[ConfigManager sharedInstance].identifier forKey:@"client_code"];
+    [parameter setObjectSafe:@"refresh_token" forKey:@"grant_type"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].identifier forKey:@"client_code"];
     if ([ConfigManager sharedInstance].refresh_token.length == 0) {
         [ConfigManager sharedInstance].refresh_token = @"";
     }
-    [parameter setObject:[ConfigManager sharedInstance].refresh_token forKey:@"refresh_token"];
-    [parameter setObject:@"app" forKey:@"client_id"];
-    [parameter setObject:@"appSecret" forKey:@"client_secret"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].refresh_token forKey:@"refresh_token"];
+    [parameter setObjectSafe:@"app" forKey:@"client_id"];
+    [parameter setObjectSafe:@"appSecret" forKey:@"client_secret"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetOauthToken] parameters:parameter];
     
@@ -356,17 +356,17 @@ static BOOL canCHeckNetwork = NO;
         //            self.isfrist = NO;
         //        else
         //            self.isfrist = YES;
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             
-            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
+            [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
             successBlock(YES,data,@"");
             
         }
         else
         {
-            successBlock(NO,nil,[data objectForKey:@"msg"]);
+            successBlock(NO,nil,[data objectForKeySafe:@"msg"]);
         }
     } failureBlock:^(NSString *description) {
         DLog(@"description = %@",description);

@@ -50,6 +50,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
 //    self.tableview.scrollEnabled = NO;
 //    [NSObject setExtraCellLineHidden:self.tableview];
     self.MembersRelationNib = [UINib nibWithNibName:@"MembersRelationCell" bundle:nil];
@@ -111,7 +112,7 @@
     if (indexPath.section == 0) {
         MembersRelationCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MembersRelationCell"];
         if(cell==nil){
-            cell = (MembersRelationCell*)[[self.MembersRelationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MembersRelationCell*)[[self.MembersRelationNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
 //        [cell setupCell];
@@ -122,7 +123,7 @@
     {
         MembersBirthdayCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MembersBirthdayCell"];
         if(cell==nil){
-            cell = (MembersBirthdayCell*)[[self.MembersBirthdayNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MembersBirthdayCell*)[[self.MembersBirthdayNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
 //        [cell setupCell];
@@ -135,7 +136,7 @@
     {
         MembersSexCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MembersSexCell"];
         if(cell==nil){
-            cell = (MembersSexCell*)[[self.MembersSexNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MembersSexCell*)[[self.MembersSexNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
 //        [cell setupCell];
@@ -286,19 +287,19 @@
 -(void)httpCreateCustomer
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomer] parameters:parameter];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[ConfigManager sharedInstance].strcustMobile forKey:@"custMobile"];
-    [param setObject:[ConfigManager sharedInstance].strcheckCode forKey:@"checkCode"];
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:[ConfigManager sharedInstance].strcustName forKey:@"custName"];
-    [param setObject:self.strBabyBirthday forKey:@"babyBirthday"];
-    [param setObject:self.strBabyRelation forKey:@"babyRelation"];
-    [param setObject:self.strBabyGender forKey:@"babyGender"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strcustMobile forKey:@"custMobile"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strcheckCode forKey:@"checkCode"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strcustName forKey:@"custName"];
+    [param setObjectSafe:self.strBabyBirthday forKey:@"babyBirthday"];
+    [param setObjectSafe:self.strBabyRelation forKey:@"babyRelation"];
+    [param setObjectSafe:self.strBabyGender forKey:@"babyGender"];
     
     
     DLog(@"param = %@",param);
@@ -308,10 +309,10 @@
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             
-            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[data objectForKey:@"datas"] objectForKey:@"custId"] intValue]];
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[data objectForKeySafe:@"datas"] objectForKeySafe:@"custId"] intValue]];
             SuccessRegisterViewController* SuccessRegisterView = [[SuccessRegisterViewController alloc] initWithNibName:@"SuccessRegisterViewController" bundle:nil];
 
             [self.navigationController pushViewController:SuccessRegisterView animated:YES];
@@ -320,7 +321,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

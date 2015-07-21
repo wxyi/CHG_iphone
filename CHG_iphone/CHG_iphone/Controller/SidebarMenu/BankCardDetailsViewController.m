@@ -56,10 +56,11 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.BankCardDetailsNib = [UINib nibWithNibName:@"BankCardDetailsCell" bundle:nil];
     
-    [ConfigManager sharedInstance].strBankId = [NSString stringWithFormat:@"%d",[self.items[@"bankId"] intValue]];
+    [ConfigManager sharedInstance].strBankId = [NSString stringWithFormat:@"%d",[[self.items objectForKeySafe: @"bankId"] intValue]];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -73,7 +74,7 @@
 {
     BankCardDetailsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"BankCardDetailsCell"];
     if(cell==nil){
-        cell = (BankCardDetailsCell*)[[self.BankCardDetailsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (BankCardDetailsCell*)[[self.BankCardDetailsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
     
     }
     if (indexPath.row == 0) {
@@ -86,13 +87,13 @@
             cell.namelab.text =@"开户名";
         }
         
-        cell.Detailslab.text = self.items[@"accountName"];
+        cell.Detailslab.text = [self.items objectForKeySafe:@"accountName"];
         cell.namelab.textAlignment = NSTextAlignmentRight;
     }
     else if (indexPath.row == 1)
     {
         cell.namelab.text =@"银行卡号";
-        NSString* cardnumber = self.items[@"cardNumber"] ;
+        NSString* cardnumber = [self.items objectForKeySafe:@"cardNumber"] ;
         
         NSString* temp = @"";
         for (int i = 0; i < cardnumber.length - 4; i ++) {
@@ -110,7 +111,7 @@
         
         BanKCode* code = [[BanKCode alloc] init];
         //    DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
-        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:self.items[@"bankCode"]];
+        code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[self.items objectForKeySafe:@"bankCode"]];
         cell.Detailslab.text = code.bankName;
     }
     

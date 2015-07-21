@@ -52,6 +52,7 @@
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-80);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
@@ -86,7 +87,7 @@
 }
 -(IBAction)orderProcessing:(UIButton*)sender
 {
-    if ([[self.items objectForKey:@"productList"] count] != 0) {
+    if ([[self.items objectForKeySafe:@"productList"] count] != 0) {
         if (self.BtnSkipSelect) {
             self.BtnSkipSelect(sender.tag,self.items);
         }
@@ -136,7 +137,7 @@
 //        return cell;
         AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
         if(cell==nil){
-            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.picktype = PickUpTypeDidNot;
@@ -155,17 +156,17 @@
     {
         OrderAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderAmountCell"];
         if(cell==nil){
-            cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
        
         NSArray* prolist = [self.items objectForKeySafe:@"productList"];
         CGFloat orderAmount = 0.0;
-        CGFloat orderFactAmount = 0.0;
+//        CGFloat orderFactAmount = 0.0;
 
         for (int i = 0; i < [prolist count]; i ++) {
-            CGFloat price = [prolist[i][@"productPrice"] doubleValue];
-            orderAmount += price * [prolist[i][@"remainQuantity"] floatValue];
+            CGFloat price = [[[prolist objectAtIndexSafe: i] objectForKeySafe: @"productPrice"] doubleValue];
+            orderAmount += price * [[[prolist objectAtIndexSafe: i] objectForKeySafe: @"remainQuantity"] floatValue];
             
         }
         
@@ -283,9 +284,9 @@
 -(void)httpGetOrder
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
 
-    [parameter setObject:self.strOrderId forKey:@"orderId"];
+    [parameter setObjectSafe:self.strOrderId forKey:@"orderId"];
 
     
     DLog(@"parameter = %@",parameter);
@@ -298,18 +299,18 @@
             [MMProgressHUD dismiss];
 //            self.items = [data objectForKey:@"order"];
             
-            NSDictionary* tmitem = [data objectForKey:@"order"];
-            NSArray* prolist = [tmitem objectForKey:@"productList"];
+            NSDictionary* tmitem = [data objectForKeySafe:@"order"];
+            NSArray* prolist = [tmitem objectForKeySafe:@"productList"];
             
             NSMutableArray* productList = [[NSMutableArray alloc] init];
             self.quantity = 0.0;
             self.remainQuantity = 0.0;
             for (int i = 0; i < [prolist count]; i++) {
-                if ([[[prolist objectAtIndex:i] objectForKey:@"remainQuantity"] intValue] != 0) {
-                    [productList addObject:[prolist objectAtIndex:i]];
+                if ([[[prolist objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] intValue] != 0) {
+                    [productList addObjectSafe:[prolist objectAtIndexSafe:i]];
                 }
-                self.quantity += [[[prolist objectAtIndex:i] objectForKey:@"quantity"] floatValue];
-                self.remainQuantity += [[[prolist objectAtIndex:i] objectForKey:@"remainQuantity"] floatValue];
+                self.quantity += [[[prolist objectAtIndexSafe:i] objectForKeySafe:@"quantity"] floatValue];
+                self.remainQuantity += [[[prolist objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] floatValue];
             }
             
             NSMutableDictionary* testdict = [tmitem mutableCopy];

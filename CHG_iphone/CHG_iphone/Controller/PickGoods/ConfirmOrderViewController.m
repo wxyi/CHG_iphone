@@ -12,6 +12,7 @@
 #import "PresellGoodsViewController.h"
 #import "CompletedOrderDetailsViewController.h"
 #import "OrderManagementViewController.h"
+#import "SuccessRegisterViewController.h"
 @interface ConfirmOrderViewController ()
 @property UINib* ConfirmOrderNib;
 @end
@@ -49,6 +50,10 @@
     if (self.returnType == OrderReturnTypeAMember) {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if (self.returnType == OrderReturnTypePopPage)
+    {
+        [leftButton addTarget:self action:@selector(gobackRegistePage) forControlEvents:UIControlEventTouchUpInside];
+    }
     else
     {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
@@ -64,7 +69,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)gobackRegistePage
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[SuccessRegisterViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
 -(void)setupView
 {
 //    CGRect rect = self.tableview.frame;
@@ -73,6 +85,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.ConfirmOrderNib = [UINib nibWithNibName:@"ConfirmOrderCell" bundle:nil];
 }
@@ -89,7 +102,7 @@
 {
     ConfirmOrderCell *cell=[tableView dequeueReusableCellWithIdentifier:@"ConfirmOrderCell"];
     if(cell==nil){
-        cell = (ConfirmOrderCell*)[[self.ConfirmOrderNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (ConfirmOrderCell*)[[self.ConfirmOrderNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     
@@ -220,7 +233,7 @@
         DLog(@"提货");
 
         PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
-        PresellGoodsView.m_returnType = OrderReturnTypeAMember;
+        PresellGoodsView.m_returnType = self.returnType;
         PresellGoodsView.orderSaletype = SaleTypePickingGoods;
         PresellGoodsView.skiptype = SkipFromOrderFinish;
         [self.navigationController pushViewController:PresellGoodsView animated:YES];

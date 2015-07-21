@@ -29,7 +29,7 @@
         radio1.isButton = YES;
         radio1.tag = [[NSString stringWithFormat:@"11%d",i] intValue];
         radio1.frame = CGRectMake(70+i*62, 0, 62, 35);
-        [radio1 setTitle:[items objectAtIndex:i] forState:UIControlStateNormal];
+        [radio1 setTitle:[items objectAtIndexSafe:i] forState:UIControlStateNormal];
         radio1.titleLabel.font = FONT(14);
         radio1.titleLabel.textAlignment = NSTextAlignmentCenter;
         [radio1 setTitleColor:[UIColor blackColor]  forState:UIControlStateNormal];

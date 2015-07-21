@@ -50,6 +50,7 @@
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -160,19 +161,19 @@
 -(void)httpVersionUpdate
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCheckVersion] parameters:parameter];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:@"IOS" forKey:@"appType"];
+    [param setObjectSafe:@"IOS" forKey:@"appType"];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@" data = %@",data );
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
-            if (![[ConfigManager sharedInstance].sysVersion isEqualToString:[data objectForKey:@"datas"][@"appVersion"]]) {
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"] intValue]==200){
+            if (![[ConfigManager sharedInstance].sysVersion isEqualToString:[[data objectForKeySafe:@"datas"] objectForKeySafe: @"appVersion"]]) {
                 VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
-                VersionUpdateView.items = [data objectForKey:@"datas"];
+                VersionUpdateView.items = [data objectForKeySafe:@"datas"];
                 [self.navigationController pushViewController:VersionUpdateView animated:YES];
             }
             

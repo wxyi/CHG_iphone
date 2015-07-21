@@ -63,7 +63,7 @@
     self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-    
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     // Do any additional setup after loading the view from its nib.
     self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
@@ -100,31 +100,31 @@
 {
     StatisticsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StatisticsCell"];
     if(cell==nil){
-        cell = (StatisticsCell*)[[self.StatisticsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (StatisticsCell*)[[self.StatisticsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     //        [cell setStatistics:@"2015-5-10" number:[NSString stringWithFormat:@"%d",20*indexPath.section]];
-    NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section ];
+    NSDictionary* dictionary = [self.items objectAtIndexSafe:indexPath.section ];
     
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
-            [cell setStatistics:dictionary[@"day"] number:[NSString stringWithFormat:@"%.2f",[dictionary[@"sellAmount"] doubleValue]]  baseData:self.nbaseData];
+            [cell setStatistics:[dictionary objectForKeySafe:@"day"] number:[NSString stringWithFormat:@"%.2f",[[dictionary objectForKeySafe:@"sellAmount"] doubleValue]]  baseData:self.nbaseData];
             break;
         }
         case StatisticalTypeMembershipGrowth:
         {
-            [cell setStatistics:dictionary[@"day"] number:[NSString stringWithFormat:@"%d",[dictionary[@"count"] intValue]] baseData:self.nbaseData];
+            [cell setStatistics:[dictionary objectForKeySafe:@"day"] number:[NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"count"] intValue]] baseData:self.nbaseData];
             break;
         }
         case StatisticalTypePinRewards:
         {
-            [cell setStatistics:dictionary[@"day"] number:[NSString stringWithFormat:@"%.2f",[dictionary[@"awardSalerAmount"] doubleValue]] baseData:self.nbaseData];
+            [cell setStatistics:[dictionary objectForKeySafe: @"day"] number:[NSString stringWithFormat:@"%.2f",[[dictionary objectForKeySafe: @"awardSalerAmount"] doubleValue]] baseData:self.nbaseData];
             break;
         }
         case StatisticalTypePartnersRewards:
         {
-            [cell setStatistics:dictionary[@"day"] number:[NSString stringWithFormat:@"%.2f",[dictionary[@"awardPartnerAmount"] doubleValue]] baseData:self.nbaseData];
+            [cell setStatistics:[dictionary objectForKeySafe: @"day"] number:[NSString stringWithFormat:@"%.2f",[[dictionary objectForKeySafe:@"awardPartnerAmount"] doubleValue]] baseData:self.nbaseData];
             break;
         }
         default:
@@ -179,7 +179,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.CellSkipSelect) {
-        self.CellSkipSelect([self.items objectAtIndex:indexPath.section ]);
+        self.CellSkipSelect([self.items objectAtIndexSafe:indexPath.section ]);
     }
 
 }
@@ -197,10 +197,10 @@
 {
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:self.strYear forKey:@"year"];
-    [parameter setObject:self.strMonth forKey:@"month"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:self.strYear forKey:@"year"];
+    [parameter setObjectSafe:self.strMonth forKey:@"month"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
@@ -235,52 +235,55 @@
             [MMProgressHUD dismiss];
             
             NSArray* tm_item;
-            [self.items removeAllObjects];
+//            [self.items removeAllObjects];
+            if ([self.items count] != 0) {
+                [self.items removeAllObjects];
+            }
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"sellCount"] doubleValue]];
-                    tm_item = [data objectForKey:@"sellList"];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"sellCount"] doubleValue]];
+                    tm_item = [data objectForKeySafe:@"sellList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"sellAmount"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe:i] objectForKeySafe: @"sellAmount"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
                 }
                 case StatisticalTypeMembershipGrowth:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[[data objectForKeySafe: @"custCount"] intValue]];
 //                    self.items = [data objectForKey:@"custList"];
-                    tm_item = [data objectForKey:@"custList"];
+                    tm_item = [data objectForKeySafe:@"custList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"count"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe: i] objectForKeySafe: @"count"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
                 }
                 case StatisticalTypePinRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardSalerCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"awardSalerCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"awardSalerList"];
                   
-                    tm_item = [data objectForKey:@"awardSalerList"];
+                    tm_item = [data objectForKeySafe:@"awardSalerList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"awardSalerAmount"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe: i] objectForKeySafe: @"awardSalerAmount"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardPartnerCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"awardPartnerCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"awardPartnerList"];
-                    tm_item = [data objectForKey:@"awardPartnerList"];
+                    tm_item = [data objectForKeySafe:@"awardPartnerList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"awardPartnerAmount"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe: i] objectForKeySafe: @"awardPartnerAmount"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
@@ -288,7 +291,7 @@
                 default:
                     break;
             }
-            self.nbaseData = [data[@"baseData"] intValue];
+            self.nbaseData = [[data objectForKeySafe: @"baseData"] intValue];
             
             NSDate *now = [NSDate date];
             NSLog(@"now date is: %@", now);
@@ -324,14 +327,14 @@
             
             
             [self reLoadView];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
         }
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor blackColor] CGColor]
@@ -340,8 +343,8 @@
         }
         
     } failureBlock:^(NSString *description) {
-        [self.tableview.header endRefreshing];
-        [self.tableview.footer endRefreshing];
+//        [self.tableview.header endRefreshing];
+//        [self.tableview.footer endRefreshing];
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
@@ -436,7 +439,7 @@
         self.strYear = nextYear;
         self.strMonth = nextMonth;
         [self httpGetStatisticAnalysis];
-//        [self.tableview.header endRefreshing];
+        [self.tableview.header endRefreshing];
         
 //        [self.tableview.header endRefreshing];
     });
@@ -465,7 +468,7 @@
         [self httpGetStatisticAnalysis];
         
         // 拿到当前的上拉刷新控件，结束刷新状态
-//        [self.tableview.footer endRefreshing];
+        [self.tableview.footer endRefreshing];
     });
 }
 -(NSString*)GetCurrentTitle

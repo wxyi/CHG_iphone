@@ -36,7 +36,7 @@
     }
     if (self.Comordertype == TerminationOrder)
     {
-        self.title = @"退货柜台";
+        self.title = @"终止订单";
     }
     else
     {
@@ -127,6 +127,7 @@
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -40);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     //    self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
@@ -183,20 +184,20 @@
         if (self.Comordertype != TerminationOrder){
             amountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"amountCell"];
             if(cell==nil){
-                cell = (amountCell*)[[self.amountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (amountCell*)[[self.amountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             
-            if ([self.items[@"orderCreator"] length] == 0) {
+            if ([[self.items objectForKeySafe: @"orderCreator"] length] == 0) {
                 cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",@""];
             }
             else
             {
-                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",self.items[@"orderCreator"]];
+                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",[self.items objectForKeySafe:@"orderCreator"]];
             }
             
             
-            NSString* custName= self.items[@"custName"];
+            NSString* custName= [self.items objectForKeySafe:@"custName"];
             DLog(@"wxy -custName = %@",custName);
             if (custName.length != 0) {
                 custName = [custName substringToIndex:custName.length - 1];
@@ -215,7 +216,7 @@
         {
             AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
             if(cell==nil){
-                cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             cell.picktype = PickUpTypeStop;
@@ -233,7 +234,7 @@
     else if (indexPath.section == 1 && self.Comordertype != TerminationOrder) {
         AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
         if(cell==nil){
-            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.picktype = PickUpTypeFinish;
@@ -254,14 +255,15 @@
         {
             PickAndReturnCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PickAndReturnCell"];
             if(cell==nil){
-                cell = (PickAndReturnCell*)[[self.PickAndReturnNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (PickAndReturnCell*)[[self.PickAndReturnNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             
-            cell.receivableNameLab.text =@"应退金额";
-            cell.actualNameLab.text = @"实退金额";
-            cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[self.items[@"orderAmount"] doubleValue]] ;
-            cell.receivableLab.text =[NSString stringWithFormat:@"%.2f",[self.items[@"orderFactAmount"] doubleValue]] ;
+            cell.receivableNameLab.text =@"应退金额:";
+            cell.actualNameLab.text = @"实退金额:";
+            cell.returnPrice = [NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderAmountWth"] floatValue] ];
+            cell.actualtext.text = [NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderFactAmountWth"] doubleValue]] ;
+            cell.receivableLab.text =[NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderFactAmountWth"] doubleValue]] ;
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -270,12 +272,12 @@
         {
             OrderAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderAmountCell"];
             if(cell==nil){
-                cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             
-            cell.receivablelab.text = [NSString stringWithFormat:@"%.2f",[self.items[@"orderAmount"] doubleValue]];
-            cell.Receivedlab.text =[NSString stringWithFormat:@"%.2f",[self.items[@"orderFactAmount"] doubleValue]] ;
+            cell.receivablelab.text = [NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderAmount"] doubleValue]];
+            cell.Receivedlab.text =[NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderFactAmount"] doubleValue]] ;
             if(self.Comordertype == TerminationOrder)
             {
                 [cell.Receivedlab setEnabled:YES];
@@ -285,7 +287,7 @@
                 [cell.Receivedlab setEnabled:NO];
             }
             
-            cell.favorablelab.text = [NSString stringWithFormat:@"%.2f",[self.items[@"orderDiscount"] doubleValue]] ;
+            cell.favorablelab.text = [NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderDiscount"] doubleValue]] ;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
         }
@@ -385,9 +387,9 @@
 -(void)httpGetOrder
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
-    [parameter setObject:self.strOrderId forKey:@"orderId"];
+    [parameter setObjectSafe:self.strOrderId forKey:@"orderId"];
     
     
     DLog(@"parameter = %@",parameter);
@@ -484,24 +486,25 @@
 -(void)httpCancelOrder:(NSDictionary*)dict
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCancelOrder] parameters:parameter];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:dict[@"orderId"] forKey:@"orderId"];
-    [param setObject:dict[@"orderFactAmount"] forKey:@"factAmount"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:[dict objectForKeySafe:@"orderId"] forKey:@"orderId"];
+    UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
+    [param setObjectSafe:textfield.text forKey:@"factAmount"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
-        DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"] intValue]==200){
+        DLog(@"data = %@ msg = %@",[data objectForKeySafe:@"datas"],[data objectForKeySafe:@"msg"]);
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"] intValue]==200){
             
             [[NSNotificationCenter defaultCenter] postNotificationName:REFRESH_ORDER object:nil];
             
             ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
             ConfirmOrderView.Confirmsaletype = SaleTypeStopOrder;
-            ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%@",dict[@"orderId"]];
+            ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%@",[dict objectForKeySafe:@"orderId"]];
             [self.navigationController pushViewController:ConfirmOrderView animated:YES];
 //            [self.navigationController popViewControllerAnimated:YES];
             

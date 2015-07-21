@@ -61,7 +61,7 @@
     
     
     [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-        NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+        NSString *title = [NSString stringWithFormat:@"%d秒后重发",second];
         return title;
     }];
     [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
@@ -78,7 +78,7 @@
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    [parameter setObject:config.strMobile forKey:@"mobile"];
+    [parameter setObjectSafe:config.strMobile forKey:@"mobile"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
     
@@ -87,7 +87,7 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if (success) {
             if (self.didGetCode) {
-                self.didGetCode([data objectForKey:@"checkCode"]);
+                self.didGetCode([data objectForKeySafe:@"checkCode"]);
             }
         }
         else

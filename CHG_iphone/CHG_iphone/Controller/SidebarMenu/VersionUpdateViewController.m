@@ -43,6 +43,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.tableview.backgroundColor = [UIColor lightGrayColor];
     self.UpdateVersionNib = [UINib nibWithNibName:@"UpdateVersionViCell" bundle:nil];
@@ -59,12 +60,12 @@
 {
     UpdateVersionViCell *cell=[tableView dequeueReusableCellWithIdentifier:@"UpdateVersionViCell"];
     if(cell==nil){
-        cell = (UpdateVersionViCell*)[[self.UpdateVersionNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (UpdateVersionViCell*)[[self.UpdateVersionNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     cell.image.image = [UIImage imageNamed:@"icon.png"];
-    cell.VersionNum.text = [NSString stringWithFormat:@"版本号:%@",self.items[@"appVersion"]];
-    cell.VersionUrl = self.items[@"url"];
+    cell.VersionNum.text = [NSString stringWithFormat:@"版本号:%@",[self.items objectForKeySafe: @"appVersion"]];
+    cell.VersionUrl = [self.items objectForKeySafe:@"url"];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -98,7 +99,7 @@
 //    textview.delegate = self;//设置它的委托方法
 
     textview.backgroundColor = UIColorFromRGB(0xf0f0f0);//设置它的背景颜色
-    textview.text = self.items[@"appDes"];//设置它显示的内容
+    textview.text = [self.items objectForKeySafe:@"appDes"];//设置它显示的内容
 
 //    textview.returnKeyType = UIReturnKeyDefault;//返回键的类型
 //    textview.keyboardType = UIKeyboardTypeDefault;//键盘类型

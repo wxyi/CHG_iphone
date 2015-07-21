@@ -39,18 +39,30 @@
     
     textField.backgroundColor = [UIColor clearColor];
     NSString* price = textField.text;
-    DLog(@"price = %.1f Receivedlab = %.1f",[price doubleValue],[self.receivableLab.text doubleValue]);
+    DLog(@"price = %f Receivedlab = %f",[textField.text floatValue],[self.returnPrice floatValue]);
     
-    if ([self.receivableLab.text doubleValue] < [price doubleValue]) {
+    if ([self.returnPrice floatValue] < [textField.text floatValue] &&[textField.text floatValue] != 0) {
 //        textField.text = @"";
         
 //        NSString* info;
 //        info = @"实退金额小于或等于应退金额";
-        textField.text = @"";
-        [SGInfoAlert showInfo:@"实退金额小于或等于应退金额"
+        textField.text = self.receivableLab.text;
+        [SGInfoAlert showInfo:@"实退金额应小于应收金额"
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self
                      vertical:0.7];
+    }
+    else if([textField.text floatValue] <= 0)
+    {
+        textField.text = self.receivableLab.text;
+//        [SGInfoAlert showInfo:@"实退金额应小于等于0"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self
+//                     vertical:0.7];
+    }
+    else
+    {
+        textField.text = [NSString stringWithFormat:@"%.2f",[textField.text doubleValue]];
     }
   
 }

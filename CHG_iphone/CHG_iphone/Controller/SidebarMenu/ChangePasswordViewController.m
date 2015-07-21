@@ -44,6 +44,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -63,11 +64,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
-    title.textColor = UIColorFromRGB(0x323232);
-    title.font = FONT(15);
-    title.text = [self.items objectAtIndexSafe:indexPath.row];
-    [cell.contentView addSubview:title];
+//    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+//    title.textColor = UIColorFromRGB(0x323232);
+//    title.font = FONT(15);
+//    title.text = [self.items objectAtIndexSafe:indexPath.row];
+//    [cell.contentView addSubview:title];
 
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
 //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
@@ -96,11 +97,11 @@
         [forgetbtn addTarget:self action:@selector(ChangePassword:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:forgetbtn];
 
-        textField.frame = CGRectMake(90, 2, SCREEN_WIDTH -180, 40);
+        textField.frame = CGRectMake(10, 2, SCREEN_WIDTH -80, 40);
     }
     else
     {
-        textField.frame = CGRectMake(90, 2, SCREEN_WIDTH -90, 40);
+        textField.frame = CGRectMake(10, 2, SCREEN_WIDTH -20, 40);
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -219,11 +220,11 @@
     UITextField* passfield2 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
 
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"pwd"];
-    [param setObject:[[NSObject md5:passfield2.text] uppercaseString] forKey:@"newpwd"];
+    [param setObjectSafe:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"pwd"];
+    [param setObjectSafe:[[NSObject md5:passfield2.text] uppercaseString] forKey:@"newpwd"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiUpdatePassword] parameters:parameter];
     
     
@@ -231,7 +232,7 @@
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             [MMProgressHUD dismiss];
             
@@ -240,8 +241,8 @@
 //                           inView:self.view
 //                         vertical:0.7];
             
-            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
+            [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
             [self.navigationController popToRootViewControllerAnimated:YES];
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
             [delegate setupHomePageViewController];
@@ -251,7 +252,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

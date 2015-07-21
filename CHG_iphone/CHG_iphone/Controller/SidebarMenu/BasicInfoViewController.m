@@ -47,6 +47,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     [self httpGetMyProfile];
 }
@@ -82,13 +83,13 @@
         infolab.textAlignment = NSTextAlignmentRight;
         NSString* info;
         if (indexPath.row == 0) {
-            info = self.BasicInfo[@"userName"];
+            info = [self.BasicInfo objectForKeySafe: @"userName"];
         }
         else if (indexPath.row == 1)
         {
 
             if ([self.BasicInfo[@"mobile"] length] != 0) {
-                NSString* idcard = self.BasicInfo[@"mobile"];
+                NSString* idcard = [self.BasicInfo objectForKeySafe:@"mobile"];
                 idcard = [NSString stringWithFormat:@"*******%@",[idcard substringFromIndex:7]];
                 info = idcard;
             }
@@ -100,8 +101,8 @@
         
         else if (indexPath.row == 2)
         {
-            if ([self.BasicInfo[@"idcardNumber"] length] != 0) {
-                NSString* idcard = self.BasicInfo[@"idcardNumber"];
+            if ([[self.BasicInfo objectForKeySafe:@"idcardNumber"] length] != 0) {
+                NSString* idcard = [self.BasicInfo objectForKeySafe:@"idcardNumber"];
                 idcard = [NSString stringWithFormat:@"**************%@",[idcard substringFromIndex:14]];
                 info = idcard;
             }
@@ -154,7 +155,7 @@
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetMyProfile] parameters:parameter];
     

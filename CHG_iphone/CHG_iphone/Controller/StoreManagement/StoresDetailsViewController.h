@@ -10,7 +10,7 @@
 #import "LMComBoxView.h"
 #import <BaiduMapAPI/BMapKit.h>
 #import "AddressInfo.h"
-@interface StoresDetailsViewController : UIViewController<LMComBoxViewDelegate,BMKMapViewDelegate,BMKGeoCodeSearchDelegate>
+@interface StoresDetailsViewController : UIViewController<BMKMapViewDelegate,BMKGeoCodeSearchDelegate>
 {
     IBOutlet BMKMapView* _mapView;
 //    BMKLocationService* _locService;
@@ -18,7 +18,7 @@
     BMKGeoCodeSearchOption *_geocodeSearchOption;
 }
 @property(nonatomic,weak)IBOutlet UILabel* storeNamelab;
-@property(nonatomic,weak)IBOutlet UITextField* locationField;
+@property(nonatomic,weak)IBOutlet UILabel* locationField;
 @property(nonatomic,strong)NSDictionary* storesDict;
 @property(nonatomic,strong)AddressInfo* address;
 @property(nonatomic,strong)NSDictionary* addcode;

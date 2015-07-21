@@ -184,7 +184,7 @@
 //}
 -(void)setUpBgScrollView
 {
-    self.address = [[AddressInfo alloc] initWithDictionary:self.storesDict[@"address"]];
+    self.address = [[AddressInfo alloc] initWithDictionary:[self.storesDict objectForKeySafe: @"address"]];
     self.locationField.text = self.address.strAddress;
     for (int i = 0 ; i < 3; i ++) {
         UILabel *addlabel = [[UILabel alloc] initWithFrame:CGRectMake(90+ (SCREEN_WIDTH -120)/3 *i, 0, (SCREEN_WIDTH -120)/3, 40)];
@@ -502,7 +502,7 @@
 -(void)httpAddressCode
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     NSString *url = [NSObject URLWithBaseString:[APIAddress ApiAddressCode] parameters:parameter];
     
     //    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
@@ -512,7 +512,7 @@
         if (success) {
             DLog(@"data = %@",data);
 //            if (![ConfigManager sharedInstance].strAddressCode) {
-                self.addcode = [data objectForKey:@"datas"];
+                self.addcode = [data objectForKeySafe:@"datas"];
 //            }
         }
         else

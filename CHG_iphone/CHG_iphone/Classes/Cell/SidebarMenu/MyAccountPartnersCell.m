@@ -34,6 +34,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
     self.SettlementNib = [UINib nibWithNibName:@"SettlementCell" bundle:nil];
     self.GrowthNib = [UINib nibWithNibName:@"GrowthCell" bundle:nil];
@@ -79,20 +80,20 @@
     {
         SettlementCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SettlementCell"];
         if(cell==nil){
-            cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (SettlementCell*)[[self.SettlementNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         //        cell.CardNumlab.text = @"6210*******79263";
         
         
-        cell.datelab.text = self.dictionary[@"amountDate"];
+        cell.datelab.text = [self.dictionary objectForKeySafe:@"amountDate"];
         cell.statelab.text = @"支出";
         cell.namelab.text = @"晨冠已结算";
         
         
-        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardArrive"] doubleValue]];
-        cell.BankCardlab.text = self.dictionary[@"awardArriveBank"];
-        cell.CardNumlab.text = self.dictionary[@"awardAccount"];
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.dictionary objectForKeySafe:@"awardArrive"] doubleValue]];
+        cell.BankCardlab.text = [self.dictionary objectForKeySafe:@"awardArriveBank"];
+        cell.CardNumlab.text = [self.dictionary objectForKeySafe:@"awardAccount"];
         
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -102,16 +103,16 @@
     {
         GrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:@"GrowthCell"];
         if(cell==nil){
-            cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (GrowthCell*)[[self.GrowthNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
-        cell.datelab.text = self.dictionary[@"amountDate"];;
+        cell.datelab.text = [self.dictionary objectForKeySafe:@"amountDate"];
         cell.statelab.text = @"收入";
         cell.namelab.text = @"消费分账奖励";
         
         
-        cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[self.dictionary[@"awardPartnerAmount"] doubleValue]];
+        cell.iphonelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.dictionary objectForKeySafe:@"awardPartnerAmount"] doubleValue]];
         
         cell.skipbtn.tag = 102;
 
@@ -171,7 +172,7 @@
 -(void)goskipdetails:(NSInteger)tag
 {
     if (self.accountSkip) {
-        self.accountSkip(tag,self.dictionary[@"amountDate"]);
+        self.accountSkip(tag,[self.dictionary objectForKeySafe:@"amountDate"]);
     }
 }
 @end

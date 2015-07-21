@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="_mapView" destination="vy1-hR-XHh" id="njS-Rm-EQ6"/>
                 <outlet property="bgScrollView" destination="A1G-9h-TgG" id="c7Y-Y2-N26"/>
-                <outlet property="locationField" destination="JyH-jr-H2R" id="QTq-vQ-WET"/>
+                <outlet property="locationField" destination="xre-41-O4k" id="Rgt-LP-qqf"/>
                 <outlet property="storeNamelab" destination="ndK-tC-zP6" id="H30-4Y-jUb"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -47,7 +47,7 @@
                         <constraint firstAttribute="height" constant="448" id="vnc-56-e33"/>
                     </constraints>
                 </view>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1G-9h-TgG" customClass="LMContainsLMComboxScrollView">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1G-9h-TgG" customClass="LMContainsLMComboxScrollView">
                     <rect key="frame" x="0.0" y="40" width="320" height="80"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="所在地区" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ess-TQ-hH3">
@@ -86,15 +86,6 @@
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="街道门牌信息" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JyH-jr-H2R">
-                            <rect key="frame" x="90" y="40" width="210" height="40"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="40" id="q1X-Nt-TxZ"/>
-                                <constraint firstAttribute="width" constant="210" id="sRC-86-1j9"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w0b-8h-eOR">
                             <rect key="frame" x="285" y="2" width="25" height="35"/>
                             <constraints>
@@ -108,25 +99,36 @@
                                 <action selector="locationAddress:" destination="-1" eventType="touchDown" id="Nhm-zN-Wel"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xre-41-O4k">
+                            <rect key="frame" x="88" y="40" width="210" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="210" id="kbm-r7-L2g"/>
+                                <constraint firstAttribute="height" constant="40" id="nHw-a1-Mbb"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="JyH-jr-H2R" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="40" id="1y4-A2-cEF"/>
                         <constraint firstItem="604-Wg-WU2" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="40" id="Azw-SH-jwV"/>
                         <constraint firstItem="604-Wg-WU2" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" id="LRI-8w-t2y"/>
                         <constraint firstItem="wea-YI-QKy" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" constant="10" id="M3G-nR-eqo"/>
                         <constraint firstAttribute="trailing" secondItem="w0b-8h-eOR" secondAttribute="trailing" constant="10" id="MTn-4f-ZS4"/>
                         <constraint firstAttribute="trailing" secondItem="604-Wg-WU2" secondAttribute="trailing" id="NvS-rV-jf5"/>
+                        <constraint firstItem="xre-41-O4k" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="40" id="RvF-lp-OIh"/>
                         <constraint firstItem="w0b-8h-eOR" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="2" id="Ub3-7I-fLw"/>
-                        <constraint firstItem="JyH-jr-H2R" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" constant="90" id="VpC-km-3vx"/>
                         <constraint firstItem="sTg-Uv-Qw0" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="80" id="YGY-zd-Sxi"/>
                         <constraint firstAttribute="trailing" secondItem="sTg-Uv-Qw0" secondAttribute="trailing" id="Zi2-T6-x4R"/>
                         <constraint firstItem="ess-TQ-hH3" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" id="aAA-wg-F3y"/>
                         <constraint firstAttribute="height" constant="80" id="cG1-Zl-2cX"/>
                         <constraint firstAttribute="width" constant="320" id="cnx-rJ-Sxt"/>
+                        <constraint firstItem="xre-41-O4k" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" constant="88" id="dAu-Ng-43A"/>
                         <constraint firstItem="wea-YI-QKy" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="40" id="hNO-7R-v1O"/>
                         <constraint firstItem="ess-TQ-hH3" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" constant="10" id="igT-wP-Pbb"/>
                         <constraint firstItem="sTg-Uv-Qw0" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" id="kdt-u1-ngi"/>
+                        <constraint firstAttribute="bottom" secondItem="xre-41-O4k" secondAttribute="bottom" id="yH5-co-Pex"/>
                     </constraints>
                 </scrollView>
             </subviews>

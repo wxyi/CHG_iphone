@@ -65,7 +65,7 @@
                 NSMutableArray* dataArray = [NSMutableArray array];
                 for (int i=1; i<=4; i++) {
                     //加载图片的完整路劲
-                    [dataArray addObject:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"1136-640 %d",i] ofType:@"jpg"]];
+                    [dataArray addObjectSafe:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"1136-640 %d",i] ofType:@"jpg"]];
                 }
                 //怎么判断是第一次进入 可以有 判断文件 判断字段 等等方法
                 LKWelcomeView* welcome = [[LKWelcomeView alloc]initWithFrame:self.view.bounds andPathArray:dataArray];
@@ -132,7 +132,7 @@
 -(void)httpGetUserConfig
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetUserConfig] parameters:parameter];
@@ -170,15 +170,15 @@
                 if ([config.Roles isEqualToString:@"PARTNER"]) {
                     [ConfigManager sharedInstance].shopId = @"";
                     
-                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [data objectForKey:@"dimensionalCodeUrl"];
+                    [ConfigManager sharedInstance].strdimensionalCodeUrl = [data objectForKeySafe:@"dimensionalCodeUrl"];
                 }
                 else
                 {
                     if ([config.shopList count] != 0) {
-                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndex:0] objectForKey:@"shopId"] intValue]];
-                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndex:0] objectForKey:@"dimensionalCodeUrl"] ;
+                        [ConfigManager sharedInstance].shopId = [NSString stringWithFormat:@"%d",[[[config.shopList objectAtIndexSafe:0] objectForKeySafe:@"shopId"] intValue]];
+                        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[config.shopList objectAtIndexSafe:0] objectForKeySafe:@"dimensionalCodeUrl"] ;
                         
-                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndex:0] objectForKey:@"shopName"] ;
+                        [ConfigManager sharedInstance].strStoreName = [[config.shopList objectAtIndexSafe:0] objectForKeySafe:@"shopName"] ;
                     }
                     
                 }

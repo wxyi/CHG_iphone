@@ -31,41 +31,10 @@
         return;
     }
     if (self.iphoneField.text.length == 11  ) {
-        NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
         
-        self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
-            DLog(@"否");
-            
-            
-            [self httpCustomerBefore];
-            
-        } otherButtonBlock:^{
-            
-        }];
-        [self.stAlertView show];
+        [self httpCustomerBefore];
         
-        sender.enabled = NO;
-        //button type要 设置成custom 否则会闪动
-        [sender startWithSecond:60];
-        sender.backgroundColor = UIColorFromRGB(0xdddddd);
-        sender.alpha=0.4;
-//        sender.titleLabel.textColor = UIColorFromRGB(0xdddddd);
-        [sender setTitleColor:UIColorFromRGB(0x646464) forState:UIControlStateNormal];
-        [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-            NSString *title = [NSString stringWithFormat:@"%d秒后重送",second];
-            return title;
-        }];
-        [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
-            sender.alpha=1;
-            countDownButton.enabled = YES;
-            sender.backgroundColor = UIColorFromRGB(0x171c61);
-            [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//            sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
-            return @"点击重新获取";
-            
-        }];
-       
-        
+
     }
 //    else
 //    {
@@ -76,6 +45,30 @@
 //    }
     
     
+}
+-(void)sendCheck
+{
+    JKCountDownButton* sender = (JKCountDownButton*)[self viewWithTag:10000];
+    sender.enabled = NO;
+    //button type要 设置成custom 否则会闪动
+    [sender startWithSecond:60];
+    sender.backgroundColor = UIColorFromRGB(0xdddddd);
+    sender.alpha=0.4;
+    //        sender.titleLabel.textColor = UIColorFromRGB(0xdddddd);
+    [sender setTitleColor:UIColorFromRGB(0x646464) forState:UIControlStateNormal];
+    [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
+        NSString *title = [NSString stringWithFormat:@"%d秒后重新发送",second];
+        return title;
+    }];
+    [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+        sender.alpha=1;
+        countDownButton.enabled = YES;
+        sender.backgroundColor = UIColorFromRGB(0x171c61);
+        [sender setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        //            sender.titleLabel.tintColor = UIColorFromRGB(0x171C61);
+        return @"点击重新获取";
+        
+    }];
 }
 -(BOOL)isCorrect
 {
@@ -106,7 +99,7 @@
 -(void)httpValidateCustMobile
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:self.iphoneField.text forKey:@"mobile"];
+    [parameter setObjectSafe:self.iphoneField.text forKey:@"mobile"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
     
@@ -116,8 +109,10 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if (success) {
             if (self.didGetCode) {
-                self.didGetCode([data objectForKey:@"checkCode"]);
+                self.didGetCode([data objectForKeySafe:@"checkCode"]);
             }
+            
+            
         }
         else
         {
@@ -141,33 +136,49 @@
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
 //    [parameter setObject:self.iphoneField.text forKey:@"mobile"];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomerBefore] parameters:parameter];
     
     NSMutableDictionary *parame = [NSMutableDictionary dictionary];
-    [parame setObject:self.iphoneField.text forKey:@"mobile"];
+    [parame setObjectSafe:self.iphoneField.text forKey:@"mobile"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:parame successBlock:^(BOOL success, id data, NSString *msg) {
         
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             
+            NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
+            
+            self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                
+                [self sendCheck];
+                
+            } otherButtonBlock:^{
+                
+            }];
+            [self.stAlertView show];
+            
             if (self.didGetCode) {
-                self.didGetCode([[data objectForKey:@"datas"] objectForKey:@"checkCode"]);
+                self.didGetCode([[data objectForKeySafe:@"datas"] objectForKeySafe:@"checkCode"]);
             }
             
         }
         else
         {
             if (self.didshowInfo) {
-                self.didshowInfo([data objectForKey:@"msg"]);
+                self.didshowInfo([data objectForKeySafe:@"msg"]);
             }
         }
         
         
     } failureBlock:^(NSString *description) {
         
+        if (self.didGetCode) {
+            self.didGetCode(description);
+        }
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {
@@ -217,31 +228,31 @@
     }
     return YES;
 }
--(void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    
-//    NSString *regex = @"[a-zA-Z0-9\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*";
+//-(void)textFieldDidBeginEditing:(UITextField *)textField
+//{
 //    
-//    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-//    if (![pred evaluateWithObject:string]) {
-//        return NO;
+////    NSString *regex = @"[a-zA-Z0-9\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*";
+////    
+////    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+////    if (![pred evaluateWithObject:string]) {
+////        return NO;
+////    }
+//    if (textField == self.iphoneField) {
+//        if (self.iphoneField.text.length > 0) {
+//            if ([[self.iphoneField.text substringToIndex:1] intValue]!= 1) {
+//                if (self.didGetCode) {
+//                    self.didGetCode(@"手机格式不正确");
+//                }
+//            }
+//        }
 //    }
-    if (textField == self.iphoneField) {
-        if (self.iphoneField.text.length > 0) {
-            if ([[self.iphoneField.text substringToIndex:1] intValue]!= 1) {
-                if (self.didGetCode) {
-                    self.didGetCode(@"手机格式不正确");
-                }
-            }
-        }
-    }
-}
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (self.iphoneField.text.length != 11) {
-        if (self.didGetCode) {
-            self.didGetCode(@"手机格式不正确");
-        }
-    }
-}
+//}
+//-(void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    if (self.iphoneField.text.length != 11) {
+//        if (self.didGetCode) {
+//            self.didGetCode(@"手机格式不正确");
+//        }
+//    }
+//}
 @end

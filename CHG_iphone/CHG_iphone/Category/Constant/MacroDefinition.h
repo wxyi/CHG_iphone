@@ -364,6 +364,7 @@ typedef enum
 {
     OrderReturnTypeAMember = 0,//门店订单管理
     OrderReturnTypeHomePage, //会员订单管理
+    OrderReturnTypePopPage, //返回上一层;
     
 }OrderReturnType;
 

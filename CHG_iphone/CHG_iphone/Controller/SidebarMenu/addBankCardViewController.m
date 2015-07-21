@@ -51,6 +51,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.AddShoppersNib = [UINib nibWithNibName:@"AddShoppersCell" bundle:nil];
     self.SelectBankCardNib = [UINib nibWithNibName:@"SelectBankCardCell" bundle:nil];
@@ -69,7 +70,7 @@
     if (indexPath.row == 0 || indexPath.row == 1) {
         AddShoppersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AddShoppersCell"];
         if(cell==nil){
-            cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.namelab.text = [self.items objectAtIndexSafe:indexPath.row];
@@ -100,7 +101,7 @@
     {
         SelectBankCardCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SelectBankCardCell"];
         if(cell==nil){
-            cell = (SelectBankCardCell*)[[self.SelectBankCardNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (SelectBankCardCell*)[[self.SelectBankCardNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.namelab.text = [self.items objectAtIndexSafe:indexPath.row];
@@ -224,7 +225,7 @@
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiAddBankCard] parameters:parameter];
     NSMutableDictionary *bankpar = [NSMutableDictionary dictionary];
     
@@ -233,22 +234,22 @@
 //    code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:[Card.text substringToIndex:6]];
     
    
-    [bankpar setObject:self.bank.bankCode forKey:@"bankCode"];
-    [bankpar setObject:Card.text forKey:@"cardNumber"];
-    [bankpar setObject:name.text forKey:@"accountName"];
+    [bankpar setObjectSafe:self.bank.bankCode forKey:@"bankCode"];
+    [bankpar setObjectSafe:Card.text forKey:@"cardNumber"];
+    [bankpar setObjectSafe:name.text forKey:@"accountName"];
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:bankpar successBlock:^(BOOL success, id data, NSString *msg) {
-        DLog(@"data = %@ msg = %@",[data objectForKey:@"datas"],[data objectForKey:@"msg"]);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        DLog(@"data = %@ msg = %@",[data objectForKeySafe:@"datas"],[data objectForKey:@"msg"]);
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             [self.navigationController popViewControllerAnimated:YES];
         }
         else
         {
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -320,7 +321,7 @@
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                     reuseIdentifier:identifier];
     
-    BanKCode* textbank = [self.bankitems objectAtIndex:indexPath.row];
+    BanKCode* textbank = [self.bankitems objectAtIndexSafe:indexPath.row];
     cell.textLabel.text = textbank.bankName;
     
     return cell;
@@ -339,7 +340,7 @@
     NSLog(@"%s : %d", __func__, indexPath.row);
     // your code here
     
-    self.bank = [self.bankitems objectAtIndex:indexPath.row];
+    self.bank = [self.bankitems objectAtIndexSafe:indexPath.row];
     UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
     textlab.text = self.bank.bankName;
     textlab.textAlignment = NSTextAlignmentLeft;

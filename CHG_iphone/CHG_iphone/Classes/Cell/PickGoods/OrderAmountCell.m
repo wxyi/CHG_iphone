@@ -43,13 +43,21 @@
     NSString* price = textField.text;
     DLog(@"price = %.1f Receivedlab = %.1f",[price doubleValue],[self.Receivedlab.text doubleValue]);
     
-    if ([self.receivablelab.text doubleValue] >= [price doubleValue]) {
+    if ([self.receivablelab.text doubleValue] >= [price doubleValue]&& [price floatValue] != 0) {
         self.favorablelab.text = [NSString stringWithFormat:@"%.2f",[self.receivablelab.text doubleValue] - [price doubleValue]];
         self.Receivedlab.text = [NSString stringWithFormat:@"%.2f",[price doubleValue] ];
     }
+    else if([price floatValue] <= 0)
+    {
+        textField.text = self.receivablelab.text;
+//        [SGInfoAlert showInfo:@"实退金额应小于等于0"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self
+//                     vertical:0.7];
+    }
     else
     {
-        textField.text = @"";
+        textField.text = self.receivablelab.text;
         
         NSString* info;
         if (self.orderSaletype == SaleTypeSellingGoods ||self.orderSaletype == SaleTypePresell) {

@@ -33,6 +33,7 @@
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.scrollEnabled = NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.OrderGiftNib = [UINib nibWithNibName:@"OrderGiftCell" bundle:nil];
     
@@ -46,7 +47,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self.allitems objectForKey:@"productList"] count];
+    return [[self.allitems objectForKeySafe:@"productList"] count];
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -54,30 +55,31 @@
 //    {
         OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
         if(cell==nil){
-            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
-        NSDictionary* dict =  [[self.allitems objectForKey:@"productList"] objectAtIndex:indexPath.row] ;
+        NSDictionary* dict =  [[self.allitems objectForKeySafe:@"productList"] objectAtIndexSafe:indexPath.row] ;
         
-        [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
-        cell.titlelab.text = dict[@"productName"];
-        cell.pricelab.text = dict[@"productPrice"];
+        [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
+        cell.titlelab.text = [dict objectForKeySafe:@"productName"];
+        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
     
     int goodNum = 0;
     if (self.picktype == PickUpTypeDid) {
-        goodNum = [[dict objectForKey:@"quantity"] intValue] -  [[dict objectForKey:@"remainQuantity"] intValue] - [[dict objectForKey:@"returnQuantity"] intValue];
+//        goodNum = [[dict objectForKeySafe:@"quantity"] intValue] -  [[dict objectForKeySafe:@"remainQuantity"] intValue] - [[dict objectForKeySafe:@"returnQuantity"] intValue];
+        goodNum = [[self.allitems objectForKeySafe:@"getGoodsNum"]intValue];
     }
     else if(self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop)
     {
-        goodNum = [[dict objectForKey:@"quantity"] intValue];
+        goodNum = [[dict objectForKeySafe:@"quantity"] intValue];
     }
     else
     {
-        goodNum = [[dict objectForKey:@"remainQuantity"] intValue];
+        goodNum = [[dict objectForKeySafe:@"remainQuantity"] intValue];
     }
     
-    if ([dict[@"returnQuantity"] intValue] != 0 && self.picktype != PickUpTypeDidNot) {
-        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[dict[@"returnQuantity"] intValue]];
+    if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0 && self.picktype != PickUpTypeDidNot) {
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
     }
         cell.countlab.text = [NSString stringWithFormat:@"x %d",goodNum ];
 
@@ -152,7 +154,7 @@
         orderstatus.textColor = UIColorFromRGB(0x878787);
         if (self.picktype != PickUpTypeFinish)
         {
-            orderstatus.text = [NSString stringWithFormat:@"制单人:%@",self.allitems[@"orderCreator"]];;
+            orderstatus.text = [NSString stringWithFormat:@"制单人:%@",[self.allitems objectForKeySafe:@"orderCreator"]];;
         }
         [v_header addSubview:orderstatus];
         
@@ -161,7 +163,7 @@
         datelab.textAlignment = NSTextAlignmentLeft;
         datelab.font = FONT(13);
         datelab.textColor = UIColorFromRGB(0x878787);;
-        datelab.text = self.allitems[@"orderDate"];
+        datelab.text = [self.allitems objectForKeySafe:@"orderDate"];
         [v_header addSubview:datelab];
         
         
@@ -169,7 +171,7 @@
         Seriallab.textAlignment = NSTextAlignmentRight;
         Seriallab.font = FONT(13);
         Seriallab.textColor = UIColorFromRGB(0x878787);;
-        Seriallab.text = [NSString stringWithFormat:@"订单编号:%d",[self.allitems[@"orderId"] intValue]];
+        Seriallab.text = [NSString stringWithFormat:@"订单编号:%d",[[self.allitems objectForKeySafe:@"orderId"] intValue]];
         
         [v_header addSubview:Seriallab];
 
@@ -182,21 +184,21 @@
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
     v_footer.backgroundColor = [UIColor clearColor];
 //    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
-    NSArray* productList = self.allitems[@"productList"];
+    NSArray* productList = [self.allitems objectForKeySafe:@"productList"];
     NSInteger count = 0;
     if (self.picktype == PickUpTypeDid)
     {
         for (int i = 0; i< [productList count]; i++) {
-            NSInteger remainQuantity= [productList[i][@"remainQuantity"] integerValue];
-            NSInteger quantity= [productList[i][@"quantity"] integerValue];
-            NSInteger returnQuantity= [productList[i][@"returnQuantity"] integerValue];
+            NSInteger remainQuantity= [[[productList objectAtIndexSafe:i] objectForKeySafe: @"remainQuantity"] integerValue];
+            NSInteger quantity= [[[productList objectAtIndexSafe:i] objectForKeySafe:@"quantity"] integerValue];
+            NSInteger returnQuantity= [[[productList objectAtIndexSafe:i] objectForKeySafe:@"returnQuantity"] integerValue];
             count += quantity - remainQuantity - returnQuantity;
         }
     }
     else
     {
         for (int i = 0; i< [productList count]; i++) {
-            count += [productList[i][@"remainQuantity"] intValue];
+            count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] intValue];
         }
     }
     
@@ -214,8 +216,8 @@
     
 
     if (self.picktype == PickUpTypeDid) {
-        string = [NSString stringWithFormat:@"共提货%d次",[self.allitems[@"getGoodsNum"] intValue]];
-        rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[self.allitems[@"getGoodsNum"] intValue]]];
+        string = [NSString stringWithFormat:@"共提货%d次",[[self.allitems objectForKeySafe:@"getGoodsNum"] intValue]];
+        rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%d",[[self.allitems objectForKeySafe:@"getGoodsNum"] intValue]]];
         text = [[NSMutableAttributedString alloc] initWithString:string];
         [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
         

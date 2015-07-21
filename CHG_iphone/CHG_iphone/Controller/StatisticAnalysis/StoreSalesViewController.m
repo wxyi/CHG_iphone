@@ -58,10 +58,10 @@
     self.StoreSalesDay.isRefresh = YES;
     self.StoreSalesDay.CellSkipSelect =^(NSDictionary* dictionary){
         DLog(@"跳转详情");
-        if ([dictionary[@"orderStatus"] intValue] == 0) {
+        if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
             DLog(@"未完成订单")
             PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-            PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             PickGoodsView.ManagementTyep = OrderManagementTypeAll;
             [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
         }
@@ -69,7 +69,7 @@
         {
             DLog(@"已完成订单");
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
+            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = OrderManagementTypeAll;
             CompletedOrderDetailsView.Comordertype = detailsOrder;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
@@ -97,7 +97,7 @@
         UIButton* button = (UIButton*)[weakSelf.view viewWithTag:100];
 
         weakSelf.isSkip = YES;
-        NSString* data = dictionary[@"day"];
+        NSString* data = [dictionary objectForKeySafe:@"day"];
         weakSelf.strYear = [data substringToIndex:4];
         weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
         weakSelf.strDay = [data substringFromIndex:6];
@@ -116,7 +116,7 @@
         UIButton* button = (UIButton*)[weakSelf.view viewWithTag:101];
         
         weakSelf.isSkip = YES;
-        NSString* data = dictionary[@"year"];
+        NSString* data = [dictionary objectForKeySafe:@"year"];
         weakSelf.strYear = [data substringToIndex:4];
         weakSelf.strMonth = [data substringWithRange:NSMakeRange(4, 2)];
         weakSelf.isRefresh = YES;

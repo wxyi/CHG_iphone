@@ -43,6 +43,7 @@
     self.items = [NSArray arrayWithObjects:@"重置密码",@"确认密码" ,nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -62,15 +63,15 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
-    title.textColor = UIColorFromRGB(0x323232);
-    title.font = FONT(15);
-    title.text = [self.items objectAtIndexSafe:indexPath.row];
-    [cell.contentView addSubview:title];
+//    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
+//    title.textColor = UIColorFromRGB(0x323232);
+//    title.font = FONT(15);
+//    title.text = [self.items objectAtIndexSafe:indexPath.row];
+//    [cell.contentView addSubview:title];
     
     UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
-    textField.frame = CGRectMake(90, 2, SCREEN_WIDTH - 90, 40);
+    textField.frame = CGRectMake(10, 2, SCREEN_WIDTH - 20, 40);
     textField.placeholder = [self.items objectAtIndexSafe:indexPath.row]; //默认显示的字
     textField.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
     textField.secureTextEntry = YES; //密码
@@ -143,12 +144,12 @@
 -(void)httpResetPassword
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     UITextField* textfield1 = (UITextField*)[self.view viewWithTag:1010];
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:[[NSObject md5:textfield1.text] uppercaseString] forKey:@"newPwd"];
-    [param setObject:self.strCheckCode forKey:@"checkCode"];
+    [param setObjectSafe:[[NSObject md5:textfield1.text] uppercaseString] forKey:@"newPwd"];
+    [param setObjectSafe:self.strCheckCode forKey:@"checkCode"];
     
     NSString *url = [NSObject URLWithBaseString:[APIAddress ApiResetPassword] parameters:parameter];
     
@@ -156,7 +157,7 @@
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
             
 //            [SGInfoAlert showInfo:@"密码修改成功"
@@ -164,8 +165,8 @@
 //                           inView:self.view
 //                         vertical:0.7];
 //            sleep(1000);
-            [ConfigManager sharedInstance].access_token = [[data objectForKey:@"datas"] objectForKey:@"access_token"];
-            [ConfigManager sharedInstance].refresh_token = [[data objectForKey:@"datas"] objectForKey:@"refresh_token"];
+            [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
+            [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
             [self.navigationController popToRootViewControllerAnimated:YES];
             
             

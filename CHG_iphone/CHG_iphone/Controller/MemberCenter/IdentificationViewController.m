@@ -280,12 +280,12 @@
     if (self.isScan) {
         IdentUserInfoCell *cell=[tableView dequeueReusableCellWithIdentifier:@"IdentUserInfoCell"];
         if(cell==nil){
-            cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
-        cell.iphonelab.text = self.dict[@"custMobile"];
+        cell.iphonelab.text = [self.dict objectForKeySafe: @"custMobile"];
         cell.iphonelab.delegate = self;
-        cell.namelab.text = self.dict[@"custName"];
+        cell.namelab.text = [self.dict objectForKeySafe:@"custName"];
         [cell.iphonelab addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         cell.didGetCode = ^(NSString* checkcode)
         {
@@ -301,7 +301,7 @@
     {
         IdentificationCell *cell=[tableView dequeueReusableCellWithIdentifier:@"IdentificationCell"];
         if(cell==nil){
-            cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.iphoneTextfiel.frame = CGRectMake(10, 0, SCREEN_WIDTH -20, 40);
@@ -505,29 +505,29 @@
     
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    [param setObject:custMobile forKey:@"mobile"];
+    [param setObjectSafe:custMobile forKey:@"mobile"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateMobile] parameters:parameter];
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         
-        DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        DLog(@"data = %@ msg = %@",data,[data objectForKeySafe:@"msg"]);
+        if([data objectForKey:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             self.isfinish = NO;
             
             [MMProgressHUD dismiss];
-            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKey:@"datas"] objectForKey:@"Cust"] objectForKey:@"custId"] intValue]];
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKeySafe:@"datas"] objectForKeySafe:@"Cust"] objectForKeySafe:@"custId"] intValue]];
             
             
             DLog(@"识别成功");
-            self.dict = [[data objectForKey:@"datas"] objectForKey:@"Cust"];
-            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[self.dict objectForKey:@"custId"] intValue]];
-            [ConfigManager sharedInstance].strcustMobile = [NSString stringWithFormat:@"%@",[self.dict objectForKey:@"custMobile"] ];
-            [ConfigManager sharedInstance].strcustName = [NSString stringWithFormat:@"%@",[self.dict objectForKey:@"custName"]];
+            self.dict = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"Cust"];
+            [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[self.dict objectForKeySafe:@"custId"] intValue]];
+            [ConfigManager sharedInstance].strcustMobile = [NSString stringWithFormat:@"%@",[self.dict objectForKeySafe:@"custMobile"] ];
+            [ConfigManager sharedInstance].strcustName = [NSString stringWithFormat:@"%@",[self.dict objectForKeySafe:@"custName"]];
             
             if (self.m_MenuType == MenuTypeMemberCenter) {
                 [self skipVariousPages];
@@ -552,7 +552,7 @@
 //
 //            }
         }
-        else if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==47001)
+        else if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==47001)
         {
             DLog(@"识别失败");
             
@@ -748,7 +748,7 @@
     
     if ([metadataObjects count] >0)
     {
-        AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
+        AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndexSafe:0];
         stringValue = metadataObject.stringValue;
         
         
@@ -864,7 +864,7 @@
 {
     //获取键盘的高度
     NSDictionary *userInfo = [aNotification userInfo];
-    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    NSValue *aValue = [userInfo objectForKeySafe:UIKeyboardFrameEndUserInfoKey];
     CGRect keyboardRect = [aValue CGRectValue];
     self.keyHeight = keyboardRect.size.height;
     
@@ -885,6 +885,7 @@
     [UIView setAnimationDuration: movementDuration];
     
     CGRect rect = self.tableview.frame;
+    rect.origin.y = 0;
     NSString* deviceName = [ConfigManager sharedInstance].deviceName;
     if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"]) {
         rect.origin.y = rect.origin.y - 100;
@@ -892,12 +893,13 @@
     }
     else
     {
-        rect.origin.y = rect.origin.y - 100;
+        rect.origin.y = rect.origin.y - 150;
     }
     
     self.tableview.frame = rect;
     
     rect = self.nextbtn.frame;
+    rect.origin.y = SCREEN_HEIGHT - 40;
     rect.origin.y = rect.origin.y - self.keyHeight;
     self.nextbtn.frame = rect;
     
@@ -923,7 +925,7 @@
     }
     else
     {
-        rect.origin.y = rect.origin.y + 100;
+        rect.origin.y = rect.origin.y + 150;
         
     }
 //    rect.origin.y = rect.origin.y + self.keyHeight;

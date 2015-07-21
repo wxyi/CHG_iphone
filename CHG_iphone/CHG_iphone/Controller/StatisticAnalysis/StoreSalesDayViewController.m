@@ -84,7 +84,7 @@
     DLog(@"-----%@",NSStringFromCGRect(self.tableview.frame))
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-    
+    self.tableview.showsVerticalScrollIndicator = NO;
     // Do any additional setup after loading the view from its nib.
 //    self.StatisticAnalysisTopNib = [UINib nibWithNibName:@"StatisticAnalysisTopCell" bundle:nil];
     self.StoresInfoNib = [UINib nibWithNibName:self.strNibName bundle:nil];
@@ -123,19 +123,19 @@
         {
             StoresInfoCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
             if(cell==nil){
-                cell = (StoresInfoCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (StoresInfoCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            NSDictionary* dictionary = [self.items objectAtIndex:indexPath.section ];
+            NSDictionary* dictionary = [self.items objectAtIndexSafe:indexPath.section ];
             DLog(@"%@",dictionary);
             
-            cell.datelab.text = dictionary[@"orderDate"];
-            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%d",[dictionary[@"orderCode"] intValue]];
-            cell.namelab.text = dictionary[@"custName"];
-            cell.producerlab.text = [NSString stringWithFormat:@"制单人:%@",dictionary[@"orderCreator"]];
-            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[dictionary[@"orderAmount"] doubleValue]];
+            cell.datelab.text = [dictionary objectForKeySafe:@"orderDate"];
+            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%d",[[dictionary objectForKeySafe:@"orderCode"] intValue]];
+            cell.namelab.text = [dictionary objectForKeySafe:@"custName"];
+            cell.producerlab.text = [NSString stringWithFormat:@"制单人:%@",[dictionary objectForKeySafe:@"orderCreator"]];
+            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[dictionary objectForKeySafe:@"orderFactAmount"] doubleValue]];
             
-            cell.items = self.items[indexPath.section];
+            cell.items = [self.items objectAtIndexSafe:indexPath.section];
             cell.CellSkipSelect=^(NSDictionary* dictionary){
                 [self goskipdetails:dictionary];
             };
@@ -147,15 +147,15 @@
         {
             MembegrowthCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
             if(cell==nil){
-                cell = (MembegrowthCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (MembegrowthCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            cell.datelab.text = self.items[indexPath.section][@"joinDate"];
-            cell.statelab.text = self.items[indexPath.section][@"comeFrom"];
+            cell.datelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe: @"joinDate"];
+            cell.statelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"comeFrom"];
             
             
-            cell.namelab.text = self.items[indexPath.section][@"name"];
-            cell.iphonelab.text = self.items[indexPath.section][@"mobile"];
+            cell.namelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"name"];
+            cell.iphonelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"mobile"];
             
             
             
@@ -168,14 +168,14 @@
         {
             pinCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
             if(cell==nil){
-                cell = (pinCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (pinCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            cell.datelab.text =  self.items[indexPath.section][@"awardSalerDate"];
-            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%@", self.items[indexPath.section][@"orderCode"]];;
-            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.items[indexPath.section]objectForKey:@"awardSalerMoney"] doubleValue]];
+            cell.datelab.text =  [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"awardSalerDate"];
+            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%@", [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"orderCode"]];;
+            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.items[indexPath.section]objectForKeySafe:@"awardSalerMoney"] doubleValue]];
             
-            cell.items = self.items[indexPath.section];
+            cell.items = [self.items objectAtIndexSafe:indexPath.section];
             cell.CellSkipSelect=^(NSDictionary* dictionary){
                 [self goskipdetails:dictionary];
             };
@@ -188,15 +188,15 @@
         {
             PartnersCell *cell=[tableView dequeueReusableCellWithIdentifier:self.strNibName];
             if(cell==nil){
-                cell = (PartnersCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+                cell = (PartnersCell*)[[self.StoresInfoNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            cell.datelab.text = self.items[indexPath.section][@"awardSalerDate"];
-            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%@", self.items[indexPath.section][@"orderCode"]];
-            cell.namelab.text = self.items[indexPath.section][@"partnerName"];
-            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.items[indexPath.section]objectForKey:@"awardSalerMoney"] doubleValue]];
+            cell.datelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"awardSalerDate"];
+            cell.statelab.text = [NSString stringWithFormat:@"订单编号:%@", [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"orderCode"]];
+            cell.namelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"partnerName"];
+            cell.pricelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.items[indexPath.section]objectForKeySafe:@"awardSalerMoney"] doubleValue]];
             
-            cell.items = self.items[indexPath.section];
+            cell.items = [self.items objectAtIndexSafe: indexPath.section];
             cell.CellSkipSelect=^(NSDictionary* dictionary){
                 [self goskipdetails:dictionary];
             };
@@ -263,10 +263,10 @@
 {
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:self.strYear forKey:@"year"];
-    [parameter setObject:self.strMonth forKey:@"month"];
-    [parameter setObject:self.strDay forKey:@"day"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:self.strYear forKey:@"year"];
+    [parameter setObjectSafe:self.strMonth forKey:@"month"];
+    [parameter setObjectSafe:self.strDay forKey:@"day"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
@@ -306,49 +306,55 @@
 //            self.pricelab.text = [NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
 //            self.items = [data objectForKey:@"custList"];
             NSArray* tm_item;
-            [self.items removeAllObjects];
+            if ([self.items count] != 0) {
+                DLog("is NSMutableArray %d\n", [self.items isKindOfClass:[NSMutableArray class]]);
+                [self.items removeAllObjects];
+                
+            }
+            
             switch (self.statisticalType) {
                 case StatisticalTypeStoreSales:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"custCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"custCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"custList"];
-                    tm_item = [data objectForKey:@"custList"];
+                    tm_item = [data objectForKeySafe:@"custList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"orderAmount"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe:i] objectForKeySafe:@"orderAmount"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
                 }
                 case StatisticalTypeMembershipGrowth:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%d",[data[@"custCount"] intValue]];
-                    self.items = [data objectForKey:@"custList"];
+                    self.pricelab.text =[NSString stringWithFormat:@"%d",[[data objectForKeySafe:@"custCount"] intValue]];
+                    tm_item = [data objectForKeySafe:@"custList"];
+                    self.items = [tm_item mutableCopy];
                     
                     break;
                 }
                 case StatisticalTypePinRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardSalerCount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe:@"awardSalerCount"] doubleValue]];
 //                    self.items = [data objectForKey:@"awardSalerList"];
                     
-                    tm_item = [data objectForKey:@"awardSalerList"];
+                    tm_item = [data objectForKeySafe:@"awardSalerList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"awardSalerMoney"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe:i] objectForKeySafe:@"awardSalerMoney"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
                 }
                 case StatisticalTypePartnersRewards:
                 {
-                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[data[@"awardPartnerAmount"] doubleValue]];
+                    self.pricelab.text =[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe:@"awardPartnerAmount"] doubleValue]];
                     
                     
-                    tm_item = [data objectForKey:@"awardPartnerList"];
+                    tm_item = [data objectForKeySafe:@"awardPartnerList"];
                     for (int i = 0; i < [tm_item count]; i ++) {
-                        if ([tm_item[i][@"awardSalerMoney"] intValue ] != 0) {
-                            [self.items addObject:tm_item[i]];
+                        if ([[[tm_item objectAtIndexSafe:i] objectForKeySafe:@"awardSalerMoney"] intValue ] != 0) {
+                            [self.items addObjectSafe:tm_item[i]];
                         }
                     }
                     break;
@@ -375,14 +381,14 @@
                 
             }
             [self reLoadView];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
         }
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
-            [self.tableview.header endRefreshing];
-            [self.tableview.footer endRefreshing];
+//            [self.tableview.header endRefreshing];
+//            [self.tableview.footer endRefreshing];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor blackColor] CGColor]
@@ -392,8 +398,8 @@
         
         
     } failureBlock:^(NSString *description) {
-        [self.tableview.header endRefreshing];
-        [self.tableview.footer endRefreshing];
+//        [self.tableview.header endRefreshing];
+//        [self.tableview.footer endRefreshing];
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
@@ -547,7 +553,7 @@
         self.strYear = nextYear;
 
         [self httpGetStatisticAnalysis];
-//        [self.tableview.header endRefreshing];
+        [self.tableview.header endRefreshing];
     });
 }
 
@@ -600,7 +606,7 @@
         
         [self httpGetStatisticAnalysis];
         // 拿到当前的上拉刷新控件，结束刷新状态
-//        [self.tableview.footer endRefreshing];
+        [self.tableview.footer endRefreshing];
     });
 }
 

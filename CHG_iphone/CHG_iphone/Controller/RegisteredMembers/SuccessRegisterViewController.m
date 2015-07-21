@@ -69,6 +69,7 @@
     
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 //    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.SuccessRegistereNib = [UINib nibWithNibName:@"SuccessRegistereCell" bundle:nil];
@@ -91,7 +92,7 @@
     if (indexPath.section == 0) {
         SuccessRegistereCell *cell=[tableView dequeueReusableCellWithIdentifier:@"SuccessRegistereCell"];
         if(cell==nil){
-            cell = (SuccessRegistereCell*)[[self.SuccessRegistereNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (SuccessRegistereCell*)[[self.SuccessRegistereNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -101,7 +102,7 @@
     {
         registeredMenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"registeredMenuCell"];
         if(cell==nil){
-            cell = (registeredMenuCell*)[[self.registeredMenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (registeredMenuCell*)[[self.registeredMenuNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
@@ -181,7 +182,7 @@
                 PresellGoodsView.orderSaletype = SaleTypePresell;
             }
             
-            PresellGoodsView.m_returnType = OrderReturnTypeHomePage;
+            PresellGoodsView.m_returnType = OrderReturnTypePopPage;
             [self.navigationController pushViewController:PresellGoodsView animated:YES];
             break;
         }

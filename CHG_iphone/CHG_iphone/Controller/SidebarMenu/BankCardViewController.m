@@ -55,6 +55,7 @@
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled= NO;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.BanKCardNib = [UINib nibWithNibName:@"BanKCardCell" bundle:nil];
     
@@ -95,7 +96,7 @@
 {
     BanKCardCell *cell=[tableView dequeueReusableCellWithIdentifier:@"BanKCardCell"];
     if(cell==nil){
-        cell = (BanKCardCell*)[[self.BanKCardNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (BanKCardCell*)[[self.BanKCardNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
         UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
         if ( config.nRoleType != 1)
@@ -120,9 +121,9 @@
 //    DLog(@"[textField.text substringToIndex:6] = %@",[textField.text substringToIndex:6]);
     code = [[SQLiteManager sharedInstance] getBankCodeDataByCardCode:dict[@"bankCode"]];
     cell.BankNameLab.text = code.bankName;
-    cell.CardTypeLab.text = dict[@"cardType"];
+    cell.CardTypeLab.text = [dict objectForKeySafe: @"cardType"];
     
-    NSString* numlab = dict[@"cardNumber"];
+    NSString* numlab = [dict objectForKeySafe:@"cardNumber"];
     cell.tailNumLab.text = [numlab substringFromIndex:numlab.length - 4];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -195,7 +196,7 @@
 -(void)httpGetBankCardList
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetBankCardList] parameters:parameter];
     
@@ -213,7 +214,10 @@
             }
             else
             {
-                [self.items removeAllObjects];
+//                [self.items removeAllObjects];
+                if ([self.items count] != 0) {
+                    [self.items removeAllObjects];
+                }
                 [self.items addObjectSafe:data];
                 self.tableview.hidden = NO;
                 self.addbtn.hidden = YES;
@@ -248,8 +252,8 @@
 -(void)httpDeleteBankCard
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[NSString stringWithFormat:@"%d",[self.items[0][@"bankId"] intValue]] forKey:@"bankId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[NSString stringWithFormat:@"%d",[[[self.items objectAtIndexSafe:0] objectForKeySafe: @"bankId"] intValue]] forKey:@"bankId"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiDeleteBankCard] parameters:parameter];
     

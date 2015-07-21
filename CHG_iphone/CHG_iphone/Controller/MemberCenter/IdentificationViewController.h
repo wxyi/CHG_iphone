@@ -24,7 +24,7 @@
 @property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
 @property (nonatomic, strong) UIImageView * line;
 
-
+@property (nonatomic,assign)BOOL isMoveUp;
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UIButton* nextbtn;
 @property(nonatomic,assign)MenuType m_MenuType;

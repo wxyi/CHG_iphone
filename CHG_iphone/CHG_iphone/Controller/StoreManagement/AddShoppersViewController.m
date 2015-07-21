@@ -41,6 +41,7 @@
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.AddShoppersNib = [UINib nibWithNibName:@"AddShoppersCell" bundle:nil];
 }
@@ -56,7 +57,7 @@
 {
     AddShoppersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AddShoppersCell"];
     if(cell==nil){
-        cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     cell.namelab.text = [self.items objectAtIndexSafe:indexPath.row];
@@ -166,10 +167,10 @@
         {
             info = @"请输入手机号";
         }
-        else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphone ])
-        {
-            info = @"手机格式不正确";
-        }
+//        else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphone ])
+//        {
+//            info = @"手机格式不正确";
+//        }
         else if (cardNum.length > 0 && cardNum.length != 18)
         {
             DLog(@"%d",cardNum.length);
@@ -193,7 +194,7 @@
 -(void)httpUpdateSeller
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
 
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiUpdateSeller] parameters:parameter];
     
@@ -204,7 +205,7 @@
 //        "sellerName":"MsellerName",
 //        "sellerMobile":"15912345678",
 //        "idCardNumber":"667778899"}
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     NSString* personType;
     if (self.PersonnerType == StorePersonnelTypeManager) {
         personType = @"1";
@@ -213,7 +214,7 @@
     {
         personType = @"0";
     }
-    [param setObject:personType forKey:@"personType"];
+    [param setObjectSafe:personType forKey:@"personType"];
     //姓名
     
     NSArray* array =  @[@"sellerName", @"sellerMobile", @"idCardNumber"];
@@ -221,18 +222,18 @@
     for (int i = 0; i < array.count; i++) {
         NSInteger tag = [[NSString stringWithFormat:@"101%d",i] intValue];
         textfield = (UITextField*)[self.view viewWithTag:tag];
-        [param setObject:textfield.text forKey:[array objectAtIndex:i]];
+        [param setObjectSafe:textfield.text forKey:[array objectAtIndexSafe:i]];
     }
     DLog(@"param = %@",param);
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
-        DLog(@"data = %@ msg = %@",data,[data objectForKey:@"msg"]);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        DLog(@"data = %@ msg = %@",data,[data objectForKeySafe:@"msg"]);
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -242,7 +243,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -277,7 +278,7 @@
         if (field.text.length > 15) {
             field.text = [field.text substringToIndex:15];
 //            [field resignFirstResponder];
-            info = @"姓名不能大于32位";
+            info = @"姓名不能大于15位";
         }
     }
     

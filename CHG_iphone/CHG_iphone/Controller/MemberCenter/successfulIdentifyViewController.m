@@ -61,6 +61,7 @@
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.tableview.scrollEnabled = NO;
 //    self.tableview.backgroundColor = UIColorFromRGB(0xdddddd);
@@ -83,7 +84,7 @@
     if (indexPath.section == 0) {
         successfulIdentifyCell *cell=[tableView dequeueReusableCellWithIdentifier:@"successfulIdentifyCell"];
         if(cell==nil){
-            cell = (successfulIdentifyCell*)[[self.successfulIdentifyNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (successfulIdentifyCell*)[[self.successfulIdentifyNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
@@ -110,7 +111,7 @@
     {
         MenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MenuCell"];
         if(cell==nil){
-            cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MenuCell*)[[self.MenuNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         

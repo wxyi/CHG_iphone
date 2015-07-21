@@ -42,22 +42,28 @@
 -(IBAction)orderProcessing:(UIButton*)sender
 {
     DLog(@"退货");
-    if (self.BtnSkipSelect) {
-        self.BtnSkipSelect(sender.tag,self.items);
-    }
+//    if (self.BtnSkipSelect) {
+//        self.BtnSkipSelect(sender.tag,self.items);
+//    }
 
-//    if ([[self.items objectForKey:@"productList"] count] != 0) {
-//        if (self.BtnSkipSelect) {
-//            self.BtnSkipSelect(sender.tag,self.items);
-//        }
-//    }
-//    else
-//    {
-//        [SGInfoAlert showInfo:@"无退货商品"
-//                      bgColor:[[UIColor blackColor] CGColor]
-//                       inView:self.view
-//                     vertical:0.7];
-//    }
+    NSInteger pickQuantity = 0;
+    NSArray* productList = [self.items objectForKey:@"productList"] ;
+    for (int j = 0; j < productList.count; j++) {
+        NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"pickQuantity"] integerValue];
+        pickQuantity += pickcount;
+    }
+    if ([productList count] != 0 && pickQuantity != 0) {
+        if (self.BtnSkipSelect) {
+            self.BtnSkipSelect(sender.tag,self.items);
+        }
+    }
+    else
+    {
+        [SGInfoAlert showInfo:@"没有可退货的商品"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+    }
     
 }
 -(void)setupView
@@ -69,6 +75,7 @@
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-80);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.AllOrdersNib = [UINib nibWithNibName:@"AllOrdersCell" bundle:nil];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     self.OrderAmountNib = [UINib nibWithNibName:@"OrderAmountCell" bundle:nil];
@@ -119,7 +126,7 @@
 //        return cell;
         AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
         if(cell==nil){
-            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.picktype = PickUpTypeDid;
@@ -137,12 +144,12 @@
     {
         OrderAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrderAmountCell"];
         if(cell==nil){
-            cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
         
-        NSArray* prolist = [self.items objectForKeySafe:@"productList"];
+//        NSArray* prolist = [self.items objectForKeySafe:@"productList"];
 //        CGFloat orderAmount = 0.0;
 //        CGFloat orderFactAmount = 0.0;
 //
@@ -269,9 +276,9 @@
 -(void)httpGetOrder
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
-    [parameter setObject:self.strOrderId forKey:@"orderId"];
+    [parameter setObjectSafe:self.strOrderId forKey:@"orderId"];
     
     
     DLog(@"parameter = %@",parameter);
@@ -284,8 +291,8 @@
         if (success) {
             [MMProgressHUD dismiss];
             
-            NSDictionary* tmitem = [data objectForKey:@"order"];
-            NSArray* prolist = [tmitem objectForKey:@"productList"];
+            NSDictionary* tmitem = [data objectForKeySafe:@"order"];
+            NSArray* prolist = [tmitem objectForKeySafe:@"productList"];
             
             NSMutableArray* productList = [[NSMutableArray alloc] init];
             self.quantity = 0.0;
@@ -294,11 +301,11 @@
                 
                
 
-                if ([[[prolist objectAtIndex:i] objectForKey:@"pickQuantity"] intValue] > 0) {
-                    [productList addObject:[prolist objectAtIndex:i]];
+                if ([[[prolist objectAtIndexSafe:i] objectForKeySafe:@"pickQuantity"] intValue] > 0 ||[[[prolist objectAtIndexSafe:i] objectForKeySafe:@"returnQuantity"] intValue] > 0 ) {
+                    [productList addObjectSafe:[prolist objectAtIndexSafe:i]];
                 }
-                self.pickQuantity += [[[prolist objectAtIndex:i] objectForKey:@"pickQuantity"] floatValue];
-                self.quantity += [[[prolist objectAtIndex:i] objectForKey:@"quantity"] floatValue];
+                self.pickQuantity += [[[prolist objectAtIndexSafe:i] objectForKeySafe:@"pickQuantity"] floatValue];
+                self.quantity += [[[prolist objectAtIndexSafe:i] objectForKeySafe:@"quantity"] floatValue];
             }
             
             NSMutableDictionary* testdict = [tmitem mutableCopy];

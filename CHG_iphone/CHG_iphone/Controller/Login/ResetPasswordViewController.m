@@ -34,6 +34,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.scrollEnabled = NO;
 //    self.tableview.backgroundColor = [UIColor whiteColor];
@@ -56,7 +57,7 @@
     __weak typeof(self) weakSelf = self;
     ResetPasswordCell *cell=[tableView dequeueReusableCellWithIdentifier:@"ResetPasswordCell"];
     if(cell==nil){
-        cell = (ResetPasswordCell*)[[self.ResetPasswordNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+        cell = (ResetPasswordCell*)[[self.ResetPasswordNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
         
     }
     
@@ -199,9 +200,9 @@
 {
     UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].strUserName forKey:@"userName"];
-    [parameter setObject:self.strcheckCode forKey:@"checkCode"];
-    [parameter setObject:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newPwd"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].strUserName forKey:@"userName"];
+    [parameter setObjectSafe:self.strcheckCode forKey:@"checkCode"];
+    [parameter setObjectSafe:[[NSObject md5:passfield1.text] uppercaseString] forKey:@"newPwd"];
     
    
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiForgetPassword] parameters:nil];
@@ -210,9 +211,9 @@
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:parameter successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
-            DLog(@"msg = %@",[data objectForKey:@"msg"]);
+            DLog(@"msg = %@",[data objectForKeySafe:@"msg"]);
             
 //            [SGInfoAlert showInfo:@"密码修改成功"
 //                          bgColor:[[UIColor blackColor] CGColor]
@@ -241,7 +242,7 @@
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];

@@ -70,6 +70,10 @@
         }
         
     }
+    else if (self.m_returnType == OrderReturnTypePopPage)
+    {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
     else
     {
         if(self.m_returnType == OrderReturnTypeAMember && (self.orderSaletype == SaleTypeSellingGoods || self.orderSaletype == SaleTypePresell))
@@ -147,7 +151,7 @@
     
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
-    
+    self.tableview.showsVerticalScrollIndicator = NO;
 //    self.tableview.tableHeaderView = v_header;
     
     self.PresellNib = [UINib nibWithNibName:@"PresellCell" bundle:nil];
@@ -368,16 +372,16 @@
      ||self.orderSaletype == SaleTypePickingGoods) {
         OrdersGoodsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"OrdersGoodsCell"];
         if(cell==nil){
-            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (OrdersGoodsCell*)[[self.OrdersGoodsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
 
 
-         [cell.GoodImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
-        cell.titlelab.text = dict[@"productName"] ;
-        cell.pricelab.text = dict[@"productPrice"];
-        cell.countlab.text = [NSString stringWithFormat:@"x%d",[dict[@"QrcList"] count]];
+         [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe: @"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
+        cell.titlelab.text = [dict objectForKeySafe:@"productName"] ;
+        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
+        cell.countlab.text = [NSString stringWithFormat:@"x%d",[[dict objectForKeySafe:@"QrcList"] count]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -385,7 +389,7 @@
     {
         PresellCell *cell=[tableView dequeueReusableCellWithIdentifier:@"PresellCell"];
         if(cell==nil){
-            cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (PresellCell*)[[self.PresellNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             NSMutableArray *rightUtilityButtons = [NSMutableArray new];
             
             
@@ -401,22 +405,22 @@
         cell.operationPage = @"0";
         NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
 
-        [cell.GoodsImage setImageWithURL:[NSURL URLWithString:dict[@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
-        cell.titlelab.text = dict[@"productName"] ;
-        cell.pricelab.text = dict[@"productPrice"];
+        [cell.GoodsImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
+        cell.titlelab.text = [dict objectForKeySafe:@"productName"] ;
+        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
 
         
         cell.TextStepper.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.row] intValue];
-        cell.counter = [dict[@"QrcList"] count];
+        cell.counter = [[dict objectForKeySafe:@"QrcList"] count];
         NSInteger Qrclistcount;
-        if ([dict[@"QrcList"] count] > 60) {
+        if ([[dict objectForKeySafe:@"QrcList"] count] > 60) {
             Qrclistcount = 60;
             
             
         }
         else
         {
-            Qrclistcount = [dict[@"QrcList"] count];
+            Qrclistcount = [[dict objectForKeySafe:@"QrcList"] count];
         }
         [cell.TextStepper setCurrent:Qrclistcount];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -546,7 +550,7 @@
     {
         OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
         OrderCounterView.orderSaletype = self.orderSaletype;
-        OrderCounterView.returnType = self.m_returnType;
+        OrderCounterView.m_returnType = self.m_returnType;
         if (self.orderSaletype == SaleTypeSellingGoods ) {
             OrderCounterView.items = self.items;
         }
@@ -558,7 +562,7 @@
                 DLog(@"textstepper = %.f",TextStepper.Current);
                 NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
                 anotherDict = [self.items objectAtIndexSafe:i];
-                [anotherDict setObject:[NSString stringWithFormat:@"%.2f", TextStepper.Current ] forKey:@"quantity"];
+                [anotherDict setObjectSafe:[NSString stringWithFormat:@"%.2f", TextStepper.Current ] forKey:@"quantity"];
                 [self.items replaceObjectAtIndexSafe:i withObject:anotherDict];
             }
             OrderCounterView.items = self.items;
@@ -572,10 +576,10 @@
 -(void)httpQrCode:(NSString*)parame
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [parameter setObject:parame forKey:@"productCode"];
-    [parameter setObject:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:parame forKey:@"productCode"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
     
     NSString* type;
     if (self.orderSaletype == SaleTypeSellingGoods) {
@@ -593,7 +597,7 @@
     {
         type = @"3";
     }
-    [parameter setObject:type forKey:@"type"];
+    [parameter setObjectSafe:type forKey:@"type"];
 //    NSMutableDictionary *productpar = [NSMutableDictionary dictionary];
 //    [productpar setObject:parame forKey:@"productCode"];
 //    DLog(@"parameter = %@",productpar);
@@ -607,11 +611,11 @@
         if (success) {
             [MMProgressHUD dismiss];
             if (self.orderSaletype == SaleTypeSellingGoods || self.orderSaletype == SaleTypePickingGoods ||self.orderSaletype == SaleTypeReturnEngageGoods ||self.orderSaletype == SaleTypeReturnGoods) {
-                [self addProductforSingleHair:[data objectForKey:@"datas"]];
+                [self addProductforSingleHair:[data objectForKeySafe:@"datas"]];
             }
             else if(self.orderSaletype == SaleTypePresell)
             {
-                [self addProductforSingleMultiple:[data objectForKey:@"datas"]];
+                [self addProductforSingleMultiple:[data objectForKeySafe:@"datas"]];
             }
         }
         else
@@ -649,7 +653,7 @@
         return;
     }
     if (self.items.count == 0 ) {
-        [self.items addObject:product];
+        [self.items addObjectSafe:product];
     }
     else
     {
@@ -658,8 +662,8 @@
         NSInteger index = 0 ;
         for (int i = 0; i < tempArray.count; i++) {
             
-            NSInteger productId = [[tempArray[i] objectForKey:@"productId"] intValue];
-            NSInteger dataproId = [product[@"productId"] intValue];
+            NSInteger productId = [[[tempArray objectAtIndexSafe: i] objectForKeySafe:@"productId"] intValue];
+            NSInteger dataproId = [[product objectForKeySafe: @"productId"] intValue];
             
             if (productId == dataproId) {
                 isSameId = YES;
@@ -674,10 +678,10 @@
         }
         else
         {
-            NSMutableArray *QrcArr = tempArray[index][@"QrcList"];
-            NSMutableArray *prodQrcArr = product[@"QrcList"];
+            NSMutableArray *QrcArr = [[tempArray objectAtIndexSafe: index] objectForKeySafe: @"QrcList"];
+            NSMutableArray *prodQrcArr = [product objectForKeySafe: @"QrcList"];
             
-            if (QrcArr.count == 60 && prodQrcArr.count > 0) {
+            if (QrcArr.count + prodQrcArr.count > 60) {
                 [SGInfoAlert showInfo:@"该商量已超过销售数量限制，禁止添加商品！"
                               bgColor:[[UIColor blackColor] CGColor]
                                inView:self.view
@@ -687,9 +691,9 @@
                 if (QrcArr.count == 60) {
                     break;
                 }
-                [QrcArr addObject:prodQrcArr[i]];
+                [QrcArr addObjectSafe:prodQrcArr[i]];
             }
-            [product setObject:QrcArr forKey:@"QrcList"];
+            [product setObjectSafe:QrcArr forKey:@"QrcList"];
             [self.items replaceObjectAtIndexSafe:index withObject:product];
         }
     }
@@ -714,8 +718,8 @@
         NSInteger index = 0 ;
         for (int i = 0; i < tempArray.count; i++) {
             
-                NSInteger productId = [[tempArray[i] objectForKey:@"productId"] intValue];
-                NSInteger dataproId = [product[@"productId"] intValue];
+                NSInteger productId = [[tempArray[i] objectForKeySafe:@"productId"] intValue];
+                NSInteger dataproId = [[product objectForKeySafe: @"productId"] intValue];
                 
                 if (productId == dataproId) {
                     isSameId = YES;
@@ -729,8 +733,8 @@
         }
         else
         {
-            NSMutableArray *QrcArr = self.items[index][@"QrcList"];
-            NSMutableArray *prodQrcArr = product[@"QrcList"];
+            NSMutableArray *QrcArr = [[self.items objectAtIndexSafe: index] objectForKeySafe: @"QrcList"];
+            NSMutableArray *prodQrcArr = [product objectForKeySafe: @"QrcList"];
             
     
             NSPredicate * QrcPredicate = [NSPredicate predicateWithFormat:@"NOT (SELF IN %@)",QrcArr];
@@ -749,23 +753,23 @@
                 NSMutableArray *datas = [[NSMutableArray alloc] init];
                 datas = [Qrcfilter mutableCopy];
                 
-                if (datas.count == 60 && prodQrcfilter.count > 0) {
+                if (datas.count + prodQrcfilter.count > 60) {
                     [SGInfoAlert showInfo:@"该商量已超过销售数量限制，禁止添加商品！"
                                   bgColor:[[UIColor blackColor] CGColor]
                                    inView:self.view
                                  vertical:0.7];
                 }
-                
-                if (prodQrcfilter.count != 0) {
+                else  if (prodQrcfilter.count != 0) {
                     for (int i = 0; i < prodQrcfilter.count; i++) {
 
-                        if ([datas count] < 60) {
-                            [datas addObject:prodQrcfilter[i]];
-                        }
+                        [datas addObjectSafe:prodQrcfilter[i]];
+//                        if ([datas count] < 60) {
+//                            
+//                        }
                         
                     }
                 }
-                [product setObject:datas forKey:@"QrcList"];
+                [product setObjectSafe:datas forKey:@"QrcList"];
                 [self.items replaceObjectAtIndexSafe:index withObject:product];
                 
             }
@@ -781,16 +785,16 @@
     if (datas.count > 0) {
         NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
         NSMutableArray *QrcArr = [[NSMutableArray alloc] init];
-        [anotherDict setObject:[datas[0] objectForKey:@"productName"] forKey:@"productName"];
-        [anotherDict setObject:[datas[0] objectForKey:@"productPrice"] forKey:@"productPrice"];
-        [anotherDict setObject:[datas[0] objectForKey:@"productSmallUrl"] forKey:@"productSmallUrl"];
-        [anotherDict setObject:[datas[0] objectForKey:@"productId"] forKey:@"productId"];
+        [anotherDict setObjectSafe:[[datas objectAtIndexSafe: 0] objectForKeySafe:@"productName"] forKey:@"productName"];
+        [anotherDict setObjectSafe:[[datas objectAtIndexSafe: 0] objectForKeySafe:@"productPrice"] forKey:@"productPrice"];
+        [anotherDict setObjectSafe:[[datas objectAtIndexSafe: 0] objectForKeySafe:@"productSmallUrl"] forKey:@"productSmallUrl"];
+        [anotherDict setObjectSafe:[[datas objectAtIndexSafe: 0] objectForKeySafe:@"productId"] forKey:@"productId"];
 
         for (int i = 0; i < datas.count; i++) {
             
-            [QrcArr addObject:datas[i][@"productCode"]];
+            [QrcArr addObjectSafe:datas[i][@"productCode"]];
         }
-        [anotherDict setObject:QrcArr forKey:@"QrcList"];
+        [anotherDict setObjectSafe:QrcArr forKey:@"QrcList"];
         
         
         return anotherDict;
@@ -806,7 +810,7 @@
 -(void)httpValidateOrderProduct
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     //post 参数
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     NSString *strurl ;
@@ -821,34 +825,35 @@
     NSString* url = [NSObject URLWithBaseString:strurl parameters:parameter];
     
     
-    [param setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
-    [param setObject:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
+    [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [param setObjectSafe:[ConfigManager sharedInstance].strCustId forKey:@"custId"];
 
 
     NSString* productCode = @"";
     for (int i = 0; i < [self.items count]; i++) {
         
-        productCode = [productCode stringByAppendingString:[self.items[i][@"QrcList"] componentsJoinedByString:@","]]  ;
+        productCode = [productCode stringByAppendingString:[[[self.items objectAtIndexSafe: i] objectForKeySafe: @"QrcList"] componentsJoinedByString:@","]]  ;
         productCode = [productCode stringByAppendingString:@","]  ;
     }
     DLog(@"productCode = %@",productCode)
     
-    [param setObject:productCode forKey:@"productCodeStr"];
+    [param setObjectSafe:productCode forKey:@"productCodeStr"];
     __weak typeof(self) weakSelf = self;
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",data,msg);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200){
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
         
             [MMProgressHUD dismiss];
             
             
             OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
             OrderCounterView.orderSaletype = weakSelf.orderSaletype;
+            OrderCounterView.m_returnType = self.m_returnType;
             OrderCounterView.items = weakSelf.items;
-            OrderCounterView.priceDict = [data objectForKey:@"datas"];
+            OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
             [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
             
         }
@@ -858,12 +863,13 @@
             if (self.orderSaletype == SaleTypePickingGoods) {
                 OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
                 OrderCounterView.orderSaletype = weakSelf.orderSaletype;
+                OrderCounterView.m_returnType = weakSelf.m_returnType;
                 OrderCounterView.items = weakSelf.items;
                 OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
                 [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
             }
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
@@ -924,8 +930,8 @@
     }
     
     // 条码类型 AVMetadataObjectTypeQRCode
-    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
-    
+//    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
+    [_output setMetadataObjectTypes:[NSArray arrayWithObjects:AVMetadataObjectTypeQRCode,AVMetadataObjectTypeCode39Code,AVMetadataObjectTypeCode128Code,AVMetadataObjectTypeCode39Mod43Code,AVMetadataObjectTypeEAN13Code,AVMetadataObjectTypeEAN8Code,AVMetadataObjectTypeCode93Code,nil]];
     // Preview
     _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
     _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -945,7 +951,7 @@
     
     if ([metadataObjects count] >0)
     {
-        AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
+        AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndexSafe:0];
         stringValue = metadataObject.stringValue;
         
         
@@ -1093,8 +1099,8 @@
    operatino = [aNotification object];
     NSMutableDictionary* product = [NSMutableDictionary dictionary];
     NSMutableArray* tempArray = [self.items mutableCopy];
-    product = tempArray[operatino.indexpath.row];
-    NSMutableArray *QrcArr = product[@"QrcList"];
+    product = [tempArray objectAtIndexSafe: operatino.indexpath.row];
+    NSMutableArray *QrcArr = [product objectForKeySafe: @"QrcList"];
     DLog(@"clicktype = %@ indexpath.row = %d",operatino.strClickType,operatino.indexpath.row)
 //    NSMutableArray *prodQrcArr = product[@"QrcList"];
     if([operatino.strClickType intValue] == 1)//减去一
@@ -1105,13 +1111,13 @@
     else if ([operatino.strClickType intValue] == 2)// 加一
     {
         DLog(@"增加一");
-        [QrcArr addObject:[QrcArr objectAtIndex:0]];
+        [QrcArr addObjectSafe:[QrcArr objectAtIndexSafe:0]];
     }
     else
     {
         DLog(@"无操作");
     }
-    [product setObject:QrcArr forKey:@"QrcList"];
+    [product setObjectSafe:QrcArr forKey:@"QrcList"];
     [self.items replaceObjectAtIndexSafe:operatino.indexpath.row withObject:product];
     
     

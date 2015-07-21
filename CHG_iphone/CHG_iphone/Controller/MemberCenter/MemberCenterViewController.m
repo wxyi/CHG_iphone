@@ -44,6 +44,7 @@
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.showsVerticalScrollIndicator = NO;
 //    self.tableview.scrollEnabled = NO;
     self.tableview.backgroundColor = UIColorFromRGB(0xdddddd);
     [NSObject setExtraCellLineHidden:self.tableview];
@@ -72,12 +73,12 @@
     if (indexPath.row == 0) {
         MemberRewardsCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MemberRewardsCell"];
         if(cell==nil){
-            cell = (MemberRewardsCell*)[[self.MemberRewardsNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MemberRewardsCell*)[[self.MemberRewardsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         NSMutableArray* item = [[NSMutableArray alloc] init];
-        [item addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[self.items[@"newCustMonth"] intValue]],@"count", nil]];
-         [item addObject:[NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员消费(元)",@"title",[NSString stringWithFormat:@"%.2f",[self.items[@"newCustMonthMoney"] doubleValue]],@"count", nil]];
+        [item addObjectSafe:[NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.items objectForKeySafe:@"newCustMonth"] intValue]],@"count", nil]];
+         [item addObjectSafe:[NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员消费(元)",@"title",[NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"newCustMonthMoney"] doubleValue]],@"count", nil]];
          
         
         
@@ -94,13 +95,13 @@
     {
         awardTotalAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"awardTotalAmountCell"];
         if(cell==nil){
-            cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         cell.contentView.backgroundColor = UIColorFromRGB(0xF5A541);
         cell.nameLab.text = @"本月会员总消费(元)";
         cell.nameLab.textColor = UIColorFromRGB(0xf0f0f0);
-        cell.amountLab.text =[NSString stringWithFormat:@"%.2f",[self.items[@"custMonthMoneyAll"] doubleValue]];
+        cell.amountLab.text =[NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"custMonthMoneyAll"] doubleValue]];
         cell.amountLab.font = FONT(40);
         cell.amountLab.textColor = [UIColor whiteColor];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -110,7 +111,7 @@
     {
         MemberMenuCell *cell=[tableView dequeueReusableCellWithIdentifier:@"MemberMenuCell"];
         if(cell==nil){
-            cell = (MemberMenuCell*)[[self.MemberMenuNib instantiateWithOwner:self options:nil] objectAtIndex:0];
+            cell = (MemberMenuCell*)[[self.MemberMenuNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
         
@@ -156,8 +157,8 @@
 -(void)httpGetCustCenter
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
-    [parameter setObject:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
+    [parameter setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCustCenter] parameters:parameter];
     
@@ -165,14 +166,21 @@
         if (success) {
             self.items = data;
             [self.tableview reloadData];
-            [self.tableview.header endRefreshing];
+//            [self.tableview.header endRefreshing];
         }
         else
         {
-            [self.tableview.header endRefreshing];
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+//            [self.tableview.header endRefreshing];
         }
     } failureBlock:^(NSString *description) {
-        
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {
@@ -221,7 +229,7 @@
         [self httpGetCustCenter];
 
         
-//        [self.tableview.header endRefreshing];
+        [self.tableview.header endRefreshing];
     });
 }
 @end

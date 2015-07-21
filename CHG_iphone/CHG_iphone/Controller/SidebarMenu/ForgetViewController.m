@@ -43,6 +43,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -81,13 +82,16 @@
     [cell.contentView addSubview:line];
     
     JKCountDownButton* countDownCode = [JKCountDownButton buttonWithType:UIButtonTypeCustom];
-    countDownCode.backgroundColor = [UIColor clearColor];
+//    countDownCode.backgroundColor = [UIColor clearColor];
+    countDownCode.backgroundColor = UIColorFromRGB(0x171c61);
     countDownCode.titleLabel.font = FONT(13);
-    countDownCode.titleLabel.textColor = UIColorFromRGB(0x00428B);
-    countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 2, 80, 40);
+    [countDownCode.layer setMasksToBounds:YES];
+    [countDownCode.layer setCornerRadius:4]; //设置矩形四个圆角半径
+    [countDownCode setTitleColor:UIColorFromRGB(0xffffff) forState:UIControlStateNormal];
+    countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 6, 80, 32);
     [countDownCode setTitle:@"点击获取" forState:UIControlStateNormal];
     countDownCode.tag = 1000111;
-    [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 //    countDownCode.backgroundColor = [UIColor whiteColor];
 
     
@@ -111,18 +115,25 @@
         
         
         [textField resignFirstResponder];
+        
         sender.enabled = NO;
-        sender.alpha=0.4;
-        sender.titleLabel.tintColor = UIColorFromRGB(0xdddddd);
+//        sender.alpha=0.4;
+//        sender.titleLabel.tintColor = ;
+//        [sender setTitleColor:UIColorFromRGB(0xdddddd) forState:<#(UIControlState)#>]
+        sender.backgroundColor = UIColorFromRGB(0xdddddd);
+//        [sender setTitleColor:UIColorFromRGB(0x646464) forState:UIControlStateNormal];
         [sender startWithSecond:60];
         
         [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-            NSString *title = [NSString stringWithFormat:@"剩余%d秒",second];
+            NSString *title = [NSString stringWithFormat:@"%d秒后重发",second];
             return title;
         }];
         [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
             countDownButton.enabled = YES;
-            sender.titleLabel.tintColor = UIColorFromRGB(0x00428B);
+//            sender.titleLabel.tintColor = UIColorFromRGB(0x00428B);
+//            sender.alpha=1;
+            sender.backgroundColor = UIColorFromRGB(0x171c61);
+//            [sender setTitleColor:UIColorFromRGB(0x00428B) forState:UIControlStateNormal];
             return @"点击重新获取";
             
         }];
@@ -194,9 +205,7 @@
                      vertical:0.7];
         return ;
     }
-    ResetViewController* ResetView = [[ResetViewController alloc] initWithNibName:@"ResetViewController" bundle:nil];
-    ResetView.strCheckCode = self.strCheckCode;
-    [self.navigationController pushViewController:ResetView animated:YES];
+    [self httpValidateCheckCode];
 }
 
 
@@ -204,7 +213,7 @@
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    [parameter setObject:config.strMobile forKey:@"mobile"];
+    [parameter setObjectSafe:config.strMobile forKey:@"mobile"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
     
@@ -215,7 +224,7 @@
         DLog(@"data = %@ msg = %@",data,msg);
         if (success) {
             [MMProgressHUD dismiss];
-            self.strCheckCode = [data objectForKey:@"checkCode"];
+            self.strCheckCode = [data objectForKeySafe:@"checkCode"];
             
             
             [SGInfoAlert showInfo:self.strCheckCode
@@ -281,19 +290,21 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     UITextField* textfield = (UITextField*)[self.view viewWithTag:101];
     UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
-    [param setObject:cfg.strMobile forKey:@"mobile"];
-    [param setObject:textfield.text forKey:@"checkCode"];
+    [param setObjectSafe:cfg.strMobile forKey:@"mobile"];
+    [param setObjectSafe:textfield.text forKey:@"checkCode"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@",data);
-        if([data objectForKey:@"code"] &&[[data objectForKey:@"code"]  intValue]==200)
+        if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             
-            
+            ResetViewController* ResetView = [[ResetViewController alloc] initWithNibName:@"ResetViewController" bundle:nil];
+            ResetView.strCheckCode = self.strCheckCode;
+            [self.navigationController pushViewController:ResetView animated:YES];
         }
         else
         {
-            [SGInfoAlert showInfo:[data objectForKey:@"msg"]
+            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
