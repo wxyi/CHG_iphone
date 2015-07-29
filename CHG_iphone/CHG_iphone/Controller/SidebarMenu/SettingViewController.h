@@ -12,4 +12,5 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,strong)STAlertView* stAlertView;
+@property(nonatomic,strong)NSDictionary* dict;
 @end

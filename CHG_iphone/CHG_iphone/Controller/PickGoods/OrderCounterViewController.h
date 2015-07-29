@@ -18,6 +18,9 @@
 @property(nonatomic,assign)SaleType orderSaletype;
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property(nonatomic,assign)OrderReturnType m_returnType;
+@property(nonatomic,strong)NSDictionary* ChangePriceDict;
+@property(nonatomic,strong)NSMutableArray* countitem;
+@property(nonatomic,assign)BOOL isfrist;
 -(IBAction)OrderCounterView:(id)sender;
 
 @end

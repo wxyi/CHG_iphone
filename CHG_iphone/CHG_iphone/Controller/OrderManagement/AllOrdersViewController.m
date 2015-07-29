@@ -80,11 +80,11 @@
 //    NSString* strurl = @"http://111.202.33.27:9080/chg/pic/qrc/wx/100790.jpg";
     [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
     cell.titlelab.text = [dict objectForKeySafe:@"productName"];
-    cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+    cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];
     cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKeySafe:@"quantity"] intValue] ];
     
     if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0) {
-        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -182,7 +182,7 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付 ￥%.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
     rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
@@ -339,6 +339,10 @@
         }
         
     } failureBlock:^(NSString *description) {
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
 //        [MMProgressHUD dismissWithError:description];
 //        [self.tableview.header endRefreshing];
 //        [self.tableview.footer endRefreshing];
@@ -381,7 +385,10 @@
                          vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {

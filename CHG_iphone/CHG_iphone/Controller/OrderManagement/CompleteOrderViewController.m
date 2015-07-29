@@ -27,6 +27,7 @@
 //    rect.size.height = SCREEN_HEIGHT  - 40;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
+    
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-80);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -83,11 +84,12 @@
     
     [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
     cell.titlelab.text = [dict objectForKeySafe:@"productName"];
-    cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+//    cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+    cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];;
     cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKeySafe:@"quantity"] intValue] ];
     
     if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0) {
-        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -172,7 +174,7 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付 ￥%.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
     rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
@@ -243,17 +245,17 @@
 //    NSString* tag = [NSString stringWithFormat:@"%d",sender.tag];
 //    NSInteger section = [[tag substringFromIndex:2] intValue];
 //    NSDictionary* dict = [self.items objectAtIndex:section];
-    NSInteger pickQuantity = 0;
-    for (int i = 0; i < self.items.count; i++) {
-        NSArray* productList = [[self.items objectAtIndexSafe:i] objectForKeySafe:@"productList"];
-        for (int j = 0; j < productList.count; j++) {
-            NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"pickQuantity"] integerValue];
-            pickQuantity += pickcount;
-        }
-        
-    }
+//    NSInteger pickQuantity = 0;
+//    for (int i = 0; i < self.items.count; i++) {
+//        NSArray* productList = [[self.items objectAtIndexSafe:i] objectForKeySafe:@"productList"];
+//        for (int j = 0; j < productList.count; j++) {
+//            NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"quantity"] integerValue];
+//            pickQuantity += pickcount;
+//        }
+//        
+//    }
     
-    if ([self.items count] != 0 && pickQuantity  != 0) {
+    if ([self.items count] != 0 /*&& pickQuantity  != 0*/) {
         if (self.BtnSkipSelect) {
             self.BtnSkipSelect(sender.tag,nil);
         }

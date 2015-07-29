@@ -43,6 +43,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
@@ -91,6 +92,7 @@
     countDownCode.frame = CGRectMake(SCREEN_WIDTH-90, 6, 80, 32);
     [countDownCode setTitle:@"点击获取" forState:UIControlStateNormal];
     countDownCode.tag = 1000111;
+    
 //    [countDownCode setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 //    countDownCode.backgroundColor = [UIColor whiteColor];
 
@@ -98,45 +100,13 @@
     [cell.contentView addSubview:countDownCode];
     [countDownCode addToucheHandler:^(JKCountDownButton*sender, NSInteger tag) {
         
-        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        [self httpGetCheckCode];
         
-        NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[config.strMobile substringFromIndex:7]];
-        
-        self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
-            DLog(@"否");
-            
-            [self httpGetCheckCode];
-            
-        } otherButtonBlock:^{
-            
-        }];
-        [self.stAlertView show];
-        DLog(@"是");
         
         
         [textField resignFirstResponder];
         
-        sender.enabled = NO;
-//        sender.alpha=0.4;
-//        sender.titleLabel.tintColor = ;
-//        [sender setTitleColor:UIColorFromRGB(0xdddddd) forState:<#(UIControlState)#>]
-        sender.backgroundColor = UIColorFromRGB(0xdddddd);
-//        [sender setTitleColor:UIColorFromRGB(0x646464) forState:UIControlStateNormal];
-        [sender startWithSecond:60];
         
-        [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
-            NSString *title = [NSString stringWithFormat:@"%d秒后重发",second];
-            return title;
-        }];
-        [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
-            countDownButton.enabled = YES;
-//            sender.titleLabel.tintColor = UIColorFromRGB(0x00428B);
-//            sender.alpha=1;
-            sender.backgroundColor = UIColorFromRGB(0x171c61);
-//            [sender setTitleColor:UIColorFromRGB(0x00428B) forState:UIControlStateNormal];
-            return @"点击重新获取";
-            
-        }];
         
     }];
     
@@ -227,6 +197,39 @@
             self.strCheckCode = [data objectForKeySafe:@"checkCode"];
             
             
+            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+            
+            NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[config.strMobile substringFromIndex:7]];
+            
+            self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
+                DLog(@"否");
+                
+                
+                
+            } otherButtonBlock:^{
+                
+            }];
+            [self.stAlertView show];
+            DLog(@"是");
+            
+            JKCountDownButton* sender = (JKCountDownButton*)[self.view viewWithTag:1000111];
+            sender.enabled = NO;
+            sender.backgroundColor = UIColorFromRGB(0xdddddd);
+            [sender startWithSecond:60];
+            
+            [sender didChange:^NSString *(JKCountDownButton *countDownButton,int second) {
+                NSString *title = [NSString stringWithFormat:@"%d秒后重发",second];
+                return title;
+            }];
+            [sender didFinished:^NSString *(JKCountDownButton *countDownButton, int second) {
+                countDownButton.enabled = YES;
+                //            sender.titleLabel.tintColor = UIColorFromRGB(0x00428B);
+                //            sender.alpha=1;
+                sender.backgroundColor = UIColorFromRGB(0x171c61);
+                //            [sender setTitleColor:UIColorFromRGB(0x00428B) forState:UIControlStateNormal];
+                return @"点击重新获取";
+                
+            }];
             [SGInfoAlert showInfo:self.strCheckCode
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view

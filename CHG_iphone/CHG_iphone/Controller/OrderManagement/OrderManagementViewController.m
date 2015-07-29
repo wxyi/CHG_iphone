@@ -78,7 +78,10 @@
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
     }
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    if (self.ManagementTyep != OrderManagementTypeAll) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    }
+    
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_serch.png"] style:UIBarButtonItemStylePlain target:self action:@selector(skipPage)];
     // Do any additional setup after loading the view from its nib.
@@ -90,6 +93,7 @@
     DLog(@"搜索");
     OrderQuryViewController* OrderQueryView = [[OrderQuryViewController alloc] initWithNibName:@"OrderQuryViewController" bundle:nil];
     OrderQueryView.ManagementTyep = self.ManagementTyep;
+    OrderQueryView.m_returnType = self.m_returnType;
     [self.navigationController pushViewController:OrderQueryView animated:YES];
 }
 -(void)gobackRegistePage
@@ -144,6 +148,7 @@
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
                 PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
                 PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
+                PickGoodsView.m_returnType = weakSelf.m_returnType;
                 PickGoodsView.skiptype = SkipfromOrderManage;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
             }
@@ -155,6 +160,7 @@
                 CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
                 CompletedOrderDetailsView.Comordertype = detailsOrder;
                 CompletedOrderDetailsView.skiptype = SkipfromOrderManage;
+                CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
             }
@@ -165,6 +171,7 @@
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.Comordertype = TerminationOrder;
+            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
             
             
@@ -194,6 +201,7 @@
                 PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
                 PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
                 PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
+                PickGoodsView.m_returnType = weakSelf.m_returnType;
                 [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
             }
             else
@@ -202,6 +210,7 @@
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
                 CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
                 CompletedOrderDetailsView.Comordertype = detailsOrder;
+                CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
             }
@@ -213,6 +222,7 @@
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.Comordertype = TerminationOrder;
+            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
 //            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
 //                DLog(@"否");
@@ -247,6 +257,7 @@
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.skiptype = SkipFromPopPage;
             PresellGoodsView.orderSaletype = satype;
+            PresellGoodsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
         
@@ -277,6 +288,7 @@
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
             CompletedOrderDetailsView.Comordertype = detailsOrder;
+            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
 
         }
@@ -286,6 +298,7 @@
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
             PresellGoodsView.orderSaletype = satype;
             PresellGoodsView.skiptype = SkipFromPopPage;
+            PresellGoodsView.m_returnType = weakSelf.m_returnType;
             [weakSelf.navigationController pushViewController:PresellGoodsView animated:YES];
         }
     };

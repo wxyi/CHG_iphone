@@ -85,6 +85,7 @@
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH - 60)];
 //    v_footer.backgroundColor = [UIColor lightGrayColor];
+//    v_footer.backgroundColor = UIColorFromRGB(0xdddddd);
     UILabel* titlelab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
     titlelab.text = @"新特性";
     titlelab.textAlignment = NSTextAlignmentCenter;
@@ -98,7 +99,7 @@
 
 //    textview.delegate = self;//设置它的委托方法
 
-    textview.backgroundColor = UIColorFromRGB(0xf0f0f0);//设置它的背景颜色
+    textview.backgroundColor = [UIColor clearColor];//设置它的背景颜色
     textview.text = [self.items objectForKeySafe:@"appDes"];//设置它显示的内容
 
 //    textview.returnKeyType = UIReturnKeyDefault;//返回键的类型

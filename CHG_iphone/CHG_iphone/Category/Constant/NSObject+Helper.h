@@ -48,6 +48,10 @@
 
 //创建文件夹
 +(NSString*)CreateDocumentsfileManager:(NSString*)fileName;
+
+
+//根据时间字段对数组进行排序
++ (NSArray*)sortDictionayrForDate:(NSArray*)Source dateKey:(NSString*)dateKey ;
 /*
 //转千分位
 -(NSString*)toThousand:(NSString*) strnormal;

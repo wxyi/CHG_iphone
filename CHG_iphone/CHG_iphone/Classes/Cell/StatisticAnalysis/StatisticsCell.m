@@ -14,7 +14,7 @@
     // Initialization code
     
     
-    self.bottomview = [[UIView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH -20, 30)];
+    self.bottomview = [[UIView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH -20, 35)];
     self.bottomview.backgroundColor = UIColorFromRGB(0xf0f0f0);
     [self addSubview:self.bottomview];
     
@@ -36,7 +36,7 @@
     CGFloat scale = [self getShowData:baseData CurrentData:abs([number doubleValue])];
     frame.size.width = self.bottomview.frame.size.width * scale;
     frame.origin.x = 0;
-    frame.size.height = 30;
+    frame.size.height = 35;
     self.bgview.frame = frame;
     
 //    NSString * currentData = [NSObject currentTime];
@@ -63,7 +63,15 @@
     self.dateLab.textAlignment = NSTextAlignmentLeft;
     self.dateLab.font = FONT(12);
     self.dateLab.textColor = [UIColor whiteColor];
-    self.dateLab.text = date;
+    NSString* strdate;
+    if (date.length > 6) {
+        strdate = [date substringFromIndex:4];
+    }
+    else
+    {
+        strdate = date;
+    }
+    self.dateLab.text = strdate;
     [self.bgview addSubview:self.dateLab];
     
     frame.size.width -= 10;
@@ -81,24 +89,20 @@
     CGFloat mNormal = 0.6f;  // 正常的现实比例
     NSInteger mNormalData = baseData;  // 正常的值
     NSInteger mMaxData = baseData * 3;     // 最大值
-    NSInteger mData = CurrentData;             // 当前值
+    CGFloat mData = CurrentData;             // 当前值
     
     CGFloat result = 0.0f;
     if(mData < mNormalData) {
-        result = mMin + (mNormal - mMin)/(mNormalData - mData);
+        result = mMin + (mNormal - mMin) * mData / mNormalData;
     }
     else if(mData == mNormalData) {
         return mNormal;
     }
+    else if(mData < mMaxData) {
+        result = mNormal + (1 - mNormal) * mData/ mMaxData;
+    }
     else {
-        if (mMaxData - mData <= 0) {
-            result = 1;
-        }
-        else
-        {
-            result = mNormal + (1-mNormal)/(mMaxData - mData);
-        }
-        
+        result = 1.0;
     }
     
     return result;

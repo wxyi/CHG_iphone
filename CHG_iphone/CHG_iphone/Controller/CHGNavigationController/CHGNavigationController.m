@@ -26,7 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
+    self.PanGest = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
+    [self.view addGestureRecognizer:self.PanGest];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -135,6 +136,11 @@
     if ([self.viewControllers count] == 1) {
         [self.frostedViewController panGestureRecognized:sender];
     }
+    else
+    {
+        sender.enabled = NO;
+    }
+    
     
 }
 /*
@@ -210,7 +216,7 @@
 }
 -(void)unbundlingbankCard
 {
-    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑绑定?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
         DLog(@"否");
         
         [self httpDeleteBankCard];

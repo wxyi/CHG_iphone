@@ -25,21 +25,21 @@
     
     if(self.Confirmsaletype == SaleTypeSellingGoods || self.Confirmsaletype == SaleTypePresell)
     {
-        self.strfinish = @"订单完成";
+        self.strfinish = @"订单完成!";
     }
     else if(self.Confirmsaletype == SaleTypePickingGoods)
     {
-        self.strfinish = @"提货完成";
+        self.strfinish = @"提货完成!";
     }
     else if (self.Confirmsaletype == SaleTypeReturnGoods)
     {
-        self.strfinish = @"退货完成";
+        self.strfinish = @"退货完成!";
     }
     else if (self.Confirmsaletype == SaleTypeStopOrder)
     {
-        self.strfinish = @"终止订单完成";
+        self.strfinish = @"终止完成!";
     }
-    self.title = self.strfinish;
+    self.title = @"订单完成";
     
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 10, 50, 24)];

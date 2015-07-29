@@ -90,7 +90,8 @@
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableview.bounces = NO;
+//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.showsVerticalScrollIndicator = NO;
     self.PromoListNib = [UINib nibWithNibName:@"PromoListCell" bundle:nil];
     self.AccountBriefNib = [UINib nibWithNibName:@"AccountBriefCell" bundle:nil];
@@ -121,14 +122,25 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    
+    if (self.stAlert.length != 0) {
+        [SGInfoAlert showInfo:self.stAlert
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        
+        self.stAlert = @"";
+    }
     [self httpGetAccountBrief];
 //    [self setupRefresh];
 }
-
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
-    
     return self.cellCount;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -162,7 +174,7 @@
         NSArray* itme = [NSArray arrayWithObjects:
                          [NSDictionary dictionaryWithObjectsAndKeys:@"会员总数",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custTotalCount"] intValue]],@"count", nil],
                          [NSDictionary dictionaryWithObjectsAndKeys:@"本月新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custMonthCount"] intValue]],@"count", nil],
-                         [NSDictionary dictionaryWithObjectsAndKeys:@"本日新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custDayCount"] intValue]],@"count", nil], nil];
+                         [NSDictionary dictionaryWithObjectsAndKeys:@"今日新增会员",@"title",[NSString stringWithFormat:@"%d",[[self.AccountBriefDict objectForKeySafe:@"custDayCount"] intValue]],@"count", nil], nil];
         
         [cell setupView:[itme mutableCopy]];
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -252,6 +264,13 @@
         return cell;
     }
     
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 1;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 1;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -645,4 +664,27 @@
         [self.tableview.header endRefreshing];
     });
 }
+
+-(void)viewDidLayoutSubviews
+{
+    if ([self.tableview respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.tableview setSeparatorInset:UIEdgeInsetsMake(0,0,0,0)];
+    }
+    
+    if ([self.tableview respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.tableview setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
+    }
+}
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+}
+
 @end

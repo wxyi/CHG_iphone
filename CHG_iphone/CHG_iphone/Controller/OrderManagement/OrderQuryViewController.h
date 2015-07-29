@@ -15,6 +15,8 @@
 @property(nonatomic,weak)IBOutlet UITextField* starttime;
 @property(nonatomic,weak)IBOutlet UITextField* endtime;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
+@property (nonatomic,assign)OrderReturnType m_returnType;
+
 @property(nonatomic,assign)NSInteger m_nPageNumber;
 
 @property(nonatomic,assign)BOOL isFirst;

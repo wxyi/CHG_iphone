@@ -35,8 +35,8 @@
     NSLog(@"加载为当前视图 = %@",self.title);
     
     if ([self.items allKeys] == 0) {
-        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
-        [MMProgressHUD showWithTitle:@"" status:@""];
+//        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
+//        [MMProgressHUD showWithTitle:@"" status:@""];
         [self httpGetOrder];
     }
     
@@ -66,6 +66,7 @@
         self.Pickupbtn.hidden = YES;
         self.Terminationbtn.hidden = YES;
         self.line.hidden = YES;
+        self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-40);
     }
     else
     {
@@ -173,14 +174,14 @@
         
         CGFloat orderAmountWth = [[self.items objectForKeySafe:@"orderAmountWth"] floatValue];
         CGFloat orderFactAmountWth = [[self.items objectForKeySafe:@"orderFactAmountWth"] floatValue];
-        cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", orderAmountWth];
-        cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", orderFactAmountWth];
+        cell.receivablelab.text =[NSString stringWithFormat:@"￥%.2f", orderAmountWth];
+        cell.Receivedlab.text = [NSString stringWithFormat:@"￥%.2f", orderFactAmountWth];
         
 //        orderFactAmount += [[self.items objectForKey:@"orderFactAmount"] floatValue] /self.quantity * self.remainQuantity;
 //        cell.receivablelab.text =[NSString stringWithFormat:@"%.2f", orderAmount];
 //        cell.Receivedlab.text = [NSString stringWithFormat:@"%.2f", orderFactAmount];
         [cell.Receivedlab setEnabled:NO];
-        cell.favorablelab.text = [NSString stringWithFormat:@"%.2f", orderAmountWth - orderFactAmountWth];
+        cell.favorablelab.text = [NSString stringWithFormat:@"￥%.2f", orderAmountWth - orderFactAmountWth];
 //        if ([self.items[@"getGoodsNum"] intValue] == 0) {
 //            cell.receivablelab.text =@"0.00";
 //            cell.Receivedlab.text = @"0.00";
@@ -367,7 +368,7 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-//    [header beginRefreshing];
+    [header beginRefreshing];
     
     // 设置header
     self.tableview.header = header;

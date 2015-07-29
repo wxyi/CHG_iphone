@@ -14,5 +14,6 @@
 @property(nonatomic,weak)IBOutlet UITextField* favorablelab;
 @property(nonatomic,assign)BOOL isHaveDian;
 @property(nonatomic,assign)SaleType orderSaletype;
+@property(nonatomic,copy)OrderPrice orderpriceBlock;
 @property(nonatomic,assign)double allprice;
 @end

@@ -56,7 +56,7 @@
         _counter = 1;
     }
     if (self.showCount) {
-        self.showCount(_counter);
+        self.showCount(Clicktype,self.price,self.indexPath,_counter);
     }
     PresellOperation * operation = [[PresellOperation alloc] init];
     operation.strClickType = Clicktype;

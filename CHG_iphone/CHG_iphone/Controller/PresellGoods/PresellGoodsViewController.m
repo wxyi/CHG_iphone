@@ -12,12 +12,41 @@
 #import "OrderCounterViewController.h"
 #import "JTImageLabel.h"
 #import "PresellOperation.h"
-@interface PresellGoodsViewController ()<SWTableViewCellDelegate>
+//
+//#import <AssetsLibrary/AssetsLibrary.h>
+//#import <QRCodeReader.h>
+//#import <TwoDDecoderResult.h>
+//
+//#import <AudioToolbox/AudioToolbox.h>
+
+#import "ZBarReaderView.h"
+@interface PresellGoodsViewController ()<SWTableViewCellDelegate,ZBarReaderViewDelegate>
 @property UINib* PresellNib;
 @property UINib* OrdersGoodsNib;
+@property (strong,nonatomic)ZBarReaderView* readerView;
+@property (strong,nonatomic)ZBarImageScanner *scanner;
+//@property (nonatomic, strong) ZXCapture *capture;
+//@property (nonatomic) BOOL startScan;
 @end
 
 @implementation PresellGoodsViewController
+
+//- (void)setCapture {
+//    self.capture = nil;
+//    self.capture = [[ZXCapture alloc] init];
+//    self.capture.camera = self.capture.back;
+////    [self.capture setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+////    self.capture.focusMode = ;
+////    self.capture.rotation = 90.0f;
+////    self.capture.layer.cornerRadius = 5.0f;
+//    CGRect frame = CGRectMake(0, 0, SCREEN_WIDTH, 220);
+//    self.capture.layer.frame = frame;
+//    [self.view.layer insertSublayer: self.capture.layer atIndex:0];
+//
+//    [self.capture start];
+////    [self setBackground];
+//    self.startScan = YES;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -57,7 +86,7 @@
     
     if (self.m_returnType == OrderReturnTypeAMember && (self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods)) {
         
-        if (self.skiptype != SkipFromPopPage && self.skiptype != SkipfromOrderManage && self.orderSaletype == SaleTypePickingGoods) {
+        if (self.skiptype == SkipFromOrderFinish && self.orderSaletype == SaleTypePickingGoods) {
             [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
         }
         else if (self.skiptype == SkipFromPopPage)
@@ -112,11 +141,17 @@
     bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
     [bottomview addGestureRecognizer:tapGestureRecognizer];
     [self.view addSubview:topeview];
+    [self.view bringSubviewToFront:topeview];
     [self.view addSubview:lefteview];
+    [self.view bringSubviewToFront:lefteview];
     [self.view addSubview:righteview];
+    [self.view bringSubviewToFront:righteview];
     [self.view addSubview:bottomview];
+    [self.view bringSubviewToFront:bottomview];
     // Do any additional setup after loading the view from its nib.
     [self setupView];
+    
+    
 
 }
 
@@ -171,9 +206,10 @@
     _line = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-170)/2, 15, 170, 2)];
     _line.image = [NSObject createImageWithColor:UIColorFromRGB(0xF5A541)];
     [self.view addSubview:_line];
+//    [self.view bringSubviewToFront:_line];
     
     JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
-    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
+    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     promptlabel.textLabel.text = @"扫描二维码识别商品信息";
     promptlabel.textLabel.font = FONT(12);
     promptlabel.textLabel.textColor = [UIColor whiteColor];
@@ -187,11 +223,16 @@
     [super viewWillDisappear:animated];
     [timer invalidate];
     [timer1 invalidate];
-    [_session stopRunning];
-    [_session removeInput:self.input];
-    [_session removeOutput:self.output];
-    [self.preview removeFromSuperlayer];
     
+//    [_session stopRunning];
+//    [_session removeInput:self.input];
+//    [_session removeOutput:self.output];
+//    [self.preview removeFromSuperlayer];
+//    [self stopCapture];
+    [self.readerView stop];
+    [self.readerView removeFromSuperview];
+    self.readerView.readerDelegate = nil;
+    self.readerView = nil;
     
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -212,50 +253,66 @@
     }
     else
     {
-        [self setupCamera];
+        
+//        [self setCapture];
+//        self.capture.delegate = self;
+//        [self initCapture];
+//        [self setupCamera];
+        [self loopDrawLine];
     }
     
 }
 
 
-//-(void)readerView:(ZBarReaderView *)readerView didReadSymbols:(ZBarSymbolSet *)symbols fromImage:(UIImage *)image
-//{
-//    NSString *codeData=[[NSString alloc]init];
-//    for (ZBarSymbol *sym in symbols) {
-//        codeData = sym.data;
-//        break;
-//    }
-//    DLog(@"codeData = %@",codeData);
-//    //判断是否包含 头'http:'
-//    NSString *regex = @"http+:[^\\s]*";
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
-//    
-//    //判断是否包含 头'ssid:'
-//    NSString *ssid = @"ssid+:[^\\s]*";;
-//    NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
-//    
-//    //判断是否为纯数字'
-//    NSString * num        = @"^-?\\d+$";
-//    NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", num];
-//    if ([predicate evaluateWithObject:codeData]) {
-//        
-//        DLog(@"判断是否包含 头'http:");
-//        [self httpQrCode:codeData];
-//        
-//    }
-//    else if([ssidPre evaluateWithObject:codeData]){
-//        DLog(@"判断是否包含 头'ssid:");
-//    }
-//    else if([numpred evaluateWithObject:codeData]){
-//        DLog(@"判断是否为纯数字");
-//        if (self.orderSaletype != SaleTypeReturnGoods && self.orderSaletype != SaleTypeReturnEngageGoods) {
-//            [self httpQrCode:codeData];
-//        }
-//
-//        
-//    }
-//}
-//
+-(void)readerView:(ZBarReaderView *)readerView didReadSymbols:(ZBarSymbolSet *)symbols fromImage:(UIImage *)image
+{
+    NSString *codeData=[[NSString alloc]init];
+    for (ZBarSymbol *sym in symbols) {
+        codeData = sym.data;
+        break;
+    }
+    if (self.isfinish) {
+        self.isfinish = NO;
+        NSString *regex = @"http+:[^\\s]*";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+        
+        //判断是否包含 头'ssid:'
+        NSString *ssid = @"ssid+:[^\\s]*";;
+        NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+        
+        //判断是否为纯数字'
+        NSString * num = @"^-?\\d+$";
+        NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", num];
+        if ([predicate evaluateWithObject:codeData]) {
+            
+            DLog(@"判断是否包含 头'http:");
+            [self httpQrCode:codeData];
+            
+        }
+        else if([ssidPre evaluateWithObject:codeData]){
+            DLog(@"判断是否包含 头'ssid:");
+        }
+        else if([numpred evaluateWithObject:codeData]){
+            DLog(@"判断是否为纯数字");
+            if (self.orderSaletype != SaleTypeReturnGoods && self.orderSaletype != SaleTypeReturnEngageGoods) {
+                [self httpQrCode:codeData];
+            }
+            else
+            {
+                [SGInfoAlert showInfo:@"不支持扫箱码退货"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            }
+        }
+        else
+        {
+            [self httpQrCode:codeData];
+        }
+        
+    }
+}
+
 //-(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 //{
 //    id<NSFastEnumeration> results =
@@ -276,72 +333,7 @@
 //    
 //    
 //}
-//-(void)loopDrawLine
-//{
-//    CGRect  rect = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2, 15, ZbarRead_With, 2);
-//    if (self.lineImage) {
-//        [self.lineImage removeFromSuperview];
-//    }
-//    self.lineImage = [[UIImageView alloc] initWithFrame:rect];
-//    self.lineImage.image = [UIImage imageNamed:@"scan_laser.png"];
-//    //    imageview.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"scan_laser.png"]];
-//    [UIView animateWithDuration:3.0
-//                          delay: 0.0
-//                        options: UIViewAnimationOptionCurveEaseIn
-//                     animations:^{
-//                         //修改fream的代码写在这里
-//                         self.lineImage.frame =CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2, 185, ZbarRead_With, 2);
-//                         [self.lineImage setAnimationRepeatCount:0];
-//                         
-//                     }
-//                     completion:^(BOOL finished){
-//                         if (!self.is_Anmotion) {
-//                             [self loopDrawLine];
-//                         }
-//                         
-//                     }];
-//    
-//    if (!self.is_have) {
-//        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-//        
-//        //将触摸事件添加到当前view
-//        
-//        UIImageView *topeview=[[UIImageView alloc] init];
-//        topeview.backgroundColor = COLOR(0, 0, 0, 0.3);
-//        topeview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 15);
-//        [topeview addGestureRecognizer:tapGestureRecognizer];
-//        UIImageView *lefteview=[[UIImageView alloc] init];
-//        lefteview.backgroundColor = COLOR(0, 0, 0, 0.3);
-//        lefteview.frame = CGRectMake(0, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
-//        [lefteview addGestureRecognizer:tapGestureRecognizer];
-//        UIImageView *righteview=[[UIImageView alloc] init];
-//        righteview.backgroundColor = COLOR(0, 0, 0, 0.3);
-//        righteview.frame = CGRectMake((SCREEN_WIDTH-ZbarRead_With)/2+ZbarRead_With, 15, (SCREEN_WIDTH-ZbarRead_With)/2, ZbarRead_With);
-//        [righteview addGestureRecognizer:tapGestureRecognizer];
-//        UIImageView *bottomview=[[UIImageView alloc] init];
-//        bottomview.backgroundColor = COLOR(0, 0, 0, 0.3);
-//        bottomview.frame = CGRectMake(0, 185, SCREEN_WIDTH, 35);
-//        [bottomview addGestureRecognizer:tapGestureRecognizer];
-//        
-//        self.ZBarReader.tag = 101;
-//        
-//        self.ZBarReader.readerDelegate = self;
-//        self.ZBarReader.allowsPinchZoom = YES;//使用手势变焦
-//        self.ZBarReader.trackingColor = [UIColor blueColor];
-//        self.ZBarReader.showsFPS = NO;// 显示帧率  YES 显示  NO 不显示
-//        self.ZBarReader.scanCrop = CGRectMake(0, 0, 1, 1);//将被扫描的图像的区域
-//        
-//        self.ZBarReader.torchMode = 0;
-//        [self.ZBarReader addSubview:topeview];
-//        [self.ZBarReader addSubview:lefteview];
-//        [self.ZBarReader addSubview:righteview];
-//        [self.ZBarReader addSubview:bottomview];
-//        
-//        [self.ZBarReader start];
-//        self.is_have = YES;
-//    }
-//    [self.view addSubview:self.lineImage];
-//}
+
 -(void)keyboardHide:(UITapGestureRecognizer*)tap{
     UITextField* textfiled = (UITextField*)[self.view viewWithTag:100];
     [textfiled resignFirstResponder];
@@ -380,8 +372,9 @@
 
          [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe: @"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = [dict objectForKeySafe:@"productName"] ;
-        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
-        cell.countlab.text = [NSString stringWithFormat:@"x%d",[[dict objectForKeySafe:@"QrcList"] count]];
+//        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];;
+        cell.countlab.text = [NSString stringWithFormat:@"x%lu",(unsigned long)[(NSArray*)[dict objectForKeySafe:@"QrcList"] count]];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
     }
@@ -399,6 +392,7 @@
             [cell setRightUtilityButtons:rightUtilityButtons WithButtonWidth:60.0f];
             cell.delegate = self;
         }
+        cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
         [cell setupCell];
         
         cell.indexPath = indexPath;
@@ -407,20 +401,20 @@
 
         [cell.GoodsImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = [dict objectForKeySafe:@"productName"] ;
-        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
-
+//        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];;
         
         cell.TextStepper.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.row] intValue];
-        cell.counter = [[dict objectForKeySafe:@"QrcList"] count];
+        cell.counter = [(NSArray*)[dict objectForKeySafe:@"QrcList"] count];
         NSInteger Qrclistcount;
-        if ([[dict objectForKeySafe:@"QrcList"] count] > 60) {
+        if ([(NSArray*)[dict objectForKeySafe:@"QrcList"] count] > 60) {
             Qrclistcount = 60;
             
             
         }
         else
         {
-            Qrclistcount = [[dict objectForKeySafe:@"QrcList"] count];
+            Qrclistcount = [(NSArray*)[dict objectForKeySafe:@"QrcList"] count];
         }
         [cell.TextStepper setCurrent:Qrclistcount];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -560,9 +554,12 @@
                 NSInteger tag  = [[NSString stringWithFormat:@"101%d",i] intValue];
                 TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
                 DLog(@"textstepper = %.f",TextStepper.Current);
+                
+                NSDictionary* dict = [self.items objectAtIndexSafe:i];
                 NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
                 anotherDict = [self.items objectAtIndexSafe:i];
-                [anotherDict setObjectSafe:[NSString stringWithFormat:@"%.2f", TextStepper.Current ] forKey:@"quantity"];
+                
+                [anotherDict setObjectSafe:[NSString stringWithFormat:@"%lu", (unsigned long)[(NSArray*)[dict objectForKeySafe:@"QrcList"] count]] forKey:@"quantity"];
                 [self.items replaceObjectAtIndexSafe:i withObject:anotherDict];
             }
             OrderCounterView.items = self.items;
@@ -674,7 +671,8 @@
 
         }
         if (!isSameId) {
-            [self.items addObjectSafe:product];
+//            [self.items addObjectSafe:product];
+            [self.items insertObjectSafe:product atIndex:0];
         }
         else
         {
@@ -729,7 +727,8 @@
         }
 
         if (!isSameId) {
-            [self.items addObjectSafe:product];
+//            [self.items addObjectSafe:product];
+            [self.items insertObjectSafe:product atIndex:0];
         }
         else
         {
@@ -838,7 +837,7 @@
     DLog(@"productCode = %@",productCode)
     
     [param setObjectSafe:productCode forKey:@"productCodeStr"];
-    __weak typeof(self) weakSelf = self;
+    
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
@@ -850,11 +849,11 @@
             
             
             OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
-            OrderCounterView.orderSaletype = weakSelf.orderSaletype;
+            OrderCounterView.orderSaletype = self.orderSaletype;
             OrderCounterView.m_returnType = self.m_returnType;
-            OrderCounterView.items = weakSelf.items;
+            OrderCounterView.items = self.items;
             OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
-            [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
+            [self.navigationController pushViewController:OrderCounterView animated:YES];
             
         }
         else
@@ -862,11 +861,11 @@
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
             if (self.orderSaletype == SaleTypePickingGoods) {
                 OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
-                OrderCounterView.orderSaletype = weakSelf.orderSaletype;
-                OrderCounterView.m_returnType = weakSelf.m_returnType;
-                OrderCounterView.items = weakSelf.items;
+                OrderCounterView.orderSaletype = self.orderSaletype;
+                OrderCounterView.m_returnType = self.m_returnType;
+                OrderCounterView.items = self.items;
                 OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
-                [weakSelf.navigationController pushViewController:OrderCounterView animated:YES];
+                [self.navigationController pushViewController:OrderCounterView animated:YES];
             }
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
@@ -896,11 +895,32 @@
     // Pass the selected object to the new view controller.
 }
 */
+-(void)loopDrawLine
+{
+    self.scanner = [ZBarImageScanner new];
+    self.readerView =  [[ZBarReaderView alloc]
+                                    initWithImageScanner: self.scanner];
+    self.readerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 220);
+    self.readerView.tag = 101;
+    self.readerView.readerDelegate = self;
+    self.readerView.allowsPinchZoom = YES;//使用手势变焦
+    self.readerView.trackingColor = [UIColor blueColor];
+    self.readerView.showsFPS = NO;// 显示帧率  YES 显示  NO 不显示
+    self.readerView.scanCrop = CGRectMake(0, 0, 1, 1);//将被扫描的图像的区域
+    self.readerView.tracksSymbols = NO;
+    self.readerView.torchMode = 0;
+    [self.view addSubview:self.readerView];
+    [self.view sendSubviewToBack:self.readerView];
+    
+//    [self.view.layer insertSublayer:self.readerView.layer atIndex:0];
+    [self.readerView start];
+    
+}
 - (void)setupCamera
 {
     // Device
     _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
+//    [_device setVideoZoomFactor:50.0f];
     // Input
     _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
     
@@ -919,6 +939,10 @@
     
     _session = [[AVCaptureSession alloc]init];
     [_session setSessionPreset:AVCaptureSessionPresetHigh];
+    if ([_session canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+        _session.sessionPreset = AVCaptureSessionPreset1920x1080;
+        
+    }
     if ([_session canAddInput:self.input])
     {
         [_session addInput:self.input];
@@ -928,6 +952,30 @@
     {
         [_session addOutput:self.output];
     }
+//    _captureOutput = [[AVCaptureVideoDataOutput alloc] init];
+//    _captureOutput.alwaysDiscardsLateVideoFrames = YES;
+//    [_captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
+//    NSString* key = (NSString *)kCVPixelBufferPixelFormatTypeKey;
+//    NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
+//    NSDictionary *videoSettings = [NSDictionary dictionaryWithObject:value forKey:key];
+//    [_captureOutput setVideoSettings:videoSettings];
+//    [_session addOutput:_captureOutput];
+//    _session.sessionPreset = AVCaptureSessionPresetMedium;
+    
+//    [_session beginConfiguration];
+//    
+//
+//    
+//    
+//    [_session commitConfiguration];
+//    [_session beginConfiguration];
+//    [_device lockForConfiguration:nil];
+//    
+//    // Set torch to on
+//    [_device setTorchMode:AVCaptureTorchModeOn];
+//    
+//    [_device unlockForConfiguration];
+//    [_session commitConfiguration];
     
     // 条码类型 AVMetadataObjectTypeQRCode
 //    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
@@ -942,6 +990,9 @@
     
     // Start
     [_session startRunning];
+
+
+    
 }
 #pragma mark AVCaptureMetadataOutputObjectsDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
@@ -1034,9 +1085,10 @@
 
 -(void)deletePresellGoods:(NSNotification*)aNotification
 {
-    NSString* index = [aNotification object];
-    if ([self.items count] != 0 && [self.items count] > ([index intValue]-1)) {
-        [self.items removeObjectAtIndexSafe:[index intValue]];
+    NSIndexPath *cellIndexPath = [aNotification object];
+    if ([self.items count] != 0 /*&& [self.items count] > (cellIndexPath.row -1)*/) {
+//        [self.items removeObjectAtIndexSafe:[index intValue]];
+        [self.items removeObjectAtIndexSafe:cellIndexPath.row];
         [self.tableview reloadData];
     }
     
@@ -1052,7 +1104,10 @@
             self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
-                [self.items removeObjectAtIndexSafe:index];
+                NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];
+                
+                [self.items removeObjectAtIndex:cellIndexPath.row];
+//                [self.items removeObjectAtIndexSafe:index];
                 [self.tableview reloadData];
                 
             } otherButtonBlock:^{
@@ -1125,4 +1180,314 @@
         [self.tableview reloadData];
     }
 }
+
+
+- (void)initCapture
+{
+    _session = [[AVCaptureSession alloc]init];
+    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    //    [_device setVideoZoomFactor:50.0f];
+    // Input
+    _input = [AVCaptureDeviceInput deviceInputWithDevice:_device error:nil];
+//    AVCaptureDevice* inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+//    AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:nil];
+    [_session addInput:_input];
+    
+    _captureOutput = [[AVCaptureVideoDataOutput alloc] init];
+    _captureOutput.alwaysDiscardsLateVideoFrames = YES;
+    [_captureOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
+    NSString* key = (NSString *)kCVPixelBufferPixelFormatTypeKey;
+    NSNumber* value = [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA];
+    NSDictionary *videoSettings = [NSDictionary dictionaryWithObject:value forKey:key];
+    [_captureOutput setVideoSettings:videoSettings];
+    [_session addOutput:_captureOutput];
+    
+//    CGFloat width = self.view.frame.size.width;
+//    CGFloat height = self.view.frame.size.height;
+//    CGFloat tm_X = 15.0/height;
+//    CGFloat tm_Y = ((width - 170.0)/2)/width;
+//    CGFloat tm_Width = 170.0/height;
+//    CGFloat tm_Height = 170.0/width;
+//    [_output setRectOfInterest:CGRectMake(tm_X,tm_Y,tm_Width ,tm_Height)];    // Session
+//    DLog(@"cgrectmake = %@",NSStringFromCGRect(_output.rectOfInterest));
+    
+    
+    NSString* preset = 0;
+//    if (NSClassFromString(@"NSOrderedSet") && // Proxy for "is this iOS 5" ...
+//        [UIScreen mainScreen].scale > 1 &&
+//        [_device
+//         supportsAVCaptureSessionPreset:AVCaptureSessionPresetiFrame960x540]) {
+//            // NSLog(@"960");
+//            preset = AVCaptureSessionPresetiFrame960x540;
+//        }
+    if (!preset) {
+        // NSLog(@"MED");
+        preset = AVCaptureSessionPresetMedium;
+    }
+    _session.sessionPreset = preset;
+    
+    if (!self.preview) {
+        self.preview = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
+    }
+    // NSLog(@"prev %p %@", self.prevLayer, self.prevLayer);
+//    self.preview.frame = CGRectMake(0, 0, SCREEN_WIDTH, 220);
+//    self.preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//    [self.view.layer addSublayer: self.preview];
+//    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
+    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    //    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);
+    _preview.frame =CGRectMake(0,0,SCREEN_WIDTH,220);;
+    [self.view.layer insertSublayer:self.preview atIndex:0];
+    
+    self.isScanning = YES;
+    [_session startRunning];
+}
+
+- (UIImage *) imageFromSampleBuffer:(CMSampleBufferRef) sampleBuffer
+{
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    // Lock the base address of the pixel buffer
+    CVPixelBufferLockBaseAddress(imageBuffer,0);
+    
+    // Get the number of bytes per row for the pixel buffer
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
+    // Get the pixel buffer width and height
+    size_t width = CVPixelBufferGetWidth(imageBuffer);
+    size_t height = CVPixelBufferGetHeight(imageBuffer);
+    
+    // Create a device-dependent RGB color space
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    if (!colorSpace)
+    {
+        NSLog(@"CGColorSpaceCreateDeviceRGB failure");
+        return nil;
+    }
+    
+    // Get the base address of the pixel buffer
+    void *baseAddress = CVPixelBufferGetBaseAddress(imageBuffer);
+    // Get the data size for contiguous planes of the pixel buffer.
+    size_t bufferSize = CVPixelBufferGetDataSize(imageBuffer);
+    
+    // Create a Quartz direct-access data provider that uses data we supply
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, baseAddress, bufferSize,
+                                                              NULL);
+    // Create a bitmap image from data supplied by our data provider
+    CGImageRef cgImage =
+    CGImageCreate(width,
+                  height,
+                  8,
+                  32,
+                  bytesPerRow,
+                  colorSpace,
+                  kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little,
+                  provider,
+                  NULL,
+                  true,
+                  kCGRenderingIntentDefault);
+    CGDataProviderRelease(provider);
+    CGColorSpaceRelease(colorSpace);
+    
+    // Create and return an image object representing the specified Quartz image
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    
+    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    
+    return image;
+}
+
+//- (void)decodeImage:(UIImage *)image
+//{
+//    NSMutableSet *qrReader = [[NSMutableSet alloc] init];
+//    QRCodeReader *qrcoderReader = [[QRCodeReader alloc] init];
+//    [qrReader addObject:qrcoderReader];
+//    
+//    Decoder *decoder = [[Decoder alloc] init];
+//    decoder.delegate = self;
+//    decoder.readers = qrReader;
+//    [decoder decodeImage:image];
+//}
+
+//#pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
+//
+//- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+//{
+//    UIImage *image = [self imageFromSampleBuffer:sampleBuffer];
+//    
+//    [self decodeImage:image];
+//
+//}
+#pragma mark - DecoderDelegate
+//- (void)decoder:(Decoder *)decoder willDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset;
+//{
+////    [self decodeImage:image];
+//////    NSString* stringValue = result.text;
+////    
+////    
+////    
+////    //        [_session stopRunning];
+////    //        [timer invalidate];
+////    
+////    //判断是否包含 头'http:'
+////    
+////    if (self.isfinish) {
+////        self.isfinish = NO;
+////        NSString *regex = @"http+:[^\\s]*";
+////        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+////        
+////        //判断是否包含 头'ssid:'
+////        NSString *ssid = @"ssid+:[^\\s]*";;
+////        NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+////        
+////        //判断是否为纯数字'
+////        NSString * num = @"^-?\\d+$";
+////        NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", num];
+////        if ([predicate evaluateWithObject:stringValue]) {
+////            
+////            DLog(@"判断是否包含 头'http:");
+////            [self httpQrCode:stringValue];
+////            
+////        }
+////        else if([ssidPre evaluateWithObject:stringValue]){
+////            DLog(@"判断是否包含 头'ssid:");
+////        }
+////        else if([numpred evaluateWithObject:stringValue]){
+////            DLog(@"判断是否为纯数字");
+////            if (self.orderSaletype != SaleTypeReturnGoods && self.orderSaletype != SaleTypeReturnEngageGoods) {
+////                [self httpQrCode:stringValue];
+////            }
+////            else
+////            {
+////                [SGInfoAlert showInfo:@"不支持扫箱码退货"
+////                              bgColor:[[UIColor blackColor] CGColor]
+////                               inView:self.view
+////                             vertical:0.7];
+////            }
+////        }
+////        else
+////        {
+////            [self httpQrCode:stringValue];
+////        }
+////        
+////    }
+//}
+//- (void)decoder:(Decoder *)decoder didDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset withResult:(TwoDDecoderResult *)result
+//{
+////    self.isScanning = NO;
+////    [self.session stopRunning];
+//    DLog(@"result = %@",result.text);
+//    NSString* stringValue = result.text;
+//    
+//    
+//    
+//    //        [_session stopRunning];
+//    //        [timer invalidate];
+//    
+//    //判断是否包含 头'http:'
+//    
+//    if (self.isfinish) {
+//        self.isfinish = NO;
+//        NSString *regex = @"http+:[^\\s]*";
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+//        
+//        //判断是否包含 头'ssid:'
+//        NSString *ssid = @"ssid+:[^\\s]*";;
+//        NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+//        
+//        //判断是否为纯数字'
+//        NSString * num = @"^-?\\d+$";
+//        NSPredicate * numpred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", num];
+//        if ([predicate evaluateWithObject:stringValue]) {
+//            
+//            DLog(@"判断是否包含 头'http:");
+//            [self httpQrCode:stringValue];
+//            
+//        }
+//        else if([ssidPre evaluateWithObject:stringValue]){
+//            DLog(@"判断是否包含 头'ssid:");
+//        }
+//        else if([numpred evaluateWithObject:stringValue]){
+//            DLog(@"判断是否为纯数字");
+//            if (self.orderSaletype != SaleTypeReturnGoods && self.orderSaletype != SaleTypeReturnEngageGoods) {
+//                [self httpQrCode:stringValue];
+//            }
+//            else
+//            {
+//                [SGInfoAlert showInfo:@"不支持扫箱码退货"
+//                              bgColor:[[UIColor blackColor] CGColor]
+//                               inView:self.view
+//                             vertical:0.7];
+//            }
+//        }
+//        else
+//        {
+//            [self httpQrCode:stringValue];
+//        }
+//        
+//    }
+//}
+
+//- (void)decoder:(Decoder *)decoder failedToDecodeImage:(UIImage *)image usingSubset:(UIImage *)subset reason:(NSString *)reason
+//{
+//    if (!self.isScanning) {
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"没有发现二维码" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//        [alertView show];
+//    }
+//}
+- (void)stopCapture {
+
+    self.isScanning = NO;
+    [_session stopRunning];
+    
+    [_session removeInput:_input];
+
+    [_session removeOutput:_captureOutput];
+    [self.preview removeFromSuperlayer];
+    
+    self.preview = nil;
+    self.session = nil;
+}
+
+//- (NSString *)barcodeFormatToString:(ZXBarcodeFormat)format {
+//    switch (format) {
+//        case kBarcodeFormatAztec:
+//            return @"Aztec";
+//        case kBarcodeFormatCodabar:
+//            return @"CODABAR";
+//        case kBarcodeFormatCode39:
+//            return @"Code 39";
+//        case kBarcodeFormatCode93:
+//            return @"Code 93";
+//        case kBarcodeFormatCode128:
+//            return @"Code 128";
+//        case kBarcodeFormatDataMatrix:
+//            return @"Data Matrix";
+//        case kBarcodeFormatEan8:
+//            return @"EAN-8";
+//        case kBarcodeFormatEan13:
+//            return @"EAN-13";
+//        case kBarcodeFormatITF:
+//            return @"ITF";
+//        case kBarcodeFormatPDF417:
+//            return @"PDF417";
+//        case kBarcodeFormatQRCode:
+//            return @"QR Code";
+//        case kBarcodeFormatRSS14:
+//            return @"RSS 14";
+//        case kBarcodeFormatRSSExpanded:
+//            return @"RSS Expanded";
+//        case kBarcodeFormatUPCA:
+//            return @"UPCA";
+//        case kBarcodeFormatUPCE:
+//            return @"UPCE";
+//        case kBarcodeFormatUPCEANExtension:
+//            return @"UPC/EAN extension";
+//        default:
+//            return @"Unknown";
+//    }
+//}
+
+
+
 @end

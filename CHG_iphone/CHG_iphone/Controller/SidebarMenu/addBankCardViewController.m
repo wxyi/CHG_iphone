@@ -51,6 +51,7 @@
 //    self.tableview.frame = rect;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.AddShoppersNib = [UINib nibWithNibName:@"AddShoppersCell" bundle:nil];
@@ -199,6 +200,11 @@
     else if ([Cardtype.text isEqualToString:@"请选择银行"])
     {
         info = @"请选择银行";
+    }
+    else if ([NSObject stringContainsEmoji:name.text]) {
+        DLog(@"包含表情");
+        info = @"持卡人不能包含表情";
+                
     }
 //    else if ([IdentifierValidator isValid:IdentifierTypeCreditNumber value:Card.text]) {
 //        JTImageLabel *promptlabel = (JTImageLabel*)[self.view viewWithTag:103];
@@ -357,11 +363,16 @@
     UILabel* textlab = (UILabel*)[self.view viewWithTag:1012];
     NSString* info;
     if (field.tag == 1010) {
-        if (field.text.length > 15) {
+        if (field.markedTextRange == nil&& field.text.length > 15) {
             field.text = [field.text substringToIndex:15];
-//            [field resignFirstResponder];
-            info = @"持卡人姓名不能大于20位";
+            info = @"持卡人姓名不能大于15位";
         }
+//        if (field.text.length > 15) {
+//            
+//            field.text = [field.text substringToIndex:15];
+////            [field resignFirstResponder];
+//            info = @"持卡人姓名不能大于20位";
+//        }
     }
     else if(field.tag == 1011)
     {
@@ -432,7 +443,10 @@
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 15) {
+//        if (existedLength - selectedLength + replaceLength > 15) {
+//            return NO;
+//        }
+        if (textField.text.length >= 15 && string.length > range.length) {
             return NO;
         }
     }

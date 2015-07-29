@@ -113,7 +113,7 @@
         }
    
     }
-    
+    cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
     NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.row];
 //    [cell.BankImage setImageWithURL:[NSURL URLWithString:dict[@"cardPicturePath"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
     cell.BankImage.image = [UIImage imageNamed:@"icon.png"];
@@ -148,7 +148,7 @@
         case 0:
         {
 //            [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑此银行卡" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认解绑绑定?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
                 [self httpDeleteBankCard];

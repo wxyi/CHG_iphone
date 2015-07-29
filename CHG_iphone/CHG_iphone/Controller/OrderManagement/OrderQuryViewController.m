@@ -26,6 +26,16 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
+    
+    
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView ];
     // Do any additional setup after loading the view from its nib.
 }
@@ -57,8 +67,8 @@
 //    rect.size.height = SCREEN_HEIGHT  - 70;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT-70);
-    self.bg_view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70);
+    self.tableview.frame = CGRectMake(0, 80, SCREEN_WIDTH, SCREEN_HEIGHT-80);
+    self.bg_view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 80);
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -101,7 +111,7 @@
         radio1 = [[QRadioButton alloc] initWithDelegate:self groupId:[NSString stringWithFormat:@"groupId%D",1]];
         radio1.isButton = YES;
         radio1.tag = [[NSString stringWithFormat:@"11%d",i] intValue];
-        radio1.frame = CGRectMake(70+i*62, 2, 62, 30);
+        radio1.frame = CGRectMake(10+i*70, 2, 70, 40);
         [radio1 setTitle:[items objectAtIndexSafe:i] forState:UIControlStateNormal];
         radio1.titleLabel.font = FONT(14);
         radio1.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -144,9 +154,11 @@
     [self checkDatas];
 }
 -(void)keyboardHide:(UITapGestureRecognizer*)tap{
-    
+//    self.startdatePicker.ScrollToDate = [NSDate date];
     [self.starttime resignFirstResponder];
+//    self.enddatePicker.ScrollToDate = [NSDate date];
     [self.endtime resignFirstResponder];
+    
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -196,10 +208,11 @@
         
         [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe: @"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = [dict objectForKeySafe:@"productName"];
-        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+//        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];
         cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKeySafe:@"quantity"] intValue] ];
         if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0) {
-            cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
+            cell.returnCountlab.text = [NSString stringWithFormat:@"已退%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
         }
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -296,8 +309,8 @@
     [v_footer addSubview:goodscountlab];
     
     
-    string = [NSString stringWithFormat:@"实付 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -375,6 +388,7 @@
             PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
             PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             PickGoodsView.ManagementTyep = self.ManagementTyep;
+//            PickGoodsView.m_returnType 
             [self.navigationController pushViewController:PickGoodsView animated:YES];
         }
         else
@@ -387,6 +401,15 @@
             [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
             
         }
+    }
+    else
+    {
+        CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+        CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+        CompletedOrderDetailsView.ManagementTyep = self.ManagementTyep;
+        CompletedOrderDetailsView.Comordertype = TerminationOrder;
+        CompletedOrderDetailsView.m_returnType = self.m_returnType;
+        [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
     }
 }
 #pragma mark - UUDatePicker's delegate
@@ -583,6 +606,8 @@
     if ([self.items count] != 0) {
         [self.items removeAllObjects];
     }
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
+    [MMProgressHUD showWithTitle:@"" status:@""];
     [self checkDatas];
     
 }
@@ -648,8 +673,10 @@
 }
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    NSDate *  senddate=[NSDate date];
     if (textField.text.length == 0) {
-        NSDate *  senddate=[NSDate date];
+        
+        
         
         NSDateFormatter  *dateformatter=[[NSDateFormatter alloc] init];
         
@@ -659,6 +686,17 @@
         textField.text = locationString;
         NSLog(@"locationString:%@",locationString);
     }
+    if (textField == self.starttime) {
+        self.startdatePicker.ScrollToDate = senddate;
+        [self.startdatePicker drawRect:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    }
+    else
+    {
+        self.enddatePicker.ScrollToDate = senddate;
+        [self.enddatePicker drawRect:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    }
+    
+    
 }
 
 - (void)reLoadView {

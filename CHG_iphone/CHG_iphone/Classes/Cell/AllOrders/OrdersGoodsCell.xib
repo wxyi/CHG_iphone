@@ -84,7 +84,7 @@
                     <constraint firstItem="CgF-SM-3RJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="160" id="i4H-SK-kEG"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="GoodImage" destination="8SA-6i-bxF" id="K2e-Rt-oUk"/>
                 <outlet property="countlab" destination="JqQ-If-Ybl" id="FuH-VG-G6Q"/>

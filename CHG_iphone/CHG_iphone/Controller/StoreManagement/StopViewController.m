@@ -31,12 +31,12 @@
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     if ([config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count > 1)
     {
-        self.items = [NSArray arrayWithObjects:@"门店切换",@"店员管理", nil];
+        self.items = [NSArray arrayWithObjects:@"门店切换",@"门店管理", nil];
     }
     else if ([config.Roles isEqualToString:@"SHOPLEADER"]||(
              [config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count == 1))
     {
-        self.items = [NSArray arrayWithObjects:@"店员管理", nil];
+        self.items = [NSArray arrayWithObjects:@"门店管理", nil];
     }
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;

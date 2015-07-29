@@ -63,6 +63,7 @@
             PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
             PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             PickGoodsView.ManagementTyep = OrderManagementTypeAll;
+            PickGoodsView.m_returnType = OrderReturnTypeStatistic;
             [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
         }
         else
@@ -156,20 +157,33 @@
 {
     
     if (number == 0) {
-        self.StoreSalesDay.strYear= self.strYear;
-        self.StoreSalesDay.strMonth= self.strMonth;
-        self.StoreSalesDay.strDay= self.strDay;
+        if (self.isRefresh || self.isSkip) {
+            self.StoreSalesDay.strYear= self.strYear;
+            self.StoreSalesDay.strMonth= self.strMonth;
+            self.StoreSalesDay.strDay= self.strDay;
+        }
+        
         self.StoreSalesDay.isSkip= self.isSkip;
         self.StoreSalesDay.isRefresh = self.isRefresh;
         self.vcAll = self.StoreSalesDay;
     } else if (number == 1) {
-        self.StoreSalesMonth.strYear= self.strYear;
-        self.StoreSalesMonth.strMonth= self.strMonth;
+//        self.StoreSalesMonth.strYear= self.strYear;
+//        self.StoreSalesMonth.strMonth= self.strMonth;
+        if (self.isRefresh || self.isSkip) {
+            self.StoreSalesMonth.strYear= self.strYear;
+            self.StoreSalesMonth.strMonth= self.strMonth;
+//            self.StoreSalesDay.strDay= self.strDay;
+        }
         self.StoreSalesMonth.isSkip= self.isSkip;
         self.StoreSalesMonth.isRefresh = self.isRefresh;
         self.vcAll = self.StoreSalesMonth;
     } else if (number == 2) {
-        self.StoreSalesYear.strYear= self.strYear;
+        if (self.isRefresh || self.isSkip) {
+            self.StoreSalesYear.strYear= self.strYear;
+//            self.StoreSalesDay.strMonth= self.strMonth;
+//            self.StoreSalesDay.strDay= self.strDay;
+        }
+//        self.StoreSalesYear.strYear= self.strYear;
         self.StoreSalesYear.isSkip= self.isSkip;
         self.StoreSalesYear.isRefresh = self.isRefresh;
         self.vcAll = self.StoreSalesYear;

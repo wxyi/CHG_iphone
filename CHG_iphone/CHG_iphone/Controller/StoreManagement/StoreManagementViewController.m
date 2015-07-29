@@ -132,7 +132,7 @@
     }
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, width)];
     v_header.backgroundColor = [UIColor clearColor];
-    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-180)/2, (width-112)/2, 180, 112)];
+    UIImageView* imageview = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-130)/2, (width-112)/2, 130, 112)];
     
     imageview.image = [UIImage imageNamed:@"icon_logo_big"];
     [v_header addSubview:imageview];
@@ -203,7 +203,10 @@
         NSLog(@"%@",file);
         
     } failureBlock:^(NSString *description) {
-        
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
         DLog(@"下载失败error = %@",description);
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         

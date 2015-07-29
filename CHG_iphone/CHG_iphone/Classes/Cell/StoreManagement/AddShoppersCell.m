@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    self.nametext.delegate = self;
+//    self.nametext.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

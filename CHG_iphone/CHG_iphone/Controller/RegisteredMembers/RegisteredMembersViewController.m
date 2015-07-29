@@ -162,12 +162,22 @@
 -(void)nextBtn
 {
     DLog(@"下一步");
-//    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
-//    [iphonefield resignFirstResponder];
-//    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
-//    [namefield resignFirstResponder];
-//    UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
-//    [checkfield resignFirstResponder];
+    UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+    [iphonefield resignFirstResponder];
+    UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    [namefield resignFirstResponder];
+    UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
+    [checkfield resignFirstResponder];
+    
+    if ([NSObject stringContainsEmoji:namefield.text]) {
+        DLog(@"包含表情");
+        [SGInfoAlert showInfo:@"会员姓名不能包含表情"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        return ;
+
+    }
 //    NSString* info ;
 //    if (iphonefield.text.length == 0) {
 //        info = @"请输入手机号码";
@@ -215,9 +225,9 @@
 
 - (void) textFieldDidChange:(UITextField*) textField
 {
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:kAlphaNum options:NSRegularExpressionCaseInsensitive error:nil];
-    NSString *modifiedString = [regex stringByReplacingMatchesInString:textField.text options:0 range:NSMakeRange(0, [textField.text length]) withTemplate:@""];
-    DLog(@"modifiedString = %@ textField.text = %@",modifiedString,textField.text)
+//    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:kAlphaNum options:NSRegularExpressionCaseInsensitive error:nil];
+//    NSString *modifiedString = [regex stringByReplacingMatchesInString:textField.text options:0 range:NSMakeRange(0, [textField.text length]) withTemplate:@""];
+//    DLog(@"modifiedString = %@ textField.text = %@",modifiedString,textField.text)
 //    textField.text = modifiedString;
     NSString * info;
     if (textField.tag == 1010) {
@@ -239,11 +249,15 @@
     }
     else if(textField.tag == 1011)
     {
-        if (textField.text.length > 15) {
+        if (textField.markedTextRange == nil&& textField.text.length > 15) {
             textField.text = [textField.text substringToIndex:15];
-//            [textField resignFirstResponder];
             info = @"会员姓名不能大于15位";
         }
+//        if (textField.text.length > 15) {
+//            textField.text = [textField.text substringToIndex:15];
+////            [textField resignFirstResponder];
+//            info = @"会员姓名不能大于15位";
+//        }
         else
         {
             info = @"";

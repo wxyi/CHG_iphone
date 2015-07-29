@@ -24,8 +24,8 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     textField.backgroundColor = UIColorFromRGB(0xdddddd);
-   
-    
+    textField.text = [textField.text stringByReplacingOccurrencesOfString:@"￥" withString:@""];
+//    textField.text = [textField.text substringFromIndex:1];
     
 //    textField.text = @"";
     
@@ -43,9 +43,11 @@
     NSString* price = textField.text;
     DLog(@"price = %.1f Receivedlab = %.1f",[price doubleValue],[self.Receivedlab.text doubleValue]);
     
-    if ([self.receivablelab.text doubleValue] >= [price doubleValue]&& [price floatValue] != 0) {
-        self.favorablelab.text = [NSString stringWithFormat:@"%.2f",[self.receivablelab.text doubleValue] - [price doubleValue]];
-        self.Receivedlab.text = [NSString stringWithFormat:@"%.2f",[price doubleValue] ];
+    if ([[self.receivablelab.text substringFromIndex:1] doubleValue] >= [price doubleValue]&& [price floatValue] != 0) {
+        self.favorablelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.receivablelab.text substringFromIndex:1] doubleValue] - [price doubleValue]];
+        self.Receivedlab.text = [NSString stringWithFormat:@"￥%.2f",[price doubleValue] ];
+        
+        
     }
     else if([price floatValue] <= 0)
     {
@@ -74,7 +76,12 @@
     }
 
    
-    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObjectSafe:textField.text forKey:@"orderFactAmount"];
+    [dict setObjectSafe:self.favorablelab.text forKey:@"orderDiscount"];
+    if (self.orderpriceBlock) {
+        self.orderpriceBlock(dict);
+    }
 }
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {

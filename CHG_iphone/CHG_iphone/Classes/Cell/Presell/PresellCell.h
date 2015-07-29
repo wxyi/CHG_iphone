@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TextStepperField.h"
-typedef void(^showOrderCount)(NSInteger count);
+typedef void(^showOrderCount)(NSString* state,CGFloat price,NSIndexPath* indexPath,NSInteger count);
 @interface PresellCell : SWTableViewCell
 @property(nonatomic,weak)IBOutlet UIImageView* GoodsImage;
 @property(nonatomic,weak)IBOutlet UILabel* titlelab;
@@ -18,6 +18,7 @@ typedef void(^showOrderCount)(NSInteger count);
 @property(nonatomic,strong)showOrderCount showCount;
 @property(nonatomic,strong)NSIndexPath * indexPath;
 @property(nonatomic,strong)NSString * operationPage;
+@property(nonatomic,assign)CGFloat price;
 - (IBAction)ibStepperDidStep:(id)sender ;
 
 -(void)setupCell;

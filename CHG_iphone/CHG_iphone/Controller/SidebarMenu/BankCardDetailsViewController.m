@@ -77,6 +77,7 @@
         cell = (BankCardDetailsCell*)[[self.BankCardDetailsNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
     
     }
+    cell.namelab.textAlignment = NSTextAlignmentRight;
     if (indexPath.row == 0) {
         UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
         if (config.nRoleType != 1){
@@ -88,7 +89,7 @@
         }
         
         cell.Detailslab.text = [self.items objectForKeySafe:@"accountName"];
-        cell.namelab.textAlignment = NSTextAlignmentRight;
+//        cell.namelab.textAlignment = NSTextAlignmentRight;
     }
     else if (indexPath.row == 1)
     {

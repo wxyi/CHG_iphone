@@ -10,5 +10,6 @@
 
 @interface amountCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UILabel* nameLab;
-@property(nonatomic,weak)IBOutlet UILabel* priceLab;
+@property(nonatomic,weak) UILabel* priceLab;
+@property(nonatomic,weak) UILabel* MemberLab;
 @end

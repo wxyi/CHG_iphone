@@ -50,10 +50,10 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eed-3e-MwF">
-                        <rect key="frame" x="240" y="115" width="70" height="30"/>
+                        <rect key="frame" x="240" y="115" width="70" height="27"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="Bw4-ao-r83"/>
-                            <constraint firstAttribute="height" constant="30" id="tee-mp-D8x"/>
+                            <constraint firstAttribute="height" constant="27" id="tee-mp-D8x"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="停用">
@@ -86,7 +86,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="eed-3e-MwF" secondAttribute="trailing" constant="10" id="0dY-Q1-lHu"/>
-                    <constraint firstAttribute="bottom" secondItem="eed-3e-MwF" secondAttribute="bottom" constant="-1" id="5Bz-Fq-ISJ"/>
+                    <constraint firstAttribute="bottom" secondItem="eed-3e-MwF" secondAttribute="bottom" constant="2" id="5Bz-Fq-ISJ"/>
                     <constraint firstItem="q2D-ej-A39" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="35" id="6Tq-5y-9HP"/>
                     <constraint firstItem="2uB-Qu-JOo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="74" id="82K-7F-xPa"/>
                     <constraint firstItem="1mt-hM-loA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="35" id="JCY-1S-nFB"/>

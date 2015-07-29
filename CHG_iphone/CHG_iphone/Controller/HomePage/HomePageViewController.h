@@ -16,4 +16,6 @@
 @property (nonatomic,strong)NSMutableArray* menuArr;
 @property (nonatomic,strong)UserConfig* config;
 @property (nonatomic,assign)NSInteger cellCount;
+
+@property (nonatomic,strong)NSString* stAlert;
 @end

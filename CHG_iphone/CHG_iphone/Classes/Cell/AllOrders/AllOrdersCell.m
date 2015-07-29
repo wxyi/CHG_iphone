@@ -62,24 +62,32 @@
         
         [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
         cell.titlelab.text = [dict objectForKeySafe:@"productName"];
-        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
-    
+//        cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
+        cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];;
     int goodNum = 0;
-    if (self.picktype == PickUpTypeDid) {
-//        goodNum = [[dict objectForKeySafe:@"quantity"] intValue] -  [[dict objectForKeySafe:@"remainQuantity"] intValue] - [[dict objectForKeySafe:@"returnQuantity"] intValue];
-        goodNum = [[self.allitems objectForKeySafe:@"getGoodsNum"]intValue];
-    }
-    else if(self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop)
+//    if (self.picktype == PickUpTypeDid) {
+////        goodNum = [[dict objectForKeySafe:@"quantity"] intValue] -  [[dict objectForKeySafe:@"remainQuantity"] intValue] - [[dict objectForKeySafe:@"returnQuantity"] intValue];
+//        goodNum = [[self.allitems objectForKeySafe:@"getGoodsNum"]intValue];
+//    }
+//    else
+    if(self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop)
     {
         goodNum = [[dict objectForKeySafe:@"quantity"] intValue];
     }
     else
     {
-        goodNum = [[dict objectForKeySafe:@"remainQuantity"] intValue];
+        if (self.picktype == PickUpTypeDidNot) {
+             goodNum = [[dict objectForKeySafe:@"remainQuantity"] intValue];
+        }
+        else
+        {
+            goodNum =[[dict objectForKeySafe:@"quantity"] intValue] - [[dict objectForKeySafe:@"remainQuantity"] intValue];
+        }
+        
     }
     
     if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0 && self.picktype != PickUpTypeDidNot) {
-        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
     }
         cell.countlab.text = [NSString stringWithFormat:@"x %d",goodNum ];
 
@@ -191,14 +199,20 @@
         for (int i = 0; i< [productList count]; i++) {
             NSInteger remainQuantity= [[[productList objectAtIndexSafe:i] objectForKeySafe: @"remainQuantity"] integerValue];
             NSInteger quantity= [[[productList objectAtIndexSafe:i] objectForKeySafe:@"quantity"] integerValue];
-            NSInteger returnQuantity= [[[productList objectAtIndexSafe:i] objectForKeySafe:@"returnQuantity"] integerValue];
-            count += quantity - remainQuantity - returnQuantity;
+//            NSInteger returnQuantity= [[[productList objectAtIndexSafe:i] objectForKeySafe:@"returnQuantity"] integerValue];
+            count += quantity - remainQuantity ;
+        }
+    }
+    else if(self.picktype == PickUpTypeDidNot)
+    {
+        for (int i = 0; i< [productList count]; i++) {
+            count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] intValue];
         }
     }
     else
     {
         for (int i = 0; i< [productList count]; i++) {
-            count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] intValue];
+            count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"quantity"] intValue];
         }
     }
     

@@ -11,7 +11,7 @@
 #import "GoodsDetailsViewController.h"
 #import "CompletedOrderDetailsViewController.h"
 #import "OrderManagementViewController.h"
-
+#import "SuccessRegisterViewController.h"
 @interface PickGoodsViewController ()
 
 @end
@@ -32,17 +32,40 @@
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
-    if (self.skiptype == SkipfromOrderManage) {
+//    if (self.skiptype == SkipfromOrderManage) {
+//        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    else
+//    {
+//        [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+//    }
+    if (self.m_returnType == OrderReturnTypeAMember) {
+        
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if (self.m_returnType == OrderReturnTypePopPage)
+    {
+        [leftButton addTarget:self action:@selector(gobackRegistePage) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if(self.m_returnType == OrderReturnTypeStatistic)
+    {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
     }
     else
     {
-        [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
     }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
 }
-
+-(void)gobackRegistePage
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[SuccessRegisterViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -28,7 +28,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"我的账户";
-    
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -120,7 +122,7 @@
             
         }
         
-        if ([[dict objectForKeySafe:@"state"] intValue ] == 2 ) {
+        if ([[dict objectForKeySafe:@"state"] intValue ] == 1 ) {
             cell.datelab.text = dict[@"amountDate"];;
             cell.statelab.text = @"收入";
             cell.namelab.text = @"动销奖励";
@@ -242,6 +244,13 @@
 
 -(void)httpGetMyAccount
 {
+    
+    if (self.strDay.length == 1) {
+        self.strDay = [NSString stringWithFormat:@"0%@",self.strDay];
+    }
+    if (self.strMonth.length == 1) {
+        self.strMonth = [NSString stringWithFormat:@"0%@",self.strMonth];
+    }
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
   
     [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
@@ -275,7 +284,7 @@
                                 [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"awardUsing"] doubleValue]],@"count", nil],
                                                        [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe:@"awardTotal"] doubleValue]],@"count", nil], nil];
 
-            [self reLoadView];
+            
             [self.collection reloadData];
 //            [self.tableview.header endRefreshing];
 //            [self.tableview.footer endRefreshing];
@@ -469,9 +478,9 @@
             }
         }
         
-        
         self.strYear = lastYear;
         self.strMonth = lastMonth;
+        
         
         [self httpGetMyAccount];
         
@@ -535,8 +544,9 @@
 {
     NSMutableArray* tm_array = [[NSMutableArray alloc] init];
 //    [tm_array removeAllObjects];
-    if ([tm_array count] != 0) {
-        [tm_array removeAllObjects];
+    if ([items count] == 0) {
+//        [tm_array removeAllObjects];
+        return;
     }
     if ([self.config.Roles isEqualToString:@"PARTNER"]) {
 //        NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
@@ -560,7 +570,7 @@
                 [dictionary setObjectSafe:@"" forKey:@"awardArriveBank"];
                 [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
                 [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObjectSafe:@"1" forKey:@"state"];
+                [dictionary setObjectSafe:@"2" forKey:@"state"];
                 [tm_array addObjectSafe:dictionary];
             }
         }
@@ -588,7 +598,7 @@
                 [dictionary setObjectSafe:@"" forKey:@"awardArriveBank"];
                 [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
                 [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObjectSafe:@"1" forKey:@"state"];
+                [dictionary setObjectSafe:@"2" forKey:@"state"];
                 [tm_array addObjectSafe:dictionary];
             }
             if ([[dict objectForKeySafe:@"awardSaleAmount"] intValue] != 0)
@@ -598,14 +608,38 @@
                 [dictionary setObjectSafe:@"" forKey:@"awardArriveBank"];
                 [dictionary setObjectSafe:[dict objectForKeySafe:@"awardAccount"] forKey:@"awardAccount"];
                 [dictionary setObjectSafe:[dict objectForKeySafe:@"amountDate"] forKey:@"amountDate"];
-                [dictionary setObjectSafe:@"2" forKey:@"state"];
+                [dictionary setObjectSafe:@"1" forKey:@"state"];
                 [tm_array addObjectSafe:dictionary];
             }
         }
     }
     
+    [tm_array sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        
+        
+        NSString* state1 = [obj1 objectForKeySafe:@"state"];
+        NSString* state2 = [obj2 objectForKeySafe:@"state"];
+        if ([state1 integerValue] > [state2 integerValue]) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        if ([state1 integerValue] < [state2 integerValue]) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+    
+   
+    
     DLog(@"tm_array = %@",tm_array);
-    self.items = [tm_array copy];
+    if (tm_array.count != 0) {
+//        self.items = [tm_array copy];
+        self.items = [NSObject sortDictionayrForDate:[tm_array copy] dateKey:@"amountDate"];
+//        [self sortDate:[tm_array copy] sortId:@"amountDate"];
+        [self reLoadView];
+    }
+
 }
 
 - (void)reLoadView {
@@ -615,4 +649,7 @@
         [self.tableview setContentOffset:CGPointMake(0,0 ) animated:NO];
     }
 }
+
+
+
 @end

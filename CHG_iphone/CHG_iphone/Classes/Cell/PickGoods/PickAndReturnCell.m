@@ -24,6 +24,8 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     textField.backgroundColor = UIColorFromRGB(0xdddddd);
+//    textField.text = [textField.text substringFromIndex:1];
+    textField.text = [textField.text stringByReplacingOccurrencesOfString:@"￥" withString:@""];
 //    textField.text = @"";
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField
@@ -62,9 +64,14 @@
     }
     else
     {
-        textField.text = [NSString stringWithFormat:@"%.2f",[textField.text doubleValue]];
+        textField.text = [NSString stringWithFormat:@"￥%.2f",[textField.text doubleValue]];
     }
-  
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObjectSafe:textField.text forKey:@"orderFactAmount"];
+    
+    if (self.orderpriceBlock) {
+        self.orderpriceBlock(dict);
+    }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

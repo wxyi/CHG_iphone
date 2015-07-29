@@ -37,6 +37,14 @@
     }
     self.title = @"门店详情";
     
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
 //    self.bgScrollView.scrollEnabled = NO;
 //    _locService = [[BMKLocationService alloc]init];
     
@@ -57,11 +65,7 @@
 }
 -(void)setupView
 {
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide:)];
-    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
-    tapGestureRecognizer.cancelsTouchesInView = NO;
-    //将触摸事件添加到当前view
-    [self.view addGestureRecognizer:tapGestureRecognizer];
+
     
     self.storeNamelab.text = [ConfigManager sharedInstance].strStoreName;
 //    [self ParsingAddress];
@@ -72,6 +76,7 @@
     
 }
 -(void)viewWillAppear:(BOOL)animated {
+    
     [_mapView viewWillAppear];
     _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     _geocodesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
@@ -99,14 +104,14 @@
 ////    NSArray *components = [areaDic allKeys];
 ////    NSArray *sortedArray = [components sortedArrayUsingComparator: ^(id obj1, id obj2) {
 ////        
-////        if ([obj1 integerValue] > [obj2 integerValue]) {
-////            return (NSComparisonResult)NSOrderedDescending;
-////        }
-////        
-////        if ([obj1 integerValue] < [obj2 integerValue]) {
-////            return (NSComparisonResult)NSOrderedAscending;
-////        }
-////        return (NSComparisonResult)NSOrderedSame;
+//        if ([obj1 integerValue] > [obj2 integerValue]) {
+//            return (NSComparisonResult)NSOrderedDescending;
+//        }
+//        
+//        if ([obj1 integerValue] < [obj2 integerValue]) {
+//            return (NSComparisonResult)NSOrderedAscending;
+//        }
+//        return (NSComparisonResult)NSOrderedSame;
 ////    }];
 ////    
 ////    NSMutableArray *provinceTmp = [NSMutableArray array];

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyAccountViewController">
@@ -38,7 +38,7 @@
                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jz4-Oi-Ap4">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jz4-Oi-Ap4">
                     <rect key="frame" x="159" y="10" width="1" height="51"/>
                     <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -72,6 +72,7 @@
                 <constraint firstAttribute="trailing" secondItem="10o-QJ-BT0" secondAttribute="trailing" id="WMu-S8-DDr"/>
                 <constraint firstItem="Liv-sG-l1j" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lz8-yc-VcF"/>
                 <constraint firstItem="6af-d6-Mch" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tmD-J5-CXZ"/>
+                <constraint firstItem="jz4-Oi-Ap4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="y2k-hq-2l4"/>
             </constraints>
             <point key="canvasLocation" x="325" y="155"/>
         </view>

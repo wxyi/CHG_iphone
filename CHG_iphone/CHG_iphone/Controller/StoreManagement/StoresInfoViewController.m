@@ -28,11 +28,28 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.title = @"门店信息";
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    
+    if (self.stAlert.length != 0) {
+        [SGInfoAlert showInfo:self.stAlert
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
+        
+        self.stAlert = @"";
+    }
+
 //    if (self.items.count == 0)
     {
         [self httpGetShop];
@@ -80,13 +97,14 @@
     [self becomeFirstResponder];
     
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    if ([config.Roles isEqualToString:@"SHOPLEADER"])
-    {
-        self.addbtn.userInteractionEnabled=NO;
-//        self.addbtn.alpha=0.4;
-        self.addbtn.backgroundColor = UIColorFromRGB(0x878787);
-    }
-    
+//    if ([config.Roles isEqualToString:@"SHOPLEADER"])
+//    {
+//        
+//    }
+    self.addbtn.userInteractionEnabled=NO;
+    self.addbtn.backgroundColor = UIColorFromRGB(0x878787);
+    self.addshopperbtn.userInteractionEnabled=NO;
+    self.addshopperbtn.backgroundColor = UIColorFromRGB(0x878787);
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -229,9 +247,9 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0 ) {
-        return 5;
-    }
+//    if (section == 0 ) {
+//        return 5;
+//    }
     return 1;
 }
 
@@ -336,12 +354,14 @@
                 if (![config.Roles isEqualToString:@"SHOPLEADER"]) {
                     self.addbtn.userInteractionEnabled=YES;
                     self.addbtn.backgroundColor = UIColorFromRGB(0x171c61);
-                    self.addbtn.alpha=1;
+                    
+                    
                 }
                 
 //                self.addbtn.alpha=0.4;
             }
-            
+            self.addshopperbtn.userInteractionEnabled=YES;
+            self.addshopperbtn.backgroundColor = UIColorFromRGB(0x171c61);
             
             DLog(@"self.items = %@",self.items);
             [self.tableview reloadData];

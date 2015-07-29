@@ -9,6 +9,7 @@
 #import "AddShoppersViewController.h"
 #import "JTImageLabel.h"
 #import "AddShoppersCell.h"
+#import "StoresInfoViewController.h"
 @interface AddShoppersViewController ()<UITextFieldDelegate>
 @property UINib* AddShoppersNib;
 @end
@@ -41,6 +42,7 @@
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.AddShoppersNib = [UINib nibWithNibName:@"AddShoppersCell" bundle:nil];
@@ -180,6 +182,11 @@
         {
             info = @"身份证格式不正确";
         }
+        else if ([NSObject stringContainsEmoji:name])
+        {
+            info = @"姓名不能包含表情";
+            
+        }
         if (info.length != 0) {
             [SGInfoAlert showInfo:info
                           bgColor:[[UIColor blackColor] CGColor]
@@ -237,7 +244,10 @@
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
-            [self.navigationController popViewControllerAnimated:YES];
+//            [self.navigationController popViewControllerAnimated:YES];
+            StoresInfoViewController *StoresInfoView = [self.navigationController.viewControllers objectAtIndexSafe:self.navigationController.viewControllers.count-2];
+            StoresInfoView.stAlert = [NSString stringWithFormat:@"%@成功",self.title];
+            [self.navigationController popToViewController:StoresInfoView animated:YES];
         }
         else
         {
@@ -275,9 +285,14 @@
 
     NSString* info;
     if (field.tag == 1010) {
-        if (field.text.length > 15) {
+//        if (field.text.length > 15) {
+//            field.text = [field.text substringToIndex:15];
+////            [field resignFirstResponder];
+//            info = @"姓名不能大于15位";
+//            
+//        }
+        if (field.markedTextRange == nil&& field.text.length > 15) {
             field.text = [field.text substringToIndex:15];
-//            [field resignFirstResponder];
             info = @"姓名不能大于15位";
         }
     }
@@ -335,9 +350,33 @@
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
+        
+        NSCharacterSet *cs;
+        cs = [[NSCharacterSet characterSetWithCharactersInString:@"1234567890"]invertedSet];
+        
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""]; //按cs分离出数组,数组按@""分离出字符串
+        
+        
         if (existedLength - selectedLength + replaceLength > 18) {
             return NO;
         }
+        else if(existedLength - selectedLength + replaceLength < 18)
+        {
+            return [string isEqualToString:filtered];
+        }
+        else
+        {
+            if ([string isEqualToString:@"x"]||[string isEqualToString:@"X"]||[string isEqualToString:filtered]) {
+                return YES;
+            }
+            else
+            {
+                return NO;
+            }
+        }
+        
+//        BOOL canChange = [string isEqualToString:filtered];
+        
     }
     return YES;
 }

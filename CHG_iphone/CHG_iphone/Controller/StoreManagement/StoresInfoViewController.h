@@ -15,5 +15,8 @@
 @property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,strong)NSDictionary* shopinfo;
 @property(nonatomic,strong)STAlertView* stAlertView;
+
+@property (nonatomic,strong)NSString* stAlert;
+
 -(IBAction)addStoresInfo:(UIButton*)sender;
 @end

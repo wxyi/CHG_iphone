@@ -19,5 +19,7 @@
 @property (nonatomic,assign)OrderType Comordertype;
 @property (nonatomic,assign)SkipType skiptype;
 @property(nonatomic,assign)OrderReturnType m_returnType;
+@property(nonatomic,strong)NSDictionary* ChangePriceDict;
+@property(nonatomic,assign)BOOL isfrist;
 -(IBAction)orderProcessing:(UIButton*)sender;
 @end

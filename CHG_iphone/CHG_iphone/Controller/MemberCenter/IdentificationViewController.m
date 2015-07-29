@@ -27,6 +27,13 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     self.title = @"会员识别";
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
     // Do any additional setup after loading the view from its nib.
     
@@ -38,6 +45,7 @@
     [_session stopRunning];
     [_preview removeFromSuperlayer];
     [timer invalidate];
+    [timer1 invalidate];
     [_session removeOutput:self.output];
     [_session removeInput:self.input];
     
@@ -55,7 +63,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
+                                                 name:UIKeyboardDidShowNotification
                                                object:nil];
     
     //增加监听，当键退出时收出消息
@@ -304,7 +312,7 @@
             cell = (IdentificationCell*)[[self.IdentificationNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
-        cell.iphoneTextfiel.frame = CGRectMake(10, 0, SCREEN_WIDTH -20, 40);
+        cell.iphoneTextfiel.frame = CGRectMake(90, 0, SCREEN_WIDTH -100, 40);
         cell.iphoneTextfiel.delegate = self;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -356,7 +364,7 @@
     
     
     JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
-    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_small.png"];
+    promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     promptlabel.textLabel.text = @"扫描二维码识别会员信息";
     promptlabel.textLabel.font = FONT(12);
     promptlabel.textLabel.textColor = [UIColor whiteColor];
@@ -367,6 +375,7 @@
     
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
     // Device
+    timer1 = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(httpScanInfo) userInfo:nil repeats:YES];
     
     NSString *mediaType = AVMediaTypeVideo;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
@@ -380,7 +389,13 @@
         // Output
         _output = [[AVCaptureMetadataOutput alloc]init];
         [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-        
+//        CGFloat width = self.view.frame.size.width;
+//        CGFloat height = self.view.frame.size.height;
+//        CGFloat tm_X = 15.0/height;
+//        CGFloat tm_Y = ((width - 170.0)/2)/width;
+//        CGFloat tm_Width = 170.0/height;
+//        CGFloat tm_Height = 170.0/width;
+//        [_output setRectOfInterest:CGRectMake(tm_X,tm_Y,tm_Width ,tm_Height)];    // Session
         // Session
         _session = [[AVCaptureSession alloc]init];
         [_session setSessionPreset:AVCaptureSessionPresetHigh];
@@ -517,7 +532,7 @@
         
         DLog(@"data = %@ msg = %@",data,[data objectForKeySafe:@"msg"]);
         if([data objectForKey:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
-            self.isfinish = NO;
+//            self.isfinish = NO;
             
             [MMProgressHUD dismiss];
             [ConfigManager sharedInstance].strCustId = [NSString stringWithFormat:@"%d",[[[[data objectForKeySafe:@"datas"] objectForKeySafe:@"Cust"] objectForKeySafe:@"custId"] intValue]];
@@ -556,7 +571,7 @@
         {
             DLog(@"识别失败");
             
-            self.isfinish = NO;
+//            self.isfinish = NO;
             
             if ([IdentifierValidator isValid:IdentifierTypePhone value:custMobile])
             {
@@ -566,7 +581,7 @@
                     self.isScan = NO;
                     //                [self.ZBarReader stop];
                     
-                    self.isfinish = YES;
+//                    self.isfinish = YES;
                     UITextField* texield = (UITextField*)[self.view viewWithTag:100];
                     RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
                     RegisteredMembersView.ordertype = OrderReturnTypeAMember;
@@ -578,7 +593,7 @@
                     //                [_session startRunning];
                     
                 } otherButtonBlock:^{
-                    self.isfinish = NO;
+//                    self.isfinish = NO;
                     DLog(@"是");
                     
                 }];
@@ -754,8 +769,8 @@
         
 //        [_session stopRunning];
 //        [timer invalidate];
-        if (!self.isfinish) {
-            self.isfinish = YES;
+        if (self.isfinish) {
+            self.isfinish = NO;
             //判断是否包含 头'http:'
             NSString *regex = @"http+:[^\\s]*";
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
@@ -785,6 +800,10 @@
                     //               [_session stopRunning];
                     [self httpValidateMobile:stringValue];
                 }
+            }
+            else
+            {
+                [self httpValidateMobile:stringValue];
             }
         }
         
@@ -888,14 +907,14 @@
     rect.origin.y = 0;
     NSString* deviceName = [ConfigManager sharedInstance].deviceName;
     if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"]) {
-        rect.origin.y = rect.origin.y - 100;
+        rect.origin.y = rect.origin.y - 150;
         
     }
     else
     {
         rect.origin.y = rect.origin.y - 150;
     }
-    
+    rect.size.height = rect.size.height + 150;
     self.tableview.frame = rect;
     
     rect = self.nextbtn.frame;
@@ -920,7 +939,7 @@
     CGRect rect = self.tableview.frame;
     NSString* deviceName = [ConfigManager sharedInstance].deviceName;
     if ([deviceName isEqualToString:@"iPhone 4S"] || [deviceName isEqualToString:@"iPhone 4"]) {
-        rect.origin.y = rect.origin.y + 100;
+        rect.origin.y = rect.origin.y + 150;
         
     }
     else
@@ -966,10 +985,10 @@
     
     
 }
-//-(void)httpScanInfo
-//{
-//    DLog(@"data = %@",[NSObject currentTime]);
-//    
-//    self.isfinish = YES;
-//}
+-(void)httpScanInfo
+{
+    DLog(@"data = %@",[NSObject currentTime]);
+    
+    self.isfinish = YES;
+}
 @end

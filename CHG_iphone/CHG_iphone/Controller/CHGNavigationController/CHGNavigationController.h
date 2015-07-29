@@ -10,6 +10,7 @@
 #import "APBaseNavigationController.h"
 @interface CHGNavigationController : APBaseNavigationController
 @property (nonatomic,strong)STAlertView* stAlertView;
+@property (nonatomic,strong)UIPanGestureRecognizer* PanGest;
 - (void)showMenu;
 - (void)goback;
 - (void)gobacktoSuccess;

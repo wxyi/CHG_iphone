@@ -308,6 +308,9 @@ typedef void(^GetCheckCode)(NSString* checkcode);
 typedef void(^skipDetailsPage)(NSString* orderID);
 
 typedef void(^MyAccountSkip)(NSInteger index, NSString* strData);//index = 0 跳转动销奖励 1跳转分账奖励
+
+//缓冲修改后的价格
+typedef void(^OrderPrice)(NSMutableDictionary *dict);
 #define ZbarRead_With 170
 
 
@@ -365,7 +368,7 @@ typedef enum
     OrderReturnTypeAMember = 0,//门店订单管理
     OrderReturnTypeHomePage, //会员订单管理
     OrderReturnTypePopPage, //返回上一层;
-    
+    OrderReturnTypeStatistic //统计分析
 }OrderReturnType;
 
 typedef enum

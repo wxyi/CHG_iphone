@@ -95,10 +95,11 @@
     
     [cell.GoodImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe: @"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
     cell.titlelab.text = [dict objectForKeySafe:@"productName"];
-    cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+//    cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];;
+    cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];
     cell.countlab.text = [NSString stringWithFormat:@"x %d",[[dict objectForKeySafe:@"quantity"] intValue] ];
     if ([dict[@"returnQuantity"] intValue] != 0) {
-        cell.returnCountlab.text = [NSString stringWithFormat:@"已退货%d件",[dict[@"returnQuantity"] intValue]];
+        cell.returnCountlab.text = [NSString stringWithFormat:@"已退%d件",[dict[@"returnQuantity"] intValue]];
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -186,8 +187,8 @@
     [v_footer addSubview:line];
     
     
-    string = [NSString stringWithFormat:@"实付 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
+    string = [NSString stringWithFormat:@"订单金额 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -287,15 +288,15 @@
 -(IBAction)Returngoods:(UIButton*)sender
 {
     NSInteger pickQuantity = 0;
-    for (int i = 0; i < self.items.count; i++) {
-        NSArray* productList = [[self.items objectAtIndexSafe:i] objectForKeySafe:@"productList"];
-        for (int j = 0; j < productList.count; j++) {
-            NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"pickQuantity"] integerValue];
-            pickQuantity += pickcount;
-        }
-        
-    }
-    if ([self.items count] != 0 && pickQuantity !=0) {
+//    for (int i = 0; i < self.items.count; i++) {
+//        NSArray* productList = [[self.items objectAtIndexSafe:i] objectForKeySafe:@"productList"];
+//        for (int j = 0; j < productList.count; j++) {
+//            NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"remainQuantity"] integerValue];
+//            pickQuantity += pickcount;
+//        }
+//        
+//    }
+    if ([self.items count] != 0 /*&& pickQuantity !=0*/) {
         if (self.BtnSkipSelect) {
             self.BtnSkipSelect(sender.tag,nil);
         }
@@ -408,7 +409,10 @@
                          vertical:0.7];
         }
     } failureBlock:^(NSString *description) {
-        
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {

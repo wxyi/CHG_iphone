@@ -50,8 +50,11 @@
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
+    
+    [self httpVersionUpdate];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -78,15 +81,30 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     if (indexPath.row == 1) {
-        NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
-        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
         
-        badgeView2.text = [NSString stringWithFormat:@"%@",[ConfigManager sharedInstance].sysVersion];
-        badgeView2.tintColor = [UIColor orangeColor];
-        badgeView2.textColor = [UIColor whiteColor];
-        [badgeView2 sizeToFit];
-        badgeView2.frame = CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -30, 10, badgeView2.frame.size.width, badgeView2.frame.size.height);
-        [cell.contentView addSubview:badgeView2];
+        
+        NSString* appVersion = [self.dict objectForKeySafe: @"appVersion"];
+        if (appVersion.length != 0) {
+            NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
+            //        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
+            badgeView2.backgroundColor = [UIColor clearColor];
+            //        badgeView2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"checkversion_bg.png"] ];
+            badgeView2.text = appVersion;
+            badgeView2.tintColor = [UIColor clearColor];
+            
+            badgeView2.textColor = [UIColor whiteColor];
+            [badgeView2 sizeToFit];
+            badgeView2.frame = CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -30, 10, badgeView2.frame.size.width, badgeView2.frame.size.height);
+            
+            
+            
+            
+            UIImageView * bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -40, 10, badgeView2.frame.size.width+10, badgeView2.frame.size.height)];
+            bgImage.image = [UIImage imageNamed:@"checkversion_bg.png"];
+            [cell.contentView addSubview:bgImage];
+            [cell.contentView addSubview:badgeView2];
+        }
+        
     }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -127,7 +145,10 @@
     }
     else if (indexPath.row == 1)
     {
-        [self httpVersionUpdate];
+        
+        VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
+        VersionUpdateView.items = self.dict;
+        [self.navigationController pushViewController:VersionUpdateView animated:YES];
         
     }
     else if(indexPath.row == 2)
@@ -171,15 +192,18 @@
         
         DLog(@" data = %@",data );
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"] intValue]==200){
-            if (![[ConfigManager sharedInstance].sysVersion isEqualToString:[[data objectForKeySafe:@"datas"] objectForKeySafe: @"appVersion"]]) {
-                VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
-                VersionUpdateView.items = [data objectForKeySafe:@"datas"];
-                [self.navigationController pushViewController:VersionUpdateView animated:YES];
-            }
+//            if (![[ConfigManager sharedInstance].sysVersion isEqualToString:[[data objectForKeySafe:@"datas"] objectForKeySafe: @"appVersion"]]) {
+//                
+//            }
+            self.dict =[data objectForKeySafe:@"datas"];
+            [self.tableview reloadData];
             
         }
     } failureBlock:^(NSString *description) {
-        
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {

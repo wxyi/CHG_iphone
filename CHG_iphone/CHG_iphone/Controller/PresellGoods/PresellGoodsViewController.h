@@ -8,16 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-@interface PresellGoodsViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,AVCaptureMetadataOutputObjectsDelegate>
+
+//#import <Decoder.h>
+//#import <ZXingObjC/ZXingObjC.h>
+@interface PresellGoodsViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,AVCaptureMetadataOutputObjectsDelegate,AVCaptureVideoDataOutputSampleBufferDelegate>
 {
     int num;
     BOOL upOrdown;
     NSTimer * timer;
     NSTimer * timer1;
+    BOOL decoding;
 }
 @property (strong,nonatomic)AVCaptureDevice * device;
 @property (strong,nonatomic)AVCaptureDeviceInput * input;
 @property (strong,nonatomic)AVCaptureMetadataOutput * output;
+@property (strong,nonatomic)AVCaptureVideoDataOutput *captureOutput;
 @property (strong,nonatomic)AVCaptureSession * session;
 @property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
 @property(nonatomic,assign)OrderReturnType m_returnType;
@@ -32,6 +37,15 @@
 @property(nonatomic,strong)STAlertView* stAlertView;
 //@property(nonatomic,assign)OrderReturnType m_returnType;
 @property (nonatomic,assign)SkipType skiptype;
+
+//
+//
+@property (nonatomic, retain) AVCaptureSession *captureSession;
+@property (nonatomic, retain) AVCaptureVideoPreviewLayer *prevLayer;
+
+@property (nonatomic, assign) BOOL isScanning;
+
+
 -(IBAction)ConfirmInfo:(id)sender;
 
 @end

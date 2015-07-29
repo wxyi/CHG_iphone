@@ -7,7 +7,7 @@
 //
 
 #import "ResetViewController.h"
-
+#import "HomePageViewController.h"
 @interface ResetViewController ()<UITextFieldDelegate>
 
 @end
@@ -43,6 +43,7 @@
     self.items = [NSArray arrayWithObjects:@"重置密码",@"确认密码" ,nil];
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
+    self.tableview.scrollEnabled = NO;
     self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
 }
@@ -167,7 +168,10 @@
 //            sleep(1000);
             [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
             [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
-            [self.navigationController popToRootViewControllerAnimated:YES];
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+            HomePageViewController *HomePageView = [self.navigationController.viewControllers objectAtIndexSafe:0];;
+            HomePageView.stAlert = @"修改密码成功";
+            [self.navigationController popToViewController:HomePageView animated:YES];
             
             
         }
@@ -205,20 +209,20 @@
 - (void) textFieldDidChange:(UITextField *)textField
 {
     if (textField.text.length > 16) {
-        [SGInfoAlert showInfo:@"密码不能大于16位"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.6];
+//        [SGInfoAlert showInfo:@"密码不能大于16位"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.6];
         [textField resignFirstResponder];
     }
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
     if (textField.text.length < 6) {
-        [SGInfoAlert showInfo:@"密码不能小于6位"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.6];
+//        [SGInfoAlert showInfo:@"密码不能小于6位"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.6];
         [textField resignFirstResponder];
     }
 }

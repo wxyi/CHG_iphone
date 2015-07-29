@@ -52,5 +52,5 @@ typedef void (^FinishBlock)(NSString * year,
 - (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format;
 - (id)initWithframe:(CGRect)frame Delegate:(id<UUDatePickerDelegate>)delegate PickerStyle:(DateStyle)uuDateStyle;
 - (id)initWithframe:(CGRect)frame PickerStyle:(DateStyle)uuDateStyle didSelected:(FinishBlock)finishBlock;
-
+- (void)drawRect:(CGRect)rect;
 @end

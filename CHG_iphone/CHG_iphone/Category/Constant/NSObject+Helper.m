@@ -219,6 +219,39 @@
     
     return len + numMatch;
 }
+
+//根据时间字段对数组进行排序
++ (NSArray*)sortDictionayrForDate:(NSArray*)Source dateKey:(NSString*)dateKey
+{
+    NSArray *sortedArray = [Source sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSString* strdate1 = [obj1 objectForKeySafe:dateKey];
+        NSString* strdate2 = [obj2 objectForKeySafe:dateKey];
+        
+        NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];//实例化一个NSDateFormatter对象
+        
+        [dateFormat setDateFormat:@"YYYY-MM-DD"];//设定时间格式,这里可以设置成自己需要的格式
+        
+        NSDate *date1 =[dateFormat dateFromString:strdate1];
+        NSDate *date2 =[dateFormat dateFromString:strdate2];
+        
+        NSComparisonResult result = [date1 compare:date2];
+        
+        switch(result)
+        {
+            case NSOrderedAscending:
+                return NSOrderedDescending;
+            case NSOrderedDescending:
+                return NSOrderedAscending;
+            case NSOrderedSame:
+                return NSOrderedSame;
+            default:
+                return NSOrderedSame;
+        } // 时间从近到远（远近相对当前时间而言）
+        
+    }];
+    DLog(@"wxy sortedArray = %@",sortedArray);
+    return sortedArray;
+}
 /*
 //转千分位
 -(NSString*) toThousand:(NSString*) strnormal
