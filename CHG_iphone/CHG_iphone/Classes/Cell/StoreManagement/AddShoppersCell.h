@@ -10,5 +10,5 @@
 
 @interface AddShoppersCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
-@property(nonatomic,weak)IBOutlet UITextField* nametext;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* nametext;
 @end

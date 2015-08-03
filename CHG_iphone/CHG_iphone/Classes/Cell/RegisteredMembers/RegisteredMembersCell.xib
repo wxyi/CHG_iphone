@@ -24,7 +24,7 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField opaque="NO" clipsSubviews="YES" tag="1012" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="必填" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1vq-bf-fVN">
+                    <textField opaque="NO" clipsSubviews="YES" tag="1012" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="必填" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1vq-bf-fVN" customClass="NoCopyTextField">
                         <rect key="frame" x="90" y="90" width="110" height="44"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="Bbd-DC-JPx"/>
@@ -44,7 +44,7 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField opaque="NO" clipsSubviews="YES" tag="1011" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="必填" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PZc-ep-CPo">
+                    <textField opaque="NO" clipsSubviews="YES" tag="1011" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="必填" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PZc-ep-CPo" customClass="NoCopyTextField">
                         <rect key="frame" x="90" y="45" width="230" height="44"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="I3m-s6-jQO"/>
@@ -64,7 +64,7 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField opaque="NO" clipsSubviews="YES" tag="1010" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="必填" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tjk-1d-50H">
+                    <textField opaque="NO" clipsSubviews="YES" tag="1010" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="必填" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tjk-1d-50H" customClass="NoCopyTextField">
                         <rect key="frame" x="90" y="0.0" width="230" height="44"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="230" id="ZjT-L1-HAN"/>

@@ -67,7 +67,7 @@
     
     if (self.m_returnType == OrderReturnTypeAMember) {
         
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
     }
     else if (self.m_returnType == OrderReturnTypePopPage)
     {
@@ -93,8 +93,17 @@
     DLog(@"搜索");
     OrderQuryViewController* OrderQueryView = [[OrderQuryViewController alloc] initWithNibName:@"OrderQuryViewController" bundle:nil];
     OrderQueryView.ManagementTyep = self.ManagementTyep;
-    OrderQueryView.m_returnType = self.m_returnType;
+    OrderQueryView.m_returnType = OrderReturnTypeQueryOrder;
     [self.navigationController pushViewController:OrderQueryView animated:YES];
+}
+-(void)gobacktoSuccessFulldentify
+{
+    
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[successfulIdentifyViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
 }
 -(void)gobackRegistePage
 {

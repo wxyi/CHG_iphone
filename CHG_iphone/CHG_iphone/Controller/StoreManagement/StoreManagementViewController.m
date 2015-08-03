@@ -38,6 +38,11 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.ispush = NO;
+}
 -(void)setupView
 {
     UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
@@ -152,16 +157,20 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [ConfigManager sharedInstance].shopId = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopId"];
-    [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"dimensionalCodeUrl"] ;
+    if (!self.ispush) {
+        self.ispush = YES;
     
-    [NSDownNetImage deleteFile];
-    [self DownStoreQrCode];
-    
-    [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopName"] ;
-    DLog(@"shopId= %@",[ConfigManager sharedInstance].shopId);
-//    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-    [self setupHomePageViewController];
+        [ConfigManager sharedInstance].shopId = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopId"];
+        [ConfigManager sharedInstance].strdimensionalCodeUrl = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"dimensionalCodeUrl"] ;
+        
+        [NSDownNetImage deleteFile];
+        [self DownStoreQrCode];
+        
+        [ConfigManager sharedInstance].strStoreName = [[self.items objectAtIndexSafe:indexPath.row] objectForKeySafe:@"shopName"] ;
+        DLog(@"shopId= %@",[ConfigManager sharedInstance].shopId);
+        //    AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+        [self setupHomePageViewController];
+    }
 }
 
 /*

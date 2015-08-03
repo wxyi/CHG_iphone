@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface OrderAmountCell : UITableViewCell<UITextFieldDelegate>
-@property(nonatomic,weak)IBOutlet UITextField* receivablelab;
-@property(nonatomic,weak)IBOutlet UITextField* Receivedlab;
-@property(nonatomic,weak)IBOutlet UITextField* favorablelab;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* receivablelab;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* Receivedlab;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* favorablelab;
 @property(nonatomic,assign)BOOL isHaveDian;
 @property(nonatomic,assign)SaleType orderSaletype;
 @property(nonatomic,copy)OrderPrice orderpriceBlock;

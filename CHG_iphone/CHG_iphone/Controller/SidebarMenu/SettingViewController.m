@@ -160,7 +160,7 @@
 -(void)loginout
 {
     DLog(@"退出账号");
-    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定退出" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+    self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定退出登陆?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
         DLog(@"否");
         
         [NSDownNetImage deleteFile];

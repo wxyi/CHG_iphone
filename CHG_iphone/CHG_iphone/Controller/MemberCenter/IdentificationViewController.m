@@ -297,10 +297,10 @@
         [cell.iphonelab addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         cell.didGetCode = ^(NSString* checkcode)
         {
-            [SGInfoAlert showInfo:checkcode
-                          bgColor:[[UIColor blackColor] CGColor]
-                           inView:self.view
-                         vertical:0.7];
+//            [SGInfoAlert showInfo:checkcode
+//                          bgColor:[[UIColor blackColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
         };
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
@@ -363,7 +363,7 @@
     [v_header addSubview:_line];
     
     
-    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
+    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 175, SCREEN_WIDTH, 50)];
     promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     promptlabel.textLabel.text = @"扫描二维码识别会员信息";
     promptlabel.textLabel.font = FONT(12);
@@ -471,7 +471,7 @@
         NSString * info  = @"";
         if (texield.text.length == 0)
         {
-            info = @"请输入手机号";
+            info = @"请输入手机号码";
         }
         else if (![IdentifierValidator isValid:IdentifierTypePhone value:texield.text]) {
             info = @"手机号格式错误";
@@ -576,7 +576,7 @@
             if ([IdentifierValidator isValid:IdentifierTypePhone value:custMobile])
             {
                 [MMProgressHUD dismiss];
-                self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+                self.stAlertView = [[STAlertView alloc] initWithTitle:@"未识别会员信息" message:@"是否注册为新会员?" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                     DLog(@"否");
                     self.isScan = NO;
                     //                [self.ZBarReader stop];

@@ -10,8 +10,8 @@
 
 @interface LoginCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UIView* bgView;
-@property(nonatomic,weak)IBOutlet UITextField* userTextfield;
-@property(nonatomic,weak)IBOutlet UITextField* passwordTextfield;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* userTextfield;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* passwordTextfield;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 
 -(IBAction)Login:(UIButton*)sender;

@@ -13,6 +13,8 @@
 #import "CompletedOrderDetailsViewController.h"
 #import "OrderManagementViewController.h"
 #import "SuccessRegisterViewController.h"
+#import "OrderQuryViewController.h"
+#import "successfulIdentifyViewController.h"
 @interface ConfirmOrderViewController ()
 @property UINib* ConfirmOrderNib;
 @end
@@ -48,7 +50,11 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
     if (self.returnType == OrderReturnTypeAMember) {
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if (self.returnType == OrderReturnTypeQueryOrder)
+    {
+        [leftButton addTarget:self action:@selector(gobacktoQuery) forControlEvents:UIControlEventTouchUpInside];
     }
     else if (self.returnType == OrderReturnTypePopPage)
     {
@@ -59,7 +65,11 @@
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
     }
     
+    if (self.returnType == OrderReturnTypeQueryOrder) {
+        self.returnType = OrderReturnTypeAMember;
+    }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
     
     [self setupView];
     // Do any additional setup after loading the view from its nib.
@@ -68,6 +78,23 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(void)gobacktoQuery
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[OrderQuryViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
+-(void)gobacktoSuccessFulldentify
+{
+    
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[successfulIdentifyViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
 }
 -(void)gobackRegistePage
 {

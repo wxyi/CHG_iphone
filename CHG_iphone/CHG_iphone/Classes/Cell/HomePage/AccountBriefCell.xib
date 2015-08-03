@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="KGk-i7-Jjw" customClass="AccountBriefCell">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="47" id="KGk-i7-Jjw" customClass="AccountBriefCell">
             <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -24,23 +24,12 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                     </collectionView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VxW-tK-tZR">
-                        <rect key="frame" x="0.0" y="47" width="320" height="1"/>
-                        <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="1" id="JYs-Bx-QLT"/>
-                            <constraint firstAttribute="width" constant="320" id="hXX-n9-ARB"/>
-                        </constraints>
-                    </imageView>
                 </subviews>
                 <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="VxW-tK-tZR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="97Q-dy-4Xq"/>
                     <constraint firstItem="HiD-vF-72T" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="CEw-Ok-uPg"/>
-                    <constraint firstAttribute="bottom" secondItem="VxW-tK-tZR" secondAttribute="bottom" constant="-1" id="Rea-1v-EgY"/>
                     <constraint firstAttribute="centerY" secondItem="HiD-vF-72T" secondAttribute="centerY" id="T5e-Co-oZc"/>
                     <constraint firstAttribute="centerX" secondItem="HiD-vF-72T" secondAttribute="centerX" id="dkC-Ut-Egw"/>
-                    <constraint firstAttribute="trailing" secondItem="VxW-tK-tZR" secondAttribute="trailing" id="rio-ha-zFW"/>
                     <constraint firstItem="HiD-vF-72T" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="tRr-GA-yaT"/>
                 </constraints>
             </tableViewCellContentView>
@@ -48,7 +37,7 @@
             <connections>
                 <outlet property="AccountBriefView" destination="HiD-vF-72T" id="JVs-X7-UhQ"/>
             </connections>
-            <point key="canvasLocation" x="289" y="189"/>
+            <point key="canvasLocation" x="289" y="188"/>
         </tableViewCell>
     </objects>
 </document>

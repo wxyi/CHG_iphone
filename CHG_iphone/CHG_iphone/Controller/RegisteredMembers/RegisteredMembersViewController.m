@@ -113,10 +113,10 @@
     {
         weakSelf.strCheckCode = checkcode;
         
-        [SGInfoAlert showInfo:checkcode
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
+//        [SGInfoAlert showInfo:checkcode
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.7];
     };
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
@@ -168,10 +168,34 @@
     [namefield resignFirstResponder];
     UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
     [checkfield resignFirstResponder];
+    NSString * info ;
     
-    if ([NSObject stringContainsEmoji:namefield.text]) {
+    
+    if (iphonefield.text.length == 0) {
+        info = @"请输入手机号码";
+    }
+    else if(![IdentifierValidator isValid:IdentifierTypePhone value:iphonefield.text ])
+    {
+        info = @"手机格式不正确";
+    }
+    else if (namefield.text.length < 2) {
+        info = @"名字不能小于两位";
+    }
+    else if ([NSObject stringContainsEmoji:namefield.text]||[Utils checkName:namefield.text])
+    {
+        info = @"名称只能输入中文、数字、字母、“_”";
+    }
+    else if(checkfield.text.length == 0)
+    {
+        info = @"请输入验证码";
+    }
+    else if(checkfield.text.length != 6)
+    {
+        info = @"验证码输入有码";
+    }
+    if (info.length != 0) {
         DLog(@"包含表情");
-        [SGInfoAlert showInfo:@"会员姓名不能包含表情"
+        [SGInfoAlert showInfo:info
                       bgColor:[[UIColor blackColor] CGColor]
                        inView:self.view
                      vertical:0.7];
@@ -386,5 +410,20 @@
     } Refresh_tokenBlock:^(BOOL success) {
         [self httpValidateCheckCode];
     }];
+}
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(paste:))
+        return NO;
+    if (action == @selector(cut:))
+        return NO;
+    if (action == @selector(copy:))
+        return NO;
+    if (action == @selector(delete:))
+        return NO;
+    if (action == @selector(select:))
+        return NO;
+    if (action == @selector(selectAll:))
+        return NO;
+    return [super canPerformAction:action withSender:sender];
 }
 @end

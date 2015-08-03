@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -31,6 +31,14 @@
                         <color key="textColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qrq-jk-31g">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="kFQ-vN-nbk"/>
+                            <constraint firstAttribute="width" constant="320" id="zAw-UT-OGL"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
@@ -38,9 +46,12 @@
                     <constraint firstItem="lCY-c3-998" firstAttribute="leading" secondItem="hSn-Sq-dc4" secondAttribute="leading" id="9JM-sf-x7W"/>
                     <constraint firstItem="lCY-c3-998" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="11" id="AEZ-Ae-Byo"/>
                     <constraint firstAttribute="centerY" secondItem="kQf-gA-q6g" secondAttribute="centerY" constant="49.5" id="AFm-VO-Qee"/>
+                    <constraint firstItem="qrq-jk-31g" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ISB-v5-E6K"/>
                     <constraint firstAttribute="centerX" secondItem="hSn-Sq-dc4" secondAttribute="centerX" constant="37" id="QKm-CO-71O"/>
+                    <constraint firstAttribute="trailing" secondItem="qrq-jk-31g" secondAttribute="trailing" id="WpY-4C-H0O"/>
                     <constraint firstItem="kQf-gA-q6g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="c3C-xg-66P"/>
                     <constraint firstItem="lCY-c3-998" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="gY0-bh-sds"/>
+                    <constraint firstItem="qrq-jk-31g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="izL-oT-Uig"/>
                     <constraint firstItem="lCY-c3-998" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="2" id="jU9-3R-CRO"/>
                     <constraint firstAttribute="centerX" secondItem="kQf-gA-q6g" secondAttribute="centerX" constant="160" id="q4r-SE-MgH"/>
                     <constraint firstItem="kQf-gA-q6g" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="s6w-1d-1wm"/>

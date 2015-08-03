@@ -70,7 +70,7 @@
 //    title.text = [self.items objectAtIndexSafe:indexPath.row];
 //    [cell.contentView addSubview:title];
     
-    UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
+    NoCopyTextField* textField = [[NoCopyTextField alloc] initWithFrame:CGRectZero];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     textField.frame = CGRectMake(10, 2, SCREEN_WIDTH - 20, 40);
     textField.placeholder = [self.items objectAtIndexSafe:indexPath.row]; //默认显示的字

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		27A02FF8FF9E75B8B06D1157 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FFC0609EA17E6E08581D28 /* libPods.a */; };
+		2E23855A1B6CD9B600714BEB /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */; };
 		2E307DA31B4C2CBA00E0ECD4 /* MyAccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA11B4C2CBA00E0ECD4 /* MyAccountCell.m */; };
 		2E307DA41B4C2CBA00E0ECD4 /* MyAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E307DA21B4C2CBA00E0ECD4 /* MyAccountCell.xib */; };
 		2E307DA81B4C303300E0ECD4 /* MyAccountPartnersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA61B4C303300E0ECD4 /* MyAccountPartnersCell.m */; };
@@ -38,6 +39,9 @@
 		2E73EA571B28182000A62558 /* IdentUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E73EA551B28182000A62558 /* IdentUserInfoCell.m */; };
 		2E73EA581B28182000A62558 /* IdentUserInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E73EA561B28182000A62558 /* IdentUserInfoCell.xib */; };
 		2E7422B71B68B04C00E2F976 /* about_us_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E7422B61B68B04C00E2F976 /* about_us_icon.png */; };
+		2E7422B91B6A27B000E2F976 /* btn_back_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E7422B81B6A27B000E2F976 /* btn_back_blue.png */; };
+		2E7422BD1B6A675400E2F976 /* StoreManageSubCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7422BB1B6A675400E2F976 /* StoreManageSubCell.m */; };
+		2E7422BE1B6A675400E2F976 /* StoreManageSubCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E7422BC1B6A675400E2F976 /* StoreManageSubCell.xib */; };
 		2E761B3A1B2054D10028FDF9 /* SGInfoAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E761B391B2054D10028FDF9 /* SGInfoAlert.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2E761B3E1B207C6C0028FDF9 /* MemberRewardsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E761B3C1B207C6C0028FDF9 /* MemberRewardsCell.m */; };
 		2E761B3F1B207C6C0028FDF9 /* MemberRewardsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E761B3D1B207C6C0028FDF9 /* MemberRewardsCell.xib */; };
@@ -123,7 +127,6 @@
 		2E9938F01B0DEE5A00870456 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9938EF1B0DEE5A00870456 /* QRCodeGenerator.m */; };
 		2EBAE8B31B4A5883002E1C39 /* MyUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */; };
 		2EBAF1431B4E7C3200CDAC1A /* PresellOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */; };
-		2EBAF1471B4EC05800CDAC1A /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */; };
 		2ED17ECF1B299BD000F96595 /* CompletedOrderDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */; };
 		2ED17ED01B299BD000F96595 /* CompletedOrderDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17ECE1B299BD000F96595 /* CompletedOrderDetailsViewController.xib */; };
 		2ED17EE01B2AE27700F96595 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17EDF1B2AE27700F96595 /* icon.png */; };
@@ -322,6 +325,7 @@
 		2ED84C6E1B17F6FE0086992D /* StatisticAnalysisViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ED84C6C1B17F6FE0086992D /* StatisticAnalysisViewController.xib */; };
 		2ED84C721B17F95A0086992D /* StoreSalesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED84C701B17F95A0086992D /* StoreSalesViewController.m */; };
 		2ED84C731B17F95A0086992D /* StoreSalesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ED84C711B17F95A0086992D /* StoreSalesViewController.xib */; };
+		2ED8E0241B6E8A8C00AF690F /* NoCopyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8E0231B6E8A8C00AF690F /* NoCopyTextField.m */; };
 		2EDC35001B4D4749008AB922 /* WelcomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EDC34FE1B4D4749008AB922 /* WelcomePageViewController.m */; };
 		2EDC35011B4D4749008AB922 /* WelcomePageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC34FF1B4D4749008AB922 /* WelcomePageViewController.xib */; };
 		2EDC35061B4D49C2008AB922 /* page_320.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EDC35021B4D49C2008AB922 /* page_320.png */; };
@@ -433,6 +437,10 @@
 		2E73EA551B28182000A62558 /* IdentUserInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IdentUserInfoCell.m; path = Cell/MemberCenter/IdentUserInfoCell.m; sourceTree = "<group>"; };
 		2E73EA561B28182000A62558 /* IdentUserInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IdentUserInfoCell.xib; path = Cell/MemberCenter/IdentUserInfoCell.xib; sourceTree = "<group>"; };
 		2E7422B61B68B04C00E2F976 /* about_us_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = about_us_icon.png; sourceTree = "<group>"; };
+		2E7422B81B6A27B000E2F976 /* btn_back_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_back_blue.png; sourceTree = "<group>"; };
+		2E7422BA1B6A675400E2F976 /* StoreManageSubCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StoreManageSubCell.h; path = Cell/StoreManagement/StoreManageSubCell.h; sourceTree = "<group>"; };
+		2E7422BB1B6A675400E2F976 /* StoreManageSubCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StoreManageSubCell.m; path = Cell/StoreManagement/StoreManageSubCell.m; sourceTree = "<group>"; };
+		2E7422BC1B6A675400E2F976 /* StoreManageSubCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StoreManageSubCell.xib; path = Cell/StoreManagement/StoreManageSubCell.xib; sourceTree = "<group>"; };
 		2E761B381B2054D10028FDF9 /* SGInfoAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGInfoAlert.h; sourceTree = "<group>"; };
 		2E761B391B2054D10028FDF9 /* SGInfoAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGInfoAlert.m; sourceTree = "<group>"; };
 		2E761B3B1B207C6C0028FDF9 /* MemberRewardsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemberRewardsCell.h; path = Cell/MemberCenter/MemberRewardsCell.h; sourceTree = "<group>"; };
@@ -896,6 +904,8 @@
 		2ED84C6F1B17F95A0086992D /* StoreSalesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StoreSalesViewController.h; path = StatisticAnalysis/StoreSalesViewController.h; sourceTree = "<group>"; };
 		2ED84C701B17F95A0086992D /* StoreSalesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StoreSalesViewController.m; path = StatisticAnalysis/StoreSalesViewController.m; sourceTree = "<group>"; };
 		2ED84C711B17F95A0086992D /* StoreSalesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StoreSalesViewController.xib; path = StatisticAnalysis/StoreSalesViewController.xib; sourceTree = "<group>"; };
+		2ED8E0221B6E8A8C00AF690F /* NoCopyTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoCopyTextField.h; sourceTree = "<group>"; };
+		2ED8E0231B6E8A8C00AF690F /* NoCopyTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoCopyTextField.m; sourceTree = "<group>"; };
 		2EDC34FD1B4D4749008AB922 /* WelcomePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomePageViewController.h; path = WelcomePage/WelcomePageViewController.h; sourceTree = "<group>"; };
 		2EDC34FE1B4D4749008AB922 /* WelcomePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomePageViewController.m; path = WelcomePage/WelcomePageViewController.m; sourceTree = "<group>"; };
 		2EDC34FF1B4D4749008AB922 /* WelcomePageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WelcomePageViewController.xib; path = WelcomePage/WelcomePageViewController.xib; sourceTree = "<group>"; };
@@ -998,8 +1008,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E23855A1B6CD9B600714BEB /* BaiduMapAPI.framework in Frameworks */,
 				2E5D0D3F1B66C04400A8B80F /* libPods-ZBarSDK.a in Frameworks */,
-				2EBAF1471B4EC05800CDAC1A /* BaiduMapAPI.framework in Frameworks */,
 				2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */,
 				2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */,
 				2EDD3D781B1F61B800D19EA0 /* SystemConfiguration.framework in Frameworks */,
@@ -1202,6 +1212,8 @@
 				2ED4749C1B187122005543AC /* BaseCell.h */,
 				2ED4749D1B187122005543AC /* BaseCell.m */,
 				2ED4749E1B187122005543AC /* BaseCell.xib */,
+				2ED8E0221B6E8A8C00AF690F /* NoCopyTextField.h */,
+				2ED8E0231B6E8A8C00AF690F /* NoCopyTextField.m */,
 			);
 			path = ViewExtend;
 			sourceTree = "<group>";
@@ -1690,6 +1702,9 @@
 				2EE9F2791B2204F6006EB46B /* SelectBankCardCell.h */,
 				2EE9F27A1B2204F6006EB46B /* SelectBankCardCell.m */,
 				2EE9F27B1B2204F6006EB46B /* SelectBankCardCell.xib */,
+				2E7422BA1B6A675400E2F976 /* StoreManageSubCell.h */,
+				2E7422BB1B6A675400E2F976 /* StoreManageSubCell.m */,
+				2E7422BC1B6A675400E2F976 /* StoreManageSubCell.xib */,
 			);
 			name = StoreManagement;
 			sourceTree = "<group>";
@@ -1760,6 +1775,7 @@
 		2ED84AA41B12BFE80086992D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2E7422B81B6A27B000E2F976 /* btn_back_blue.png */,
 				2E7422B61B68B04C00E2F976 /* about_us_icon.png */,
 				2E503F5C1B5F91BA00ACBAFB /* checkversion_bg.png */,
 				2E4E412B1B57B425006E2A57 /* icon_29.png */,
@@ -2337,6 +2353,7 @@
 				2ED474871B1844CA005543AC /* StoresInfoCell.xib in Resources */,
 				2ED84C3C1B16A80C0086992D /* successfulIdentifyViewController.xib in Resources */,
 				2ED474E61B1C3A1D005543AC /* SettlementCell.xib in Resources */,
+				2E7422BE1B6A675400E2F976 /* StoreManageSubCell.xib in Resources */,
 				2ED84AEF1B1311CE0086992D /* MemberCenterViewController.xib in Resources */,
 				2ED84B791B15924F0086992D /* PresellGoodsViewController.xib in Resources */,
 				2ED84AF51B131C730086992D /* RegisteredMembersViewController.xib in Resources */,
@@ -2403,6 +2420,7 @@
 				2E761B4E1B2082DE0028FDF9 /* MemberMenuCell.xib in Resources */,
 				2E7B0A461B1EF649007C78CA /* ConfirmOrderCell.xib in Resources */,
 				2ED84A961B12B8800086992D /* PromoListCell.xib in Resources */,
+				2E7422B91B6A27B000E2F976 /* btn_back_blue.png in Resources */,
 				2ED84C271B15D5CD0086992D /* ResetPasswordViewController.xib in Resources */,
 				2ED84C591B16DF630086992D /* MembersBirthdayCell.xib in Resources */,
 				2ED17EEE1B31739F00F96595 /* icon_logo_big.png in Resources */,
@@ -2582,6 +2600,7 @@
 				2ED84AA31B12BD3C0086992D /* UIImage+SplitImageIntoTwoParts.m in Sources */,
 				2ED474BF1B189738005543AC /* OCMaskedTextFieldView.m in Sources */,
 				2ED84C6D1B17F6FE0086992D /* StatisticAnalysisViewController.m in Sources */,
+				2E7422BD1B6A675400E2F976 /* StoreManageSubCell.m in Sources */,
 				2E7D78151B097CDC00222C1E /* HttpClient.m in Sources */,
 				2E761B521B2083950028FDF9 /* MemberMenuColCell.m in Sources */,
 				2ED17F291B3192B400F96595 /* MJRefreshStateHeader.m in Sources */,
@@ -2668,6 +2687,7 @@
 				2ED474A41B187CF6005543AC /* BasicInfoViewController.m in Sources */,
 				2EFD84E11B43CCA400E5A915 /* NSString+YRSafeCategory.m in Sources */,
 				2ED474761B183D64005543AC /* StoreSalesYearViewController.m in Sources */,
+				2ED8E0241B6E8A8C00AF690F /* NoCopyTextField.m in Sources */,
 				2E7D777C1B097CDC00222C1E /* UIView+KGViewExtend.m in Sources */,
 				2ED17F201B3192B400F96595 /* MJRefreshHeader.m in Sources */,
 				2ED475081B1C7FE1005543AC /* AboutViewController.m in Sources */,

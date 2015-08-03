@@ -15,4 +15,6 @@
 @property(nonatomic,strong)NSString* strYear;
 @property(nonatomic,strong)NSString* strMonth;
 @property(nonatomic,strong)NSString* strDay;
+
+@property(nonatomic,assign)BOOL ispush;
 @end

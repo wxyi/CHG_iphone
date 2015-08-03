@@ -12,6 +12,8 @@
 #import "CompletedOrderDetailsViewController.h"
 #import "OrderManagementViewController.h"
 #import "SuccessRegisterViewController.h"
+#import "OrderQuryViewController.h"
+#import "successfulIdentifyViewController.h"
 @interface PickGoodsViewController ()
 
 @end
@@ -39,9 +41,12 @@
 //    {
 //        [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
 //    }
-    if (self.m_returnType == OrderReturnTypeAMember) {
+    if (self.skiptype == SkipfromOrderManage) {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if (self.m_returnType == OrderReturnTypeAMember) {
         
-        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
     }
     else if (self.m_returnType == OrderReturnTypePopPage)
     {
@@ -50,6 +55,10 @@
     else if(self.m_returnType == OrderReturnTypeStatistic)
     {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if (self.m_returnType == OrderReturnTypeQueryOrder)
+    {
+        [leftButton addTarget:self action:@selector(gobacktoQuery) forControlEvents:UIControlEventTouchUpInside];
     }
     else
     {
@@ -62,6 +71,23 @@
 {
     for (UIViewController *temp in self.navigationController.viewControllers) {
         if ([temp isKindOfClass:[SuccessRegisterViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
+-(void)gobacktoSuccessFulldentify
+{
+    
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[successfulIdentifyViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
+-(void)gobacktoQuery
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[OrderQuryViewController class]]) {
             [self.navigationController popToViewController:temp animated:YES];
         }
     }

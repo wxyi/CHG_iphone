@@ -12,6 +12,7 @@
 #import "IdentificationViewController.h"
 #import "OrderManagementViewController.h"
 #import "PresellGoodsViewController.h"
+#import "MemberCenterViewController.h"
 @interface successfulIdentifyViewController ()
 @property UINib* successfulIdentifyNib;
 @property UINib* MenuNib;
@@ -41,12 +42,21 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
-    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobackMemberCenter) forControlEvents:UIControlEventTouchUpInside];
+    [leftButton addTarget:self action:@selector(gobackMemberCenter) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     // Do any additional setup after loading the view from its nib.
     [self setupView];
 }
 
+- (void)gobackMemberCenter
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[MemberCenterViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+  
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

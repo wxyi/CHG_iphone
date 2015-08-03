@@ -42,7 +42,7 @@
     [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_return.png"] style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
-    
+    self.isfirst = YES;
     [self setupView];
     [self setupcollectionView];
     // Do any additional setup after loading the view from its nib.
@@ -56,7 +56,7 @@
 {
     
     
-    
+    self.items = [[NSMutableArray alloc] init];
     self.config = [[SUHelper sharedInstance] currentUserConfig];
 //    self.config.Roles = @"PARTNER";
 //    CGRect rect = self.tableview.frame;
@@ -347,13 +347,13 @@
     header.lastUpdatedTimeLabel.hidden = YES;
     
     // 马上进入刷新状态
-    //    [header beginRefreshing];
+//    [header beginRefreshing];
     
     // 设置header
-    self.tableview.header = header;
+//    self.tableview.header = header;
     
     // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+    self.tableview.footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
         [weakSelf loadMoreData];
     }];
 }
@@ -362,6 +362,10 @@
 - (void)loadNewData
 {
     
+//    if (self.isfirst) {
+//        self.isfirst = NO;
+//        return;
+//    }
     // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
@@ -635,7 +639,11 @@
     DLog(@"tm_array = %@",tm_array);
     if (tm_array.count != 0) {
 //        self.items = [tm_array copy];
-        self.items = [NSObject sortDictionayrForDate:[tm_array copy] dateKey:@"amountDate"];
+        //self.items = [NSObject sortDictionayrForDate:[tm_array copy] dateKey:@"amountDate"];
+        NSArray* tmarr = [NSObject sortDictionayrForDate:[tm_array copy] dateKey:@"amountDate"];
+        for (int i = 0; i < tmarr.count; i ++) {
+            [self.items addObject:tmarr[i]];
+        }
 //        [self sortDate:[tm_array copy] sortId:@"amountDate"];
         [self reLoadView];
     }

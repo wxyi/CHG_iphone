@@ -33,6 +33,8 @@
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UIButton* confirmbtn;
 @property(nonatomic,strong)NSMutableArray* items;
+
+@property(nonatomic,strong)NSMutableDictionary* OrderDate;
 @property(nonatomic,assign)SaleType orderSaletype;
 @property(nonatomic,strong)STAlertView* stAlertView;
 //@property(nonatomic,assign)OrderReturnType m_returnType;

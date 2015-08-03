@@ -90,8 +90,8 @@
     
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-    self.tableview.bounces = NO;
-//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.tableview.bounces = NO;
+    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.showsVerticalScrollIndicator = NO;
     self.PromoListNib = [UINib nibWithNibName:@"PromoListCell" bundle:nil];
     self.AccountBriefNib = [UINib nibWithNibName:@"AccountBriefCell" bundle:nil];
@@ -252,8 +252,14 @@
         }
 
 
+        if ([self.config.Roles isEqualToString:@"PARTNER"]) {
+            cell.height = self.menuArr.count/3 * ((SCREEN_WIDTH)/3)-3;
+        }
+        else
+        {
+            cell.height = self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
+        }
         
-        cell.height = self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
         [cell setupView:self.menuArr];
         
         cell.didSelectedSubItemAction = ^(NSIndexPath* indexPath){
@@ -278,20 +284,30 @@
         return SCREEN_WIDTH*0.4;
     }
     else if(indexPath.row == 1)
-        return 48;
+        return 49;
     else if(indexPath.row == 2)
     {
         if ([self.config.Roles isEqualToString:@"PARTNER"])
         {
             return 75;
         }
+        else if ([self.config.Roles isEqualToString:@"SHOPSELLER"]||[self.config.Roles isEqualToString:@"SHOPLEADER"])
+        {
+            return self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
+        }
         return 100;
     }
     else if (indexPath.row == 3)
         return 75;
     else
-        
-        return self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
+    {
+        if (self.menuArr.count/3 == 1) {
+            return self.menuArr.count/3 * ((SCREEN_WIDTH)/3)-2;
+        }
+        else
+            return self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
+    }
+    
 }
 
 -(void)didSelectAccountBriefCell:(NSIndexPath*)indexPath
@@ -665,26 +681,26 @@
     });
 }
 
--(void)viewDidLayoutSubviews
-{
-    if ([self.tableview respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self.tableview setSeparatorInset:UIEdgeInsetsMake(0,0,0,0)];
-    }
-    
-    if ([self.tableview respondsToSelector:@selector(setLayoutMargins:)]) {
-        [self.tableview setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
-    }
-}
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    
-}
+//-(void)viewDidLayoutSubviews
+//{
+//    if ([self.tableview respondsToSelector:@selector(setSeparatorInset:)]) {
+//        [self.tableview setSeparatorInset:UIEdgeInsetsMake(0,0,0,0)];
+//    }
+//    
+//    if ([self.tableview respondsToSelector:@selector(setLayoutMargins:)]) {
+//        [self.tableview setLayoutMargins:UIEdgeInsetsMake(0,0,0,0)];
+//    }
+//}
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+//        [cell setSeparatorInset:UIEdgeInsetsZero];
+//    }
+//    
+//    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+//        [cell setLayoutMargins:UIEdgeInsetsZero];
+//    }
+//    
+//}
 
 @end

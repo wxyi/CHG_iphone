@@ -40,7 +40,7 @@
     
     
     textField.backgroundColor = [UIColor clearColor];
-    NSString* price = textField.text;
+//    NSString* price = textField.text;
     DLog(@"price = %f Receivedlab = %f",[textField.text floatValue],[self.returnPrice floatValue]);
     
     if ([self.returnPrice floatValue] < [textField.text floatValue] &&[textField.text floatValue] != 0) {

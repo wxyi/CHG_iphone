@@ -12,8 +12,8 @@
 @interface OrderQuryViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,QRadioButtonDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UIView* bg_view;
-@property(nonatomic,weak)IBOutlet UITextField* starttime;
-@property(nonatomic,weak)IBOutlet UITextField* endtime;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* starttime;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* endtime;
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property (nonatomic,assign)OrderReturnType m_returnType;
 

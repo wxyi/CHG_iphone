@@ -12,6 +12,8 @@
 #import "OrderCounterViewController.h"
 #import "JTImageLabel.h"
 #import "PresellOperation.h"
+#import "OrderQuryViewController.h"
+#import "successfulIdentifyViewController.h"
 //
 //#import <AssetsLibrary/AssetsLibrary.h>
 //#import <QRCodeReader.h>
@@ -87,7 +89,7 @@
     if (self.m_returnType == OrderReturnTypeAMember && (self.orderSaletype == SaleTypeReturnGoods || self.orderSaletype == SaleTypePickingGoods)) {
         
         if (self.skiptype == SkipFromOrderFinish && self.orderSaletype == SaleTypePickingGoods) {
-            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+            [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
         }
         else if (self.skiptype == SkipFromPopPage)
         {
@@ -103,11 +105,15 @@
     {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if (self.m_returnType == OrderReturnTypeQueryOrder)
+    {
+        [leftButton addTarget:self action:@selector(gobacktoQuery) forControlEvents:UIControlEventTouchUpInside];
+    }
     else
     {
         if(self.m_returnType == OrderReturnTypeAMember && (self.orderSaletype == SaleTypeSellingGoods || self.orderSaletype == SaleTypePresell))
         {
-            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+            [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
         }
         else
         {
@@ -154,7 +160,23 @@
     
 
 }
-
+-(void)gobacktoSuccessFulldentify
+{
+    
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[successfulIdentifyViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
+-(void)gobacktoQuery
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[OrderQuryViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -178,7 +200,7 @@
         self.title = @"提货扫描";
     }
     
-    
+    self.OrderDate = [NSMutableDictionary dictionary];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT -220 - 40;
 //    rect.size.width = SCREEN_WIDTH;
@@ -208,7 +230,7 @@
     [self.view addSubview:_line];
 //    [self.view bringSubviewToFront:_line];
     
-    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 170, SCREEN_WIDTH, 50)];
+    JTImageLabel *promptlabel = [[JTImageLabel alloc] initWithFrame:CGRectMake(0, 175, SCREEN_WIDTH, 50)];
     promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
     promptlabel.textLabel.text = @"扫描二维码识别商品信息";
     promptlabel.textLabel.font = FONT(12);
@@ -310,6 +332,12 @@
             [self httpQrCode:codeData];
         }
         
+//        [self.readerView.captureReader captureFrame]
+//        [self.readerView stop];
+//        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//            [self.readerView start];
+//        });
     }
 }
 
@@ -545,15 +573,18 @@
         OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
         OrderCounterView.orderSaletype = self.orderSaletype;
         OrderCounterView.m_returnType = self.m_returnType;
+        
+        
+        
         if (self.orderSaletype == SaleTypeSellingGoods ) {
             OrderCounterView.items = self.items;
         }
         else if(self.orderSaletype == SaleTypePresell)
         {
             for (int i = 0; i < self.items.count; i++) {
-                NSInteger tag  = [[NSString stringWithFormat:@"101%d",i] intValue];
-                TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
-                DLog(@"textstepper = %.f",TextStepper.Current);
+//                NSInteger tag  = [[NSString stringWithFormat:@"101%d",i] intValue];
+//                TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
+//                DLog(@"textstepper = %.f",TextStepper.Current);
                 
                 NSDictionary* dict = [self.items objectAtIndexSafe:i];
                 NSMutableDictionary *anotherDict = [NSMutableDictionary dictionary];
@@ -565,6 +596,28 @@
             OrderCounterView.items = self.items;
         }
 
+        CGFloat allprice = 0.0;
+        for (int i = 0; i < self.items.count ; i ++) {
+            NSDictionary* tm_dict = [self.items objectAtIndexSafe:i];
+            CGFloat price = [[tm_dict objectForKeySafe:@"productPrice"] floatValue];
+            NSInteger quantity = 0;
+            if (self.orderSaletype == SaleTypePresell) {
+                quantity = [[tm_dict objectForKeySafe:@"quantity"] integerValue];
+            }
+            else
+            {
+                quantity = [(NSArray*)[tm_dict objectForKeySafe:@"QrcList"] count];
+            }
+            
+            allprice += price * quantity;
+        }
+        
+        [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allprice] forKey:@"totalAmount"];
+        [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allprice] forKey:@"FactAmount"];
+        [self.OrderDate setObject:@"0.00" forKey:@"DiscountAmount"];
+        [self.OrderDate setObject:self.items forKey:@"orderList"];
+        
+        OrderCounterView.OrderDate = self.OrderDate;
         [self.navigationController pushViewController:OrderCounterView animated:YES];
     }
     
@@ -847,11 +900,35 @@
         
             [MMProgressHUD dismiss];
             
+            CGFloat allprice = 0.0;
+            for (int i = 0; i < self.items.count ; i ++) {
+                NSDictionary* tm_dict = [self.items objectAtIndexSafe:i];
+                CGFloat price = [[tm_dict objectForKeySafe:@"productPrice"] floatValue];
+                NSInteger quantity = 0;
+                quantity = [(NSArray*)[tm_dict objectForKeySafe:@"QrcList"] count];
+                
+                allprice += price * quantity;
+            }
             
+            NSDictionary* dict = [data objectForKeySafe:@"datas"];
+            
+            if (self.orderSaletype == SaleTypePickingGoods) {
+                [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allprice] forKey:@"totalAmount"];
+                [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allprice] forKey:@"FactAmount"];
+            }
+            else
+            {
+                [self.OrderDate setObject:[dict objectForKeySafe:@"ysMoney"] forKey:@"totalAmount"];
+                [self.OrderDate setObject:[dict objectForKeySafe:@"ysMoney"] forKey:@"FactAmount"];
+                
+            }
+            [self.OrderDate setObjectSafe:@"0.00" forKey:@"DiscountAmount"];
+            [self.OrderDate setObject:self.items forKey:@"orderList"];
             OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
             OrderCounterView.orderSaletype = self.orderSaletype;
             OrderCounterView.m_returnType = self.m_returnType;
             OrderCounterView.items = self.items;
+            OrderCounterView.OrderDate = self.OrderDate;
             OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
             [self.navigationController pushViewController:OrderCounterView animated:YES];
             
@@ -859,14 +936,15 @@
         else
         {
 //            [MMProgressHUD dismissWithError:[data objectForKey:@"msg"]];
-            if (self.orderSaletype == SaleTypePickingGoods) {
-                OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
-                OrderCounterView.orderSaletype = self.orderSaletype;
-                OrderCounterView.m_returnType = self.m_returnType;
-                OrderCounterView.items = self.items;
-                OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
-                [self.navigationController pushViewController:OrderCounterView animated:YES];
-            }
+//            if (self.orderSaletype == SaleTypePickingGoods) {
+//                OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
+//                OrderCounterView.orderSaletype = self.orderSaletype;
+//                OrderCounterView.m_returnType = self.m_returnType;
+//                OrderCounterView.items = self.items;
+//                
+//                OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
+//                [self.navigationController pushViewController:OrderCounterView animated:YES];
+//            }
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
                           bgColor:[[UIColor blackColor] CGColor]
@@ -898,15 +976,18 @@
 -(void)loopDrawLine
 {
     self.scanner = [ZBarImageScanner new];
-    self.readerView =  [[ZBarReaderView alloc]
-                                    initWithImageScanner: self.scanner];
+
+    self.readerView =  [[ZBarReaderView alloc] initWithImageScanner: self.scanner];
     self.readerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 220);
     self.readerView.tag = 101;
     self.readerView.readerDelegate = self;
     self.readerView.allowsPinchZoom = YES;//使用手势变焦
+    
     self.readerView.trackingColor = [UIColor blueColor];
     self.readerView.showsFPS = NO;// 显示帧率  YES 显示  NO 不显示
     self.readerView.scanCrop = CGRectMake(0, 0, 1, 1);//将被扫描的图像的区域
+//    self.readerView.captureReader.enableReader = NO;
+//    self.readerView.captureReader.enableReader = YES;
     self.readerView.tracksSymbols = NO;
     self.readerView.torchMode = 0;
     [self.view addSubview:self.readerView];
@@ -1049,8 +1130,9 @@
             {
                 [self httpQrCode:stringValue];
             }
-
+            
         }
+        
 
     }
     
@@ -1101,7 +1183,7 @@
         case 0:
         {
             [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
                 NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];

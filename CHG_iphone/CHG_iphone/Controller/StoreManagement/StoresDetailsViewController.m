@@ -193,6 +193,7 @@
     self.locationField.text = self.address.strAddress;
     for (int i = 0 ; i < 3; i ++) {
         UILabel *addlabel = [[UILabel alloc] initWithFrame:CGRectMake(90+ (SCREEN_WIDTH -120)/3 *i, 0, (SCREEN_WIDTH -120)/3, 40)];
+        addlabel.lineBreakMode = NSLineBreakByClipping;
         if (i == 0) {
             addlabel.text = self.address.strProvinceName;
         }

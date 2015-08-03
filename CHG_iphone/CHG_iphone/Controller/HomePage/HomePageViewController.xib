@@ -16,23 +16,23 @@
             <rect key="frame" x="0.0" y="94" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1qv-Wx-WgI">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1qv-Wx-WgI">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="568" id="bby-6c-f3Q"/>
-                        <constraint firstAttribute="width" constant="320" id="k9h-xc-StI"/>
+                        <constraint firstAttribute="width" constant="320" id="7vO-HI-abc"/>
+                        <constraint firstAttribute="height" constant="568" id="PLW-jd-QYn"/>
                     </constraints>
                     <color key="separatorColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <color key="sectionIndexBackgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="1qv-Wx-WgI" secondAttribute="bottom" id="VYE-VL-1Dx"/>
-                <constraint firstAttribute="trailing" secondItem="1qv-Wx-WgI" secondAttribute="trailing" id="W0M-W5-SC1"/>
-                <constraint firstItem="1qv-Wx-WgI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="uhx-yd-R57"/>
-                <constraint firstItem="1qv-Wx-WgI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wxz-ys-9DO"/>
+                <constraint firstAttribute="bottom" secondItem="1qv-Wx-WgI" secondAttribute="bottom" id="8n3-7C-uoK"/>
+                <constraint firstAttribute="trailing" secondItem="1qv-Wx-WgI" secondAttribute="trailing" id="ie7-nn-OG4"/>
+                <constraint firstItem="1qv-Wx-WgI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="oOt-am-LOg"/>
+                <constraint firstItem="1qv-Wx-WgI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="u9l-j7-9CT"/>
             </constraints>
             <point key="canvasLocation" x="305" y="349"/>
         </view>

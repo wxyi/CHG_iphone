@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface IdentificationCell : UITableViewCell
-@property(nonatomic,weak)IBOutlet UITextField* iphoneTextfiel;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* iphoneTextfiel;
 @end

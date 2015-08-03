@@ -368,7 +368,8 @@ typedef enum
     OrderReturnTypeAMember = 0,//门店订单管理
     OrderReturnTypeHomePage, //会员订单管理
     OrderReturnTypePopPage, //返回上一层;
-    OrderReturnTypeStatistic //统计分析
+    OrderReturnTypeStatistic, //统计分析
+    OrderReturnTypeQueryOrder //订单查询
 }OrderReturnType;
 
 typedef enum

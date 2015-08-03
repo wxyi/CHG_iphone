@@ -33,7 +33,11 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.ispush = NO;
+}
 -(void)setupView
 {
     
@@ -95,45 +99,47 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    StatisticalType type ;
-    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-    switch (indexPath.row) {
-        case 0:
-            type = StatisticalTypeStoreSales;
-            break;
-        case 1:
-            type = StatisticalTypeMembershipGrowth;
-            break;
-        case 2:
-            type = StatisticalTypePinRewards;
-            break;
-        case 3:
-            type = StatisticalTypePartnersRewards;
-            break;
-        default:
-            break;
-    }
-    
-    if ([config.Roles isEqualToString:@"PARTNER"])
-    {
-        if (indexPath.row == 0) {
-            type = StatisticalTypeMembershipGrowth;
-        }
-        else
-        {
-            type = StatisticalTypePartnersRewards;
+    if (!self.ispush) {
+        self.ispush = YES;
+        StatisticalType type ;
+        UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+        switch (indexPath.row) {
+            case 0:
+                type = StatisticalTypeStoreSales;
+                break;
+            case 1:
+                type = StatisticalTypeMembershipGrowth;
+                break;
+            case 2:
+                type = StatisticalTypePinRewards;
+                break;
+            case 3:
+                type = StatisticalTypePartnersRewards;
+                break;
+            default:
+                break;
         }
         
+        if ([config.Roles isEqualToString:@"PARTNER"])
+        {
+            if (indexPath.row == 0) {
+                type = StatisticalTypeMembershipGrowth;
+            }
+            else
+            {
+                type = StatisticalTypePartnersRewards;
+            }
+            
+        }
+        StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
+        StoreSalesView.statisticalType = type;
+        StoreSalesView.isSkip = NO;
+        StoreSalesView.strYear = self.strYear;
+        StoreSalesView.strMonth = self.strMonth;
+        StoreSalesView.strDay = self.strDay;
+        StoreSalesView.title = [self.items objectAtIndexSafe:indexPath.row];
+        [self.navigationController pushViewController:StoreSalesView animated:YES];
     }
-    StoreSalesViewController* StoreSalesView = [[StoreSalesViewController alloc] initWithNibName:@"StoreSalesViewController" bundle:nil];
-    StoreSalesView.statisticalType = type;
-    StoreSalesView.isSkip = NO;
-    StoreSalesView.strYear = self.strYear;
-    StoreSalesView.strMonth = self.strMonth;
-    StoreSalesView.strDay = self.strDay;
-    StoreSalesView.title = [self.items objectAtIndexSafe:indexPath.row];
-    [self.navigationController pushViewController:StoreSalesView animated:YES];
-
 }
 /*
 #pragma mark - Navigation

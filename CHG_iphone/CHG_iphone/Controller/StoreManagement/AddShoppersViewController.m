@@ -65,12 +65,13 @@
     cell.namelab.text = [self.items objectAtIndexSafe:indexPath.row];
     if (indexPath.row == 2) {
         cell.nametext.placeholder = @"选填";
+        [cell.nametext setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     else
     {
         cell.nametext.placeholder = @"必填";
     }
-    
+
     cell.nametext.delegate = self;
     [cell.nametext addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     cell.nametext.tag = [[NSString stringWithFormat:@"101%d",indexPath.row] intValue];
@@ -165,28 +166,39 @@
         if (name.length == 0) {
             info = @"请输入姓名";
         }
-        else if (iphone.length == 0)
+        else if ([NSObject stringContainsEmoji:name] || [Utils checkName:name])
         {
-            info = @"请输入手机号";
-        }
-//        else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphone ])
-//        {
-//            info = @"手机格式不正确";
-//        }
-        else if (cardNum.length > 0 && cardNum.length != 18)
-        {
-            DLog(@"%d",cardNum.length);
-            info = @"身份证格式不正确";
-        }
-        else if(cardNum.length > 0 && [Utils checkUserIdCard:cardNum])
-        {
-            info = @"身份证格式不正确";
-        }
-        else if ([NSObject stringContainsEmoji:name])
-        {
-            info = @"姓名不能包含表情";
+            info = @"名称只能输入中文、数字、字母、“_”";
             
         }
+        else if (name.length < 2) {
+            info = @"名字不能小于两位";
+        }
+        else if (iphone.length == 0)
+        {
+            info = @"请输入手机号码";
+        }
+        else if ([[iphone substringToIndex:1] intValue] !=1)
+        {
+            info = @"手机格式不正确";
+        }
+        else if(cardNum.length != 0 &&![Utils checkUserIdCard:cardNum])
+        {
+            info = @"身份证格式不正确";
+        }
+//        else if (cardNum.length != 18 )
+//        {
+//            DLog(@"%d",cardNum.length);
+//            if ((cardNum.length != 0 && cardNum.length != 15 )|| [Utils checkUserIdCard:cardNum]) {
+//                info = @"身份证格式不正确";
+//            }
+//            
+//            
+//            
+//        }
+        
+        
+        
         if (info.length != 0) {
             [SGInfoAlert showInfo:info
                           bgColor:[[UIColor blackColor] CGColor]
@@ -322,10 +334,17 @@
         if ([NSObject stringContainsEmoji:string]) {
             return NO;
         }
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 15) {
+        //        NSInteger existedLength = textField.text.length;
+        //        NSInteger selectedLength = range.length;
+        //        NSInteger replaceLength = string.length;
+        
+//        NSString *regex = @"^[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+//        NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+//        if (![pred evaluateWithObject:string]) {
+//            return NO;
+//        }
+        
+        if (textField.text.length >= 15 && string.length > range.length) {
             return NO;
         }
     }

@@ -22,7 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     switch (self.statisticalType) {
         case StatisticalTypeStoreSales:
         {
@@ -63,7 +65,8 @@
     self.title = @"日";
     self.bgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 70);
     self.nameLab.frame = CGRectMake(0, 0, SCREEN_WIDTH, 35 );
-    self.pricelab.frame = CGRectMake(0, 35, SCREEN_WIDTH, 35 );
+    self.pricelab.frame = CGRectMake(0, 30, SCREEN_WIDTH, 35 );
+    self.line.frame = CGRectMake(0, 65, SCREEN_WIDTH, 5 );
     self.nameLab.text = self.strtitle;
     if (self.statisticalType == StatisticalTypeMembershipGrowth) {
         self.pricelab.text = @"0";
@@ -80,7 +83,7 @@
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
     
-    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
+    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70 - 40);
     DLog(@"-----%@",NSStringFromCGRect(self.tableview.frame))
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
@@ -236,13 +239,13 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (StatisticalTypeMembershipGrowth == self.statisticalType) {
-        return 0.5;
+        return 0.1;
     }
     return 5;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.5;
+    return 0.1;
     
 }
 
@@ -450,7 +453,7 @@
         self.tableview.header = header;
         
         // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        self.tableview.footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             [weakSelf loadMoreData];
         }];
     }

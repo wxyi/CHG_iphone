@@ -27,6 +27,8 @@
                                 <state key="normal" backgroundImage="icon_register_girl.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" backgroundImage="icon_register_girl.png"/>
+                                <state key="highlighted" backgroundImage="icon_register_girl.png"/>
                                 <connections>
                                     <action selector="selectRadio:" destination="KGk-i7-Jjw" eventType="touchDown" id="RbD-Kd-I4a"/>
                                 </connections>
@@ -40,6 +42,8 @@
                                 <state key="normal" backgroundImage="icon_register_boy.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" backgroundImage="icon_register_boy.png"/>
+                                <state key="highlighted" backgroundImage="icon_register_boy.png"/>
                                 <connections>
                                     <action selector="selectRadio:" destination="KGk-i7-Jjw" eventType="touchDown" id="IJQ-Us-C8q"/>
                                 </connections>

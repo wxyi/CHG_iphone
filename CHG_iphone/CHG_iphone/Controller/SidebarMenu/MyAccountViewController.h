@@ -12,7 +12,7 @@
 @property(nonatomic,weak)IBOutlet UICollectionView* collection;
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,weak)IBOutlet UIImageView * line;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,strong)NSArray* collonitems;
 @property(nonatomic,strong)NSDictionary* dictionary;
 @property(nonatomic,strong)UserConfig* config;
@@ -20,4 +20,6 @@
 @property(nonatomic,strong)NSString* strYear;
 @property(nonatomic,strong)NSString* strMonth;
 @property(nonatomic,strong)NSString* strDay;
+
+@property(nonatomic,assign)BOOL isfirst;
 @end

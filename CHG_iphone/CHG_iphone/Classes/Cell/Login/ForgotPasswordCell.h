@@ -11,8 +11,8 @@
 @interface ForgotPasswordCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UIView* bgView;
 @property(nonatomic,weak)IBOutlet UIView* userbgView;
-@property(nonatomic,weak)IBOutlet UITextField* userField;
-@property(nonatomic,weak)IBOutlet UITextField* Verificationfield;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* userField;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* Verificationfield;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 @property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
 @property(nonatomic,strong)STAlertView* stAlertView;

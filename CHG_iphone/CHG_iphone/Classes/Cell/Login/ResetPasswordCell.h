@@ -10,8 +10,8 @@
 
 @interface ResetPasswordCell : UITableViewCell
 @property(nonatomic,weak)IBOutlet UIView* bgView;
-@property(nonatomic,weak)IBOutlet UITextField* resetpasswordField;
-@property(nonatomic,weak)IBOutlet UITextField* confirmpasswordfield;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* resetpasswordField;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* confirmpasswordfield;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 
 -(IBAction)ResetPassword:(UIButton*)sender;

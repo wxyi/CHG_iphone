@@ -175,7 +175,7 @@
     
     
     string = [NSString stringWithFormat:@"订单金额 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -364,7 +364,7 @@
         self.tableview.header = header;
         
         // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        self.tableview.footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             [weakSelf loadMoreData];
         }];
     }

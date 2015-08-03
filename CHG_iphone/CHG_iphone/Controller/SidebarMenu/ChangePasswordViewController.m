@@ -37,7 +37,7 @@
 }
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:@"原密码",@"重置密码",@"确认密码" ,nil];
+    self.items = [NSArray arrayWithObjects:@"原密码",@"新密码",@"重复密码" ,nil];
     
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
@@ -72,7 +72,7 @@
 //    title.text = [self.items objectAtIndexSafe:indexPath.row];
 //    [cell.contentView addSubview:title];
 
-    UITextField* textField = [[UITextField alloc] initWithFrame:CGRectZero];
+    NoCopyTextField* textField = [[NoCopyTextField alloc] initWithFrame:CGRectZero];
 //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     
     textField.placeholder = [self.items objectAtIndexSafe:indexPath.row]; //默认显示的字

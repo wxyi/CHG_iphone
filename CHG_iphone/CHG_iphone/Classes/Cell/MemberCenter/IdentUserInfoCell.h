@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface IdentUserInfoCell : UITableViewCell<UITextFieldDelegate>
-@property(nonatomic,weak)IBOutlet UITextField* iphonelab;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* iphonelab;
 @property(nonatomic,weak)IBOutlet UILabel* namelab;
 @property (nonatomic, copy) GetCheckCode didGetCode;
 @end

@@ -68,10 +68,10 @@
     {
         weakSelf.strCheckCode = checkcode;
         
-        [SGInfoAlert showInfo:weakSelf.strCheckCode
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self.view
-                     vertical:0.7];
+//        [SGInfoAlert showInfo:weakSelf.strCheckCode
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.7];
     };
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -120,7 +120,7 @@
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(10, 35, 50, 24)];
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftButton setImage:[UIImage imageNamed:@"btn_black_back.png"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_back_blue.png"] forState:UIControlStateNormal];
 //    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     //    [leftButton setBackgroundColor:[UIColor blackColor]];
     [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];

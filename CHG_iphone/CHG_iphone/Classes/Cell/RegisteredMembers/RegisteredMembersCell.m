@@ -15,6 +15,7 @@
     self.iphoneField.delegate = self;
     self.nameField.delegate = self;
     self.codeField.delegate = self;
+   
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,6 +33,7 @@
     }
     if (self.iphoneField.text.length == 11  ) {
         
+        sender.enabled = NO;
         [self httpCustomerBefore];
         
 
@@ -151,12 +153,14 @@
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             
+            
             NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
             
             self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
                 DLog(@"否");
                 
-                
+                JKCountDownButton* sender = (JKCountDownButton*)[self viewWithTag:10000];
+                sender.enabled = YES;
                 [self sendCheck];
                 
             } otherButtonBlock:^{
@@ -171,6 +175,8 @@
         }
         else
         {
+            JKCountDownButton* sender = (JKCountDownButton*)[self viewWithTag:10000];
+            sender.enabled = YES;
             if (self.didshowInfo) {
                 self.didshowInfo([data objectForKeySafe:@"msg"]);
             }
@@ -182,6 +188,9 @@
         if (self.didGetCode) {
             self.didGetCode(description);
         }
+        JKCountDownButton* sender = (JKCountDownButton*)[self viewWithTag:10000];
+        sender.enabled = YES;
+        
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {
@@ -211,9 +220,12 @@
         if ([NSObject stringContainsEmoji:string]) {
             return NO;
         }
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
+//        NSInteger existedLength = textField.text.length;
+//        NSInteger selectedLength = range.length;
+//        NSInteger replaceLength = string.length;
+        
+        
+        
         if (textField.text.length >= 15 && string.length > range.length) {
             return NO;
         }
@@ -238,12 +250,12 @@
 //-(void)textFieldDidBeginEditing:(UITextField *)textField
 //{
 //    
-////    NSString *regex = @"[a-zA-Z0-9\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*";
-////    
-////    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-////    if (![pred evaluateWithObject:string]) {
-////        return NO;
-////    }
+//    NSString *regex = @"[a-zA-Z0-9\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*";
+//////
+//    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+//    if (![pred evaluateWithObject:string]) {
+//        return NO;
+//    }
 //    if (textField == self.iphoneField) {
 //        if (self.iphoneField.text.length > 0) {
 //            if ([[self.iphoneField.text substringToIndex:1] intValue]!= 1) {

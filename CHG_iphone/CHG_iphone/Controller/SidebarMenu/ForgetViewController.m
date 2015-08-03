@@ -65,7 +65,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    UITextField* textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 200, 44)];
+    NoCopyTextField* textField = [[NoCopyTextField alloc] initWithFrame:CGRectMake(10, 0, 200, 44)];
     //    [textField setBorderStyle:UITextBorderStyleRoundedRect]; //外框类型
     textField.textColor = UIColorFromRGB(0x646464);
     textField.placeholder = @"验证码"; //默认显示的字
@@ -230,10 +230,10 @@
                 return @"点击重新获取";
                 
             }];
-            [SGInfoAlert showInfo:self.strCheckCode
-                          bgColor:[[UIColor blackColor] CGColor]
-                           inView:self.view
-                         vertical:0.7];
+//            [SGInfoAlert showInfo:self.strCheckCode
+//                          bgColor:[[UIColor blackColor] CGColor]
+//                           inView:self.view
+//                         vertical:0.7];
         }
         else
         {

@@ -31,7 +31,7 @@
     
     [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
-    // Do any additional setup after loading the view from its nib.
+//     Do any additional setup after loading the view from its nib.
     [self setupView];
 }
 

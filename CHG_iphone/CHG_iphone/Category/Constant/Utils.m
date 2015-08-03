@@ -43,9 +43,14 @@
 #pragma 正则匹配用户身份证号15或18位
 + (BOOL)checkUserIdCard: (NSString *) idCard
 {
-    NSString *pattern = @"^(//d{14}|//d{17})(//d|[xX])$";
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pattern];
-    BOOL isMatch = [pred evaluateWithObject:idCard];
+    BOOL flag;
+    if (idCard.length <= 0) {
+        flag = NO;
+        return flag;
+    }
+    NSString *regex2 = @"^(\\d{14}|\\d{17})(\\d|[xX])$";
+    NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex2];
+    BOOL isMatch = [identityCardPredicate evaluateWithObject:idCard];
     return isMatch;
 }
 
@@ -68,5 +73,17 @@
     BOOL isMatch = [pred evaluateWithObject:url];
     return isMatch;
     
+}
+
++ (BOOL)checkName:(NSString *) name
+{
+    NSString *regex = @"^[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+
+    if (![pred evaluateWithObject:name])
+    {
+        return YES;
+    }
+    return NO;
 }
 @end

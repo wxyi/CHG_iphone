@@ -60,7 +60,7 @@
 //    rect.size.height = SCREEN_HEIGHT - 70 - 40;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
+    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70 -40);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -375,7 +375,7 @@
         self.tableview.header = header;
         
         // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        self.tableview.footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             [weakSelf loadMoreData];
         }];
     }

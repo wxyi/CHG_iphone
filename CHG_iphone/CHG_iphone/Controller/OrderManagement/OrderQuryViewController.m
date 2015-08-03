@@ -310,7 +310,7 @@
     
     
     string = [NSString stringWithFormat:@"订单金额 %.2f元",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue]];
-    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"￥%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
+    rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%.2f",[[dict objectForKeySafe:@"orderFactAmount"] doubleValue] ]];
     text = [[NSMutableAttributedString alloc] initWithString:string];
     [text setTextColor:UIColorFromRGB(0xF5A541) range:rangeOfstart];
     
@@ -388,7 +388,7 @@
             PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
             PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             PickGoodsView.ManagementTyep = self.ManagementTyep;
-//            PickGoodsView.m_returnType 
+            PickGoodsView.m_returnType = self.m_returnType;
             [self.navigationController pushViewController:PickGoodsView animated:YES];
         }
         else
@@ -397,6 +397,7 @@
             CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
             CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
             CompletedOrderDetailsView.ManagementTyep = self.ManagementTyep;
+            CompletedOrderDetailsView.m_returnType = self.m_returnType;
             CompletedOrderDetailsView.Comordertype = detailsOrder;
             [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
             
@@ -407,6 +408,7 @@
         CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
         CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
         CompletedOrderDetailsView.ManagementTyep = self.ManagementTyep;
+        
         CompletedOrderDetailsView.Comordertype = TerminationOrder;
         CompletedOrderDetailsView.m_returnType = self.m_returnType;
         [self.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
@@ -588,11 +590,36 @@
     self.m_nPageNumber = 1;
     self.ispulldown = NO;
     NSString * info;
+    
+    
+    
+//    if(fitstDate > secondDate) {
+//        self.endtime.text = @"";
+//        [SGInfoAlert showInfo:@"结束时间不能小于开始时间"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self.view
+//                     vertical:0.4];
+//    }
     if (self.starttime.text.length == 0) {
         info = @"请输入开始时间";
     }
     else if (self.endtime.text.length == 0 ) {
         info = @"请输入结束时间";
+        
+    }
+    else if(self.starttime.text.length != 0 && self.endtime.text.length != 0)
+    {
+        NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-MM-dd"];
+        NSDate *startdate =[dateFormat dateFromString:self.starttime.text];
+        NSTimeInterval firstDate = [startdate timeIntervalSince1970]*1;
+        
+        
+        NSDate *enddate =[dateFormat dateFromString:self.endtime.text];
+        NSTimeInterval secondDate = [enddate timeIntervalSince1970]*1;
+        if (firstDate > secondDate) {
+            info = @"结束时间不能小于开始时间";
+        }
         
     }
     if(info.length != 0)
@@ -630,7 +657,7 @@
     self.tableview.header = header;
     
     // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-    self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+    self.tableview.footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
         [weakSelf loadMoreData];
     }];
 }

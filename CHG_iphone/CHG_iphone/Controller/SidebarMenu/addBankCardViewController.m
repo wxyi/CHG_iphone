@@ -188,6 +188,14 @@
     if (name.text.length == 0) {
         info = @"请输入姓名";
     }
+    else if ([NSObject stringContainsEmoji:name.text]|| [Utils checkName:name.text]) {
+        DLog(@"包含表情");
+        info = @"名称只能输入中文、数字、字母、“_”";
+        
+    }
+    else if (name.text.length < 2) {
+        info = @"名字不能小于两位";
+    }
     else if(Card.text.length == 0)
     {
         info = @"请输入银行卡";
@@ -201,11 +209,7 @@
     {
         info = @"请选择银行";
     }
-    else if ([NSObject stringContainsEmoji:name.text]) {
-        DLog(@"包含表情");
-        info = @"持卡人不能包含表情";
-                
-    }
+    
 //    else if ([IdentifierValidator isValid:IdentifierTypeCreditNumber value:Card.text]) {
 //        JTImageLabel *promptlabel = (JTImageLabel*)[self.view viewWithTag:103];
 //        promptlabel.imageView.image = [UIImage imageNamed:@"icon_tips_big.png"];
@@ -440,12 +444,19 @@
         if ([NSObject stringContainsEmoji:string]) {
             return NO;
         }
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
-//        if (existedLength - selectedLength + replaceLength > 15) {
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
+        //        NSInteger existedLength = textField.text.length;
+        //        NSInteger selectedLength = range.length;
+        //        NSInteger replaceLength = string.length;
+        
+//        NSString *regex = @"^[a-zA-Z0-9_\u4e00-\u9fa5]+$";
+//        NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+//        if (![pred evaluateWithObject:string]) {
 //            return NO;
 //        }
+        
         if (textField.text.length >= 15 && string.length > range.length) {
             return NO;
         }

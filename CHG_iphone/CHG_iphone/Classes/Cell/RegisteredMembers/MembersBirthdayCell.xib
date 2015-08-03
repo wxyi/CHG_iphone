@@ -17,8 +17,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x2b-cy-itb">
                         <rect key="frame" x="5" y="20" width="310" height="65"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" tag="99" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请选择日期" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nfb-dX-Flk">
-                                <rect key="frame" x="0.0" y="20" width="300" height="40"/>
+                            <textField opaque="NO" clipsSubviews="YES" tag="99" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请选择宝宝生日/预产期" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nfb-dX-Flk" customClass="NoCopyTextField">
+                                <rect key="frame" x="0.0" y="17" width="300" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="52B-WZ-shR"/>
                                     <constraint firstAttribute="width" constant="300" id="t1N-Au-jCm"/>

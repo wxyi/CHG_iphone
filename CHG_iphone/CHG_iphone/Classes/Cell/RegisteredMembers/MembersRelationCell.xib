@@ -26,6 +26,8 @@
                                 <state key="normal" backgroundImage="icon_register_other.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" backgroundImage="icon_register_other.png"/>
+                                <state key="highlighted" backgroundImage="icon_register_other.png"/>
                                 <connections>
                                     <action selector="selectRadio:" destination="KGk-i7-Jjw" eventType="touchDown" id="rtV-uV-IFT"/>
                                 </connections>
@@ -39,6 +41,8 @@
                                 <state key="normal" backgroundImage="icon_register_man.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" backgroundImage="icon_register_man.png"/>
+                                <state key="highlighted" backgroundImage="icon_register_man.png"/>
                                 <connections>
                                     <action selector="selectRadio:" destination="KGk-i7-Jjw" eventType="touchDown" id="rE9-3e-2MI"/>
                                 </connections>
@@ -52,6 +56,8 @@
                                 <state key="normal" backgroundImage="icon_register_woman.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" backgroundImage="icon_register_woman.png"/>
+                                <state key="highlighted" backgroundImage="icon_register_woman.png"/>
                                 <connections>
                                     <action selector="selectRadio:" destination="KGk-i7-Jjw" eventType="touchDown" id="4z3-Ks-IeU"/>
                                 </connections>

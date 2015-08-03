@@ -97,6 +97,7 @@
     self.tableview.delegate = self;
     self.tableview.showsVerticalScrollIndicator = NO;
 //    self.tableview.scrollEnabled = NO;
+    self.tableview.bounces = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     
@@ -218,10 +219,10 @@
             cell.operationPage = @"1";
             NSDictionary* dict =  [self.items objectAtIndexSafe:indexPath.row];
             
-            cell.price = [[dict objectForKeySafe:@"productPrice"] doubleValue];
+            
             cell.showCount =^(NSString* state,CGFloat price,NSIndexPath* indexPath,NSInteger count){
                 UILabel* label = (UILabel*)[self.view viewWithTag:1010];
-                CGFloat allpice = [[label.text substringFromIndex:1] floatValueSafe];
+                CGFloat allpice = [[self.OrderDate objectForKeySafe:@"totalAmount"] floatValue];
                 if ([state integerValue] == 2) {
                     DLog(@"加");
                     allpice += price;
@@ -231,30 +232,48 @@
                     DLog(@"减");
                     allpice -= price;
                 }
+                
                 [self.countitem replaceObjectAtIndexSafe:indexPath.row withObject:[NSString stringWithFormat:@"%d",count]];
                 label.text = [NSString stringWithFormat:@"￥%.2f",allpice];
 //
                 UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
                 textfield.text = [NSString stringWithFormat:@"￥%.2f",allpice];
+                
+                
+                
+                //add
+                NSMutableDictionary* dict = [self.items objectAtIndexSafe:indexPath.row];
+                [dict setObjectSafe:[NSString stringWithFormat:@"%d",count] forKey:@"quantity"];
+                [self.items replaceObjectAtIndex:indexPath.row withObject:dict];
+                [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allpice] forKey:@"totalAmount"];
+                [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allpice] forKey:@"FactAmount"];
+                [self.OrderDate setObject:@"0.00" forKey:@"DiscountAmount"];
+                [self.OrderDate setObject:self.items forKey:@"orderList"];
+                
             };
             
             [cell.GoodsImage setImageWithURL:[NSURL URLWithString:[dict objectForKeySafe:@"productSmallUrl"]] placeholderImage:[UIImage imageNamed:@"default_small.png"]];
             cell.titlelab.text = [dict objectForKeySafe:@"productName"] ;
 //            cell.pricelab.text = [dict objectForKeySafe:@"productPrice"];
+            
+            cell.price = [[dict objectForKeySafe:@"productPrice"] doubleValue];
             cell.pricelab.text = [NSString stringWithFormat:@"￥%@",[dict objectForKeySafe:@"productPrice"]];
-            if (self.isfrist ) {
-//                self.isfrist = NO;
-//                [self.countitem removeAllObjects];
-                
-                [self.countitem addObject:[dict objectForKeySafe:@"quantity"]];
-                cell.TextStepper.Current = [[dict objectForKeySafe:@"quantity"] doubleValue];
-                cell.counter =  [[dict objectForKeySafe:@"quantity"] intValue];
-            }
-            else
-            {
-                cell.TextStepper.Current = [[self.countitem objectAtIndexSafe:indexPath.row] doubleValue];
-                cell.counter =  [[self.countitem objectAtIndexSafe:indexPath.row] intValue];
-            }
+            
+            
+            cell.TextStepper.Current = [[[[self.OrderDate objectForKeySafe:@"orderList"] objectAtIndexSafe:indexPath.row] objectForKeySafe:@"quantity"] doubleValue];
+            cell.counter =  [[[[self.OrderDate objectForKeySafe:@"orderList"] objectAtIndexSafe:indexPath.row] objectForKeySafe:@"quantity"] intValue];
+//            if (self.isfrist ) {
+////                self.isfrist = NO;
+////                [self.countitem removeAllObjects];
+//                
+//                [self.countitem addObject:[dict objectForKeySafe:@"quantity"]];
+//                
+//            }
+//            else
+//            {
+//                cell.TextStepper.Current = [[self.countitem objectAtIndexSafe:indexPath.row] doubleValue];
+//                cell.counter =  [[self.countitem objectAtIndexSafe:indexPath.row] intValue];
+//            }
             
             cell.TextStepper.tag = [[NSString stringWithFormat:@"1011%ld",(long)indexPath.row] intValue];
             
@@ -272,16 +291,24 @@
                 
             }
             
+            DLog(@"totalamout = %@",[self.OrderDate objectForKeySafe:@"totalAmount"]);
             CGFloat price= 0.0;
             for (int i = 0; i < [self.items count]; i++) {
                 NSInteger count = [[[self.items objectAtIndexSafe:i] objectForKeySafe:@"QrcList"] count];
                 CGFloat productPrice = [[[self.items objectAtIndexSafe:i] objectForKeySafe:@"productPrice"] doubleValueSafe];
                 price += count * productPrice;
             }
-            
+//            CGFloat price= [ floatValue];
             cell.orderpriceBlock = ^(NSMutableDictionary *dict)
             {
+                
                 self.ChangePriceDict = [dict copy];
+                
+                NSString* fact = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"] ;
+//                NSString* Discount = [self.ChangePriceDict objectForKeySafe:@"orderDiscount"] ;
+                [self.OrderDate setObject:[fact substringFromIndex:1] forKey:@"FactAmount"];
+//                [self.OrderDate setObject:[Discount substringFromIndex:1] forKey:@"DiscountAmount"];
+                
             };
             
             if (self.orderSaletype == SaleTypePickingGoods) {
@@ -299,23 +326,28 @@
                 cell.returnPrice = [NSString stringWithFormat:@"%.2f",price];
                 cell.receivableNameLab.text =@"应退金额:";
                 cell.actualNameLab.text = @"实退金额:";
-                cell.receivableLab.text =[NSString stringWithFormat:@"￥%.2f",[[self.priceDict objectForKeySafe:@"ysMoney"] floatValue]] ;
+                cell.receivableLab.text =[NSString stringWithFormat:@"￥%.2f",[[self.OrderDate objectForKeySafe:@"totalAmount"] floatValue]] ;
                 
-                if (self.isfrist) {
-                    self.isfrist = NO;
-                    
-                    cell.actualtext.text = [NSString stringWithFormat:@"￥%.2f",[[self.priceDict objectForKeySafe:@"ysMoney"] floatValue]] ;
-                    
-                }
-                else{
-
-                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                    [dict setObjectSafe:[NSString stringWithFormat:@"￥%.2f",[[self.priceDict objectForKeySafe:@"ysMoney"] floatValue]] forKey:@"orderFactAmount"];
-                    
-                    self.ChangePriceDict = [dict copy];
-                    
-                    cell.actualtext.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
-                }
+                cell.actualtext.text = [NSString stringWithFormat:@"￥%.2f",[[self.OrderDate objectForKeySafe:@"FactAmount"] floatValue]] ;
+//                cell.receivableLab.text =[NSString stringWithFormat:@"￥%.2f",[[self.priceDict objectForKeySafe:@"ysMoney"] floatValue]] ;
+//                
+//                
+//                
+//                if (self.isfrist) {
+//                    self.isfrist = NO;
+//                    
+//                    cell.actualtext.text = [NSString stringWithFormat:@"￥%.2f",[[self.priceDict objectForKeySafe:@"ysMoney"] floatValue]] ;
+//                    
+//                }
+//                else{
+//
+//                    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//                    [dict setObjectSafe:[NSString stringWithFormat:@"￥%.2f",[[self.priceDict objectForKeySafe:@"ysMoney"] floatValue]] forKey:@"orderFactAmount"];
+//                    
+//                    self.ChangePriceDict = [dict copy];
+//                    
+//                    cell.actualtext.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
+//                }
                 
                 
             }
@@ -331,48 +363,55 @@
                 cell = (OrderAmountCell*)[[self.OrderAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
-            CGFloat allPrice = 0.0;
+            cell.allprice  = [[self.OrderDate objectForKeySafe:@"totalAmount"] floatValue];
             cell.orderSaletype = self.orderSaletype;
-            for (int i = 0; i< self.items.count; i++) {
-                CGFloat price = [[self.items[i] objectForKeySafe:@"productPrice"] floatValue];
-                NSInteger count;
-                if (self.orderSaletype == SaleTypeSellingGoods) {
-                    count = [[self.items[i] objectForKeySafe:@"QrcList"] count];
-                }
-                else
-                {
-                    count = [[self.items[i] objectForKeySafe:@"quantity"] intValue];
-                }
-                
-                allPrice += price * count;
-                
-            }
+//            for (int i = 0; i< self.items.count; i++) {
+//                CGFloat price = [[self.items[i] objectForKeySafe:@"productPrice"] floatValue];
+//                NSInteger count;
+//                if (self.orderSaletype == SaleTypeSellingGoods) {
+//                    count = [[self.items[i] objectForKeySafe:@"QrcList"] count];
+//                }
+//                else
+//                {
+//                    count = [[self.items[i] objectForKeySafe:@"quantity"] intValue];
+//                }
+//                
+//                allPrice += price * count;
+//                
+//            }
 
             cell.orderpriceBlock = ^(NSMutableDictionary *dict)
             {
                 self.ChangePriceDict = [dict copy];
+                
+                NSString* fact = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"] ;
+                NSString* Discount = [self.ChangePriceDict objectForKeySafe:@"orderDiscount"] ;
+                [self.OrderDate setObject:[fact substringFromIndex:1] forKey:@"FactAmount"];
+                [self.OrderDate setObject:[Discount substringFromIndex:1] forKey:@"DiscountAmount"];
             };
-            cell.receivablelab.text = [NSString stringWithFormat:@"￥%.2f",allPrice];
-            if (self.isfrist) {
-                self.isfrist = NO;
-                cell.allprice = allPrice;
-//                cell.receivablelab.text = [NSString stringWithFormat:@"￥%.2f",allPrice];
-                cell.Receivedlab.text = [NSString stringWithFormat:@"￥%.2f",allPrice];
-                cell.favorablelab.text = @"￥0.00";
-                
-                
-                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                [dict setObjectSafe:[NSString stringWithFormat:@"￥%.2f",allPrice]forKey:@"orderFactAmount"];
-                [dict setObjectSafe: @"￥0.00" forKey:@"orderDiscount"];
-                self.ChangePriceDict = [dict copy];
-            }
-            else
-            {
-                
-                cell.Receivedlab.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
-                cell.favorablelab.text = [self.ChangePriceDict objectForKeySafe:@"orderDiscount"];;
-                
-            }
+            cell.receivablelab.text = [NSString stringWithFormat:@"￥%@",[self.OrderDate objectForKeySafe:@"totalAmount"]];
+            cell.Receivedlab.text = [NSString stringWithFormat:@"￥%@",[self.OrderDate objectForKeySafe:@"FactAmount"]];
+            cell.favorablelab.text = [NSString stringWithFormat:@"￥%@",[self.OrderDate objectForKeySafe:@"DiscountAmount"]];;
+//            if (self.isfrist) {
+//                self.isfrist = NO;
+//                cell.allprice = allPrice;
+////                cell.receivablelab.text = [NSString stringWithFormat:@"￥%.2f",allPrice];
+//                cell.Receivedlab.text = [NSString stringWithFormat:@"￥%.2f",allPrice];
+//                cell.favorablelab.text = @"￥0.00";
+//                
+//                
+//                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+//                [dict setObjectSafe:[NSString stringWithFormat:@"￥%.2f",allPrice]forKey:@"orderFactAmount"];
+//                [dict setObjectSafe: @"￥0.00" forKey:@"orderDiscount"];
+//                self.ChangePriceDict = [dict copy];
+//            }
+//            else
+//            {
+//                
+//                cell.Receivedlab.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
+//                cell.favorablelab.text = [self.ChangePriceDict objectForKeySafe:@"orderDiscount"];;
+//                
+//            }
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -432,24 +471,24 @@
         if (self.orderSaletype == SaleTypeReturnGoods ||self.orderSaletype == SaleTypePresell||self.orderSaletype == SaleTypeSellingGoods) {
             DLog(@"提货退货");
 
-            UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
+//            UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
 //            UILabel* label = (UILabel*)[self.view viewWithTag:1010];
-            NSString *info;
-            if (textField.text.length == 0) {
-                info = @"请输入金额";
-            }
-            
-            if (info.length != 0) {
-                [SGInfoAlert showInfo:info
-                              bgColor:[[UIColor blackColor] CGColor]
-                               inView:self.view
-                             vertical:0.7];
-                return;
-
-            }
+//            NSString *info;
+//            if (textField.text.length == 0) {
+//                info = @"请输入金额";
+//            }
+//            
+//            if (info.length != 0) {
+//                [SGInfoAlert showInfo:info
+//                              bgColor:[[UIColor blackColor] CGColor]
+//                               inView:self.view
+//                             vertical:0.7];
+//                return;
+//
+//            }
             
             if (self.orderSaletype == SaleTypeReturnGoods) {
-                self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+                self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认退货商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                     DLog(@"否");
                     
                     [self httpOrderCounter];
@@ -472,7 +511,7 @@
         {
             DLog(@"确认提货");
             
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认提货" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认提货?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
                 [self httpOrderCounter];
@@ -495,7 +534,7 @@
         case 0:
         {
             [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 NSMutableArray* tmArray = [self.items mutableCopy];
                 NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];
@@ -508,7 +547,7 @@
 //                NSString* strindex = [NSString stringWithFormat:@"%d",index];
                 
                 
-                self.items = [tmArray copy];
+                self.items = tmArray;
                 
                 CGFloat allprice = 0.0;
                 for (int i = 0; i < self.items.count; i ++) {
@@ -521,6 +560,16 @@
                 [dict setObjectSafe:[NSString stringWithFormat:@"￥%.2f",allprice]forKey:@"orderFactAmount"];
                 [dict setObjectSafe: @"￥0.00" forKey:@"orderDiscount"];
                 self.ChangePriceDict = [dict copy];
+                
+                
+                //add
+//                NSString* fact = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"] ;
+//                NSString* Discount = [self.ChangePriceDict objectForKeySafe:@"orderDiscount"] ;
+                [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allprice] forKey:@"totalAmount"];
+                
+                [self.OrderDate setObject:[NSString stringWithFormat:@"%.2f",allprice]  forKey:@"FactAmount"];
+                [self.OrderDate setObject:@"0.00" forKey:@"DiscountAmount"];
+                [self.OrderDate setObjectSafe:self.items forKey:@"orderList"];
                 
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:DELETE_PRESELL_GOODS object:cellIndexPath];
@@ -583,22 +632,25 @@
                 strurl = [APIAddress ApiCreateEngageOrder];
             }
             
-            NSArray* Amount = @[@"orderAmount",@"orderFactAmount",@"orderDiscount"];
-            for (int i = 0; i < Amount.count; i++) {
-                UITextField* textField = (UITextField*)[self.view viewWithTag:[[NSString stringWithFormat:@"101%d",i] intValue]];
-                DLog(@"text = %@",textField.text);
-                [param setObjectSafe:[textField.text substringFromIndex:1] forKey:Amount[i]];
-            }
+//            NSArray* Amount = @[@"orderAmount",@"orderFactAmount",@"orderDiscount"];
+//            for (int i = 0; i < Amount.count; i++) {
+//                UITextField* textField = (UITextField*)[self.view viewWithTag:[[NSString stringWithFormat:@"101%d",i] intValue]];
+//                DLog(@"text = %@",textField.text);
+//                [param setObjectSafe:[textField.text substringFromIndex:1] forKey:Amount[i]];
+//            }
             
+            [param setObjectSafe:[self.OrderDate objectForKeySafe:@"totalAmount"] forKey:@"orderAmount"];
+            [param setObjectSafe:[self.OrderDate objectForKeySafe:@"FactAmount"] forKey:@"orderFactAmount"];
+            [param setObjectSafe:[self.OrderDate objectForKeySafe:@"DiscountAmount"] forKey:@"orderDiscount"];
             
             break;
         }
         case SaleTypeReturnGoods://卖货退货
         {
             strurl = [APIAddress ApiCreateReturnOrder];
-            UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
-            [param setObjectSafe:[textField.text substringFromIndex:1] forKey:@"factAmount"];
-
+//            UITextField* textField = (UITextField*)[self.view viewWithTag:1011];
+//            [param setObjectSafe:[textField.text substringFromIndex:1] forKey:@"factAmount"];
+            [param setObjectSafe:[self.OrderDate objectForKeySafe:@"FactAmount"] forKey:@"factAmount"];
             break;
         }
         case SaleTypePickingGoods://预定订单提货
@@ -634,11 +686,13 @@
             else if (self.orderSaletype == SaleTypePresell)
             {
             
+                NSArray* item = [self.OrderDate objectForKeySafe:@"orderList"];
                 NSMutableDictionary *product = [NSMutableDictionary dictionary];
+                
                 [product setObjectSafe:[[self.items objectAtIndexSafe: i] objectForKeySafe: @"productId"] forKey:@"productId"];
-                NSInteger tag  = [[NSString stringWithFormat:@"1011%d",i] intValue];
-                TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
-                [product setObjectSafe:[NSString stringWithFormat:@"%.0f", TextStepper.Current ]  forKey:@"quantity"];
+//                NSInteger tag  = [[NSString stringWithFormat:@"1011%d",i] intValue];
+//                TextStepperField* TextStepper = (TextStepperField*)[self.view viewWithTag:tag];
+                [product setObjectSafe:[[item objectAtIndexSafe:i] objectForKeySafe:@"quantity"]  forKey:@"quantity"];
                 
                 [productList addObjectSafe:product];
             }

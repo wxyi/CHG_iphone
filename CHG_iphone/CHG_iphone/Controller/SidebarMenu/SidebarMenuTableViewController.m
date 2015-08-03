@@ -84,6 +84,8 @@
 -(void)showQrCode
 {
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewHide)];
+    [contentView addGestureRecognizer:tapGestureRecognizer];
     contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UIImageView* image = [[UIImageView alloc] initWithFrame:contentView.frame];
     NSString *newstr =[NSString stringWithFormat:@"%@/%@",APPDocumentsDirectory,@"StoreQrCode.jpg"] ;
@@ -93,6 +95,11 @@
     KGModal *modal = [KGModal sharedInstance];
     modal.showCloseButton = NO;
     [modal showWithContentView:contentView andAnimated:YES];
+}
+-(void)viewHide
+{
+    DLog(@"隐藏");
+    [[KGModal sharedInstance] hide];
 }
 #pragma mark -
 #pragma mark UITableView Delegate

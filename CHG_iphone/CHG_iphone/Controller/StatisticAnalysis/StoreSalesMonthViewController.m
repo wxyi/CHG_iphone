@@ -60,7 +60,7 @@
 //    rect.size.height = SCREEN_HEIGHT - 70 -40;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70);
+    self.tableview.frame = CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT -70 -40);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.showsVerticalScrollIndicator = NO;
@@ -327,14 +327,14 @@
             
             
             [self reLoadView];
-//            [self.tableview.header endRefreshing];
-//            [self.tableview.footer endRefreshing];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
         }
         else
         {
 //            [MMProgressHUD dismissWithError:msg];
-//            [self.tableview.header endRefreshing];
-//            [self.tableview.footer endRefreshing];
+            [self.tableview.header endRefreshing];
+            [self.tableview.footer endRefreshing];
             [MMProgressHUD dismiss];
             [SGInfoAlert showInfo:msg
                           bgColor:[[UIColor blackColor] CGColor]
@@ -343,8 +343,8 @@
         }
         
     } failureBlock:^(NSString *description) {
-//        [self.tableview.header endRefreshing];
-//        [self.tableview.footer endRefreshing];
+        [self.tableview.header endRefreshing];
+        [self.tableview.footer endRefreshing];
 //        [MMProgressHUD dismissWithError:description];
         [MMProgressHUD dismiss];
         [SGInfoAlert showInfo:description
@@ -392,7 +392,7 @@
         self.tableview.header = header;
         
         // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
-        self.tableview.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        self.tableview.footer = [MJRefreshBackNormalFooter  footerWithRefreshingBlock:^{
             [weakSelf loadMoreData];
         }];
     }
@@ -409,6 +409,11 @@
         
         // 拿到当前的下拉刷新控件，结束刷新状态
         
+        
+//        NSString *nextMonth;
+        
+        
+        
         NSDate *now = [NSDate date];
         NSLog(@"now date is: %@", now);
         
@@ -419,8 +424,18 @@
         
         int year = [dateComponent year];
         int month = [dateComponent month];
-        NSString *nextMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] + 1];
+        NSString *nextMonth;
         NSString* nextYear = [NSString stringWithFormat:@"%d",[self.strYear intValue]];
+        
+        if (self.isSkip) {
+            self.isSkip = NO;
+            nextMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue]];
+        }
+        else
+        {
+            nextMonth = [NSString stringWithFormat:@"%d",[self.strMonth intValue] + 1];
+        }
+        
         if ([nextMonth intValue] >= month ) {
             if ([nextYear intValue] >= year) {
                 nextMonth = [NSString stringWithFormat:@"%d",month];
@@ -468,7 +483,7 @@
         [self httpGetStatisticAnalysis];
         
         // 拿到当前的上拉刷新控件，结束刷新状态
-        [self.tableview.footer endRefreshing];
+//        [self.tableview.footer endRefreshing];
     });
 }
 -(NSString*)GetCurrentTitle

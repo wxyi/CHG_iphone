@@ -60,7 +60,7 @@
     else
     {
         textField.text = self.receivablelab.text;
-        
+        self.favorablelab.text = @"￥0.00";
         NSString* info;
         if (self.orderSaletype == SaleTypeSellingGoods ||self.orderSaletype == SaleTypePresell) {
             info = @"实收金额小于或等于应收金额";

@@ -17,6 +17,7 @@
 #import "PickAndReturnCell.h"
 #import "ConfirmOrderViewController.h"
 #import "OrderManagementViewController.h"
+#import "OrderQuryViewController.h"
 @interface CompletedOrderDetailsViewController ()
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderAmountNib;
@@ -51,6 +52,10 @@
     if (self.skiptype == SkipfromOrderManage) {
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if (self.m_returnType == OrderReturnTypeQueryOrder)
+    {
+        [leftButton addTarget:self action:@selector(gobacktoQuery) forControlEvents:UIControlEventTouchUpInside];
+    }
     else
     {
         [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
@@ -59,6 +64,14 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     [self setupView];
     
+}
+-(void)gobacktoQuery
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[OrderQuryViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
 }
 -(void)gotoOrderManagement
 {
@@ -94,7 +107,7 @@
     if (self.Comordertype == TerminationOrder)
     {
         DLog(@"确认终止订单");
-        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+        self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
             DLog(@"否");
             [self httpCancelOrder:self.items];
             
@@ -115,8 +128,9 @@
         NSInteger pickQuantity = 0;
         NSArray* productList = [self.items objectForKey:@"productList"] ;
         for (int j = 0; j < productList.count; j++) {
-            NSInteger pickcount = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"remainQuantity"] integerValue];
-            pickQuantity += pickcount;
+            NSInteger quantity = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"quantity"] integerValue];
+            NSInteger returnQuantity = [[[productList objectAtIndexSafe:j] objectForKeySafe:@"returnQuantity"] integerValue];
+            pickQuantity += quantity - returnQuantity;
         }
         if ([productList count] != 0 && pickQuantity != 0) {
             PresellGoodsViewController* PresellGoodsView = [[PresellGoodsViewController alloc] initWithNibName:@"PresellGoodsViewController" bundle:nil];
@@ -144,6 +158,7 @@
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
     self.isfrist = NO;
+    self.ChangePriceDict = [NSMutableDictionary dictionary];
     self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT -40);
     self.tableview.delegate = self;
     self.tableview.dataSource = self;
@@ -175,7 +190,17 @@
 //    rect = self.returnBtn.frame;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
 //    rect.size.width = SCREEN_WIDTH;
-    [self setupRefresh];
+    
+    if (self.Comordertype == TerminationOrder)
+    {
+        [self httpGetOrder];
+        
+    }
+    else
+    {
+        [self setupRefresh];
+    }
+    
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -183,7 +208,7 @@
     {
         return 2;
     }
-    return 3;
+    return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -203,79 +228,99 @@
     if (indexPath.section == 0) {
         
         
-        if (self.Comordertype != TerminationOrder){
-            amountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"amountCell"];
-            if(cell==nil){
-                cell = (amountCell*)[[self.amountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
-                
-            }
-            
-            if ([[self.items objectForKeySafe: @"orderCreator"] length] == 0) {
-                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",@""];
-            }
-            else
-            {
-                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",[self.items objectForKeySafe:@"orderCreator"]];
-            }
-            
-            
-            NSString* custName= [self.items objectForKeySafe:@"custName"];
-            DLog(@"wxy -custName = %@",custName);
-            if (custName.length != 0) {
-                custName = [custName substringToIndex:custName.length - 1];
-            }
-            else
-            {
-                custName = @"";
-            }
-            if (custName.length > 8) {
-//                NSMutableString * string = [custName mutableCopy];
-//                [string insertString:@"    " atIndex:10];
-//                custName = [string copy];
-                cell.priceLab.textAlignment = NSTextAlignmentLeft;
-            }
-            CGSize size = CGSizeMake(110,2000);
-            //计算实际frame大小，并将label的frame变成实际大小
-            CGSize labelsize = [custName sizeWithFont:FONT(13) constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap];
-            cell.priceLab.frame = CGRectMake(SCREEN_WIDTH - 10 -labelsize.width, 0, labelsize.width, 40);
-            cell.priceLab.text = [NSString stringWithFormat:@"%@*",custName];
-//            [cell.contentView addSubview:cell.priceLab];
-            
-            
-            cell.MemberLab.frame = CGRectZero;
-            cell.MemberLab.frame = CGRectMake(SCREEN_WIDTH - 30 -labelsize.width, 0, 30, 40);
-//            [cell.contentView addSubview:cell.priceLab];
-            
-            
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            return cell;
-        }
-        else
-        {
-            AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
-            if(cell==nil){
-                cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
-                
-            }
-            cell.picktype = PickUpTypeStop;
-            cell.height = self.m_height;
-            [cell setupAllOrderView:self.items];
-            cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
-                if (self.didSelectedSubItemAction) {
-                    self.didSelectedSubItemAction(indexPath);
-                }
-            };
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            return cell;
-        }
-    }
-    else if (indexPath.section == 1 && self.Comordertype != TerminationOrder) {
+//        if (self.Comordertype != TerminationOrder){
+//            amountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"amountCell"];
+//            if(cell==nil){
+//                cell = (amountCell*)[[self.amountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
+//                
+//            }
+//            
+//            if ([[self.items objectForKeySafe: @"orderCreator"] length] == 0) {
+//                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",@""];
+//            }
+//            else
+//            {
+//                cell.nameLab.text = [NSString stringWithFormat:@"制单人:%@",[self.items objectForKeySafe:@"orderCreator"]];
+//            }
+//            
+//            
+//            NSString* custName= [self.items objectForKeySafe:@"custName"];
+//            DLog(@"wxy -custName = %@",custName);
+//            if (custName.length != 0) {
+//                custName = [custName substringToIndex:custName.length - 1];
+//            }
+//            else
+//            {
+//                custName = @"";
+//            }
+//            cell.priceLab.text = [NSString stringWithFormat:@"会员:%@*",custName];
+////            if (custName.length > 8) {
+//////                NSMutableString * string = [custName mutableCopy];
+//////                [string insertString:@"    " atIndex:10];
+//////                custName = [string copy];
+////                cell.priceLab.textAlignment = NSTextAlignmentLeft;
+////            }
+////            UILabel *pricelab = [[UILabel alloc] initWithFrame:CGRectZero];
+////            pricelab.font = FONT(13);
+////            pricelab.textColor = UIColorFromRGB(0xBCBCBC);
+////            pricelab.numberOfLines = 0; // 最关键的一句
+////            CGSize size = CGSizeMake(110,2000);
+////            //计算实际frame大小，并将label的frame变成实际大小
+////            CGSize labelsize = [custName sizeWithFont:FONT(13) constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap];
+////            pricelab.frame = CGRectMake(SCREEN_WIDTH - 10 -labelsize.width, 5, labelsize.width, labelsize.height);
+////            pricelab.text = [NSString stringWithFormat:@"%@*",custName];
+////            [cell.contentView addSubview:pricelab];
+////            
+////            size = CGSizeMake(40,2000);
+////            //计算实际frame大小，并将label的frame变成实际大小
+////            NSString* name = @"会员:";
+////            CGSize labelsize1 = [name sizeWithFont:FONT(13) constrainedToSize:size lineBreakMode:UILineBreakModeWordWrap];
+//////            cell.MemberLab.frame = CGRectZero;
+////            UILabel* MemberLab = [[UILabel alloc] initWithFrame:CGRectZero];
+////            MemberLab.frame = CGRectMake(SCREEN_WIDTH - labelsize1.width -labelsize.width - 10, 5, labelsize1.width , labelsize1.height);
+////            MemberLab.text = name;
+////            MemberLab.font = FONT(13);
+////            MemberLab.textColor = UIColorFromRGB(0xBCBCBC);
+////            [cell.contentView addSubview:MemberLab];
+//            
+//            
+//            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//            return cell;
+//        }
+//        else
+//        {
+//            AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
+//            if(cell==nil){
+//                cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
+//                
+//            }
+//            cell.picktype = PickUpTypeStop;
+//            cell.height = self.m_height;
+//            [cell setupAllOrderView:self.items];
+//            cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
+//                if (self.didSelectedSubItemAction) {
+//                    self.didSelectedSubItemAction(indexPath);
+//                }
+//            };
+//            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+//            return cell;
+//        }
+//    }
+//    else if (indexPath.section == 1 && self.Comordertype != TerminationOrder) {
         AllOrdersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AllOrdersCell"];
         if(cell==nil){
             cell = (AllOrdersCell*)[[self.AllOrdersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
-        cell.picktype = PickUpTypeFinish;
+        if (self.Comordertype == TerminationOrder)
+        {
+            cell.picktype = PickUpTypeStop;
+        }
+        else
+        {
+            cell.picktype = PickUpTypeFinish;
+        }
+        
         cell.height = self.m_height;
         [cell setupAllOrderView:self.items];
         cell.didSelectedSubItemAction=^(NSIndexPath* indexPath){
@@ -298,22 +343,14 @@
             }
             cell.orderpriceBlock = ^(NSMutableDictionary *dict)
             {
-                self.ChangePriceDict = [dict copy];
+                self.ChangePriceDict = dict;
             };
             cell.receivableNameLab.text =@"应退金额:";
             cell.actualNameLab.text = @"实退金额:";
-            cell.returnPrice = [NSString stringWithFormat:@"%.2f",[[self.items objectForKeySafe:@"orderAmountWth"] floatValue] ];
-            cell.receivableLab.text =[NSString stringWithFormat:@"￥%.2f",[[self.items objectForKeySafe:@"orderFactAmountWth"] doubleValue]] ;
+            cell.returnPrice = [[self.ChangePriceDict objectForKeySafe:@"orderAmount"] substringFromIndex:1];
             
-            if (self.isfrist) {
-                self.isfrist = NO;
-                cell.actualtext.text = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKeySafe:@"orderFactAmountWth"] doubleValue]] ;
-            }
-            else
-            {
-                cell.actualtext.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
-            }
-            
+            cell.receivableLab.text =[self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
+            cell.actualtext.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
             
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -356,10 +393,11 @@
     }
     else
     {
-        if (indexPath.section == 0) {
-            return 40;
-        }
-        else if (indexPath.section == 1) {
+//        if (indexPath.section == 0) {
+//            return 40;
+//        }
+//        else
+            if (indexPath.section == 0) {
             return self.m_height;
         }
         return 90;
@@ -457,8 +495,12 @@
         if (success) {
 //            [MMProgressHUD dismiss];
             self.items = [data objectForKeySafe:@"order"] ;
+            NSString* AmountWth = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKey:@"orderAmountWth"]  floatValue]];
+            NSString* FactAmountWth = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKey:@"orderFactAmountWth"]  floatValue]];
+            [self.ChangePriceDict setValue: AmountWth forKey:@"orderAmount"];
+            [self.ChangePriceDict setValue: FactAmountWth forKey:@"orderFactAmount"];
             if (self.Comordertype == TerminationOrder){
-                self.m_height = ([[weakSelf.items objectForKeySafe:@"productList"] count] + 1)*65 - 5 ;
+                self.m_height = ([[weakSelf.items objectForKeySafe:@"productList"] count] + 1)*65 - 5 - 30  ;
             }
             else{
                 weakSelf.m_height = ([[weakSelf.items objectForKeySafe:@"productList"] count] + 1)*65 - 5 + 35;
@@ -548,8 +590,8 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObjectSafe:[ConfigManager sharedInstance].shopId forKey:@"shopId"];
     [param setObjectSafe:[dict objectForKeySafe:@"orderId"] forKey:@"orderId"];
-    UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
-    [param setObjectSafe:[textfield.text substringFromIndex:1] forKey:@"factAmount"];
+//    UITextField* textfield = (UITextField*)[self.view viewWithTag:1011];
+    [param setObjectSafe:[[self.ChangePriceDict objectForKeySafe:@"orderFactAmount"] substringFromIndex:1] forKey:@"factAmount"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
         DLog(@"data = %@ msg = %@",[data objectForKeySafe:@"datas"],[data objectForKeySafe:@"msg"]);
@@ -559,6 +601,7 @@
             
             ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
             ConfirmOrderView.Confirmsaletype = SaleTypeStopOrder;
+            ConfirmOrderView.returnType = self.m_returnType;
             ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%@",[dict objectForKeySafe:@"orderId"]];
             [self.navigationController pushViewController:ConfirmOrderView animated:YES];
 //            [self.navigationController popViewControllerAnimated:YES];

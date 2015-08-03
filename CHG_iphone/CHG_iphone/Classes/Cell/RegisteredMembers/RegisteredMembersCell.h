@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "JKCountDownButton.h"
 @interface RegisteredMembersCell : UITableViewCell<UITextFieldDelegate>
-@property(nonatomic,weak)IBOutlet UITextField* iphoneField;
-@property(nonatomic,weak)IBOutlet UITextField* nameField;
-@property(nonatomic,weak)IBOutlet UITextField* codeField;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* iphoneField;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* nameField;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* codeField;
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property (nonatomic, copy) ShowInfoAlert didshowInfo;
 @property (nonatomic, copy) GetCheckCode didGetCode;

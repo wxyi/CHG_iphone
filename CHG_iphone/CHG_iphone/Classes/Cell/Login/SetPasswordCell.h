@@ -12,9 +12,9 @@
 
 @interface SetPasswordCell : UITableViewCell<UITextFieldDelegate>
 @property(nonatomic,weak)IBOutlet UIView* bgView;
-@property(nonatomic,weak)IBOutlet UITextField* setpasswordField;
-@property(nonatomic,weak)IBOutlet UITextField* confirmpasswordfield;
-@property(nonatomic,weak)IBOutlet UITextField* Verificationfield;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* setpasswordField;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* confirmpasswordfield;
+@property(nonatomic,weak)IBOutlet NoCopyTextField* Verificationfield;
 @property (weak, nonatomic) IBOutlet JKCountDownButton *countDownXib;
 @property (nonatomic, copy) BaseViewSkipAction didSkipSubItem;
 @property (nonatomic, copy) GetCheckCode didGetCode;

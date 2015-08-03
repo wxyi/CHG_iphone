@@ -70,9 +70,13 @@
 //        goodNum = [[self.allitems objectForKeySafe:@"getGoodsNum"]intValue];
 //    }
 //    else
-    if(self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop)
+    if(self.picktype == PickUpTypeFinish  )
     {
         goodNum = [[dict objectForKeySafe:@"quantity"] intValue];
+    }
+    else if (self.picktype == PickUpTypeStop)
+    {
+        goodNum = [[dict objectForKeySafe:@"remainQuantity"] intValue];
     }
     else
     {
@@ -86,7 +90,7 @@
         
     }
     
-    if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0 && self.picktype != PickUpTypeDidNot) {
+    if ([[dict objectForKeySafe:@"returnQuantity"] intValue] != 0 && self.picktype != PickUpTypeDidNot && self.picktype != PickUpTypeStop) {
         cell.returnCountlab.text = [NSString stringWithFormat:@"已退%d件",[[dict objectForKeySafe:@"returnQuantity"] intValue]];
     }
         cell.countlab.text = [NSString stringWithFormat:@"x %d",goodNum ];
@@ -121,16 +125,27 @@
     if (self.picktype == PickUpTypeStop) {
         return 30;
     }
+    
     return 60;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+    if (self.picktype == PickUpTypeFinish) {
+        return 1;
+    }
     return 30;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
     //    v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//    if (self.picktype != PickUpTypeFinish) {
+//        v_header.backgroundColor = UIColorFromRGB(0xdddddd);
+//    }
+//    else
+//    {
+//        
+//    }
     v_header.backgroundColor = [UIColor clearColor];
     
 //    UILabel *line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 5)];
@@ -141,46 +156,65 @@
     namelab.textAlignment = NSTextAlignmentLeft;
     namelab.font = FONT(13);
     namelab.textColor = UIColorFromRGB(0x878787);
-    if (self.picktype == PickUpTypeFinish  || self.picktype == PickUpTypeStop) {
+    namelab.text = [NSString stringWithFormat:@"订单编号:%d",[[self.allitems objectForKeySafe:@"orderId"] intValue]];
+    if (/*self.picktype == PickUpTypeFinish  || */self.picktype == PickUpTypeStop) {
         namelab.text = @"商品";
-    }
-    else if(self.picktype == PickUpTypeDidNot)
-    {
-        namelab.text = @"未提商品";
+        v_header.backgroundColor = UIColorFromRGB(0xdddddd);
     }
     else
     {
-        namelab.text = @"已提商品";
+        namelab.text = [NSString stringWithFormat:@"订单编号:%d",[[self.allitems objectForKeySafe:@"orderId"] intValue]];
     }
+//    else if(self.picktype == PickUpTypeDidNot)
+//    {
+//        namelab.text = @"未提商品";
+//    }
+//    else
+//    {
+//        namelab.text = @"已提商品";
+//    }
     
     [v_header addSubview:namelab];
     
     if (self.picktype != PickUpTypeStop) {
-        UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
-        orderstatus.textAlignment = NSTextAlignmentRight;
-        orderstatus.font = FONT(13);
-        orderstatus.textColor = UIColorFromRGB(0x878787);
-        if (self.picktype != PickUpTypeFinish)
-        {
-            orderstatus.text = [NSString stringWithFormat:@"制单人:%@",[self.allitems objectForKeySafe:@"orderCreator"]];;
-        }
-        [v_header addSubview:orderstatus];
+//        UILabel* orderstatus = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, CGRectGetWidth(self.bounds)-20, 30)];
+//        orderstatus.textAlignment = NSTextAlignmentRight;
+//        orderstatus.font = FONT(13);
+//        orderstatus.textColor = UIColorFromRGB(0x878787);
+//        if (self.picktype != PickUpTypeFinish)
+//        {
+//            orderstatus.text = [NSString stringWithFormat:@"制单人:%@",[self.allitems objectForKeySafe:@"orderCreator"]];;
+//        }
+//        [v_header addSubview:orderstatus];
         
         //    NSDictionary* dict = [self.items objectAtIndex:section] ;
         UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
         datelab.textAlignment = NSTextAlignmentLeft;
         datelab.font = FONT(13);
         datelab.textColor = UIColorFromRGB(0x878787);;
-        datelab.text = [self.allitems objectForKeySafe:@"orderDate"];
+//        datelab.text = [self.allitems objectForKeySafe:@"orderDate"];
+        datelab.text = [NSString stringWithFormat:@"制单人:%@",[self.allitems objectForKeySafe:@"orderCreator"]];
         [v_header addSubview:datelab];
         
         
-        UILabel* Seriallab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
+        UILabel* Seriallab = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2, 30, (SCREEN_WIDTH-20)/2, 30)];
+        Seriallab.numberOfLines = 0;
         Seriallab.textAlignment = NSTextAlignmentRight;
         Seriallab.font = FONT(13);
         Seriallab.textColor = UIColorFromRGB(0x878787);;
-        Seriallab.text = [NSString stringWithFormat:@"订单编号:%d",[[self.allitems objectForKeySafe:@"orderId"] intValue]];
-        
+//        Seriallab.text = [NSString stringWithFormat:@"订单编号:%d",[[self.allitems objectForKeySafe:@"orderId"] intValue]];
+        NSString* custName= [self.allitems objectForKeySafe:@"custName"];
+        DLog(@"wxy -custName = %@",custName);
+        if (custName.length != 0) {
+            custName = [custName substringToIndex:custName.length - 1];
+        }
+        else
+        {
+            custName = @"";
+        }
+//        cell.priceLab.text = [NSString stringWithFormat:@"会员:%@*",custName];
+
+        Seriallab.text = [NSString stringWithFormat:@"会员:%@*",custName];
         [v_header addSubview:Seriallab];
 
     }
@@ -189,6 +223,9 @@
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
+    if (self.picktype == PickUpTypeFinish) {
+        return nil;
+    }
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
     v_footer.backgroundColor = [UIColor clearColor];
 //    UILabel* goodscountlab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 30)];
@@ -209,13 +246,23 @@
             count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] intValue];
         }
     }
-    else
+    else if(self.picktype == PickUpTypeFinish)
     {
         for (int i = 0; i< [productList count]; i++) {
             count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"quantity"] intValue];
         }
     }
-    
+    else
+    {
+        for (int i = 0; i< [productList count]; i++) {
+            count += [[[productList objectAtIndexSafe:i] objectForKeySafe:@"remainQuantity"] intValue];
+        }
+    }
+    if (count == 0) {
+        UIImageView* line = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 1)];
+        line.backgroundColor = UIColorFromRGB(0xdddddd);
+        [v_footer addSubview:line];
+    }
     
     NSString* string = [NSString stringWithFormat:@"共%ld件商品",(long)count];
     NSRange rangeOfstart = [string rangeOfString:[NSString stringWithFormat:@"%ld",(long)count]];

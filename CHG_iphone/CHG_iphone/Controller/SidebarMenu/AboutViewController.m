@@ -134,7 +134,7 @@
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
     
     
-    UIImageView* logoimage = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-80)/2, 10, 80, 80)];
+    UIImageView* logoimage = [[UIImageView alloc] initWithFrame:CGRectMake((SCREEN_WIDTH-60)/2, 20, 60, 60)];
 //    logoimage.layer.masksToBounds =YES;
     
 //    logoimage.layer.cornerRadius =40;
@@ -152,8 +152,8 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(20, 40, SCREEN_WIDTH-40, 30)];
-    title.text = @"客服热线:400-8008-404";
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(30, 42, SCREEN_WIDTH-60, 30)];
+    title.text = @"客服热线:400-820-1137";
     title.textColor = UIColorFromRGB(0x878787);
     title.textAlignment = NSTextAlignmentLeft;
     [v_footer addSubview:title];
@@ -175,7 +175,7 @@
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleDimensions;
-    label.frame = CGRectInset(self.view.bounds, 20, 70);
+    label.frame = CGRectInset(self.view.bounds, 30, 70);
     label.font = [UIFont fontWithName:@"Optima-Regular" size:17];
     label.textColor = UIColorFromRGB(0x878787);
     label.delegate = self;

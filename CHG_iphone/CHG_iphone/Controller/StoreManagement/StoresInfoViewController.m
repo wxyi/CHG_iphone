@@ -14,10 +14,12 @@
 #import "StoreCell.h"
 #import "KGModal.h"
 #import "QRCodeGenerator.h"
+#import "StoreManageSubCell.h"
 @interface StoresInfoViewController ()
 @property UINib* StoreManagementNib;
 @property UINib* StoreManageNib;
 @property UINib* StoreNib;
+@property UINib* StoreManageSubNib;
 @end
 
 @implementation StoresInfoViewController
@@ -35,12 +37,13 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    
+    self.ispush = NO;
     if (self.stAlert.length != 0) {
         [SGInfoAlert showInfo:self.stAlert
                       bgColor:[[UIColor blackColor] CGColor]
@@ -72,15 +75,19 @@
 //    rect.size.height = SCREEN_HEIGHT - 40;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    
+    self.tableview.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 45);
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
-    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableview.showsVerticalScrollIndicator = NO;
     [NSObject setExtraCellLineHidden:self.tableview];
     self.StoreManagementNib = [UINib nibWithNibName:@"StoreManagementCell" bundle:nil];
     self.StoreManageNib = [UINib nibWithNibName:@"StoreManageCell" bundle:nil];
     self.StoreNib = [UINib nibWithNibName:@"StoreCell" bundle:nil];
+    
+    self.StoreManageSubNib = [UINib nibWithNibName:@"StoreManageSubCell" bundle:nil];
+    
+    
     
 //    rect = self.addbtn.frame;
 //    rect.origin.y = SCREEN_HEIGHT - 40;
@@ -96,15 +103,34 @@
     
     [self becomeFirstResponder];
     
-    UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-//    if ([config.Roles isEqualToString:@"SHOPLEADER"])
-//    {
-//        
-//    }
-    self.addbtn.userInteractionEnabled=NO;
-    self.addbtn.backgroundColor = UIColorFromRGB(0x878787);
-    self.addshopperbtn.userInteractionEnabled=NO;
-    self.addshopperbtn.backgroundColor = UIColorFromRGB(0x878787);
+    self.config = [[SUHelper sharedInstance] currentUserConfig];
+
+    self.addbtn.frame = CGRectMake(10, SCREEN_HEIGHT -42, (SCREEN_WIDTH -30)/2, 40);
+    self.addshopperbtn.frame = CGRectMake(SCREEN_WIDTH/2 + 5, SCREEN_HEIGHT -42, (SCREEN_WIDTH -30)/2, 40);
+
+    if ([self.config.Roles isEqualToString:@"SHOPLEADER"])
+    {
+
+        self.addbtn.hidden = YES;
+//        self.addshopperbtn.hidden = YES;
+        CGRect rect = self.addshopperbtn.frame;
+        rect.size.width = SCREEN_WIDTH -20;
+        rect.origin.x = 10;
+        self.addshopperbtn.frame = rect;
+        self.addshopperbtn.userInteractionEnabled=NO;
+        self.addshopperbtn.backgroundColor = UIColorFromRGB(0x878787);
+    }
+    else
+    {
+        self.addbtn.userInteractionEnabled=NO;
+        self.addbtn.backgroundColor = UIColorFromRGB(0x878787);
+        self.addshopperbtn.userInteractionEnabled=NO;
+        self.addshopperbtn.backgroundColor = UIColorFromRGB(0x878787);
+//        self.addbtn.hidden = NO;
+//        self.addshopperbtn.hidden = NO;
+        
+    }
+    
     
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -174,59 +200,84 @@
     }
     else
     {
-        StoreManageCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StoreManageCell"];
-        if(cell== nil){
-            cell = (StoreManageCell*)[[self.StoreManageNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
+        if ([self.config.Roles isEqualToString:@"SHOPLEADER"] && indexPath.section == 1)
+        {
+            StoreManageSubCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StoreManageSubCell"];
+            if(cell== nil){
+                cell = (StoreManageSubCell*)[[self.StoreManageSubNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
+                
+            }
             
-        }
-
-        
-        NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section ];
-        if ([[dict objectForKeySafe: @"positionId"] intValue] == 2) {
+            
+            NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section ];
             cell.positionlab.text = @"店长";
             
             cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
-            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-            if ([config.Roles isEqualToString:@"SHOPLEADER"]) {
-                cell.Disablebtn.hidden = YES;
-//                cell.Disablebtn.userInteractionEnabled=NO;
-//                cell.Disablebtn.alpha=0.4;
-            }
-        }
-        else{
-            cell.positionlab.text = @"导购";
-            cell.icon.image = [UIImage imageNamed:@"icon_shopping_guide.png"];
-        }
-        cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
-        cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
-        cell.CardNumlab.text = [dict objectForKeySafe:@"idCardNumber"];
-        cell.IndexPath = indexPath;
-        WEAKSELF
-        cell.didselectDisable = ^(NSIndexPath* indexPath){
-        
-            NSString * info ;
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
             
-            if ([[dict objectForKeySafe:@"positionId"] intValue] == 2 ) {
-                info = @"是否确认停用此店长";
+            cell.CardNumlab.text = [dict objectForKeySafe:@"idCardNumber"];
+            
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
+
+        }
+        else
+        {
+            StoreManageCell *cell=[tableView dequeueReusableCellWithIdentifier:@"StoreManageCell"];
+            if(cell== nil){
+                cell = (StoreManageCell*)[[self.StoreManageNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
+                
+            }
+            
+            
+            NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section ];
+            if ([[dict objectForKeySafe: @"positionId"] intValue] == 2) {
+                cell.positionlab.text = @"店长";
+                
+                cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
+                UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+                if ([config.Roles isEqualToString:@"SHOPLEADER"]) {
+                    cell.Disablebtn.hidden = YES;
+                    //                cell.Disablebtn.userInteractionEnabled=NO;
+                    //                cell.Disablebtn.alpha=0.4;
+                }
             }
             else{
-                info = @"是否确认停用此导购";
+                cell.positionlab.text = @"导购";
+                cell.icon.image = [UIImage imageNamed:@"icon_shopping_guide.png"];
             }
-            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:info message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
-                DLog(@"否");
-                [self httpSetSellerStatus:indexPath];
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
+            cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
+            cell.CardNumlab.text = [dict objectForKeySafe:@"idCardNumber"];
+            cell.IndexPath = indexPath;
+            WEAKSELF
+            cell.didselectDisable = ^(NSIndexPath* indexPath){
                 
-            } otherButtonBlock:^{
-                DLog(@"是");
+                NSString * info ;
                 
-            }];
-            
-            [self.stAlertView show];
+                if ([[dict objectForKeySafe:@"positionId"] intValue] == 2 ) {
+                    info = @"是否确认停用此店长?";
+                }
+                else{
+                    info = @"是否确认停用此导购?";
+                }
+                weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:info message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+                    DLog(@"否");
+                    [self httpSetSellerStatus:indexPath];
+                    
+                } otherButtonBlock:^{
+                    DLog(@"是");
+                    
+                }];
+                
+                [self.stAlertView show];
+                
+                
+            };
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            return cell;
 
-            
-        };
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+        }
     }
     
     
@@ -243,7 +294,15 @@
         }
         return 100;
     }
-    return 145;
+    else
+    {
+        if ([self.config.Roles isEqualToString:@"SHOPLEADER"] && indexPath.section == 1)
+        {
+            return 110;
+        }
+        return 145;
+    }
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -350,19 +409,20 @@
             }
             else
             {
-                UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
-                if (![config.Roles isEqualToString:@"SHOPLEADER"]) {
-                    self.addbtn.userInteractionEnabled=YES;
-                    self.addbtn.backgroundColor = UIColorFromRGB(0x171c61);
-                    
-                    
-                }
-                
-//                self.addbtn.alpha=0.4;
+                self.addbtn.userInteractionEnabled=YES;
+                self.addbtn.backgroundColor = UIColorFromRGB(0x171c61);
             }
+            
+//            UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
+//            if (![config.Roles isEqualToString:@"SHOPLEADER"]) {
+//                self.addbtn.userInteractionEnabled=NO;
+//                self.addbtn.backgroundColor = UIColorFromRGB(0x171c61);
+//                
+////                self.addshopperbtn.userInteractionEnabled=YES;
+////                self.addshopperbtn.backgroundColor = UIColorFromRGB(0x171c61);
+//            }
             self.addshopperbtn.userInteractionEnabled=YES;
             self.addshopperbtn.backgroundColor = UIColorFromRGB(0x171c61);
-            
             DLog(@"self.items = %@",self.items);
             [self.tableview reloadData];
         }
@@ -428,15 +488,28 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0&& indexPath.row == 0) {
-        StoresDetailsViewController* StoresDetailsView = [[StoresDetailsViewController alloc] initWithNibName:@"StoresDetailsViewController" bundle:nil];
-        StoresDetailsView.storesDict = self.shopinfo;
-        [self.navigationController pushViewController:StoresDetailsView animated:YES];
+        
+        if (!self.ispush) {
+            self.ispush = YES;
+            StoresDetailsViewController* StoresDetailsView = [[StoresDetailsViewController alloc] initWithNibName:@"StoresDetailsViewController" bundle:nil];
+            StoresDetailsView.storesDict = self.shopinfo;
+            [self.navigationController pushViewController:StoresDetailsView animated:YES];
+        }
+        
+//        [self performSelector:@selector(timeEnough) withObject:nil afterDelay:2.0]; //使用延时进行限制。
     }
+    
+}
+- (void) timeEnough
+{
+    
     
 }
 -(void)showQrCode:(NSString*)strqr
 {
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewHide)];
+    [contentView addGestureRecognizer:tapGestureRecognizer];
     contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UIImageView* image = [[UIImageView alloc] initWithFrame:contentView.frame];
     
@@ -449,7 +522,11 @@
     modal.showCloseButton = NO;
     [modal showWithContentView:contentView andAnimated:YES];
 }
-
+-(void)viewHide
+{
+    DLog(@"隐藏");
+    [[KGModal sharedInstance] hide];
+}
 -(void)httpSetSellerStatus:(NSIndexPath*)indexpath
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];

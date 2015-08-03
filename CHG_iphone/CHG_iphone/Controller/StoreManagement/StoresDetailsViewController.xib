@@ -87,7 +87,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w0b-8h-eOR">
-                            <rect key="frame" x="285" y="2" width="25" height="35"/>
+                            <rect key="frame" x="290" y="2" width="25" height="35"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="35" id="QFe-aT-n12"/>
                                 <constraint firstAttribute="width" constant="25" id="yRl-f9-qaK"/>
@@ -115,7 +115,7 @@
                         <constraint firstItem="604-Wg-WU2" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="40" id="Azw-SH-jwV"/>
                         <constraint firstItem="604-Wg-WU2" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" id="LRI-8w-t2y"/>
                         <constraint firstItem="wea-YI-QKy" firstAttribute="leading" secondItem="A1G-9h-TgG" secondAttribute="leading" constant="10" id="M3G-nR-eqo"/>
-                        <constraint firstAttribute="trailing" secondItem="w0b-8h-eOR" secondAttribute="trailing" constant="10" id="MTn-4f-ZS4"/>
+                        <constraint firstAttribute="trailing" secondItem="w0b-8h-eOR" secondAttribute="trailing" constant="5" id="MTn-4f-ZS4"/>
                         <constraint firstAttribute="trailing" secondItem="604-Wg-WU2" secondAttribute="trailing" id="NvS-rV-jf5"/>
                         <constraint firstItem="xre-41-O4k" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="40" id="RvF-lp-OIh"/>
                         <constraint firstItem="w0b-8h-eOR" firstAttribute="top" secondItem="A1G-9h-TgG" secondAttribute="top" constant="2" id="Ub3-7I-fLw"/>

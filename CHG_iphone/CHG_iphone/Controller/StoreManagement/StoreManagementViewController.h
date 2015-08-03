@@ -11,5 +11,6 @@
 @interface StoreManagementViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,weak)IBOutlet UITableView* tableview;
 @property(nonatomic,strong)NSArray* items;
+@property(nonatomic,assign)BOOL ispush;
 -(IBAction)goSkipStore:(id)sender;
 @end

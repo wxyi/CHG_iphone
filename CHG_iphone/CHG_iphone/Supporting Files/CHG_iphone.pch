@@ -46,6 +46,6 @@
     #import "Utils.h"
     #import "UIViewController+APSafeTransition.h"
     #import "YRClassSafeCategory.h"
-    
+    #import "NoCopyTextField.h"
 #define _AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_
 #endif
