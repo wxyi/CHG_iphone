@@ -16,4 +16,5 @@
 @property(nonatomic,assign)SaleType orderSaletype;
 @property(nonatomic,copy)OrderPrice orderpriceBlock;
 @property(nonatomic,assign)double allprice;
+@property (nonatomic, copy) GetCheckCode didGetCode;
 @end

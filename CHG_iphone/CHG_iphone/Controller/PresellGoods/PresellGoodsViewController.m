@@ -573,7 +573,7 @@
         OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
         OrderCounterView.orderSaletype = self.orderSaletype;
         OrderCounterView.m_returnType = self.m_returnType;
-        
+        OrderCounterView.skiptype = self.skiptype;
         
         
         if (self.orderSaletype == SaleTypeSellingGoods ) {
@@ -927,6 +927,7 @@
             OrderCounterViewController* OrderCounterView = [[OrderCounterViewController alloc] initWithNibName:@"OrderCounterViewController" bundle:nil];
             OrderCounterView.orderSaletype = self.orderSaletype;
             OrderCounterView.m_returnType = self.m_returnType;
+            OrderCounterView.skiptype = self.skiptype;
             OrderCounterView.items = self.items;
             OrderCounterView.OrderDate = self.OrderDate;
             OrderCounterView.priceDict = [data objectForKeySafe:@"datas"];
@@ -976,8 +977,14 @@
 -(void)loopDrawLine
 {
     self.scanner = [ZBarImageScanner new];
-
-    self.readerView =  [[ZBarReaderView alloc] initWithImageScanner: self.scanner];
+//    [self.scanner setSymbology: 0
+//                   config: ZBAR_CFG_X_DENSITY
+//                       to: 2];
+//    [self.scanner setSymbology: 0
+//                   config: ZBAR_CFG_Y_DENSITY
+//                       to: 2];
+    self.readerView =  [[ZBarReaderView alloc]
+                                    initWithImageScanner: self.scanner];
     self.readerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 220);
     self.readerView.tag = 101;
     self.readerView.readerDelegate = self;
@@ -1160,7 +1167,7 @@
 }
 -(void)httpScanInfo
 {
-    DLog(@"data = %@",[NSObject currentTime]);
+//    DLog(@"data = %@",[NSObject currentTime]);
 
     self.isfinish = YES;
 }
@@ -1183,7 +1190,7 @@
         case 0:
         {
             [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认删除此商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 
                 NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];

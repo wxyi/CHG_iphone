@@ -42,7 +42,7 @@
 }
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:@"账户与安全",@"检测新版本",@"关于我们", nil];
+    self.items = [NSArray arrayWithObjects:@"账户与安全",/*@"版本更新",*/@"关于我们", nil];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
@@ -80,32 +80,37 @@
     [cell.contentView addSubview:title];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-    if (indexPath.row == 1) {
-        
-        
-        NSString* appVersion = [self.dict objectForKeySafe: @"appVersion"];
-        if (appVersion.length != 0) {
-            NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
-            //        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
-            badgeView2.backgroundColor = [UIColor clearColor];
-            //        badgeView2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"checkversion_bg.png"] ];
-            badgeView2.text = appVersion;
-            badgeView2.tintColor = [UIColor clearColor];
-            
-            badgeView2.textColor = [UIColor whiteColor];
-            [badgeView2 sizeToFit];
-            badgeView2.frame = CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -30, 10, badgeView2.frame.size.width, badgeView2.frame.size.height);
-            
-            
-            
-            
-            UIImageView * bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-badgeView2.frame.size.width -40, 10, badgeView2.frame.size.width+10, badgeView2.frame.size.height)];
-            bgImage.image = [UIImage imageNamed:@"checkversion_bg.png"];
-            [cell.contentView addSubview:bgImage];
-            [cell.contentView addSubview:badgeView2];
-        }
-        
-    }
+//    if (indexPath.row == 1) {
+//        
+//        
+//        NSString* appVersion = [self.dict objectForKeySafe: @"appVersion"];
+//        if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion] && appVersion.length != 0) {
+//            UILabel* textlab = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-120, 0, 90, 40)];
+//            textlab.text = @"有新版本可用";
+//            textlab.font = FONT(15);
+//            textlab.textColor = UIColorFromRGB(0x878787);
+//            [cell.contentView addSubview:textlab];
+//            NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
+//            //        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
+//            badgeView2.backgroundColor = [UIColor clearColor];
+//            //        badgeView2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"checkversion_bg.png"] ];
+//            badgeView2.text = @"new";
+//            badgeView2.tintColor = [UIColor clearColor];
+//            
+//            badgeView2.textColor = [UIColor whiteColor];
+//            [badgeView2 sizeToFit];
+//            badgeView2.frame = CGRectMake(SCREEN_WIDTH-120-badgeView2.frame.size.width , 7, badgeView2.frame.size.width, badgeView2.frame.size.height);
+//            
+//            
+//            
+//            
+//            UIImageView * bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-120-badgeView2.frame.size.width , 7, badgeView2.frame.size.width, badgeView2.frame.size.height)];
+//            bgImage.image = [UIImage imageNamed:@"checkversion_bg.png"];
+//            [cell.contentView addSubview:bgImage];
+//            [cell.contentView addSubview:badgeView2];
+//        }
+//        
+//    }
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -143,15 +148,23 @@
         AccountAndSecurityViewController* AccountAndSecurityView= [[AccountAndSecurityViewController alloc] initWithNibName:@"AccountAndSecurityViewController" bundle:nil];
         [self.navigationController pushViewController:AccountAndSecurityView animated:YES];
     }
-    else if (indexPath.row == 1)
-    {
-        
-        VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
-        VersionUpdateView.items = self.dict;
-        [self.navigationController pushViewController:VersionUpdateView animated:YES];
-        
-    }
-    else if(indexPath.row == 2)
+//    else if (indexPath.row == 1)
+//    {
+//        NSString* url = [self.dict objectForKeySafe:@"url"];
+//        NSString *str = [url substringToIndex:url.length -2];
+//        
+//        
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",str,@"1019667891"]]];
+////        if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion])
+////        {
+////            VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
+////            VersionUpdateView.items = self.dict;
+////            [self.navigationController pushViewController:VersionUpdateView animated:YES];
+////        }
+//        
+//        
+//    }
+    else
     {
         AboutViewController* AboutView = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
         [self.navigationController pushViewController:AboutView animated:YES];

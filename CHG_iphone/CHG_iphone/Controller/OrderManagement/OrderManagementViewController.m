@@ -149,41 +149,56 @@
     self.AllOrdersView.BtnSkipSelect =^(NSInteger tag,NSDictionary* dictionary){
         NSString* strtag = [NSString stringWithFormat:@"%d",tag];
         NSInteger ntag = [[strtag substringToIndex:2] intValue];
-         DLog(@"dictionary = %@",dictionary);
-        if (ntag == 10) {
-            DLog(@"详情");
-            if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
-                DLog(@"未完成订单")
-                PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
-                PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
-                PickGoodsView.m_returnType = weakSelf.m_returnType;
-                PickGoodsView.skiptype = SkipfromOrderManage;
-                [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+        
+        NSString* orderid = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+        if ([orderid integerValue] != 0) {
+            DLog(@"dictionary = %@",dictionary);
+            if (ntag == 10) {
+                DLog(@"详情");
+                
+                
+                if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
+                    DLog(@"未完成订单")
+                    
+                    PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+                    PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+                    PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
+                    PickGoodsView.m_returnType = weakSelf.m_returnType;
+                    PickGoodsView.skiptype = SkipfromOrderManage;
+                    [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+                }
+                else
+                {
+                    DLog(@"已完成订单");
+                    CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                    CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+                    CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+                    CompletedOrderDetailsView.Comordertype = detailsOrder;
+                    CompletedOrderDetailsView.skiptype = SkipfromOrderManage;
+                    CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
+                    [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+                    
+                }
             }
-            else
-            {
-                DLog(@"已完成订单");
+            else if (ntag == 11) {
+                DLog(@"终止定单")
                 CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
                 CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
                 CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
-                CompletedOrderDetailsView.Comordertype = detailsOrder;
-                CompletedOrderDetailsView.skiptype = SkipfromOrderManage;
+                CompletedOrderDetailsView.Comordertype = TerminationOrder;
+                CompletedOrderDetailsView.skiptype = SkipFromPopPage;
                 CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
                 [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
                 
+                
             }
         }
-        else if (ntag == 11) {
-            DLog(@"终止定单")
-            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
-            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
-            CompletedOrderDetailsView.Comordertype = TerminationOrder;
-            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
-            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
-            
-            
+        else
+        {
+            [SGInfoAlert showInfo:@"网络异常"
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:weakSelf.view
+                         vertical:0.7];
         }
 
     };
@@ -204,51 +219,61 @@
         DLog(@"dictionary = %@",dictionary);
         NSString* strtag = [NSString stringWithFormat:@"%d",tag];
         NSInteger ntag = [[strtag substringToIndex:2] intValue];
+        
+        
         if (ntag == 10 ) {
-            if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
-                DLog(@"未完成订单")
-                PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
-                PickGoodsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
-                PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
-                PickGoodsView.m_returnType = weakSelf.m_returnType;
-                [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+            NSString* orderid = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+            if ([orderid integerValue] != 0) {
+            
+                if ([[dictionary objectForKeySafe:@"orderStatus"] intValue] == 0) {
+                    DLog(@"未完成订单")
+                    NSString* orderid = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+                    PickGoodsViewController* PickGoodsView = [[PickGoodsViewController alloc] initWithNibName:@"PickGoodsViewController" bundle:nil];
+                    PickGoodsView.strOrderId = orderid;
+                    PickGoodsView.ManagementTyep = weakSelf.ManagementTyep;
+                    PickGoodsView.m_returnType = weakSelf.m_returnType;
+                    [weakSelf.navigationController pushViewController:PickGoodsView animated:YES];
+                    
+                }
+                else
+                {
+                    DLog(@"已完成订单");
+                    CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                    CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+                    CompletedOrderDetailsView.Comordertype = detailsOrder;
+                    CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
+                    [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+                    
+                }
             }
             else
             {
-                DLog(@"已完成订单");
-                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
-                CompletedOrderDetailsView.Comordertype = detailsOrder;
-                CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
-                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
-                
+                [SGInfoAlert showInfo:@"网络异常"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:weakSelf.view
+                             vertical:0.7];
             }
 
         }
         else if (ntag == 11) {
             DLog(@"终止定单")
-            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
-            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
-            CompletedOrderDetailsView.Comordertype = TerminationOrder;
-            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
-            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
-//            weakSelf.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确定终止订单" message:@"" cancelButtonTitle:@"否" otherButtonTitle:@"是" cancelButtonBlock:^{
-//                DLog(@"否");
-//                
-//                
-//            } otherButtonBlock:^{
-//                DLog(@"是");
-//                //            [self httpCancelOrder :dict];
-//                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-//                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[dictionary[@"orderId"] intValue]];
-//                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
-//                CompletedOrderDetailsView.Comordertype = TerminationOrder;
-//                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
-//            }];
-//            
-//            [weakSelf.stAlertView show];
-            
+            NSString* orderid = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+            if ([orderid integerValue] != 0) {
+                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+                CompletedOrderDetailsView.skiptype = SkipFromPopPage;
+                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+                CompletedOrderDetailsView.Comordertype = TerminationOrder;
+                CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
+                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            }
+            else
+            {
+                [SGInfoAlert showInfo:@"网络异常"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:weakSelf.view
+                             vertical:0.7];
+            }
         }
         else
         {
@@ -293,12 +318,24 @@
         if (ntag == 10) {
             DLog(@"订单详情");
             DLog(@"已完成订单");
-            CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
-            CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
-            CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
-            CompletedOrderDetailsView.Comordertype = detailsOrder;
-            CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
-            [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            NSString* orderid = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+            if ([orderid integerValue] != 0) {
+            
+                CompletedOrderDetailsViewController* CompletedOrderDetailsView = [[CompletedOrderDetailsViewController alloc] initWithNibName:@"CompletedOrderDetailsViewController" bundle:nil];
+                CompletedOrderDetailsView.strOrderId = [NSString stringWithFormat:@"%d",[[dictionary objectForKeySafe:@"orderId"] intValue]];
+                CompletedOrderDetailsView.ManagementTyep = weakSelf.ManagementTyep;
+                CompletedOrderDetailsView.Comordertype = detailsOrder;
+                CompletedOrderDetailsView.m_returnType = weakSelf.m_returnType;
+                [weakSelf.navigationController pushViewController:CompletedOrderDetailsView animated:YES];
+            }
+            else
+            {
+                [SGInfoAlert showInfo:@"网络异常"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:weakSelf.view
+                             vertical:0.7];
+            }
+            
 
         }
         else if(tag == 1312)

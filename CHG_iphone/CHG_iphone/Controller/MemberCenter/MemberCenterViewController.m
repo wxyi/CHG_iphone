@@ -23,14 +23,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"会员中心";
-    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
-    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
-    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
-    
-    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+//    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+//    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+//    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+//    
+//    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
 //     Do any additional setup after loading the view from its nib.
     [self setupView];
 }
@@ -151,7 +151,7 @@
     DLog(@"会员识别");
     IdentificationViewController* IdentificationView= [[IdentificationViewController alloc] initWithNibName:@"IdentificationViewController" bundle:nil];
     IdentificationView.m_MenuType = MenuTypeMemberCenter;
-    
+    IdentificationView.ordertype = OrderReturnTypeAMember;
     [self.navigationController pushViewController:IdentificationView animated:YES];
 }
 -(void)httpGetCustCenter

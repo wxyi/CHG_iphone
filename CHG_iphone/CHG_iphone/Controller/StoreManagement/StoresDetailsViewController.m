@@ -25,7 +25,7 @@
     
     
 }
-@property(nonatomic,weak)IBOutlet LMContainsLMComboxScrollView *bgScrollView;
+@property(nonatomic,weak)IBOutlet UIView *bgScrollView;
 @end
 
 @implementation StoresDetailsViewController
@@ -192,7 +192,7 @@
     self.address = [[AddressInfo alloc] initWithDictionary:[self.storesDict objectForKeySafe: @"address"]];
     self.locationField.text = self.address.strAddress;
     for (int i = 0 ; i < 3; i ++) {
-        UILabel *addlabel = [[UILabel alloc] initWithFrame:CGRectMake(90+ (SCREEN_WIDTH -120)/3 *i, 0, (SCREEN_WIDTH -120)/3, 40)];
+        UILabel *addlabel = [[UILabel alloc] initWithFrame:CGRectMake(90+ (SCREEN_WIDTH -120)/3 *i, 40, (SCREEN_WIDTH -120)/3, 40)];
         addlabel.lineBreakMode = NSLineBreakByClipping;
         if (i == 0) {
             addlabel.text = self.address.strProvinceName;
@@ -205,7 +205,7 @@
         {
             addlabel.text = self.address.strDistrictName;
         }
-        [self.bgScrollView addSubview:addlabel];
+        [self.view addSubview:addlabel];
     }
     [self searchCityByCityName];
 //    NSArray *keys = [NSArray arrayWithObjects:@"province",@"city",@"area", nil];

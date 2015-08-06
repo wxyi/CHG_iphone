@@ -175,7 +175,7 @@
     [param setObjectSafe:@"" forKey:@"babyBirthday"];
     [param setObjectSafe:@"" forKey:@"babyRelation"];
     [param setObjectSafe:@"" forKey:@"babyGender"];
-
+    [param setObjectSafe:@"0" forKey:@"isBabyInfo"];
     
     DLog(@"param = %@",param);
     

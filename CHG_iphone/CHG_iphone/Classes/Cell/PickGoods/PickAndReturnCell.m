@@ -49,10 +49,13 @@
 //        NSString* info;
 //        info = @"实退金额小于或等于应退金额";
         textField.text = self.receivableLab.text;
-        [SGInfoAlert showInfo:@"实退金额应小于应收金额"
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self
-                     vertical:0.7];
+        if (self.didGetCode) {
+            self.didGetCode(@"实退金额应小于应收金额");
+        }
+//        [SGInfoAlert showInfo:@"实退金额应小于应收金额"
+//                      bgColor:[[UIColor blackColor] CGColor]
+//                       inView:self
+//                     vertical:0.7];
     }
     else if([textField.text floatValue] <= 0)
     {

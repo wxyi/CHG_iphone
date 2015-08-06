@@ -24,7 +24,7 @@
                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KMk-Lm-6Tr">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KMk-Lm-6Tr">
                         <rect key="frame" x="0.0" y="24" width="320" height="1"/>
                         <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -38,8 +38,7 @@
                             <constraint firstAttribute="height" constant="51" id="iR3-A7-bji"/>
                             <constraint firstAttribute="width" constant="150" id="lSJ-0h-sns"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Njt-wp-eRb">
@@ -48,8 +47,7 @@
                             <constraint firstAttribute="height" constant="51" id="jSL-M2-zVH"/>
                             <constraint firstAttribute="width" constant="150" id="kVd-G5-Qff"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1td-qc-Z2v">
@@ -67,6 +65,7 @@
                     <constraint firstAttribute="bottom" secondItem="J1M-WA-v9l" secondAttribute="bottom" constant="-1" id="11x-lR-rTD"/>
                     <constraint firstAttribute="trailing" secondItem="KMk-Lm-6Tr" secondAttribute="trailing" id="Cbl-eL-rs7"/>
                     <constraint firstItem="J1M-WA-v9l" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Ld2-xu-SeB"/>
+                    <constraint firstItem="KMk-Lm-6Tr" firstAttribute="top" secondItem="Njt-wp-eRb" secondAttribute="top" id="MPX-ng-MlQ"/>
                     <constraint firstAttribute="trailing" secondItem="Njt-wp-eRb" secondAttribute="trailing" constant="10" id="Ng2-6K-1Ra"/>
                     <constraint firstItem="KMk-Lm-6Tr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Rhi-II-nfS"/>
                     <constraint firstAttribute="bottom" secondItem="Njt-wp-eRb" secondAttribute="bottom" constant="-1" id="XhE-8e-8km"/>

@@ -14,4 +14,5 @@
 @property(nonatomic,assign)OrderReturnType returnType;
 @property(nonatomic,strong)NSString* strOrderId;
 @property(nonatomic,strong)NSString* strfinish;
+@property (nonatomic,assign)SkipType skiptype;
 @end

@@ -188,11 +188,12 @@
 //        [v_header addSubview:orderstatus];
         
         //    NSDictionary* dict = [self.items objectAtIndex:section] ;
-        UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, SCREEN_WIDTH-20, 30)];
+        UILabel* datelab = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, (SCREEN_WIDTH-20)/2, 30)];
         datelab.textAlignment = NSTextAlignmentLeft;
         datelab.font = FONT(13);
         datelab.textColor = UIColorFromRGB(0x878787);;
 //        datelab.text = [self.allitems objectForKeySafe:@"orderDate"];
+        datelab.numberOfLines = 0;
         datelab.text = [NSString stringWithFormat:@"制单人:%@",[self.allitems objectForKeySafe:@"orderCreator"]];
         [v_header addSubview:datelab];
         
@@ -223,7 +224,7 @@
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (self.picktype == PickUpTypeFinish) {
+    if (self.picktype == PickUpTypeStop) {
         return nil;
     }
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];

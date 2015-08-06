@@ -43,6 +43,12 @@
 -(void)setupView
 {
     
+    
+    NSInteger count =  [[[SQLiteManager sharedInstance] getBankCodeDatas] count];
+    if (count == 0) {
+        [[SUHelper sharedInstance] GetBankCodeInfo];
+    }
+    
     self.items = [[NSMutableArray alloc] init];
     
     self.title = @"银行卡";

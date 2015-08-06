@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		27A02FF8FF9E75B8B06D1157 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FFC0609EA17E6E08581D28 /* libPods.a */; };
-		2E23855A1B6CD9B600714BEB /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */; };
 		2E307DA31B4C2CBA00E0ECD4 /* MyAccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA11B4C2CBA00E0ECD4 /* MyAccountCell.m */; };
 		2E307DA41B4C2CBA00E0ECD4 /* MyAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E307DA21B4C2CBA00E0ECD4 /* MyAccountCell.xib */; };
 		2E307DA81B4C303300E0ECD4 /* MyAccountPartnersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA61B4C303300E0ECD4 /* MyAccountPartnersCell.m */; };
@@ -36,6 +35,7 @@
 		2E547D361B1FF89500E148C2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D351B1FF89500E148C2 /* CoreVideo.framework */; };
 		2E547D381B1FF8A400E148C2 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D371B1FF8A400E148C2 /* libiconv.dylib */; };
 		2E5D0D3F1B66C04400A8B80F /* libPods-ZBarSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E5D0D3E1B66C04400A8B80F /* libPods-ZBarSDK.a */; };
+		2E714F641B7122E100BBA302 /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */; };
 		2E73EA571B28182000A62558 /* IdentUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E73EA551B28182000A62558 /* IdentUserInfoCell.m */; };
 		2E73EA581B28182000A62558 /* IdentUserInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E73EA561B28182000A62558 /* IdentUserInfoCell.xib */; };
 		2E7422B71B68B04C00E2F976 /* about_us_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E7422B61B68B04C00E2F976 /* about_us_icon.png */; };
@@ -127,6 +127,7 @@
 		2E9938F01B0DEE5A00870456 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9938EF1B0DEE5A00870456 /* QRCodeGenerator.m */; };
 		2EBAE8B31B4A5883002E1C39 /* MyUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */; };
 		2EBAF1431B4E7C3200CDAC1A /* PresellOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */; };
+		2EC0821F1B6FF17C00D53144 /* libPods-ZXing.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EC0821E1B6FF17C00D53144 /* libPods-ZXing.a */; };
 		2ED17ECF1B299BD000F96595 /* CompletedOrderDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */; };
 		2ED17ED01B299BD000F96595 /* CompletedOrderDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17ECE1B299BD000F96595 /* CompletedOrderDetailsViewController.xib */; };
 		2ED17EE01B2AE27700F96595 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17EDF1B2AE27700F96595 /* icon.png */; };
@@ -596,6 +597,7 @@
 		2EBAF1411B4E7C3200CDAC1A /* PresellOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresellOperation.h; sourceTree = "<group>"; };
 		2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresellOperation.m; sourceTree = "<group>"; };
 		2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BaiduMapAPI.framework; path = CHG_iphone/Vendor/BaiduMapAPI.framework; sourceTree = "<group>"; };
+		2EC0821E1B6FF17C00D53144 /* libPods-ZXing.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-ZXing.a"; path = "Pods/build/Debug-iphoneos/libPods-ZXing.a"; sourceTree = "<group>"; };
 		2ED17ECC1B299BD000F96595 /* CompletedOrderDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompletedOrderDetailsViewController.h; path = PickGoods/CompletedOrderDetailsViewController.h; sourceTree = "<group>"; };
 		2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompletedOrderDetailsViewController.m; path = PickGoods/CompletedOrderDetailsViewController.m; sourceTree = "<group>"; };
 		2ED17ECE1B299BD000F96595 /* CompletedOrderDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompletedOrderDetailsViewController.xib; path = PickGoods/CompletedOrderDetailsViewController.xib; sourceTree = "<group>"; };
@@ -1008,7 +1010,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E23855A1B6CD9B600714BEB /* BaiduMapAPI.framework in Frameworks */,
+				2E714F641B7122E100BBA302 /* BaiduMapAPI.framework in Frameworks */,
+				2EC0821F1B6FF17C00D53144 /* libPods-ZXing.a in Frameworks */,
 				2E5D0D3F1B66C04400A8B80F /* libPods-ZBarSDK.a in Frameworks */,
 				2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */,
 				2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */,
@@ -1031,6 +1034,7 @@
 		190B73523040FED61E1E3449 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2EC0821E1B6FF17C00D53144 /* libPods-ZXing.a */,
 				2E5D0D3E1B66C04400A8B80F /* libPods-ZBarSDK.a */,
 				2E6F82D31B667F3D00C0D725 /* libPods-ZXing.a */,
 				2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */,
@@ -2776,6 +2780,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "ca35f17c-f06e-4801-8fde-3d42f8ac469a";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2810,6 +2815,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "ca35f17c-f06e-4801-8fde-3d42f8ac469a";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2822,7 +2828,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhaoguang zheng (3REG4YRAP2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2910,7 +2916,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: zhaoguang zheng (3REG4YRAP2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

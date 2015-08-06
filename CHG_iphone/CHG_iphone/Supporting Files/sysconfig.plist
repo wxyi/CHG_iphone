@@ -7,12 +7,12 @@
 	<key>PubServer_HOST_BJ</key>
 	<string>http://111.202.33.27:9080/chg/api/app/v1/</string>
 	<key>clientVersion</key>
-	<string>V0.0.18</string>
+	<string>v0.19</string>
 	<key>PubServer_Token_ShH</key>
 	<string>https://crm.chgry.com/chg/</string>
 	<key>PubServer_Token_BJ</key>
 	<string>http://111.202.33.27:9080/chg/</string>
 	<key>BelongsArea</key>
-	<string>0</string>
+	<string>1</string>
 </dict>
 </plist>

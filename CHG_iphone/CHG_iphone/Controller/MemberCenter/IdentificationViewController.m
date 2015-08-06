@@ -584,7 +584,7 @@
 //                    self.isfinish = YES;
                     UITextField* texield = (UITextField*)[self.view viewWithTag:100];
                     RegisteredMembersViewController* RegisteredMembersView = [[RegisteredMembersViewController alloc] initWithNibName:@"RegisteredMembersViewController" bundle:nil];
-                    RegisteredMembersView.ordertype = OrderReturnTypeAMember;
+                    RegisteredMembersView.ordertype = self.ordertype;
                     RegisteredMembersView.strIphone = texield.text;
                     [self.navigationController pushViewController:RegisteredMembersView animated:YES];
                     //                UITextField* textfield = (UITextField*)[self.view viewWithTag:100];

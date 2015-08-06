@@ -20,7 +20,7 @@
 @property(nonatomic,assign)OrderReturnType m_returnType;
 @property(nonatomic,strong)NSDictionary* ChangePriceDict;
 @property(nonatomic,strong)NSMutableArray* countitem;
-
+@property (nonatomic,assign)SkipType skiptype;
 @property(nonatomic,strong)NSMutableDictionary* OrderDate;
 
 @property(nonatomic,assign)BOOL isfrist;

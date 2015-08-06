@@ -395,7 +395,7 @@
             {
                 IdentificationView.m_MenuType = MenuTypeOrderManagement;
             }
-            
+            IdentificationView.ordertype = OrderReturnTypeHomePage;
             [self.navigationController pushViewController:IdentificationView animated:YES];
             
             break;

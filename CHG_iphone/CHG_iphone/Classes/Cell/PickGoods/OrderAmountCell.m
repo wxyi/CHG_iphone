@@ -69,10 +69,9 @@
         {
             info = @"实退金额小于或等于应退金额";
         }
-        [SGInfoAlert showInfo:info
-                      bgColor:[[UIColor blackColor] CGColor]
-                       inView:self
-                     vertical:0.7];
+        if (self.didGetCode) {
+            self.didGetCode(info);
+        }
     }
 
    

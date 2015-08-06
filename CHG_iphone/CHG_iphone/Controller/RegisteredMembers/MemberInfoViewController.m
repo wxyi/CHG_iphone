@@ -29,6 +29,13 @@
     }
     
     
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"跳过" style:UIBarButtonItemStylePlain target:(UINavigationController*)self.navigationController action:@selector(RegisteSuccessful)];
     // Do any additional setup after loading the view from its nib.
@@ -300,7 +307,7 @@
     [param setObjectSafe:self.strBabyBirthday forKey:@"babyBirthday"];
     [param setObjectSafe:self.strBabyRelation forKey:@"babyRelation"];
     [param setObjectSafe:self.strBabyGender forKey:@"babyGender"];
-    
+    [param setObjectSafe:@"1" forKey:@"isBabyInfo"];
     
     DLog(@"param = %@",param);
     

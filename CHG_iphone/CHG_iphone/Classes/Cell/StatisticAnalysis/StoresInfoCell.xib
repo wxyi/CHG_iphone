@@ -42,11 +42,11 @@
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJq-zI-khM">
-                        <rect key="frame" x="200" y="24" width="110" height="30"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJq-zI-khM">
+                        <rect key="frame" x="200" y="24" width="110" height="40"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="110" id="Lk8-yG-46l"/>
-                            <constraint firstAttribute="height" constant="30" id="lHn-Xs-Qgu"/>
+                            <constraint firstAttribute="height" constant="40" id="lHn-Xs-Qgu"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="highlightedColor"/>

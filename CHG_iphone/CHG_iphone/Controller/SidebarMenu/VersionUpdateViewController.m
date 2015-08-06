@@ -79,21 +79,22 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return SCREEN_WIDTH - 60;
+    return SCREEN_HEIGHT - 60;
 }
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH - 60)];
-//    v_footer.backgroundColor = [UIColor lightGrayColor];
-//    v_footer.backgroundColor = UIColorFromRGB(0xdddddd);
+    UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 60)];
+    v_footer.backgroundColor = [UIColor clearColor];
+//    v_footer.backgroundColor = uicolo;
+    v_footer.backgroundColor = UIColorFromRGB(0xdddddd);
     UILabel* titlelab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
     titlelab.text = @"新特性";
     titlelab.textAlignment = NSTextAlignmentCenter;
-    titlelab.textColor = [UIColor grayColor];
+    titlelab.textColor = [UIColor blackColor];
     [v_footer addSubview:titlelab];
     
     UITextView* textview = [[UITextView alloc] initWithFrame:CGRectMake(30, 40, SCREEN_WIDTH-60, 120)];
-    textview.textColor = [UIColor grayColor];//设置textview里面的字体颜色
+    textview.textColor = [UIColor blackColor];//设置textview里面的字体颜色
     
     textview.font = [UIFont fontWithName:@"Arial" size:15.0];//设置字体名字和字体大小
 

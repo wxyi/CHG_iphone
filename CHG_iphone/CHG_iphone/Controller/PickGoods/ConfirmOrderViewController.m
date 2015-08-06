@@ -50,7 +50,14 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
     if (self.returnType == OrderReturnTypeAMember) {
-        [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        if (self.skiptype == SkipFromPopPage ) {
+            [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
     }
     else if (self.returnType == OrderReturnTypeQueryOrder)
     {
@@ -78,6 +85,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(void)gotoOrderManagement
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[OrderManagementViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
 }
 -(void)gobacktoQuery
 {

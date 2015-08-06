@@ -18,7 +18,7 @@
     BMKGeoCodeSearchOption *_geocodeSearchOption;
 }
 @property(nonatomic,weak)IBOutlet UILabel* storeNamelab;
-@property(nonatomic,weak)IBOutlet UILabel* locationField;
+@property(nonatomic,strong)IBOutlet UILabel* locationField;
 @property(nonatomic,strong)NSDictionary* storesDict;
 @property(nonatomic,strong)AddressInfo* address;
 @property(nonatomic,strong)NSDictionary* addcode;

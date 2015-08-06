@@ -9,7 +9,7 @@
 #import "RegisteredMembersViewController.h"
 #import "RegisteredMembersCell.h"
 #import "MemberInfoViewController.h"
-
+#import "MemberCenterViewController.h"
 #import "UIViewController+REFrostedViewController.h"
 
 
@@ -32,7 +32,7 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
     if (self.ordertype == OrderReturnTypeAMember) {
-        [leftButton addTarget:(CHGNavigationController*)self.navigationController action:@selector(gobackMemberCenter) forControlEvents:UIControlEventTouchUpInside];
+        [leftButton addTarget:self action:@selector(gobackMemberCenter) forControlEvents:UIControlEventTouchUpInside];
     }
     else
     {
@@ -58,7 +58,15 @@
         UITextField* textfield = (UITextField*)[self.view viewWithTag:1010+i];
         [textfield resignFirstResponder];
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+-(void)gobackMemberCenter
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[MemberCenterViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
 }
 -(void)setupView
 {

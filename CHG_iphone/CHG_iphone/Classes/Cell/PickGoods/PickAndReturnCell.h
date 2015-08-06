@@ -16,4 +16,5 @@
 @property(nonatomic,strong)NSString* returnPrice;
 @property(nonatomic,assign)BOOL isHaveDian;
 @property(nonatomic,copy)OrderPrice orderpriceBlock;
+@property (nonatomic, copy) GetCheckCode didGetCode;
 @end

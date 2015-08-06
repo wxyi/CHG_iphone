@@ -18,6 +18,8 @@
 #import "ConfirmOrderViewController.h"
 #import "OrderManagementViewController.h"
 #import "OrderQuryViewController.h"
+#import "SuccessRegisterViewController.h"
+#import "successfulIdentifyViewController.h"
 @interface CompletedOrderDetailsViewController ()
 @property UINib* OrdersGoodsNib;
 @property UINib* OrderAmountNib;
@@ -50,15 +52,34 @@
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     if (self.skiptype == SkipfromOrderManage) {
+
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+        
     }
-    else if (self.m_returnType == OrderReturnTypeQueryOrder)
-    {
-        [leftButton addTarget:self action:@selector(gobacktoQuery) forControlEvents:UIControlEventTouchUpInside];
-    }
+    
     else
     {
-        [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        if (self.m_returnType == OrderReturnTypeHomePage)
+        {
+            [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if (self.m_returnType == OrderReturnTypeQueryOrder)
+        {
+            [leftButton addTarget:self action:@selector(gobacktoQuery) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if (self.m_returnType == OrderReturnTypeAMember) {
+            
+            [leftButton addTarget:self action:@selector(gobacktoSuccessFulldentify) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if (self.m_returnType == OrderReturnTypePopPage)
+        {
+            [leftButton addTarget:self action:@selector(gobackRegistePage) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else
+        {
+            [leftButton addTarget:self action:@selector(gotoOrderManagement) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
     }
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
@@ -69,6 +90,23 @@
 {
     for (UIViewController *temp in self.navigationController.viewControllers) {
         if ([temp isKindOfClass:[OrderQuryViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
+-(void)gobacktoSuccessFulldentify
+{
+    
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[successfulIdentifyViewController class]]) {
+            [self.navigationController popToViewController:temp animated:YES];
+        }
+    }
+}
+-(void)gobackRegistePage
+{
+    for (UIViewController *temp in self.navigationController.viewControllers) {
+        if ([temp isKindOfClass:[SuccessRegisterViewController class]]) {
             [self.navigationController popToViewController:temp animated:YES];
         }
     }
@@ -184,6 +222,7 @@
     }
     if (self.Comordertype == TerminationOrder) {
         
+        self.tableview.bounces = NO;
         [self.returnBtn setTitle:@"确认终止订单" forState:UIControlStateNormal];
     }
     
@@ -343,15 +382,21 @@
             }
             cell.orderpriceBlock = ^(NSMutableDictionary *dict)
             {
-                self.ChangePriceDict = dict;
+                [self.ChangePriceDict setObject:[dict objectForKeySafe:@"orderFactAmount"] forKey:@"orderFactAmount"];
             };
             cell.receivableNameLab.text =@"应退金额:";
             cell.actualNameLab.text = @"实退金额:";
             cell.returnPrice = [[self.ChangePriceDict objectForKeySafe:@"orderAmount"] substringFromIndex:1];
             
-            cell.receivableLab.text =[self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
+            cell.receivableLab.text =[self.ChangePriceDict objectForKeySafe:@"orderAmount"];
             cell.actualtext.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
-            
+            cell.didGetCode = ^(NSString* checkcode)
+            {
+                [SGInfoAlert showInfo:checkcode
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            };
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -374,7 +419,13 @@
             {
                 [cell.Receivedlab setEnabled:NO];
             }
-            
+            cell.didGetCode = ^(NSString* checkcode)
+            {
+                [SGInfoAlert showInfo:checkcode
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            };
             cell.favorablelab.text = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKeySafe:@"orderDiscount"] doubleValue]] ;
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
@@ -495,7 +546,7 @@
         if (success) {
 //            [MMProgressHUD dismiss];
             self.items = [data objectForKeySafe:@"order"] ;
-            NSString* AmountWth = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKey:@"orderAmountWth"]  floatValue]];
+            NSString* AmountWth = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKey:@"orderFactAmountWth"]  floatValue]];
             NSString* FactAmountWth = [NSString stringWithFormat:@"￥%.2f",[[self.items objectForKey:@"orderFactAmountWth"]  floatValue]];
             [self.ChangePriceDict setValue: AmountWth forKey:@"orderAmount"];
             [self.ChangePriceDict setValue: FactAmountWth forKey:@"orderFactAmount"];
@@ -602,6 +653,7 @@
             ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
             ConfirmOrderView.Confirmsaletype = SaleTypeStopOrder;
             ConfirmOrderView.returnType = self.m_returnType;
+            ConfirmOrderView.skiptype = self.skiptype;
             ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%@",[dict objectForKeySafe:@"orderId"]];
             [self.navigationController pushViewController:ConfirmOrderView animated:YES];
 //            [self.navigationController popViewControllerAnimated:YES];

@@ -310,7 +310,13 @@
 //                [self.OrderDate setObject:[Discount substringFromIndex:1] forKey:@"DiscountAmount"];
                 
             };
-            
+            cell.didGetCode = ^(NSString* checkcode)
+            {
+                [SGInfoAlert showInfo:checkcode
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            };
             if (self.orderSaletype == SaleTypePickingGoods) {
                 cell.receivableNameLab.text =@"应收金额:";
                 cell.actualNameLab.text = @"实收金额:";
@@ -379,7 +385,13 @@
 //                allPrice += price * count;
 //                
 //            }
-
+            cell.didGetCode = ^(NSString* checkcode)
+            {
+                [SGInfoAlert showInfo:checkcode
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            };
             cell.orderpriceBlock = ^(NSMutableDictionary *dict)
             {
                 self.ChangePriceDict = [dict copy];
@@ -534,7 +546,7 @@
         case 0:
         {
             [cell hideUtilityButtonsAnimated:YES];
-            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否删除此商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
+            self.stAlertView = [[STAlertView alloc] initWithTitle:@"是否确认删除此商品?" message:@"" cancelButtonTitle:@"是" otherButtonTitle:@"否" cancelButtonBlock:^{
                 DLog(@"否");
                 NSMutableArray* tmArray = [self.items mutableCopy];
                 NSIndexPath *cellIndexPath = [self.tableview indexPathForCell:cell];
@@ -731,6 +743,7 @@
                 ConfirmOrderViewController* ConfirmOrderView = [[ConfirmOrderViewController alloc] initWithNibName:@"ConfirmOrderViewController" bundle:nil];
                 ConfirmOrderView.Confirmsaletype = self.orderSaletype;
                 ConfirmOrderView.returnType = self.m_returnType;
+                ConfirmOrderView.skiptype = self.skiptype;
                 ConfirmOrderView.strOrderId = [NSString stringWithFormat:@"%d",[[[data objectForKeySafe:@"datas"] objectForKeySafe:@"orderId"] intValue]];
                 [self.navigationController pushViewController:ConfirmOrderView animated:YES];
             }

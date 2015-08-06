@@ -114,9 +114,9 @@
     
     
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftButton setFrame:CGRectMake(10, 35, 50, 24)];
+    [leftButton setFrame:CGRectMake(10, 35, 60, 24)];
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftButton setImage:[UIImage imageNamed:@"btn_black_back.png"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_back_blue.png"] forState:UIControlStateNormal];
 //    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     //    [leftButton setBackgroundColor:[UIColor blackColor]];
     [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];

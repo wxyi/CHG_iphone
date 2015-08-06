@@ -82,7 +82,7 @@
 //    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
     //设置一个行高上限
     NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:15]};
-    CGSize size = [text boundingRectWithSize:CGSizeMake(300, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;//    [label setFrame:CGRectMake:(0,0, labelsize.width, labelsize.height)];
+    CGSize size = [text boundingRectWithSize:CGSizeMake(SCREEN_WIDTH - 20, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;//    [label setFrame:CGRectMake:(0,0, labelsize.width, labelsize.height)];
     label.frame = CGRectMake(10, 20, size.width, size.height);
     label.text = text;
     [cell.contentView addSubview:label];
@@ -152,12 +152,21 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView* v_footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
-    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(30, 42, SCREEN_WIDTH-60, 30)];
+    
+    
+    
+    NSString *text = @"版权所有:上海晨冠乳业有限公司";
+    //    UIFont *font = [UIFont fontWithName:@"Arial" size:12];
+    //设置一个行高上限
+    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:17]};
+    CGSize size = [text boundingRectWithSize:CGSizeMake(SCREEN_WIDTH - 20, 0) options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+    
+    
+    UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake((SCREEN_WIDTH - size.width)/2, 42, size.width, 30)];
     title.text = @"客服热线:400-820-1137";
     title.textColor = UIColorFromRGB(0x878787);
     title.textAlignment = NSTextAlignmentLeft;
     [v_footer addSubview:title];
-    
 //    UILabel* title1 = [[UILabel alloc] initWithFrame:CGRectMake(20, 70, SCREEN_WIDTH-40, 30)];
 //    title1.text = @"官方网站:www.chgry.com";
 //    title1.textColor = UIColorFromRGB(0x878787);
@@ -175,7 +184,7 @@
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleDimensions;
-    label.frame = CGRectInset(self.view.bounds, 30, 70);
+    label.frame = CGRectInset(self.view.bounds, (SCREEN_WIDTH - size.width)/2, 70);
     label.font = [UIFont fontWithName:@"Optima-Regular" size:17];
     label.textColor = UIColorFromRGB(0x878787);
     label.delegate = self;
