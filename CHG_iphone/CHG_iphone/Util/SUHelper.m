@@ -50,8 +50,15 @@ static SUHelper *sSharedInstance;
         }
         
     }
+    
+    if (![ConfigManager sharedInstance].PubServer_HELP) {
+        [ConfigManager sharedInstance].PubServer_HELP = [dictionary objectForKeySafe:@"PubServer_HELP"];
+        
+    }
     DLog(@"PubServer_URL = %@",[ConfigManager sharedInstance].PubServer_URL);
     DLog(@"PubServer_Token = %@",[ConfigManager sharedInstance].PubServer_TokenUrl);
+    DLog(@"PubServer_HELP = %@",[ConfigManager sharedInstance].PubServer_HELP);
+    
     [ConfigManager sharedInstance].deviceName = [self deviceString];
     [ConfigManager sharedInstance].identifier =  [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     

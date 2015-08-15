@@ -56,7 +56,9 @@
         [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
         
     }
-    
+    else if (self.skiptype == SkipFromPopPage ) {
+        [leftButton addTarget:(CHGNavigationController *)self.navigationController action:@selector(gobacktoSuccess) forControlEvents:UIControlEventTouchUpInside];
+    }
     else
     {
         if (self.m_returnType == OrderReturnTypeHomePage)

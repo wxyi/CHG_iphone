@@ -72,5 +72,15 @@
 		<key>type</key>
 		<string>6</string>
 	</dict>
+	<dict>
+		<key>icon</key>
+		<string>btn_help_center.png</string>
+		<key>title</key>
+		<string>帮助中心</string>
+		<key>level</key>
+		<string>4</string>
+		<key>type</key>
+		<string>7</string>
+	</dict>
 </array>
 </plist>

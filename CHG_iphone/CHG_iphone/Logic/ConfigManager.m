@@ -10,6 +10,7 @@
 
 @implementation ConfigManager
 @dynamic PubServer_URL;
+@dynamic PubServer_HELP;
 @dynamic PubServer_TokenUrl;
 @dynamic sysVersion;
 @dynamic deviceName;

@@ -458,4 +458,12 @@
 {
     return [[ConfigManager sharedInstance].PubServer_URL stringByAppendingString:@"validateCheckCode"];
 }
+
+/**
+ *  4.2.2.5.	帮助中心
+ */
++(NSString*) ApiGetHelps
+{
+    return [[ConfigManager sharedInstance].PubServer_HELP stringByAppendingString:@"getHelps"];
+}
 @end

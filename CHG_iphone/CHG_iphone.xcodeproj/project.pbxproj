@@ -359,6 +359,17 @@
 		2EDD3D781B1F61B800D19EA0 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDD3D771B1F61B800D19EA0 /* SystemConfiguration.framework */; };
 		2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDD3D791B1F61C400D19EA0 /* CoreGraphics.framework */; };
 		2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EDD3D7B1B1F61CC00D19EA0 /* Security.framework */; };
+		2EE0158E1B78AF2100E2719B /* HelpCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0158C1B78AF2000E2719B /* HelpCenterViewController.m */; };
+		2EE0158F1B78AF2100E2719B /* HelpCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EE0158D1B78AF2000E2719B /* HelpCenterViewController.xib */; };
+		2EE015951B78B13E00E2719B /* HelpCenterCollCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE015931B78B13E00E2719B /* HelpCenterCollCell.m */; };
+		2EE015961B78B13E00E2719B /* HelpCenterCollCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EE015941B78B13E00E2719B /* HelpCenterCollCell.xib */; };
+		2EE0159A1B78CC5700E2719B /* HelpDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE015981B78CC5700E2719B /* HelpDetailsViewController.m */; };
+		2EE0159B1B78CC5700E2719B /* HelpDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EE015991B78CC5700E2719B /* HelpDetailsViewController.xib */; };
+		2EE015A01B78D50900E2719B /* icon_boss1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE0159C1B78D50900E2719B /* icon_boss1.png */; };
+		2EE015A11B78D50900E2719B /* icon_leader.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE0159D1B78D50900E2719B /* icon_leader.png */; };
+		2EE015A21B78D50900E2719B /* icon_partners.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE0159E1B78D50900E2719B /* icon_partners.png */; };
+		2EE015A31B78D50900E2719B /* icon_seller.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE0159F1B78D50900E2719B /* icon_seller.png */; };
+		2EE015A51B79924D00E2719B /* btn_help_center.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE015A41B79924D00E2719B /* btn_help_center.png */; };
 		2EE089301B39833500A1B02B /* NSDownNetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0892F1B39833500A1B02B /* NSDownNetImage.m */; };
 		2EE7E01D1B3EE86B006C5B70 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE7E01C1B3EE86B006C5B70 /* Utils.m */; };
 		2EE9F2481B214C89006EB46B /* registeredMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F2461B214C89006EB46B /* registeredMenuCell.m */; };
@@ -945,6 +956,20 @@
 		2EDD3D771B1F61B800D19EA0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		2EDD3D791B1F61C400D19EA0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2EDD3D7B1B1F61CC00D19EA0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		2EE0158B1B78AF2000E2719B /* HelpCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpCenterViewController.h; path = HelpCenter/HelpCenterViewController.h; sourceTree = "<group>"; };
+		2EE0158C1B78AF2000E2719B /* HelpCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpCenterViewController.m; path = HelpCenter/HelpCenterViewController.m; sourceTree = "<group>"; };
+		2EE0158D1B78AF2000E2719B /* HelpCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HelpCenterViewController.xib; path = HelpCenter/HelpCenterViewController.xib; sourceTree = "<group>"; };
+		2EE015921B78B13E00E2719B /* HelpCenterCollCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpCenterCollCell.h; path = Cell/HelpCenterCollCell.h; sourceTree = "<group>"; };
+		2EE015931B78B13E00E2719B /* HelpCenterCollCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpCenterCollCell.m; path = Cell/HelpCenterCollCell.m; sourceTree = "<group>"; };
+		2EE015941B78B13E00E2719B /* HelpCenterCollCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HelpCenterCollCell.xib; path = Cell/HelpCenterCollCell.xib; sourceTree = "<group>"; };
+		2EE015971B78CC5700E2719B /* HelpDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpDetailsViewController.h; path = HelpCenter/HelpDetailsViewController.h; sourceTree = "<group>"; };
+		2EE015981B78CC5700E2719B /* HelpDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HelpDetailsViewController.m; path = HelpCenter/HelpDetailsViewController.m; sourceTree = "<group>"; };
+		2EE015991B78CC5700E2719B /* HelpDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HelpDetailsViewController.xib; path = HelpCenter/HelpDetailsViewController.xib; sourceTree = "<group>"; };
+		2EE0159C1B78D50900E2719B /* icon_boss1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_boss1.png; sourceTree = "<group>"; };
+		2EE0159D1B78D50900E2719B /* icon_leader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_leader.png; sourceTree = "<group>"; };
+		2EE0159E1B78D50900E2719B /* icon_partners.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_partners.png; sourceTree = "<group>"; };
+		2EE0159F1B78D50900E2719B /* icon_seller.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_seller.png; sourceTree = "<group>"; };
+		2EE015A41B79924D00E2719B /* btn_help_center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_help_center.png; sourceTree = "<group>"; };
 		2EE0892E1B39833500A1B02B /* NSDownNetImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDownNetImage.h; sourceTree = "<group>"; };
 		2EE0892F1B39833500A1B02B /* NSDownNetImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDownNetImage.m; sourceTree = "<group>"; };
 		2EE7E01B1B3EE86B006C5B70 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -1233,6 +1258,7 @@
 		2E7D76C51B097CDB00222C1E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2EE015901B78AF3600E2719B /* HelpCenter */,
 				2EDC34FC1B4D4725008AB922 /* WelcomePage */,
 				2ED84C691B17F67F0086992D /* StatisticAnalysis */,
 				2ED84B741B1591880086992D /* PresellGoods */,
@@ -1716,6 +1742,7 @@
 		2ED84A901B12B8280086992D /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				2EE015911B78B0FF00E2719B /* HelpCenter */,
 				2ED4750F1B1C8802005543AC /* StoreManagement */,
 				2ED474AC1B18858D005543AC /* SidebarMenu */,
 				2ED474781B183FEC005543AC /* StatisticAnalysis */,
@@ -1779,6 +1806,11 @@
 		2ED84AA41B12BFE80086992D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2EE015A41B79924D00E2719B /* btn_help_center.png */,
+				2EE0159C1B78D50900E2719B /* icon_boss1.png */,
+				2EE0159D1B78D50900E2719B /* icon_leader.png */,
+				2EE0159E1B78D50900E2719B /* icon_partners.png */,
+				2EE0159F1B78D50900E2719B /* icon_seller.png */,
 				2E7422B81B6A27B000E2F976 /* btn_back_blue.png */,
 				2E7422B61B68B04C00E2F976 /* about_us_icon.png */,
 				2E503F5C1B5F91BA00ACBAFB /* checkversion_bg.png */,
@@ -2182,6 +2214,29 @@
 			path = JTImageButton;
 			sourceTree = "<group>";
 		};
+		2EE015901B78AF3600E2719B /* HelpCenter */ = {
+			isa = PBXGroup;
+			children = (
+				2EE0158B1B78AF2000E2719B /* HelpCenterViewController.h */,
+				2EE0158C1B78AF2000E2719B /* HelpCenterViewController.m */,
+				2EE0158D1B78AF2000E2719B /* HelpCenterViewController.xib */,
+				2EE015971B78CC5700E2719B /* HelpDetailsViewController.h */,
+				2EE015981B78CC5700E2719B /* HelpDetailsViewController.m */,
+				2EE015991B78CC5700E2719B /* HelpDetailsViewController.xib */,
+			);
+			name = HelpCenter;
+			sourceTree = "<group>";
+		};
+		2EE015911B78B0FF00E2719B /* HelpCenter */ = {
+			isa = PBXGroup;
+			children = (
+				2EE015921B78B13E00E2719B /* HelpCenterCollCell.h */,
+				2EE015931B78B13E00E2719B /* HelpCenterCollCell.m */,
+				2EE015941B78B13E00E2719B /* HelpCenterCollCell.xib */,
+			);
+			name = HelpCenter;
+			sourceTree = "<group>";
+		};
 		2EE9F26B1B21F227006EB46B /* KGModal */ = {
 			isa = PBXGroup;
 			children = (
@@ -2349,12 +2404,15 @@
 				2ED474F01B1C4D40005543AC /* AccountAndSecurityViewController.xib in Resources */,
 				2E761B531B2083950028FDF9 /* MemberMenuColCell.xib in Resources */,
 				2ED84AB01B12BFE80086992D /* image5.jpg in Resources */,
+				2EE0158F1B78AF2100E2719B /* HelpCenterViewController.xib in Resources */,
+				2EE015A31B78D50900E2719B /* icon_seller.png in Resources */,
 				2E4E413C1B57B425006E2A57 /* icon_1024.png in Resources */,
 				2EE9F2951B221F41006EB46B /* .gitkeep in Resources */,
 				2EFD84D11B43886600E5A915 /* btn_black_back.png in Resources */,
 				2ED17EE01B2AE27700F96595 /* icon.png in Resources */,
 				2ED4751E1B1D46F8005543AC /* AddShoppersViewController.xib in Resources */,
 				2ED474871B1844CA005543AC /* StoresInfoCell.xib in Resources */,
+				2EE015A11B78D50900E2719B /* icon_leader.png in Resources */,
 				2ED84C3C1B16A80C0086992D /* successfulIdentifyViewController.xib in Resources */,
 				2ED474E61B1C3A1D005543AC /* SettlementCell.xib in Resources */,
 				2E7422BE1B6A675400E2F976 /* StoreManageSubCell.xib in Resources */,
@@ -2362,6 +2420,7 @@
 				2ED84B791B15924F0086992D /* PresellGoodsViewController.xib in Resources */,
 				2ED84AF51B131C730086992D /* RegisteredMembersViewController.xib in Resources */,
 				2E307DA41B4C2CBA00E0ECD4 /* MyAccountCell.xib in Resources */,
+				2EE015961B78B13E00E2719B /* HelpCenterCollCell.xib in Resources */,
 				2E93B1501B343E1800B282FF /* mapapi.bundle in Resources */,
 				2EFD84C71B426AF500E5A915 /* btn_Member_order.png in Resources */,
 				2ED17EE81B300EEB00F96595 /* icon_register_man.png in Resources */,
@@ -2389,6 +2448,7 @@
 				2ED84AE91B130C860086992D /* LoginViewController.xib in Resources */,
 				2ED4748C1B18521A005543AC /* StatisticsCell.xib in Resources */,
 				2ED84AC51B12DC210086992D /* awardTotalAmountCell.xib in Resources */,
+				2EE015A01B78D50900E2719B /* icon_boss1.png in Resources */,
 				2E307DA91B4C303300E0ECD4 /* MyAccountPartnersCell.xib in Resources */,
 				2E7D77831B097CDC00222C1E /* Images.xcassets in Resources */,
 				2ED84C631B16ECA60086992D /* SuccessRegisterViewController.xib in Resources */,
@@ -2423,6 +2483,7 @@
 				2EDC35131B4D4D76008AB922 /* splash1.png in Resources */,
 				2E761B4E1B2082DE0028FDF9 /* MemberMenuCell.xib in Resources */,
 				2E7B0A461B1EF649007C78CA /* ConfirmOrderCell.xib in Resources */,
+				2EE015A21B78D50900E2719B /* icon_partners.png in Resources */,
 				2ED84A961B12B8800086992D /* PromoListCell.xib in Resources */,
 				2E7422B91B6A27B000E2F976 /* btn_back_blue.png in Resources */,
 				2ED84C271B15D5CD0086992D /* ResetPasswordViewController.xib in Resources */,
@@ -2442,6 +2503,7 @@
 				2ED474961B186C69005543AC /* GrowthCell.xib in Resources */,
 				2EDC35061B4D49C2008AB922 /* page_320.png in Resources */,
 				2EDC35071B4D49C2008AB922 /* page_640.png in Resources */,
+				2EE015A51B79924D00E2719B /* btn_help_center.png in Resources */,
 				2E4E41341B57B425006E2A57 /* icon_29.png in Resources */,
 				2ED84ACF1B12DF2B0086992D /* RewardsCell.xib in Resources */,
 				2EE9F2491B214C89006EB46B /* registeredMenuCell.xib in Resources */,
@@ -2449,6 +2511,7 @@
 				2ED84C371B15E72A0086992D /* IdentificationCell.xib in Resources */,
 				2ED474B11B1885D6005543AC /* BanKCardCell.xib in Resources */,
 				2ED17EE91B300EEB00F96595 /* icon_register_other.png in Resources */,
+				2EE0159B1B78CC5700E2719B /* HelpDetailsViewController.xib in Resources */,
 				2ED84C461B16B47A0086992D /* MemberInfoViewController.xib in Resources */,
 				2ED84AE31B12E94E0086992D /* MenuCollectionCell.xib in Resources */,
 				2ED17F2A1B3192B400F96595 /* MJRefresh.bundle in Resources */,
@@ -2509,6 +2572,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EE0158E1B78AF2100E2719B /* HelpCenterViewController.m in Sources */,
 				2EDC3A931B3A90E90080E9E5 /* IdentificationViewController.m in Sources */,
 				2ED17F1C1B3192B400F96595 /* MJRefreshAutoFooter.m in Sources */,
 				2E7EB5DB1B22F1C800D386C2 /* UIProgressView+AFNetworking.m in Sources */,
@@ -2604,6 +2668,7 @@
 				2ED84AA31B12BD3C0086992D /* UIImage+SplitImageIntoTwoParts.m in Sources */,
 				2ED474BF1B189738005543AC /* OCMaskedTextFieldView.m in Sources */,
 				2ED84C6D1B17F6FE0086992D /* StatisticAnalysisViewController.m in Sources */,
+				2EE0159A1B78CC5700E2719B /* HelpDetailsViewController.m in Sources */,
 				2E7422BD1B6A675400E2F976 /* StoreManageSubCell.m in Sources */,
 				2E7D78151B097CDC00222C1E /* HttpClient.m in Sources */,
 				2E761B521B2083950028FDF9 /* MemberMenuColCell.m in Sources */,
@@ -2705,6 +2770,7 @@
 				2E7EB5FC1B25879E00D386C2 /* MMRadialProgressView.m in Sources */,
 				2ED84C171B15C8B90086992D /* SetPasswordCell.m in Sources */,
 				2ED474901B186B18005543AC /* pinCell.m in Sources */,
+				2EE015951B78B13E00E2719B /* HelpCenterCollCell.m in Sources */,
 				2ED474F91B1C5DE2005543AC /* ForgetViewController.m in Sources */,
 				2ED17F2C1B3192B400F96595 /* UIScrollView+MJExtension.m in Sources */,
 				2E7EB5D31B22F1C800D386C2 /* AFURLRequestSerialization.m in Sources */,

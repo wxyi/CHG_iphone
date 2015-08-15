@@ -15,6 +15,11 @@
  */
 @property(nonatomic,assign) NSString * PubServer_URL;
 
+/**
+ *  帮助中心
+ */
+@property(nonatomic,assign) NSString * PubServer_HELP;
+
 
 /**
  *  获取token

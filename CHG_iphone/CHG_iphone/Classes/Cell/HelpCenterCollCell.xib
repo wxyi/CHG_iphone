@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HelpCenterCollCell">
+            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fZX-sm-42X">
+                        <rect key="frame" x="25" y="15" width="30" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="35" id="PEP-uj-aFk"/>
+                            <constraint firstAttribute="width" constant="30" id="gvZ-w2-c4b"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ff3-mO-clU">
+                        <rect key="frame" x="0.0" y="60" width="80" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="FZz-sZ-jKp"/>
+                            <constraint firstAttribute="width" constant="80" id="dSl-qr-Ssj"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vEl-mk-Zfd">
+                        <rect key="frame" x="79" y="0.0" width="1" height="80"/>
+                        <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="1" id="VNs-dx-qDV"/>
+                            <constraint firstAttribute="height" constant="80" id="YoH-gm-Y8P"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cel-mf-DV2">
+                        <rect key="frame" x="0.0" y="79" width="80" height="1"/>
+                        <color key="backgroundColor" red="0.86666666670000003" green="0.86666666670000003" blue="0.86666666670000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="gf6-ET-KcE"/>
+                            <constraint firstAttribute="width" constant="80" id="ipn-mt-8vS"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="cel-mf-DV2" secondAttribute="bottom" id="5oR-o4-wWe"/>
+                <constraint firstAttribute="trailing" secondItem="vEl-mk-Zfd" secondAttribute="trailing" id="6PC-hC-MKM"/>
+                <constraint firstAttribute="trailing" secondItem="cel-mf-DV2" secondAttribute="trailing" id="INh-g2-7M2"/>
+                <constraint firstAttribute="centerY" secondItem="fZX-sm-42X" secondAttribute="centerY" constant="7.5" id="LAz-w6-1PQ"/>
+                <constraint firstItem="cel-mf-DV2" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="NGD-KU-d2g"/>
+                <constraint firstItem="vEl-mk-Zfd" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="SBv-DH-xdR"/>
+                <constraint firstAttribute="bottom" secondItem="vEl-mk-Zfd" secondAttribute="bottom" id="TnH-Li-cOY"/>
+                <constraint firstAttribute="trailing" secondItem="Ff3-mO-clU" secondAttribute="trailing" id="bsW-zv-Qed"/>
+                <constraint firstItem="Ff3-mO-clU" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="gN1-iE-ULs"/>
+                <constraint firstItem="fZX-sm-42X" firstAttribute="centerX" secondItem="Ff3-mO-clU" secondAttribute="centerX" id="x0k-dB-Mkv"/>
+                <constraint firstItem="Ff3-mO-clU" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="60" id="xjw-Oi-KAP"/>
+            </constraints>
+            <connections>
+                <outlet property="icon" destination="fZX-sm-42X" id="mJf-WN-NLh"/>
+                <outlet property="titlelab" destination="Ff3-mO-clU" id="imh-X3-2uq"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

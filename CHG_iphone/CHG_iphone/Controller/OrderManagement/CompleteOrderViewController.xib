@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CompleteOrderViewController">
             <connections>
-                <outlet property="returnBtn" destination="mT3-HV-FKy" id="YTs-dr-JCw"/>
+                <outlet property="returnBtn" destination="KH0-UL-v34" id="KHg-LZ-K4V"/>
                 <outlet property="tableview" destination="2aA-Gq-6LD" id="mwn-lg-Bux"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,17 +17,14 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" tag="1312" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mT3-HV-FKy">
+                <button opaque="NO" tag="1312" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KH0-UL-v34">
                     <rect key="frame" x="0.0" y="528" width="320" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.090196078431372548" green="0.10980392156862745" blue="0.38039215686274508" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.090196078430000007" green="0.10980392160000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" title="退货">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
-                    <connections>
-                        <action selector="returnGoods:" destination="-1" eventType="touchDown" id="Kw6-yX-7Sl"/>
-                    </connections>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="5go-IC-0Qj">
                     <rect key="frame" x="0.0" y="528" width="320" height="1"/>

@@ -28,12 +28,23 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    DLog(@"self.navigationController.navigationBarHidden = %d",self.navigationController.navigationBarHidden);
+    UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
+    [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
+    
+    [leftButton addTarget:self action:@selector(goback) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton] ;
+    
     self.title = @"门店选择";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
-
+-(void)goback
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

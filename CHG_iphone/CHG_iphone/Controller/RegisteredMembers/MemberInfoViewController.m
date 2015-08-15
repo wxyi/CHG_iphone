@@ -254,11 +254,12 @@
     
     
     if ([self.strBabyRelation isEqualToString:@"母亲"]) {
-        self.strBabyRelation = @"FATHER";
+        self.strBabyRelation = @"MOTHER";
     }
     else if ([self.strBabyRelation isEqualToString:@"父亲"])
     {
-        self.strBabyRelation = @"MONTHER";
+        self.strBabyRelation = @"FATHER";
+        
     }
     else
     {
@@ -309,7 +310,7 @@
     [param setObjectSafe:self.strBabyGender forKey:@"babyGender"];
     [param setObjectSafe:@"1" forKey:@"isBabyInfo"];
     
-    DLog(@"param = %@",param);
+    DLog(@"param = %@ babyBirthday＝ %@",param,self.strBabyBirthday);
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
@@ -360,8 +361,8 @@
         [dateformatter setDateFormat:@"YYYY年MM月dd日"];
         NSString *  locationString=[dateformatter stringFromDate:senddate];
         textField.text = locationString;
-        self.strBabyBirthday = locationString;
-        NSLog(@"locationString:%@",locationString);
+//        self.strBabyBirthday = locationString;
+        NSLog(@"locationString:%@",self.strBabyBirthday);
     }
 }
 @end

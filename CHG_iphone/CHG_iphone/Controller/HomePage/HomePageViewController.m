@@ -24,7 +24,7 @@
 #import "StopViewController.h"
 #import "IdentificationViewController.h"
 #import "StoreSalesViewController.h"
-
+#import "HelpCenterViewController.h"
 #import "NSDownNetImage.h"
 @interface HomePageViewController ()
 @property UINib* PromoListNib;
@@ -429,6 +429,14 @@
             [self.navigationController pushViewController:StopView animated:YES];
             break;
         }
+        case 7:
+        {
+            DLog(@"帮助中心");
+            
+            HelpCenterViewController* HelpCenterView = [[HelpCenterViewController alloc] initWithNibName:@"HelpCenterViewController" bundle:nil];
+            [self.navigationController pushViewController:HelpCenterView animated:YES];
+            break;
+        }
         default:
             break;
     }
@@ -595,7 +603,7 @@
         
         NSMutableArray* SellerArr = [NSMutableArray array];
         for (int i = 0 ; i < menuArr.count; i++) {
-            if ([[menuArr[i] objectForKeySafe:@"level"] intValue]== 1) {
+            if ([[menuArr[i] objectForKeySafe:@"level"] intValue]== 1 ||[[menuArr[i] objectForKeySafe:@"level"] intValue]== 4  ) {
                 [SellerArr addObjectSafe:menuArr[i]];
             }
         }
@@ -605,7 +613,7 @@
     {
         NSMutableArray* PartnerArr = [NSMutableArray array];
         for (int i = 0 ; i < menuArr.count; i++) {
-            if ([[menuArr[i] objectForKeySafe:@"level"] intValue]== 3) {
+            if ([[menuArr[i] objectForKeySafe:@"level"] intValue]== 3||[[menuArr[i] objectForKeySafe:@"level"] intValue]== 4) {
                 [PartnerArr addObjectSafe:menuArr[i]];
             }
         }

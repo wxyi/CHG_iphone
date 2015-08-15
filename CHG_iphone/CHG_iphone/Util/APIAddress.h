@@ -297,4 +297,9 @@
  */
 +(NSString*) ApiValidateCheckCode;
 
+/**
+ *  4.2.2.5.	帮助中心
+ */
++(NSString*) ApiGetHelps;
+
 @end
