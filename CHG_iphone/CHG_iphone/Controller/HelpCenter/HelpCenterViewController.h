@@ -10,7 +10,8 @@
 #import "HelpCenterCollCell.h"
 @interface HelpCenterViewController : UIViewController
 @property(nonatomic,weak)IBOutlet UICollectionView* collection;
-@property(nonatomic,weak)IBOutlet UITableView* tableview;
-@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,weak)IBOutlet UIView* bgView;
+@property(nonatomic,strong)NSMutableArray* items;
 @property(nonatomic,assign)NSInteger category;
+@property(nonatomic,assign)CGPoint point;
 @end

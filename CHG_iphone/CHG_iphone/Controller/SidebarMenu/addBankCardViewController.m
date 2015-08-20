@@ -25,6 +25,7 @@
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftButton.layer setBorderWidth:1.0]; //边框
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     

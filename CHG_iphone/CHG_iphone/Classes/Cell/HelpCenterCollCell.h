@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HelpCenterCollCell : UICollectionViewCell
-@property(nonatomic,weak)IBOutlet UIImageView* icon;
-@property(nonatomic,weak)IBOutlet UILabel* titlelab;
+typedef void(^skipWebView)(NSDictionary* dict);
+typedef void(^SelectCurrentBtn)(NSIndexPath* indexPath);
+@interface HelpCenterCollCell : UICollectionViewCell<UITableViewDelegate,UITableViewDataSource>
+@property(nonatomic,weak)IBOutlet UITableView* tableview;
+@property(nonatomic,strong)NSArray* items;
+@property(nonatomic,copy)SelectCurrentBtn selectBtn;
+@property(nonatomic,copy)skipWebView skipweb;
+@property(nonatomic,strong)NSIndexPath* indexPath;
+-(void)setupTableview:(NSArray*)items;
 @end

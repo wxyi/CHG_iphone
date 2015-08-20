@@ -113,8 +113,9 @@
 {
     UIView* v_header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)];
     v_header.backgroundColor = UIColorFromRGB(0xf0f0f0);
-    UILabel* titleLab = [[UILabel alloc] initWithFrame:v_header.frame];
-    titleLab.font = FONT(15);
+    UILabel* titleLab = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 40)];
+    titleLab.font = FONT(13);
+    titleLab.textColor = UIColorFromRGB(0x646464);
     titleLab.text = [self.dict objectForKey:@"title"];
     titleLab.textAlignment = NSTextAlignmentLeft;
     [v_header addSubview:titleLab];

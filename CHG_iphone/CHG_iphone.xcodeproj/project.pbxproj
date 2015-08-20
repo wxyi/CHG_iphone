@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		27A02FF8FF9E75B8B06D1157 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27FFC0609EA17E6E08581D28 /* libPods.a */; };
+		2E1FF8FE1B7EF9EE00FE3D99 /* UIButtonImageWithLable.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1FF8FD1B7EF9EE00FE3D99 /* UIButtonImageWithLable.m */; };
 		2E307DA31B4C2CBA00E0ECD4 /* MyAccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA11B4C2CBA00E0ECD4 /* MyAccountCell.m */; };
 		2E307DA41B4C2CBA00E0ECD4 /* MyAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E307DA21B4C2CBA00E0ECD4 /* MyAccountCell.xib */; };
 		2E307DA81B4C303300E0ECD4 /* MyAccountPartnersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E307DA61B4C303300E0ECD4 /* MyAccountPartnersCell.m */; };
@@ -35,7 +36,6 @@
 		2E547D361B1FF89500E148C2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D351B1FF89500E148C2 /* CoreVideo.framework */; };
 		2E547D381B1FF8A400E148C2 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D371B1FF8A400E148C2 /* libiconv.dylib */; };
 		2E5D0D3F1B66C04400A8B80F /* libPods-ZBarSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E5D0D3E1B66C04400A8B80F /* libPods-ZBarSDK.a */; };
-		2E714F641B7122E100BBA302 /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */; };
 		2E73EA571B28182000A62558 /* IdentUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E73EA551B28182000A62558 /* IdentUserInfoCell.m */; };
 		2E73EA581B28182000A62558 /* IdentUserInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E73EA561B28182000A62558 /* IdentUserInfoCell.xib */; };
 		2E7422B71B68B04C00E2F976 /* about_us_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E7422B61B68B04C00E2F976 /* about_us_icon.png */; };
@@ -127,7 +127,6 @@
 		2E9938F01B0DEE5A00870456 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9938EF1B0DEE5A00870456 /* QRCodeGenerator.m */; };
 		2EBAE8B31B4A5883002E1C39 /* MyUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */; };
 		2EBAF1431B4E7C3200CDAC1A /* PresellOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */; };
-		2EC0821F1B6FF17C00D53144 /* libPods-ZXing.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EC0821E1B6FF17C00D53144 /* libPods-ZXing.a */; };
 		2ED17ECF1B299BD000F96595 /* CompletedOrderDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */; };
 		2ED17ED01B299BD000F96595 /* CompletedOrderDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17ECE1B299BD000F96595 /* CompletedOrderDetailsViewController.xib */; };
 		2ED17EE01B2AE27700F96595 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17EDF1B2AE27700F96595 /* icon.png */; };
@@ -371,6 +370,7 @@
 		2EE015A31B78D50900E2719B /* icon_seller.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE0159F1B78D50900E2719B /* icon_seller.png */; };
 		2EE015A51B79924D00E2719B /* btn_help_center.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE015A41B79924D00E2719B /* btn_help_center.png */; };
 		2EE089301B39833500A1B02B /* NSDownNetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0892F1B39833500A1B02B /* NSDownNetImage.m */; };
+		2EE4ABF01B7F1D330092B31D /* BaiduMapAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */; };
 		2EE7E01D1B3EE86B006C5B70 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE7E01C1B3EE86B006C5B70 /* Utils.m */; };
 		2EE9F2481B214C89006EB46B /* registeredMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9F2461B214C89006EB46B /* registeredMenuCell.m */; };
 		2EE9F2491B214C89006EB46B /* registeredMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2EE9F2471B214C89006EB46B /* registeredMenuCell.xib */; };
@@ -409,6 +409,8 @@
 /* Begin PBXFileReference section */
 		0CB982631FF3B74918494AE3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		27FFC0609EA17E6E08581D28 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E1FF8FC1B7EF9EE00FE3D99 /* UIButtonImageWithLable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonImageWithLable.h; sourceTree = "<group>"; };
+		2E1FF8FD1B7EF9EE00FE3D99 /* UIButtonImageWithLable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonImageWithLable.m; sourceTree = "<group>"; };
 		2E307DA01B4C2CBA00E0ECD4 /* MyAccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyAccountCell.h; path = Cell/SidebarMenu/MyAccountCell.h; sourceTree = "<group>"; };
 		2E307DA11B4C2CBA00E0ECD4 /* MyAccountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyAccountCell.m; path = Cell/SidebarMenu/MyAccountCell.m; sourceTree = "<group>"; };
 		2E307DA21B4C2CBA00E0ECD4 /* MyAccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyAccountCell.xib; path = Cell/SidebarMenu/MyAccountCell.xib; sourceTree = "<group>"; };
@@ -1035,8 +1037,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E714F641B7122E100BBA302 /* BaiduMapAPI.framework in Frameworks */,
-				2EC0821F1B6FF17C00D53144 /* libPods-ZXing.a in Frameworks */,
+				2EE4ABF01B7F1D330092B31D /* BaiduMapAPI.framework in Frameworks */,
 				2E5D0D3F1B66C04400A8B80F /* libPods-ZBarSDK.a in Frameworks */,
 				2EDD3D7C1B1F61CC00D19EA0 /* Security.framework in Frameworks */,
 				2EDD3D7A1B1F61C400D19EA0 /* CoreGraphics.framework in Frameworks */,
@@ -1243,6 +1244,8 @@
 				2ED4749E1B187122005543AC /* BaseCell.xib */,
 				2ED8E0221B6E8A8C00AF690F /* NoCopyTextField.h */,
 				2ED8E0231B6E8A8C00AF690F /* NoCopyTextField.m */,
+				2E1FF8FC1B7EF9EE00FE3D99 /* UIButtonImageWithLable.h */,
+				2E1FF8FD1B7EF9EE00FE3D99 /* UIButtonImageWithLable.m */,
 			);
 			path = ViewExtend;
 			sourceTree = "<group>";
@@ -2651,6 +2654,7 @@
 				2ED474FE1B1C621D005543AC /* VersionUpdateViewController.m in Sources */,
 				2E7EB5CD1B22F1C800D386C2 /* AFHTTPRequestOperation.m in Sources */,
 				2ED84C401B16A88B0086992D /* successfulIdentifyCell.m in Sources */,
+				2E1FF8FE1B7EF9EE00FE3D99 /* UIButtonImageWithLable.m in Sources */,
 				2ED474EF1B1C4D40005543AC /* AccountAndSecurityViewController.m in Sources */,
 				2ED4749F1B187122005543AC /* BaseCell.m in Sources */,
 				2EDC35001B4D4749008AB922 /* WelcomePageViewController.m in Sources */,
@@ -2970,7 +2974,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4f333d79-4d2d-4e39-b3e8-77358dd0c7c2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -3058,7 +3062,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4f333d79-4d2d-4e39-b3e8-77358dd0c7c2";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;

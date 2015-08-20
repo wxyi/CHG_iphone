@@ -7,8 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HelpCenterViewController">
             <connections>
-                <outlet property="collection" destination="gag-Dl-GUB" id="BDe-s8-LJT"/>
-                <outlet property="tableview" destination="4tv-ga-r7a" id="lvM-aB-sWp"/>
+                <outlet property="bgView" destination="b8d-ra-QjW" id="t13-xE-d8A"/>
+                <outlet property="collection" destination="imH-lA-z23" id="on0-bk-Uyh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,38 +17,33 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="gag-Dl-GUB">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
-                    <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="80" id="EtK-3l-FOQ"/>
-                        <constraint firstAttribute="width" constant="320" id="y8M-fK-mSH"/>
-                    </constraints>
-                    <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="1" maxY="0.0"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="1" id="nPW-X2-yAd">
-                        <size key="itemSize" width="80" height="80"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                </collectionView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="4tv-ga-r7a">
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="imH-lA-z23">
                     <rect key="frame" x="0.0" y="80" width="320" height="488"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="488" id="9vw-nQ-f2e"/>
-                        <constraint firstAttribute="width" constant="320" id="q9c-ae-rKs"/>
+                        <constraint firstAttribute="width" constant="320" id="Boo-C1-jMJ"/>
+                        <constraint firstAttribute="height" constant="488" id="SKU-q0-gSa"/>
                     </constraints>
-                </tableView>
+                    <collectionViewLayout key="collectionViewLayout" id="w06-0t-PNj"/>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b8d-ra-QjW">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                    <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="XbS-GF-CQx"/>
+                        <constraint firstAttribute="height" constant="80" id="oka-pp-ofz"/>
+                    </constraints>
+                </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="4tv-ga-r7a" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3VP-py-BZP"/>
-                <constraint firstItem="4tv-ga-r7a" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="80" id="Hw1-Zs-EcX"/>
-                <constraint firstAttribute="trailing" secondItem="gag-Dl-GUB" secondAttribute="trailing" id="W5L-IJ-Osi"/>
-                <constraint firstItem="gag-Dl-GUB" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="knc-1l-Rcj"/>
-                <constraint firstItem="gag-Dl-GUB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="lNn-KM-sMh"/>
-                <constraint firstAttribute="trailing" secondItem="4tv-ga-r7a" secondAttribute="trailing" id="o56-X3-eYc"/>
+                <constraint firstItem="imH-lA-z23" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0QR-bh-peU"/>
+                <constraint firstItem="b8d-ra-QjW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="2wE-a0-fmu"/>
+                <constraint firstItem="b8d-ra-QjW" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="3i4-Xf-RJN"/>
+                <constraint firstAttribute="bottom" secondItem="imH-lA-z23" secondAttribute="bottom" id="HA4-RU-0Mj"/>
+                <constraint firstAttribute="trailing" secondItem="imH-lA-z23" secondAttribute="trailing" id="Plv-TD-9bm"/>
+                <constraint firstAttribute="trailing" secondItem="b8d-ra-QjW" secondAttribute="trailing" id="X2S-ev-Idm"/>
+                <constraint firstItem="imH-lA-z23" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="80" id="ieJ-IJ-Bq0"/>
             </constraints>
             <point key="canvasLocation" x="214" y="177"/>
         </view>
