@@ -17,5 +17,6 @@
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property(nonatomic,assign)NSInteger m_nPageNumber;
 @property(nonatomic,assign)BOOL isRefresh;
+@property(nonatomic,assign)BOOL isLastData;
 -(IBAction)Returngoods:(UIButton*)sender;
 @end

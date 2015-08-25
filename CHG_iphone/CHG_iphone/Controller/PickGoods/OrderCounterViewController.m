@@ -298,6 +298,7 @@
                 CGFloat productPrice = [[[self.items objectAtIndexSafe:i] objectForKeySafe:@"productPrice"] doubleValueSafe];
                 price += count * productPrice;
             }
+//            [cell.actualtext becomeFirstResponder];
 //            CGFloat price= [ floatValue];
             cell.orderpriceBlock = ^(NSMutableDictionary *dict)
             {
@@ -385,6 +386,8 @@
 //                allPrice += price * count;
 //                
 //            }
+            
+//            [cell.Receivedlab becomeFirstResponder];
             cell.didGetCode = ^(NSString* checkcode)
             {
                 [SGInfoAlert showInfo:checkcode

@@ -58,6 +58,7 @@
 {
     self.isFirst = YES;
     self.ispulldown = YES;
+    self.isLastData = NO;
     [self setupQRadioButton];
     
     
@@ -137,8 +138,9 @@
 //    [self.items removeAllObjects];
     if ([self.items count] != 0) {
         [self.items removeAllObjects];
+        
     }
-    
+    [self.tableview.footer endRefreshing];
 //    self.strOrderType = radio.titleLabel.text;
     if ([radio.titleLabel.text isEqualToString:@"全部订单"]) {
         self.strOrderType = @"2";
@@ -536,18 +538,31 @@
 //            self.items = [data objectForKey:@"datas"];
             
             NSArray* dataArr = [data objectForKeySafe:@"datas"];
-            for (int i = 0; i< dataArr.count; i++) {
-                [self.items addObjectSafe:dataArr[i]];
-            }
-            if (self.ispulldown) {
+            
+            if (dataArr.count == 0) {
+                self.isLastData = YES;
                 
-                [self.tableview reloadData];
+                [SGInfoAlert showInfo:@"最后一页不再刷新"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
             }
             else
             {
-                self.ispulldown = YES;
-                [self reLoadView];
+                for (int i = 0; i< dataArr.count; i++) {
+                    [self.items addObjectSafe:dataArr[i]];
+                }
+                if (self.ispulldown) {
+                    
+                    [self.tableview reloadData];
+                }
+                else
+                {
+                    self.ispulldown = YES;
+                    [self reLoadView];
+                }
             }
+            
             
 //            [self.tableview.header endRefreshing];
 //            [self.tableview.footer endRefreshing];
@@ -586,7 +601,7 @@
     [self.starttime resignFirstResponder];
     [self.endtime resignFirstResponder];
 //    [self.items removeAllObjects];
-    
+    [self.tableview.footer endRefreshing];
     self.m_nPageNumber = 1;
     self.ispulldown = NO;
     NSString * info;
@@ -657,6 +672,7 @@
     self.tableview.header = header;
     
     // 设置回调（一旦进入刷新状态就会调用这个refreshingBlock）
+    
     self.tableview.footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
         [weakSelf loadMoreData];
     }];
@@ -672,7 +688,7 @@
         //        [self.tableView reloadData];
         
         // 拿到当前的下拉刷新控件，结束刷新状态
-        
+        self.isLastData = NO;
         self.m_nPageNumber = 1;
 //        [self.items removeAllObjects];
         if ([self.items count] != 0) {
@@ -680,7 +696,7 @@
         }
         [self checkDatas];
         [self.tableview.header endRefreshing];
-        
+        [self.tableview.footer endRefreshing];
     });
 }
 
@@ -692,10 +708,19 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
         //        [self.tableView reloadData];
-        self.m_nPageNumber ++;
-        [self checkDatas];
-        // 拿到当前的上拉刷新控件，结束刷新状态
-        [self.tableview.footer endRefreshing];
+        
+        if (!self.isLastData) {
+            self.m_nPageNumber ++;
+            [self checkDatas];
+            // 拿到当前的上拉刷新控件，结束刷新状态
+            [self.tableview.footer endRefreshing];
+        }
+        else
+        {
+            [self.tableview.footer noticeNoMoreData];
+        }
+        
+        
     });
 }
 -(void)textFieldDidBeginEditing:(UITextField *)textField

@@ -47,10 +47,10 @@
                      vertical:0.7];
     }
     
-    
-    if (self.userField.text.length == 11)
+    NSString *iphone = [self.userField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (iphone.length == 11)
     {
-        NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.userField.text substringFromIndex:7]];
+        NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[iphone substringFromIndex:7]];
         
         self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
             DLog(@"否");
@@ -91,8 +91,8 @@
 {
 //    UITextField* passfield1 = (UITextField*)[self.view viewWithTag:1011];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    
-    [parameter setObjectSafe:self.userField.text forKey:@"mobile"];
+    NSString *iphone = [self.userField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [parameter setObjectSafe:iphone forKey:@"mobile"];
 //    [parameter setObject:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
     
     

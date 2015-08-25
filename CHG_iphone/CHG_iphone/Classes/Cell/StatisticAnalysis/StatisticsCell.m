@@ -41,23 +41,7 @@
     
 //    NSString * currentData = [NSObject currentTime];
     
-    if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
-    {
-        if ([number doubleValue] < 0) {
-            self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
-        }
-//        else
-//        if(scale == 1)
-//        {
-//            self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
-//        }
-        else
-        {
-            self.bgview.backgroundColor = UIColorFromRGB(0xf5a541);
-        }
-    }
-    else
-        self.bgview.backgroundColor = COLOR(100, 100, 100, 0.3);
+    
     
     self.dateLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, CGRectGetWidth(self.bgview.frame)-10, CGRectGetHeight(self.bgview.frame))];
     self.dateLab.textAlignment = NSTextAlignmentLeft;
@@ -65,11 +49,14 @@
     self.dateLab.textColor = [UIColor whiteColor];
     NSString* strdate;
     if (date.length > 6) {
-        strdate = [date substringFromIndex:4];
+        strdate = [date substringFromIndex:6];
+        strdate = [NSString stringWithFormat:@"%d日",[strdate intValue]];
     }
     else
     {
-        strdate = date;
+
+        strdate = [date substringFromIndex:4];
+        strdate = [NSString stringWithFormat:@"%d月",[strdate intValue]];
     }
     self.dateLab.text = strdate;
     [self.bgview addSubview:self.dateLab];
@@ -81,6 +68,29 @@
     self.numlab.textColor = [UIColor whiteColor];
     self.numlab.text = number;
     [self.bgview addSubview:self.numlab];
+    
+    if ([date isEqualToString:[NSObject currentTime]]||[date isEqualToString:[[NSObject currentTime] substringToIndex:6]])
+    {
+        if ([number doubleValue] < 0) {
+            self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
+        }
+        //        else
+        //        if(scale == 1)
+        //        {
+        //            self.bgview.backgroundColor = UIColorFromRGB(0x99cd00);
+        //        }
+        else
+        {
+            self.bgview.backgroundColor = UIColorFromRGB(0xf5a541);
+        }
+    }
+    else
+    {
+        self.bgview.backgroundColor = COLOR(100, 100, 100, 0.3);
+        self.numlab.textColor = UIColorFromRGB(0x646464);
+        self.dateLab.textColor = UIColorFromRGB(0x646464);
+    }
+    
     
 }
 -(CGFloat)getShowData:(NSInteger)baseData CurrentData:(NSInteger)CurrentData

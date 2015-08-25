@@ -111,8 +111,11 @@
 //        [cell.goodscountlab setFont:FONT(17)];
 //        [cell.goodscountlab setTextAlignment:NSTextAlignmentCenter];
 //        
-        
-        cell.iphoneLab.text = [ConfigManager sharedInstance].strcustMobile;
+        NSString* text = [ConfigManager sharedInstance].strcustMobile;
+        NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+        [nsiphone insertString:@" " atIndex:7];
+        [nsiphone insertString:@" " atIndex:3];
+        cell.iphoneLab.text = nsiphone;
         cell.nameLab.text = [ConfigManager sharedInstance].strcustName;
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;

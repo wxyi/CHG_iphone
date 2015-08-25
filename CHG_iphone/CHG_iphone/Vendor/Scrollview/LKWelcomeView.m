@@ -52,10 +52,11 @@
 //                page_scroll.scrollEnabled = NO;
                 UIButton* startBt = [UIButton buttonWithType:UIButtonTypeCustom];
                 startBt.userInteractionEnabled = YES;
-                startBt.frame = CGRectMake((SCREEN_WIDTH -220)/2, height-50, 220, 30);
+                startBt.frame = CGRectMake((SCREEN_WIDTH -260)/2, height-70, 260, 40);
                 [startBt.titleLabel setTextAlignment:NSTextAlignmentCenter];
 //                [startBt setTitle:@"立即体验" forState:UIControlStateNormal];
                 [startBt setImage:[UIImage imageNamed:@"btn_start.png"] forState:UIControlStateNormal];
+                [startBt setImage:[UIImage imageNamed:@"btn_start_hl.png"] forState:UIControlStateHighlighted];
                 [startBt addTarget:self action:@selector(startbt_pressed:) forControlEvents:UIControlEventTouchUpInside];
                 [imageview addSubview:startBt];
                 self.lastImageView = imageview;

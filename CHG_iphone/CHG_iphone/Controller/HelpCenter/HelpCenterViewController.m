@@ -10,7 +10,7 @@
 #import "HelpCenterCollCell.h"
 #import "HelpDetailsViewController.h"
 #import "UIButtonImageWithLable.h"
-@interface HelpCenterViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface HelpCenterViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 @property UINib* HelpCenterCollNib;
 @property (nonatomic,strong)NSMutableArray* btnArray;
 @end
@@ -20,6 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if (IOS_VERSION >= 7.0) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
     self.title = @"帮助中心";
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
@@ -141,8 +144,8 @@
     cell.indexPath = indexPath;
     [cell setupTableview:[self.items objectAtIndex:indexPath.row]];
     cell.selectBtn = ^(NSIndexPath* indexPath){
-        UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",indexPath.row] integerValueSafe]];
-        [self selectBtn:btn];
+//        UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",indexPath.row] integerValueSafe]];
+//        [self selectBtn:btn];
     };
  
     
@@ -258,7 +261,71 @@
         
     }];
 }
-
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    //    NSLog(@"frame = %@",NSStringFromCGRect(scrollView.frame));
+    NSInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;
+    
+    DLog(@"index = %d",index);
+    UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index] integerValueSafe]];
+    [self selectBtn:btn];
+//    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+}
+//- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
+//{
+//    return YES;
+//}
+//- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView;
+//{
+//    CGPoint point=scrollView.contentOffset;
+//    NSLog(@"%f,%f",point.x,point.y);
+//    NSInteger index = point.x /SCREEN_WIDTH;
+//    DLog(@"scrollViewDidScrollToTop --- index = %d",index);
+//}
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//    if (decelerate) {
+//        NSLog(@"wxy-------scrollViewDidEndDragging  -  End of Scrolling.");
+//        CGPoint point=scrollView.contentOffset;
+//        NSLog(@"%f,%f",point.x,point.y);
+//        NSInteger index = point.x /SCREEN_WIDTH;
+//        DLog(@"wxy --- index = %d",index);
+//
+////        if (self.point.x < point.x) {
+////            
+////            if (point.x -self.point.x > 160 && index + 1 <= self.items.count) {
+////                
+////                UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index+1] integerValueSafe]];
+////                [self selectBtn:btn];
+////            }
+////            else
+////            {
+////                UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index] integerValueSafe]];
+////                [self selectBtn:btn];
+////            }
+////            
+////        }
+////        else if(self.point.x > point.x)
+////        {
+////            if (self.point.x - point.x > 160 && index - 1 >= 0) {
+////                UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index-1] integerValueSafe]];
+////                [self selectBtn:btn];
+////            }
+////            else
+////            {
+////                UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index] integerValueSafe]];
+////                [self selectBtn:btn];
+////            }
+////        }
+////        else
+////        {
+////            UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index] integerValueSafe]];
+////            [self selectBtn:btn];
+////        }
+////
+////
+//        
+//    }
+//    
+//}
 /*
 #pragma mark - Navigation
 
@@ -269,13 +336,13 @@
 }
 */
 ////开始拖拽视图
-//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
-//{
-//    NSLog(@"scrollViewWillBeginDragging");
-//    self.point =scrollView.contentOffset;
-//    NSLog(@"%f,%f",self.point.x,self.point.y);
-//}
-////减速停止了时执行，手触摸时执行执行
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView;
+{
+    NSLog(@"scrollViewWillBeginDragging");
+    self.point =scrollView.contentOffset;
+    NSLog(@"%f,%f",self.point.x,self.point.y);
+}
+//减速停止了时执行，手触摸时执行执行
 //- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 //{
 //    NSLog(@"scrollViewDidEndDecelerating");
@@ -288,12 +355,12 @@
 //        if (point.x -self.point.x > 160 && index + 1 <= self.items.count) {
 //            
 //            UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index+1] integerValueSafe]];
-//            [self SwitchViewBtn:btn];
+//            [self selectBtn:btn];
 //        }
 //        else
 //        {
 //            UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index+1] integerValueSafe]];
-//            [self SwitchViewBtn:btn];
+//            [self selectBtn:btn];
 //        }
 //        
 //    }
@@ -301,7 +368,7 @@
 //    {
 //        if (self.point.x - point.x > 160 && index - 1 >= 0) {
 //            UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index-1] integerValueSafe]];
-//            [self SwitchViewBtn:btn];
+//            [self selectBtn:btn];
 //        }
 //        else
 //        {
@@ -311,9 +378,9 @@
 //    else
 //    {
 //        UIButton* btn = (UIButton*)[self.view viewWithTag:[[NSString stringWithFormat:@"100%d,",index] integerValueSafe]];
-//        [self SwitchViewBtn:btn];
+//        [self selectBtn:btn];
 //    }
-//    
+//
 //
 //    
 //}

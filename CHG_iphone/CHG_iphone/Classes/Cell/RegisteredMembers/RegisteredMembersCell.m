@@ -31,7 +31,7 @@
     if (![self isCorrect]) {
         return;
     }
-    if (self.iphoneField.text.length == 11  ) {
+    if (self.iphoneField.text.length == 13  ) {
         
         sender.enabled = NO;
         [self httpCustomerBefore];
@@ -76,10 +76,11 @@
 {
     
     NSString* info ;
-    if (self.iphoneField.text.length == 0) {
+    NSString* iphoneNum = [self.iphoneField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (iphoneNum.length == 0) {
         info = @"请输入手机号码";
     }
-    else if (![IdentifierValidator isValid:IdentifierTypePhone value:self.iphoneField.text ])
+    else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphoneNum ])
     {
         info = @"手机格式不正确";
     }
@@ -101,7 +102,8 @@
 -(void)httpValidateCustMobile
 {
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-    [parameter setObjectSafe:self.iphoneField.text forKey:@"mobile"];
+    NSString* iphoneNum = [self.iphoneField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [parameter setObjectSafe:iphoneNum forKey:@"mobile"];
     
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiGetCheckCode] parameters:parameter];
     
@@ -145,7 +147,8 @@
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiCreateCustomerBefore] parameters:parameter];
     
     NSMutableDictionary *parame = [NSMutableDictionary dictionary];
-    [parame setObjectSafe:self.iphoneField.text forKey:@"mobile"];
+    NSString* iphoneNum = [self.iphoneField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [parame setObjectSafe:iphoneNum forKey:@"mobile"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:parame successBlock:^(BOOL success, id data, NSString *msg) {
         
@@ -154,7 +157,7 @@
         {
             
             
-            NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:7]];
+            NSString* AlertInfo = [NSString stringWithFormat:@"已向手机号*******%@成功发送验证码,请注意查收!",[self.iphoneField.text substringFromIndex:9]];
             
             self.stAlertView = [[STAlertView alloc] initWithTitle:AlertInfo message:@"" cancelButtonTitle:nil otherButtonTitle:@"确认" cancelButtonBlock:^{
                 DLog(@"否");
@@ -210,8 +213,15 @@
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 11) {
+        if (existedLength - selectedLength + replaceLength > 13) {
             return NO;
+        }
+        NSString* iphoneNum = [self.iphoneField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if ((iphoneNum.length == 3 &&
+             textField.text.length == iphoneNum.length)||
+            (iphoneNum.length == 7 &&
+             textField.text.length == iphoneNum.length + 1)) {
+            textField.text = [textField.text stringByAppendingString:@" "];
         }
     }
     else if (textField == self.nameField) {

@@ -64,7 +64,11 @@
 //    
 //    cell.Verificationfield.leftView = paddingView;
 //    cell.Verificationfield.leftViewMode = UITextFieldViewModeAlways;
-    cell.userField.text = self.strmobile;
+    NSString* text = self.strmobile;
+    NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+    [nsiphone insertString:@" " atIndex:7];
+    [nsiphone insertString:@" " atIndex:3];
+    cell.userField.text = nsiphone;
     cell.userField.enabled = NO;
     cell.userbgView.backgroundColor = UIColorFromRGB(0xdddddd);
     cell.didSkipSubItem = ^(NSInteger tag){
@@ -172,14 +176,15 @@
 -(void)LoginAccount
 {
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    NSString *iphone = [namefield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     [namefield resignFirstResponder];
     UITextField* checkcodefield = (UITextField*)[self.view viewWithTag:1012];
     [checkcodefield resignFirstResponder];
     NSString* info ;
-    if (namefield.text.length == 0) {
+    if (iphone.length == 0) {
         info = @"请输入手机号码";
     }
-    else if (![IdentifierValidator isValid:IdentifierTypePhone value:namefield.text ])
+    else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphone ])
     {
         info = @"手机格式不正确";
     }
@@ -230,8 +235,9 @@
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+    NSString *iphone = [namefield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     UITextField* checkcodefield = (UITextField*)[self.view viewWithTag:1012];
-    [param setObjectSafe:namefield.text forKey:@"mobile"];
+    [param setObjectSafe:iphone forKey:@"mobile"];
     [param setObjectSafe:checkcodefield.text forKey:@"checkCode"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
@@ -239,7 +245,7 @@
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             ResetPasswordViewController *ResetPassword = [[ResetPasswordViewController alloc] initWithNibName:@"ResetPasswordViewController" bundle:nil];
-            ResetPassword.strmobile = namefield.text;
+            ResetPassword.strmobile = iphone;
             ResetPassword.strcheckCode = checkcodefield.text;
             [self presentViewController:ResetPassword animated:YES completion:^{
                 

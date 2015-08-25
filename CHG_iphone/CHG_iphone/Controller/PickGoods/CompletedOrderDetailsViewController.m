@@ -392,6 +392,9 @@
             
             cell.receivableLab.text =[self.ChangePriceDict objectForKeySafe:@"orderAmount"];
             cell.actualtext.text = [self.ChangePriceDict objectForKeySafe:@"orderFactAmount"];
+//            if (self.isfrist) {
+//                [cell.actualtext becomeFirstResponder];
+//            }
             cell.didGetCode = ^(NSString* checkcode)
             {
                 [SGInfoAlert showInfo:checkcode
@@ -416,6 +419,7 @@
             if(self.Comordertype == TerminationOrder)
             {
                 [cell.Receivedlab setEnabled:YES];
+//                [cell.Receivedlab becomeFirstResponder];
             }
             else
             {

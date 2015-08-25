@@ -164,7 +164,7 @@
         NSString *name = textfield.text;
         [textfield resignFirstResponder];
         textfield = (UITextField*)[self.view viewWithTag:1011];
-        NSString *iphone = textfield.text;
+        NSString *iphone = [textfield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
         [textfield resignFirstResponder];
         textfield = (UITextField*)[self.view viewWithTag:1012];
         NSString *cardNum = textfield.text;
@@ -255,6 +255,9 @@
     for (int i = 0; i < array.count; i++) {
         NSInteger tag = [[NSString stringWithFormat:@"101%d",i] intValue];
         textfield = (UITextField*)[self.view viewWithTag:tag];
+        if (i == 1) {
+            textfield.text = [textfield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        }
         [param setObjectSafe:textfield.text forKey:[array objectAtIndexSafe:i]];
     }
     DLog(@"param = %@",param);
@@ -370,8 +373,15 @@
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 11) {
+        if (existedLength - selectedLength + replaceLength > 13) {
             return NO;
+        }
+        NSString* iphoneNum = [textField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if ((iphoneNum.length == 3 &&
+             textField.text.length == iphoneNum.length)||
+            (iphoneNum.length == 7&&
+             textField.text.length == iphoneNum.length + 1)){
+            textField.text = [textField.text stringByAppendingString:@" "];
         }
     }
     else

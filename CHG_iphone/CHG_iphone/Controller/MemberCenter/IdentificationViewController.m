@@ -291,7 +291,11 @@
             cell = (IdentUserInfoCell*)[[self.IdentUserInfoNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
             
         }
-        cell.iphonelab.text = [self.dict objectForKeySafe: @"custMobile"];
+        NSString* text = [self.dict objectForKeySafe: @"custMobile"];
+        NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+        [nsiphone insertString:@" " atIndex:7];
+        [nsiphone insertString:@" " atIndex:3];
+        cell.iphonelab.text = nsiphone;
         cell.iphonelab.delegate = self;
         cell.namelab.text = [self.dict objectForKeySafe:@"custName"];
         [cell.iphonelab addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -469,11 +473,12 @@
         UITextField* texield = (UITextField*)[self.view viewWithTag:100];
         [texield resignFirstResponder];
         NSString * info  = @"";
-        if (texield.text.length == 0)
+        NSString* iphoneNum = [texield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if (iphoneNum.length == 0)
         {
             info = @"请输入手机号码";
         }
-        else if (![IdentifierValidator isValid:IdentifierTypePhone value:texield.text]) {
+        else if (![IdentifierValidator isValid:IdentifierTypePhone value:iphoneNum]) {
             info = @"手机号格式错误";
         }
         if (info.length != 0) {
@@ -483,7 +488,7 @@
                          vertical:0.7];
             return ;
         }
-        [self httpValidateMobile:texield.text];
+        [self httpValidateMobile:iphoneNum];
     }
     
     
@@ -967,8 +972,16 @@
     NSInteger existedLength = textField.text.length;
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
-    if (existedLength - selectedLength + replaceLength > 11) {
+    if (existedLength - selectedLength + replaceLength > 13) {
         return NO;
+    }
+    NSString* iphoneNum = [textField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if ((iphoneNum.length == 3 &&
+         textField.text.length == iphoneNum.length)||
+        (iphoneNum.length == 7&&
+         textField.text.length == iphoneNum.length + 1))
+    {
+        textField.text = [textField.text stringByAppendingString:@" "];
     }
     return YES;
 }

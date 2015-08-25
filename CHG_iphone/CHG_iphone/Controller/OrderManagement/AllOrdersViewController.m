@@ -41,6 +41,7 @@
     self.OrdersGoodsNib = [UINib nibWithNibName:@"OrdersGoodsCell" bundle:nil];
     // 1.注册cell
     self.isRefresh = YES;
+    self.isLastData = NO;
     self.items = [[NSMutableArray alloc] init];
     
 
@@ -319,11 +320,19 @@
             
             self.isRefresh = YES;
             NSArray* dataArr = [data objectForKeySafe:@"datas"];
+            if (dataArr.count == 0) {
+                self.isLastData = YES;
+                [SGInfoAlert showInfo:@"最后一页不再刷新"
+                              bgColor:[[UIColor blackColor] CGColor]
+                               inView:self.view
+                             vertical:0.7];
+            }
             for (int i = 0; i< dataArr.count; i++) {
                 [self.items addObjectSafe:dataArr[i]];
             }
             
             [self.tableview reloadData];
+            
 //            [self.tableview.header endRefreshing];
 //            [self.tableview.footer endRefreshing];
         }
@@ -446,7 +455,7 @@
 //        [self.tableView reloadData];
         
         // 拿到当前的下拉刷新控件，结束刷新状态
-        
+        self.isLastData = NO;
         self.m_nPageNumber = 1;
 //        [self.items removeAllObjects];
         if ([self.items count] != 0) {
@@ -454,7 +463,7 @@
         }
         [self httpGetAllOrderList];
         [self.tableview.header endRefreshing];
-        
+        [self.tableview.footer endRefreshing];
     });
 }
 
@@ -466,13 +475,36 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 刷新表格
 //        [self.tableView reloadData];
-        self.m_nPageNumber ++;
-        [self httpGetAllOrderList];
-        // 拿到当前的上拉刷新控件，结束刷新状态
-        [self.tableview.footer endRefreshing];
+        if (!self.isLastData) {
+            self.m_nPageNumber ++;
+            [self httpGetAllOrderList];
+            // 拿到当前的上拉刷新控件，结束刷新状态
+            
+            [self.tableview.footer endRefreshing];
+        }
+        else
+        {
+            [self.tableview.footer noticeNoMoreData];
+        }
+        
+        
+        
     });
 }
-
+//#pragma mark 加载最后一份数据
+//- (void)loadLastData
+//{
+//
+//    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+//    // 2.模拟2秒后刷新表格UI（真实开发中，可以移除这段gcd代码）
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        // 刷新表格
+//        [self.tableview reloadData];
+//        
+//        // 拿到当前的上拉刷新控件，变为没有更多数据的状态
+//        [self.tableview.footer noticeNoMoreData];
+//    });
+//}
 -(void)RefreshOrder
 {
     self.m_nPageNumber = 1;

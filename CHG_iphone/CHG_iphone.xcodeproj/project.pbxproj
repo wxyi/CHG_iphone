@@ -36,6 +36,8 @@
 		2E547D361B1FF89500E148C2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D351B1FF89500E148C2 /* CoreVideo.framework */; };
 		2E547D381B1FF8A400E148C2 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E547D371B1FF8A400E148C2 /* libiconv.dylib */; };
 		2E5D0D3F1B66C04400A8B80F /* libPods-ZBarSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E5D0D3E1B66C04400A8B80F /* libPods-ZBarSDK.a */; };
+		2E6FCFD61B85C7B4005DAB12 /* btn_start_hl.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E6FCFD41B85C7B4005DAB12 /* btn_start_hl.png */; };
+		2E6FCFD71B85C7B4005DAB12 /* btn_start.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E6FCFD51B85C7B4005DAB12 /* btn_start.png */; };
 		2E73EA571B28182000A62558 /* IdentUserInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E73EA551B28182000A62558 /* IdentUserInfoCell.m */; };
 		2E73EA581B28182000A62558 /* IdentUserInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E73EA561B28182000A62558 /* IdentUserInfoCell.xib */; };
 		2E7422B71B68B04C00E2F976 /* about_us_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E7422B61B68B04C00E2F976 /* about_us_icon.png */; };
@@ -447,6 +449,8 @@
 		2E547D371B1FF8A400E148C2 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		2E5D0D3E1B66C04400A8B80F /* libPods-ZBarSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-ZBarSDK.a"; path = "Pods/build/Debug-iphoneos/libPods-ZBarSDK.a"; sourceTree = "<group>"; };
 		2E6F82D31B667F3D00C0D725 /* libPods-ZXing.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-ZXing.a"; path = "Pods/build/Debug-iphoneos/libPods-ZXing.a"; sourceTree = "<group>"; };
+		2E6FCFD41B85C7B4005DAB12 /* btn_start_hl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_start_hl.png; path = "../../../../../BY_iphone/BY_iphone/Supporting Files/Resource/btn_start_hl.png"; sourceTree = "<group>"; };
+		2E6FCFD51B85C7B4005DAB12 /* btn_start.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_start.png; path = "../../../../../BY_iphone/BY_iphone/Supporting Files/Resource/btn_start.png"; sourceTree = "<group>"; };
 		2E73EA541B28182000A62558 /* IdentUserInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IdentUserInfoCell.h; path = Cell/MemberCenter/IdentUserInfoCell.h; sourceTree = "<group>"; };
 		2E73EA551B28182000A62558 /* IdentUserInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IdentUserInfoCell.m; path = Cell/MemberCenter/IdentUserInfoCell.m; sourceTree = "<group>"; };
 		2E73EA561B28182000A62558 /* IdentUserInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IdentUserInfoCell.xib; path = Cell/MemberCenter/IdentUserInfoCell.xib; sourceTree = "<group>"; };
@@ -1809,6 +1813,8 @@
 		2ED84AA41B12BFE80086992D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2E6FCFD41B85C7B4005DAB12 /* btn_start_hl.png */,
+				2E6FCFD51B85C7B4005DAB12 /* btn_start.png */,
 				2EE015A41B79924D00E2719B /* btn_help_center.png */,
 				2EE0159C1B78D50900E2719B /* icon_boss1.png */,
 				2EE0159D1B78D50900E2719B /* icon_leader.png */,
@@ -2424,6 +2430,7 @@
 				2ED84AF51B131C730086992D /* RegisteredMembersViewController.xib in Resources */,
 				2E307DA41B4C2CBA00E0ECD4 /* MyAccountCell.xib in Resources */,
 				2EE015961B78B13E00E2719B /* HelpCenterCollCell.xib in Resources */,
+				2E6FCFD61B85C7B4005DAB12 /* btn_start_hl.png in Resources */,
 				2E93B1501B343E1800B282FF /* mapapi.bundle in Resources */,
 				2EFD84C71B426AF500E5A915 /* btn_Member_order.png in Resources */,
 				2ED17EE81B300EEB00F96595 /* icon_register_man.png in Resources */,
@@ -2494,6 +2501,7 @@
 				2ED17EEE1B31739F00F96595 /* icon_logo_big.png in Resources */,
 				2E9938EC1B0DD32900870456 /* HomePageViewController.xib in Resources */,
 				2ED84ADE1B12E8490086992D /* MenuCell.xib in Resources */,
+				2E6FCFD71B85C7B4005DAB12 /* btn_start.png in Resources */,
 				2ED84B061B1333910086992D /* OrderManagementViewController.xib in Resources */,
 				2EE9F2591B21CA88006EB46B /* MembegrowthCell.xib in Resources */,
 				2ED84B301B1438BB0086992D /* OrdersGoodsCell.xib in Resources */,
@@ -2974,7 +2982,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f333d79-4d2d-4e39-b3e8-77358dd0c7c2";
+				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -3062,7 +3070,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4f333d79-4d2d-4e39-b3e8-77358dd0c7c2";
+				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;

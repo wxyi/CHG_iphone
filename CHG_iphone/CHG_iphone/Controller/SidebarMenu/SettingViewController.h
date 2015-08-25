@@ -13,4 +13,5 @@
 @property(nonatomic,strong)NSArray* items;
 @property(nonatomic,strong)STAlertView* stAlertView;
 @property(nonatomic,strong)NSDictionary* dict;
+@property(nonatomic,assign)BOOL isDetectionVersion;
 @end

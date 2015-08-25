@@ -27,6 +27,6 @@
 @property(nonatomic,assign)CGFloat m_height;
 @property(nonatomic,strong)NSString* strOrderType;
 //@property (nonatomic,assign)OrderManagementType ManagementTyep;
-
+@property(nonatomic,assign)BOOL isLastData;
 -(IBAction)QueryOrderBtn:(UIButton*)sender;
 @end

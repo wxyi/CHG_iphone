@@ -25,7 +25,7 @@
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftButton.layer setBorderWidth:1.0]; //边框
+//    [leftButton.layer setBorderWidth:1.0]; //边框
     [leftButton setImage:[UIImage imageNamed:@"btn_return"] forState:UIControlStateNormal];
     [leftButton setImage:[UIImage imageNamed:@"btn_return_hl"] forState:UIControlStateHighlighted];
     
@@ -155,12 +155,13 @@
     if (indexPath.row == 2) {
         DLog(@"请选择银行");
         UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
+        NSString* CardNum = [Card.text stringByReplacingOccurrencesOfString:@" " withString:@""];
         NSString * info = @"";
-        if (Card.text.length == 0) {
+        if (CardNum.length == 0) {
             info = @"请输入银行卡";
             
         }
-        else if(Card.text.length < 16 ||Card.text.length > 19)
+        else if(CardNum.length < 16 ||CardNum.length > 19)
         {
             info = @"银行卡不能小于16位大于19位";
             
@@ -182,7 +183,7 @@
     [name resignFirstResponder];
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
     [Card resignFirstResponder];
-    
+    NSString* CardNum = [Card.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     UITextField* Cardtype = (UITextField*)[self.view viewWithTag:1012];
     [Card resignFirstResponder];
     NSString* info;
@@ -197,11 +198,11 @@
     else if (name.text.length < 2) {
         info = @"名字不能小于两位";
     }
-    else if(Card.text.length == 0)
+    else if(CardNum.length == 0)
     {
         info = @"请输入银行卡";
     }
-    else if(Card.text.length <16 ||Card.text.length >19)
+    else if(CardNum.length <16 ||CardNum.length >19)
     {
         info = @"银行卡不能小于16位大于19位";
         
@@ -234,6 +235,7 @@
 {
     UITextField* name = (UITextField*)[self.view viewWithTag:1010];
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
+    NSString* CardNum = [Card.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
     [parameter setObjectSafe:[ConfigManager sharedInstance].access_token forKey:@"access_token"];
@@ -246,7 +248,7 @@
     
    
     [bankpar setObjectSafe:self.bank.bankCode forKey:@"bankCode"];
-    [bankpar setObjectSafe:Card.text forKey:@"cardNumber"];
+    [bankpar setObjectSafe:CardNum forKey:@"cardNumber"];
     [bankpar setObjectSafe:name.text forKey:@"accountName"];
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
@@ -381,10 +383,11 @@
     }
     else if(field.tag == 1011)
     {
-        if (field.text.length >= 6 && field.text.length <= 19) {
+        NSString *text = [field.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if (text.length >= 6 && text.length <= 19) {
             BanKCode* code = [[BanKCode alloc] init];
-            DLog(@"[textField.text substringToIndex:6] = %@",[field.text substringToIndex:6]);
-            code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[field.text substringToIndex:6]];
+            DLog(@"[textField.text substringToIndex:6] = %@",[text substringToIndex:6]);
+            code = [[SQLiteManager sharedInstance] getBankCodeDataByCardNumber:[text substringToIndex:6]];
             DLog(@"code = %@ name = %@",code.bankCode,code.bankName);
             self.bank = code;
             
@@ -399,9 +402,9 @@
             }
             
         }
-        else if(field.text.length >= 19)
+        else if(field.text.length >= 23)
         {
-            field.text = [field.text substringToIndex:19];
+            field.text = [field.text substringToIndex:23];
             info = @"银行卡号不能大于19位";
 //            [field resignFirstResponder];
         }
@@ -471,8 +474,12 @@
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
-        if (existedLength - selectedLength + replaceLength > 19) {
+        if (existedLength - selectedLength + replaceLength > 23) {
             return NO;
+        }
+        NSString *text = [textField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if (text.length % 4 == 0 && text.length != 0 && textField.text.length % 5 != 0) {
+            textField.text = [textField.text stringByAppendingString:@" "];
         }
     }
     

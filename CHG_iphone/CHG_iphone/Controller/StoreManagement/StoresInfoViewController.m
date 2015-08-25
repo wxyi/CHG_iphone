@@ -182,7 +182,12 @@
             }
             NSDictionary* dict = [self.items objectAtIndexSafe:indexPath.section ];
             cell.positionlab.text = @"门店老板";
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe: @"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
+            
+            NSString* text = [dict objectForKeySafe:@"sellerMobile"];
+            NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+            [nsiphone insertString:@" " atIndex:7];
+            [nsiphone insertString:@" " atIndex:3];
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe: @"sellerName"],nsiphone];
             cell.CardNumlab.text = @"";
             cell.didSkipSubItem =^(NSInteger tag){
                 
@@ -213,7 +218,14 @@
             cell.positionlab.text = @"店长";
             
             cell.icon.image = [UIImage imageNamed:@"icon_Shopowner.png"];
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
+            
+            NSString* text = [dict objectForKeySafe:@"sellerMobile"];
+            NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+            [nsiphone insertString:@" " atIndex:7];
+            [nsiphone insertString:@" " atIndex:3];
+            
+            
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],nsiphone];
             
             cell.CardNumlab.text = [dict objectForKeySafe:@"idCardNumber"];
             
@@ -246,7 +258,17 @@
                 cell.positionlab.text = @"导购";
                 cell.icon.image = [UIImage imageNamed:@"icon_shopping_guide.png"];
             }
-            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],[dict objectForKeySafe:@"sellerMobile"]];
+            
+            NSString* text = [dict objectForKeySafe:@"sellerMobile"];
+            DLog(@"text = %@",text);
+            NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+            if (nsiphone.length == 11) {
+                [nsiphone insertString:@" " atIndex:7];
+                [nsiphone insertString:@" " atIndex:3];
+            }
+            
+            
+            cell.nameAndIphonelab.text = [NSString stringWithFormat:@"%@ %@",[dict objectForKeySafe:@"sellerName"],nsiphone];
             cell.Disablebtn.tag = [[NSString stringWithFormat:@"101%ld",(long)indexPath.section] intValue];
             cell.CardNumlab.text = [dict objectForKeySafe:@"idCardNumber"];
             cell.IndexPath = indexPath;

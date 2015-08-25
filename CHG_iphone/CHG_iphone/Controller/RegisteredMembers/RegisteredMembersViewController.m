@@ -171,6 +171,7 @@
 {
     DLog(@"下一步");
     UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+    NSString* iphoneNum = [iphonefield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     [iphonefield resignFirstResponder];
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
     [namefield resignFirstResponder];
@@ -179,10 +180,10 @@
     NSString * info ;
     
     
-    if (iphonefield.text.length == 0) {
+    if (iphoneNum.length == 0) {
         info = @"请输入手机号码";
     }
-    else if(![IdentifierValidator isValid:IdentifierTypePhone value:iphonefield.text ])
+    else if(![IdentifierValidator isValid:IdentifierTypePhone value:iphoneNum])
     {
         info = @"手机格式不正确";
     }
@@ -265,12 +266,13 @@
     if (textField.tag == 1010) {
         
 //        DLog(@"%@",[textField.text substringToIndex:1]);
-        if (textField.text.length > 1 && [[textField.text substringToIndex:1] intValue]!= 1) {
+        NSString* iphoneNum = [textField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        if (iphoneNum.length > 1 && [[iphoneNum substringToIndex:1] intValue]!= 1) {
 //            textField.text = @"";
             info = @"手机号格式不正确";
         }
-        if (textField.text.length > 11) {
-            textField.text = [textField.text substringToIndex:11];
+        if (textField.text.length > 13) {
+            textField.text = [textField.text substringToIndex:13];
 //            [textField resignFirstResponder];
             info = @"手机号不能大于11位";
         }
@@ -334,7 +336,7 @@
     
     NSString * info ;
     if (textField.tag == 1010) {
-        if (textField.text.length != 11 && textField.text.length > 0 && [[textField.text substringToIndex:1] intValue] != 1)
+        if (textField.text.length != 13 && textField.text.length > 0 && [[textField.text substringToIndex:1] intValue] != 1)
         {
             info = @"手机格式不正确";
         }
@@ -384,9 +386,10 @@
     NSString* url = [NSObject URLWithBaseString:[APIAddress ApiValidateCheckCode] parameters:parameter];
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     UITextField* iphonefield = (UITextField*)[self.view viewWithTag:1010];
+    NSString* iphoneNum = [iphonefield.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
     UITextField* checkfield = (UITextField*)[self.view viewWithTag:1012];
-    [param setObjectSafe:iphonefield.text forKey:@"mobile"];
+    [param setObjectSafe:iphoneNum forKey:@"mobile"];
     [param setObjectSafe:checkfield.text forKey:@"checkCode"];
     
     [HttpClient asynchronousCommonJsonRequestWithProgress:url parameters:param successBlock:^(BOOL success, id data, NSString *msg) {
@@ -394,7 +397,7 @@
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             MemberInfoViewController* MemberInfoView= [[MemberInfoViewController alloc] initWithNibName:@"MemberInfoViewController" bundle:nil];
-            [ConfigManager sharedInstance].strcustMobile = iphonefield.text;
+            [ConfigManager sharedInstance].strcustMobile = iphoneNum;
             [ConfigManager sharedInstance].strcustName = namefield.text;
             [ConfigManager sharedInstance].strcheckCode = checkfield.text;
             

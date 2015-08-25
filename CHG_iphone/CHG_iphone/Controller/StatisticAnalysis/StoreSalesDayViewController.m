@@ -158,7 +158,13 @@
             
             
             cell.namelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"name"];
-            cell.iphonelab.text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"mobile"];
+            
+            NSString* text = [[self.items objectAtIndexSafe: indexPath.section] objectForKeySafe:@"mobile"];
+            NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+            [nsiphone insertString:@" " atIndex:7];
+            [nsiphone insertString:@" " atIndex:3];
+            
+            cell.iphonelab.text = nsiphone;
             
             
             

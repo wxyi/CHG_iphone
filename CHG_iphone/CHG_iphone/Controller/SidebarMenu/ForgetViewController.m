@@ -132,7 +132,11 @@
     title.textColor = UIColorFromRGB(0x323232);
     title.font = FONT(15);
     UserConfig* cfg = [[SUHelper sharedInstance] currentUserConfig];
-    title.text = [NSString stringWithFormat:@"手机号码 %@",cfg.strMobile];
+    NSString* text = cfg.strMobile;
+    NSMutableString *nsiphone = [[NSMutableString alloc] initWithString:text];
+    [nsiphone insertString:@" " atIndex:7];
+    [nsiphone insertString:@" " atIndex:3];
+    title.text = [NSString stringWithFormat:@"手机号码 %@",nsiphone];
     [v_header addSubview:title];
     return v_header;
 }

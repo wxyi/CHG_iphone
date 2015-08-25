@@ -252,6 +252,32 @@
     DLog(@"wxy sortedArray = %@",sortedArray);
     return sortedArray;
 }
+
+//// 正常号转银行卡号 － 增加4位间的空格
+//+(NSString *)normalNumToBankNum
+//{
+//    NSString *tmpStr = [self bankNumToNormalNum];
+//    
+//    int size = (tmpStr.length / 4);
+//    
+//    NSMutableArray *tmpStrArr = [[NSMutableArray alloc] init];
+//    for (int n = 0;n < size; n++)
+//    {
+//        [tmpStrArr addObject:[tmpStr substringWithRange:NSMakeRange(n*4, 4)]];
+//    }
+//    
+//    [tmpStrArr addObject:[tmpStr substringWithRange:NSMakeRange(size*4, (tmpStr.length % 4))]];
+//    
+//    tmpStr = [tmpStrArr componentsJoinedByString:@" "];
+//    
+//    return tmpStr;
+//}
+//
+//// 银行卡号转正常号 － 去除4位间的空格
+//+(NSString *)bankNumToNormalNum
+//{
+//    return [self stringByReplacingOccurrencesOfString:@" " withString:@""];
+//}
 /*
 //转千分位
 -(NSString*) toThousand:(NSString*) strnormal

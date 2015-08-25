@@ -15,4 +15,6 @@
 @property (nonatomic,assign)OrderManagementType ManagementTyep;
 @property(nonatomic,assign)BOOL isRefresh;
 @property(nonatomic,assign)NSInteger m_nPageNumber;
+//@property(nonatomic,assign)BOOL isFinishRef;
+@property(nonatomic,assign)BOOL isLastData;
 @end

@@ -42,12 +42,13 @@
 }
 -(void)setupView
 {
-    self.items = [NSArray arrayWithObjects:@"账户与安全",/*@"版本更新",*/@"关于我们", nil];
+    NSString* version = [NSString stringWithFormat:@"版本%@",[ConfigManager sharedInstance].sysVersion];
+    self.items = [NSArray arrayWithObjects:@"账户与安全",version,@"关于我们", nil];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
 //    self.tableview.frame = rect;
-    
+    self.isDetectionVersion = NO;
     self.tableview.dataSource = self;
     self.tableview.delegate = self;
     self.tableview.scrollEnabled = NO;
@@ -72,6 +73,14 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+    else
+    {
+        //删除cell的所有子视图
+        while ([cell.contentView.subviews lastObject] != nil)
+        {
+            [(UIView*)[cell.contentView.subviews lastObject] removeFromSuperview];
+        }
+    }
     cell.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UILabel* title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH-20, 44)];
     title.textColor = UIColorFromRGB(0x323232);
@@ -80,37 +89,43 @@
     [cell.contentView addSubview:title];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
-//    if (indexPath.row == 1) {
-//        
-//        
-//        NSString* appVersion = [self.dict objectForKeySafe: @"appVersion"];
-//        if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion] && appVersion.length != 0) {
-//            UILabel* textlab = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-120, 0, 90, 40)];
-//            textlab.text = @"有新版本可用";
-//            textlab.font = FONT(15);
-//            textlab.textColor = UIColorFromRGB(0x878787);
-//            [cell.contentView addSubview:textlab];
-//            NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
-//            //        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
-//            badgeView2.backgroundColor = [UIColor clearColor];
-//            //        badgeView2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"checkversion_bg.png"] ];
-//            badgeView2.text = @"new";
-//            badgeView2.tintColor = [UIColor clearColor];
-//            
-//            badgeView2.textColor = [UIColor whiteColor];
-//            [badgeView2 sizeToFit];
-//            badgeView2.frame = CGRectMake(SCREEN_WIDTH-120-badgeView2.frame.size.width , 7, badgeView2.frame.size.width, badgeView2.frame.size.height);
-//            
-//            
-//            
-//            
-//            UIImageView * bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-120-badgeView2.frame.size.width , 7, badgeView2.frame.size.width, badgeView2.frame.size.height)];
-//            bgImage.image = [UIImage imageNamed:@"checkversion_bg.png"];
-//            [cell.contentView addSubview:bgImage];
-//            [cell.contentView addSubview:badgeView2];
-//        }
-//        
-//    }
+    if (indexPath.row == 1) {
+        
+        
+        NSString* appVersion = [self.dict objectForKeySafe: @"appVersion"];
+        if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion] && appVersion.length != 0) {
+            
+            NIBadgeView* badgeView2 = [[NIBadgeView alloc] initWithFrame:CGRectZero];
+            //        badgeView2.backgroundColor = UIColorFromRGB(0xf0f0f0);
+            badgeView2.backgroundColor = [UIColor clearColor];
+            //        badgeView2.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"checkversion_bg.png"] ];
+            badgeView2.text = @"新版本";
+            badgeView2.tintColor = [UIColor clearColor];
+            
+            badgeView2.textColor = [UIColor whiteColor];
+            [badgeView2 sizeToFit];
+            badgeView2.frame = CGRectMake(SCREEN_WIDTH - 30 -badgeView2.frame.size.width , 7, badgeView2.frame.size.width, badgeView2.frame.size.height);
+            
+//            self.isNewVersion = YES;
+            
+            
+            UIImageView * bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH- 30 -badgeView2.frame.size.width , 7, badgeView2.frame.size.width, badgeView2.frame.size.height)];
+            bgImage.image = [UIImage imageNamed:@"checkversion_bg.png"];
+            [cell.contentView addSubview:bgImage];
+            [cell.contentView addSubview:badgeView2];
+        }
+        else
+        {
+            UILabel* textlab = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-120, 0, 90, 40)];
+            textlab.text = @"已是最新版本";
+            textlab.font = FONT(15);
+            textlab.textColor = UIColorFromRGB(0x878787);
+            [cell.contentView addSubview:textlab];
+//            self.isNewVersion = NO;
+        }
+        
+    }
+    
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -148,22 +163,27 @@
         AccountAndSecurityViewController* AccountAndSecurityView= [[AccountAndSecurityViewController alloc] initWithNibName:@"AccountAndSecurityViewController" bundle:nil];
         [self.navigationController pushViewController:AccountAndSecurityView animated:YES];
     }
-//    else if (indexPath.row == 1)
-//    {
-//        NSString* url = [self.dict objectForKeySafe:@"url"];
-//        NSString *str = [url substringToIndex:url.length -2];
-//        
-//        
-//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",str,@"1019667891"]]];
-////        if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion])
-////        {
-////            VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
-////            VersionUpdateView.items = self.dict;
-////            [self.navigationController pushViewController:VersionUpdateView animated:YES];
-////        }
-//        
-//        
-//    }
+    else if (indexPath.row == 1)
+    {
+        self.isDetectionVersion = YES;
+        [self httpVersionUpdate];
+//        if (self.isNewVersion) {
+//            NSString* url = [self.dict objectForKeySafe:@"url"];
+//            NSString *str = [url substringToIndex:url.length -2];
+//            
+//            
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",str,@"1019667891"]]];
+//        }
+        
+//        if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion])
+//        {
+//            VersionUpdateViewController* VersionUpdateView = [[VersionUpdateViewController alloc] initWithNibName:@"VersionUpdateViewController" bundle:nil];
+//            VersionUpdateView.items = self.dict;
+//            [self.navigationController pushViewController:VersionUpdateView animated:YES];
+//        }
+        
+        
+    }
     else
     {
         AboutViewController* AboutView = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
@@ -209,6 +229,37 @@
 //                
 //            }
             self.dict =[data objectForKeySafe:@"datas"];
+            NSString* appVersion = [self.dict objectForKeySafe: @"appVersion"];
+            if (self.isDetectionVersion) {
+                self.isDetectionVersion = NO;
+                if (![[ConfigManager sharedInstance].sysVersion isEqualToString:appVersion] && appVersion.length != 0)
+                {
+                    self.stAlertView = [[STAlertView alloc] initWithTitle:[NSString stringWithFormat:@"发现新版本%@", appVersion] message:[self.dict objectForKeySafe: @"appDes"] cancelButtonTitle:@"下次再说" otherButtonTitle:@"立即更新" cancelButtonBlock:^{
+                        
+                    } otherButtonBlock:^{
+                        DLog(@"是");
+                        NSString* url = [self.dict objectForKeySafe:@"url"];
+                        NSString *str = [url substringToIndex:url.length -2];
+                        
+                        
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",str,@"1019667891"]]];
+                    }];
+                    
+                    [self.stAlertView show];
+                }
+                else
+                {
+                    self.stAlertView = [[STAlertView alloc] initWithTitle:@"你使用的已经是最新版本了!" message:@"" cancelButtonTitle:nil otherButtonTitle:@"我知道了" cancelButtonBlock:^{
+                        
+                    } otherButtonBlock:^{
+                        DLog(@"是");
+                        
+                    }];
+                    
+                    [self.stAlertView show];
+                }
+            }
+            
             [self.tableview reloadData];
             
         }
