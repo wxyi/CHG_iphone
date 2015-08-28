@@ -127,6 +127,8 @@
 		2E9938EB1B0DD32900870456 /* HomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9938E91B0DD32900870456 /* HomePageViewController.m */; };
 		2E9938EC1B0DD32900870456 /* HomePageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E9938EA1B0DD32900870456 /* HomePageViewController.xib */; };
 		2E9938F01B0DEE5A00870456 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9938EF1B0DEE5A00870456 /* QRCodeGenerator.m */; };
+		2E9D18521B8EAED600D5B49E /* AwardHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E9D18501B8EAED600D5B49E /* AwardHomeCell.m */; };
+		2E9D18531B8EAED600D5B49E /* AwardHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E9D18511B8EAED600D5B49E /* AwardHomeCell.xib */; };
 		2EBAE8B31B4A5883002E1C39 /* MyUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */; };
 		2EBAF1431B4E7C3200CDAC1A /* PresellOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */; };
 		2ED17ECF1B299BD000F96595 /* CompletedOrderDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */; };
@@ -609,6 +611,9 @@
 		2E9938EA1B0DD32900870456 /* HomePageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = HomePageViewController.xib; path = HomePage/HomePageViewController.xib; sourceTree = "<group>"; };
 		2E9938EE1B0DEE5A00870456 /* QRCodeGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeGenerator.h; sourceTree = "<group>"; };
 		2E9938EF1B0DEE5A00870456 /* QRCodeGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeGenerator.m; sourceTree = "<group>"; };
+		2E9D184F1B8EAED600D5B49E /* AwardHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AwardHomeCell.h; path = Cell/HomePage/AwardHomeCell.h; sourceTree = "<group>"; };
+		2E9D18501B8EAED600D5B49E /* AwardHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AwardHomeCell.m; path = Cell/HomePage/AwardHomeCell.m; sourceTree = "<group>"; };
+		2E9D18511B8EAED600D5B49E /* AwardHomeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AwardHomeCell.xib; path = Cell/HomePage/AwardHomeCell.xib; sourceTree = "<group>"; };
 		2EBAE8B11B4A5883002E1C39 /* MyUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyUncaughtExceptionHandler.h; sourceTree = "<group>"; };
 		2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyUncaughtExceptionHandler.m; sourceTree = "<group>"; };
 		2EBAF1411B4E7C3200CDAC1A /* PresellOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresellOperation.h; sourceTree = "<group>"; };
@@ -1791,6 +1796,9 @@
 				2ED84ADF1B12E94E0086992D /* MenuCollectionCell.h */,
 				2ED84AE01B12E94E0086992D /* MenuCollectionCell.m */,
 				2ED84AE11B12E94E0086992D /* MenuCollectionCell.xib */,
+				2E9D184F1B8EAED600D5B49E /* AwardHomeCell.h */,
+				2E9D18501B8EAED600D5B49E /* AwardHomeCell.m */,
+				2E9D18511B8EAED600D5B49E /* AwardHomeCell.xib */,
 			);
 			name = HomePage;
 			sourceTree = "<group>";
@@ -2507,6 +2515,7 @@
 				2ED84B301B1438BB0086992D /* OrdersGoodsCell.xib in Resources */,
 				2E3D11991B1ECED300180782 /* OrderCounterViewController.xib in Resources */,
 				2EDC350F1B4D4D20008AB922 /* splash2.png in Resources */,
+				2E9D18531B8EAED600D5B49E /* AwardHomeCell.xib in Resources */,
 				2E4E41361B57B425006E2A57 /* icon_48.png in Resources */,
 				2ED475191B1CA0FB005543AC /* StoresDetailsViewController.xib in Resources */,
 				2E81FF6A1B3C2907006189A9 /* LaunchScreen.xib in Resources */,
@@ -2719,6 +2728,7 @@
 				2EFD84E21B43CCA400E5A915 /* UITableView+YRSafeCategory.m in Sources */,
 				2ED84C531B16B8D40086992D /* MembersRelationCell.m in Sources */,
 				2ED84B781B15924F0086992D /* PresellGoodsViewController.m in Sources */,
+				2E9D18521B8EAED600D5B49E /* AwardHomeCell.m in Sources */,
 				2EE9F2991B221F41006EB46B /* DKFilterView.m in Sources */,
 				2ED474EA1B1C4753005543AC /* SettingViewController.m in Sources */,
 				2E3D119D1B1ED53400180782 /* OrderAmountCell.m in Sources */,
@@ -2906,7 +2916,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: zhaoguang zheng (3REG4YRAP2)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: zhaoguang zheng (LX2KSR4FFP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2994,7 +3004,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: zhaoguang zheng (3REG4YRAP2)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: zhaoguang zheng (LX2KSR4FFP)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

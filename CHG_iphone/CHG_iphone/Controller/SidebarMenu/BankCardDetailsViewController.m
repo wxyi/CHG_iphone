@@ -68,7 +68,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 4;
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -103,6 +103,14 @@
         
         cardnumber = [NSString stringWithFormat:@"%@%@",temp,[cardnumber substringFromIndex:cardnumber.length -4]];
         cell.Detailslab.text = cardnumber;
+        
+        
+    }
+    else if (indexPath.row == 3)
+    {
+        cell.namelab.text =@"支行信息";
+      
+        cell.Detailslab.text = [self.items objectForKeySafe:@"bankName"];
         
         
     }

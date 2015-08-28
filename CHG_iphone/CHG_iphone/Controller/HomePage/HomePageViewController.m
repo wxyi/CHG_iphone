@@ -26,10 +26,11 @@
 #import "StoreSalesViewController.h"
 #import "HelpCenterViewController.h"
 #import "NSDownNetImage.h"
+#import "AwardHomeCell.h"
 @interface HomePageViewController ()
 @property UINib* PromoListNib;
 @property UINib* AccountBriefNib;
-@property UINib* awardTotalAmountNib;
+@property UINib* AwardHomeNib;
 @property UINib* RewardsNib;
 @property UINib* MenuNib;
 @property PromoListCell *listcell;
@@ -95,7 +96,7 @@
     self.tableview.showsVerticalScrollIndicator = NO;
     self.PromoListNib = [UINib nibWithNibName:@"PromoListCell" bundle:nil];
     self.AccountBriefNib = [UINib nibWithNibName:@"AccountBriefCell" bundle:nil];
-    self.awardTotalAmountNib = [UINib nibWithNibName:@"awardTotalAmountCell" bundle:nil];
+    self.AwardHomeNib = [UINib nibWithNibName:@"AwardHomeCell" bundle:nil];
     self.RewardsNib = [UINib nibWithNibName:@"RewardsCell" bundle:nil];
     
     self.MenuNib = [UINib nibWithNibName:@"MenuCell" bundle:nil];
@@ -209,9 +210,9 @@
         }
         else
         {
-            awardTotalAmountCell *cell=[tableView dequeueReusableCellWithIdentifier:@"awardTotalAmountCell"];
+            AwardHomeCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AwardHomeCell"];
             if(cell==nil){
-                cell = (awardTotalAmountCell*)[[self.awardTotalAmountNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
+                cell = (AwardHomeCell*)[[self.AwardHomeNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
                 
             }
             //        cell.backgroundColor = UIColorFromRGB(0x646464);
@@ -295,7 +296,7 @@
         {
             return self.menuArr.count/3 * ((SCREEN_WIDTH)/3);
         }
-        return 100;
+        return 75;
     }
     else if (indexPath.row == 3)
         return 75;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -15,17 +15,17 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="奖励总额(元)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lCY-c3-998">
-                        <rect key="frame" x="10" y="57" width="100" height="21"/>
+                        <rect key="frame" x="10" y="16" width="245" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="9lQ-mF-cJE"/>
-                            <constraint firstAttribute="width" constant="100" id="Rdj-1A-BlT"/>
+                            <constraint firstAttribute="width" constant="245" id="Rdj-1A-BlT"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hSn-Sq-dc4">
-                        <rect key="frame" x="105" y="42" width="210" height="36"/>
+                        <rect key="frame" x="10" y="47" width="210" height="36"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="210" id="gsf-J5-VnW"/>
@@ -46,14 +46,15 @@
                 </subviews>
                 <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstItem="hSn-Sq-dc4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="42" id="3KY-Ke-m8H"/>
-                    <constraint firstItem="lCY-c3-998" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="57" id="D5X-lq-uSl"/>
+                    <constraint firstItem="hSn-Sq-dc4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="47" id="3KY-Ke-m8H"/>
+                    <constraint firstItem="lCY-c3-998" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="D5X-lq-uSl"/>
                     <constraint firstItem="qrq-jk-31g" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ISB-v5-E6K"/>
                     <constraint firstAttribute="trailing" secondItem="qrq-jk-31g" secondAttribute="trailing" id="WpY-4C-H0O"/>
-                    <constraint firstItem="hSn-Sq-dc4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="105" id="eDA-mv-3gh"/>
+                    <constraint firstItem="hSn-Sq-dc4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="eDA-mv-3gh"/>
+                    <constraint firstItem="hSn-Sq-dc4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="ekn-Fg-NQ4"/>
                     <constraint firstItem="lCY-c3-998" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="hdZ-Jd-3GR"/>
                     <constraint firstItem="qrq-jk-31g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="izL-oT-Uig"/>
-                    <constraint firstAttribute="trailing" secondItem="hSn-Sq-dc4" secondAttribute="trailing" constant="5" id="lVx-BL-2uy"/>
+                    <constraint firstAttribute="trailing" secondItem="hSn-Sq-dc4" secondAttribute="trailing" constant="100" id="lVx-BL-2uy"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

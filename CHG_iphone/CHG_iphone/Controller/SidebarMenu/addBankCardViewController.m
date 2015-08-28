@@ -45,7 +45,7 @@
     self.bankitems = [[NSMutableArray alloc] init];
     
     self.bankitems = [[SQLiteManager sharedInstance] getBankCodeDatas];
-    self.items = [NSArray arrayWithObjects:@"持卡人",@"银行卡号",@"开户银行", nil];
+    self.items = [NSArray arrayWithObjects:@"持卡人",@"银行卡号",@"开户银行",@"支行信息", nil];
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;
 //    rect.size.width = SCREEN_WIDTH;
@@ -69,7 +69,7 @@
 }
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0 || indexPath.row == 1) {
+    if (indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 3) {
         AddShoppersCell *cell=[tableView dequeueReusableCellWithIdentifier:@"AddShoppersCell"];
         if(cell==nil){
             cell = (AddShoppersCell*)[[self.AddShoppersNib instantiateWithOwner:self options:nil] objectAtIndexSafe:0];
@@ -183,6 +183,10 @@
     [name resignFirstResponder];
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
     [Card resignFirstResponder];
+    
+    UITextField* bankname = (UITextField*)[self.view viewWithTag:1013];
+    [bankname resignFirstResponder];
+    
     NSString* CardNum = [Card.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     UITextField* Cardtype = (UITextField*)[self.view viewWithTag:1012];
     [Card resignFirstResponder];
@@ -211,6 +215,11 @@
     {
         info = @"请选择银行";
     }
+    else if (bankname.text.length != 0 && [Utils checkChinaName:bankname.text])
+    {
+        info = @"支行信息只能包含中文";
+
+    }
     
 //    else if ([IdentifierValidator isValid:IdentifierTypeCreditNumber value:Card.text]) {
 //        JTImageLabel *promptlabel = (JTImageLabel*)[self.view viewWithTag:103];
@@ -235,6 +244,7 @@
 {
     UITextField* name = (UITextField*)[self.view viewWithTag:1010];
     UITextField* Card = (UITextField*)[self.view viewWithTag:1011];
+    UITextField* bankname = (UITextField*)[self.view viewWithTag:1013];
     NSString* CardNum = [Card.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
@@ -250,6 +260,7 @@
     [bankpar setObjectSafe:self.bank.bankCode forKey:@"bankCode"];
     [bankpar setObjectSafe:CardNum forKey:@"cardNumber"];
     [bankpar setObjectSafe:name.text forKey:@"accountName"];
+    [bankpar setObjectSafe:bankname.text forKey:@"bankName"];
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleShrink];
     [MMProgressHUD showWithTitle:@"" status:@""];
@@ -414,6 +425,36 @@
             textlab.text = @"请选择银行";
         }
     }
+    else if (field.tag == 1013)
+    {
+//        NSString* lang = [[UITextInputMode currentInputMode] primaryLanguage];
+//        if ([lang isEqualToString:@"zh-Hans"]) {
+//            UITextRange *selectedRange = [field markedTextRange];
+//            UITextPosition *position = [field positionFromPosition:selectedRange.start offset:0];
+//            // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+//            if (!position) {
+//                if (field.text.length > 20) {
+//                    field.text = [field.text substringToIndex:20];
+//                }
+//            }
+//            else
+//            {
+//                //有高亮选择的字符串，则暂不对文字进行统计和限制
+//            }
+//            
+//        }
+//        else
+//        {
+//            //中文输入法以外的直接对基统计限制即可，不考虑其他的语种情况
+//            if (field.text.length > 20) {
+//                field.text = [field.text substringToIndex:20];
+//            }
+//        }
+        if (field.markedTextRange == nil&& field.text.length > 20) {
+            field.text = [field.text substringToIndex:20];
+            info = @"支行信息不能大于20位";
+        }
+    }
     
     if (info.length > 0) {
         JTImageLabel* imagelabel = (JTImageLabel*)[self.view viewWithTag:103333];
@@ -448,10 +489,7 @@
         if ([NSObject stringContainsEmoji:string]) {
             return NO;
         }
-        if ([NSObject stringContainsEmoji:string]) {
-            return NO;
-        }
-        //        NSInteger existedLength = textField.text.length;
+                //        NSInteger existedLength = textField.text.length;
         //        NSInteger selectedLength = range.length;
         //        NSInteger replaceLength = string.length;
         
@@ -482,7 +520,21 @@
             textField.text = [textField.text stringByAppendingString:@" "];
         }
     }
-    
+    else if (textField.tag == 1013) {
+        if (string.length == 0) return YES;
+        
+       
+        if ([NSObject stringContainsEmoji:string]) {
+            return NO;
+        }
+
+        
+        
+        
+        if (textField.text.length >= 20 && string.length > range.length) {
+            return NO;
+        }
+    }
     return YES;
 }
 @end

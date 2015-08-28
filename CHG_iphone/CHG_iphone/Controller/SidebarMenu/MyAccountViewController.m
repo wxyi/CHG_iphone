@@ -281,8 +281,8 @@
             
             [self createMyAccountData:[data objectForKeySafe:@"assetDetail"]];
             self.collonitems = [NSArray arrayWithObjects:
-                                [NSDictionary dictionaryWithObjectsAndKeys:@"奖励余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"awardUsing"] doubleValue]],@"count", nil],
-                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"累计奖励收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe:@"awardTotal"] doubleValue]],@"count", nil], nil];
+                                [NSDictionary dictionaryWithObjectsAndKeys:@"账户余额(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe: @"awardUsing"] doubleValue]],@"count", nil],
+                                                       [NSDictionary dictionaryWithObjectsAndKeys:@"累计账户收益(元)",@"title",[NSString stringWithFormat:@"%.2f",[[data objectForKeySafe:@"awardTotal"] doubleValue]],@"count", nil], nil];
 
             
             [self.collection reloadData];
@@ -646,6 +646,13 @@
         }
 //        [self sortDate:[tm_array copy] sortId:@"amountDate"];
         [self reLoadView];
+    }
+    else
+    {
+        [SGInfoAlert showInfo:@"本月无数据,上拉刷新请求上一个月的数据"
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     }
 
 }

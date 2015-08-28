@@ -23,4 +23,6 @@
 + (BOOL)checkURL : (NSString *) url;
 
 + (BOOL)checkName:(NSString *) name;
+#pragma 正则匹配中亠
++ (BOOL)checkChinaName:(NSString *) name;
 @end

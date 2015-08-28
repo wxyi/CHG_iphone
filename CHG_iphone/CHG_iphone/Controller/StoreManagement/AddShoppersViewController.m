@@ -172,6 +172,11 @@
         [textfield resignFirstResponder];
         
         
+        textfield = (UITextField*)[self.view viewWithTag:1013];
+        NSString *bankname = textfield.text;
+        
+        [textfield resignFirstResponder];
+        
         NSString * info = @"";
         if (name.length == 0) {
             info = @"请输入姓名";
@@ -200,6 +205,7 @@
         {
             info = @"身份证格式不正确";
         }
+        
 //        else if (cardNum.length != 18 )
 //        {
 //            DLog(@"%d",cardNum.length);

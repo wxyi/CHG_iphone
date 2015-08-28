@@ -86,4 +86,16 @@
     }
     return NO;
 }
++ (BOOL)checkChinaName:(NSString *) name
+{
+    NSString *regex = @"^[\u4e00-\u9fa5]{0,}+$";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    
+    if (![pred evaluateWithObject:name])
+    {
+        return YES;
+    }
+    return NO;
+
+}
 @end
