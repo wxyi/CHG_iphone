@@ -169,9 +169,16 @@
             [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
             [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
 //            [self.navigationController popToRootViewControllerAnimated:YES];
-            HomePageViewController *HomePageView = [self.navigationController.viewControllers objectAtIndexSafe:0];;
-            HomePageView.stAlert = @"修改密码成功";
-            [self.navigationController popToViewController:HomePageView animated:YES];
+            [SGInfoAlert showInfo:@"密码修改成功"
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            
+            dispatch_queue_t queue = dispatch_get_main_queue();
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), queue, ^{
+                
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            });
             
             
         }

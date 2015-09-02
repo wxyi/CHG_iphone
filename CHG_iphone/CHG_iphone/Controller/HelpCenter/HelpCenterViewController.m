@@ -115,9 +115,12 @@
             }
         }
         [sender setSelected:YES];
-        NSString *strtag = [NSString stringWithFormat:@"%d",sender.tag];
-        NSInteger row = [[strtag substringFromIndex:2] integerValueSafe];
-        [self.collection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        if (self.items.count != 0) {
+            NSString *strtag = [NSString stringWithFormat:@"%d",sender.tag];
+            NSInteger row = [[strtag substringFromIndex:2] integerValueSafe];
+            [self.collection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+
+        }
     }
 }
 -(void)selectBtn:(UIButton*)sender
@@ -253,8 +256,18 @@
             
 //            [self.tableview reloadData];
         }
+        else
+        {
+            [SGInfoAlert showInfo:msg
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+        }
     } failureBlock:^(NSString *description) {
-        
+        [SGInfoAlert showInfo:description
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     } progressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         
     } Refresh_tokenBlock:^(BOOL success) {

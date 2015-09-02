@@ -24,4 +24,5 @@
           inView:(UIView*)view 
         vertical:(float)height;
 
++ (void)removeSGInfoAlert;
 @end

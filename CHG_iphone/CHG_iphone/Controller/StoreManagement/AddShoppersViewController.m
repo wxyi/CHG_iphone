@@ -172,10 +172,10 @@
         [textfield resignFirstResponder];
         
         
-        textfield = (UITextField*)[self.view viewWithTag:1013];
-        NSString *bankname = textfield.text;
-        
-        [textfield resignFirstResponder];
+//        textfield = (UITextField*)[self.view viewWithTag:1013];
+//        NSString *bankname = textfield.text;
+//        
+//        [textfield resignFirstResponder];
         
         NSString * info = @"";
         if (name.length == 0) {
@@ -275,14 +275,21 @@
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
             [MMProgressHUD dismiss];
-            [SGInfoAlert showInfo:[data objectForKeySafe:@"msg"]
+            
+            NSString* stAlert = [NSString stringWithFormat:@"%@成功",self.title];
+            [SGInfoAlert showInfo:stAlert
                           bgColor:[[UIColor blackColor] CGColor]
                            inView:self.view
                          vertical:0.7];
 //            [self.navigationController popViewControllerAnimated:YES];
-            StoresInfoViewController *StoresInfoView = [self.navigationController.viewControllers objectAtIndexSafe:self.navigationController.viewControllers.count-2];
-            StoresInfoView.stAlert = [NSString stringWithFormat:@"%@成功",self.title];
-            [self.navigationController popToViewController:StoresInfoView animated:YES];
+            dispatch_queue_t queue = dispatch_get_main_queue();
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), queue, ^{
+                
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+//            StoresInfoViewController *StoresInfoView = [self.navigationController.viewControllers objectAtIndexSafe:self.navigationController.viewControllers.count-2];
+//            StoresInfoView.stAlert = [NSString stringWithFormat:@"%@成功",self.title];
+//            [self.navigationController popToViewController:StoresInfoView animated:YES];
         }
         else
         {

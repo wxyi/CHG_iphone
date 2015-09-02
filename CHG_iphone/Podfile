@@ -28,4 +28,5 @@ pod 'ZXing', '~> 2.3'
 #pod 'ZXingObjC', '~> 3.1.0'
 pod 'ZBarSDK', '~> 1.3.1'
 #pod 'JTImageButton', '~> 1.0.2'
+#pod 'ZZCustomAlertView', '~> 0.1.0'
 

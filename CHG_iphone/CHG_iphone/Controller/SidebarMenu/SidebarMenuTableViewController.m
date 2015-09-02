@@ -13,6 +13,8 @@
 #import "MyAccountViewController.h"
 #import "SettingViewController.h"
 #import "KGModal.h"
+#import "UIWindow+YUBottomPoper.h"
+#import "ZZCustomAlertView.h"
 @interface SidebarMenuTableViewController ()
 
 @end
@@ -84,22 +86,74 @@
 -(void)showQrCode
 {
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 160, 160)];
+    
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewHide)];
     [contentView addGestureRecognizer:tapGestureRecognizer];
+    
+    //长按保存
+    UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
+    longPressGr.minimumPressDuration = 1.0;
+    [contentView addGestureRecognizer:longPressGr];
+    
     contentView.backgroundColor = UIColorFromRGB(0xf0f0f0);
     UIImageView* image = [[UIImageView alloc] initWithFrame:contentView.frame];
     NSString *newstr =[NSString stringWithFormat:@"%@/%@",APPDocumentsDirectory,@"StoreQrCode.jpg"] ;
     NSLog(@"完整路径是:%@",newstr);
     image.image = [UIImage imageWithData:[NSData dataWithContentsOfFile:newstr]];
     [contentView addSubview:image];
-    KGModal *modal = [KGModal sharedInstance];
-    modal.showCloseButton = NO;
-    [modal showWithContentView:contentView andAnimated:YES];
+    
+    ZZCustomAlertView *alert = [ZZCustomAlertView alertViewWithParentView:self.view andContentView:contentView];
+    [alert show];
+//    KGModal *modal = [KGModal sharedInstance];
+//    modal.showCloseButton = NO;
+//    [modal showWithContentView:contentView andAnimated:YES];
 }
 -(void)viewHide
 {
     DLog(@"隐藏");
-    [[KGModal sharedInstance] hide];
+    [[ZZCustomAlertView alertViewOnPresent] dismiss];
+//    [[KGModal sharedInstance] hide];
+}
+-(void)longPressToDo:(UILongPressGestureRecognizer *)gesture
+{
+    if(gesture.state == UIGestureRecognizerStateBegan)
+    {
+        DLog(@"长按");
+//        [self.view bringSubviewToFront:self.view.window];
+        
+        [self.view.window  showPopWithButtonTitles:@[@"保存到相册",] styles:@[YUDefaultStyle] whenButtonTouchUpInSideCallBack:^(int index  ) {
+            
+            if (index == 0) {
+                NSString *newstr =[NSString stringWithFormat:@"%@/%@",APPDocumentsDirectory,@"StoreQrCode.jpg"] ;
+                NSLog(@"完整路径是:%@",newstr);
+                UIImage* image = [UIImage imageWithData:[NSData dataWithContentsOfFile:newstr]];
+                [self saveImageToPhotos:image];
+            }
+            
+        }];
+    }
+}
+
+-(void)saveImageToPhotos:(UIImage*)savedImage
+{
+    UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+
+}
+
+// 指定回调方法
+
+- (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo
+{
+    NSString *msg = nil ;
+    if(error != NULL){
+        msg = @"保存图片失败" ;
+    }else{
+        msg = @"保存图片成功" ;
+    }
+    [[ZZCustomAlertView alertViewOnPresent] dismiss];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"保存图片结果提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [alert show];
+
 }
 #pragma mark -
 #pragma mark UITableView Delegate

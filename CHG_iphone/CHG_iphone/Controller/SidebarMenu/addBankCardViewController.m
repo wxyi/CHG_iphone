@@ -268,7 +268,17 @@
         DLog(@"data = %@ msg = %@",[data objectForKeySafe:@"datas"],[data objectForKey:@"msg"]);
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200){
             [MMProgressHUD dismiss];
-            [self.navigationController popViewControllerAnimated:YES];
+            
+            [SGInfoAlert showInfo:@"添加成功"
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:self.view
+                         vertical:0.7];
+            dispatch_queue_t queue = dispatch_get_main_queue();
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), queue, ^{
+                
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+//            [self.navigationController popViewControllerAnimated:YES];
         }
         else
         {

@@ -74,6 +74,14 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect,
     [self removeFromSuperview];
 }
 
++ (void)removeSGInfoAlert
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:1];
+
+    [UIView commitAnimations];
+    [self performSelector:@selector(remove) withObject:nil afterDelay:1];
+}
 // 渐变消失
 - (void)fadeAway{
     [UIView beginAnimations:nil context:nil];
@@ -98,7 +106,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect,
     [view.window bringSubviewToFront:alert];
     [alert release];
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:.6f];
+    [UIView setAnimationDuration:.5f];
     alert.alpha = 1.0;
     [UIView commitAnimations];
     [alert performSelector:@selector(fadeAway) withObject:nil afterDelay:2.5];

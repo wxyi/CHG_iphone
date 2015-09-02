@@ -50,6 +50,21 @@
     self.tableview.scrollEnabled = NO;
 //    self.tableview.backgroundColor = [UIColor whiteColor];
     self.LoginNib = [UINib nibWithNibName:@"LoginCell" bundle:nil];
+    
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePopUpView)];
+    //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
+    tapGestureRecognizer.cancelsTouchesInView = NO;
+    //将触摸事件添加到当前view
+    [self.tableview addGestureRecognizer:tapGestureRecognizer];
+}
+-(void)hidePopUpView
+{
+    LoginCell *cell = (LoginCell*)[self.tableview cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (cell.isOpened) {
+        [cell.openButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -72,6 +87,11 @@
         
     }
    
+    if ([ConfigManager sharedInstance].strLoginAccount.length != 0) {
+        cell.userTextfield.text = [ConfigManager sharedInstance].strLoginAccount;
+    }
+    
+    [cell CreateDropDown];
    [cell.passwordTextfield addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     cell.didSkipSubItem = ^(NSInteger tag){
@@ -236,11 +256,26 @@
 //            self.isfrist = YES;
         if([data objectForKeySafe:@"code"] &&[[data objectForKeySafe:@"code"]  intValue]==200)
         {
-
+            UITextField* namefield = (UITextField*)[self.view viewWithTag:1011];
+            [ConfigManager sharedInstance].strLoginAccount = namefield.text;
             [ConfigManager sharedInstance].access_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"access_token"];
             [ConfigManager sharedInstance].refresh_token = [[data objectForKeySafe:@"datas"] objectForKeySafe:@"refresh_token"];
             DLog(@"access_token = %@",[ConfigManager sharedInstance].access_token);
             DLog(@"refresh_token = %@",[ConfigManager sharedInstance].refresh_token);
+            
+            LoginCell *cell = (LoginCell*)[self.tableview cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            if ([ConfigManager sharedInstance].Arr_Account.length == 0) {
+                
+                [ConfigManager sharedInstance].Arr_Account = cell.userTextfield.text;
+            }
+            else
+            {
+                NSArray* Accountlist = [[ConfigManager sharedInstance].Arr_Account componentsSeparatedByString:NSLocalizedString(@",", nil)];
+                NSMutableArray* muAccountList = [Accountlist mutableCopy];
+                [muAccountList addObject:cell.userTextfield.text];
+                NSSet *set = [NSSet setWithArray:muAccountList];
+                [ConfigManager sharedInstance].Arr_Account =  [[set allObjects] componentsJoinedByString:@","];
+            }
 //            if (![ConfigManager sharedInstance].strAddressCode)
 //            {
 //                [self httpAddressCode];

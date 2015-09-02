@@ -364,5 +364,10 @@
 //        self.strBabyBirthday = locationString;
         NSLog(@"locationString:%@",self.strBabyBirthday);
     }
+    else
+    {
+        self.datePicker.ScrollToDate = [NSObject convertDateFromString:self.strBabyBirthday];
+        [self.datePicker drawRect:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
+    }
 }
 @end

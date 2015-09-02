@@ -76,7 +76,9 @@
 
 //会员注册信息，由于nav统一从CHGNavigationController中调用，所以需要记录会员手机号，会员姓名，手机验证码
 @property(nonatomic,assign) NSString * strcustMobile;
+
 @property(nonatomic,assign) NSString * strcustName;
+
 @property(nonatomic,assign) NSString * strcheckCode;
 
 //地址更新时间
@@ -86,6 +88,7 @@
 //银行卡更新时间
 @property(nonatomic,assign) NSString * promoListUpdateTime;
 
+@property(nonatomic,assign) NSString * strLoginAccount;
 
 //图片保存路径
 @property(nonatomic,assign) NSString* strImagePath;
@@ -93,4 +96,7 @@
 
 //银行卡ID
 @property(nonatomic,assign) NSString* strBankId;
+
+//账号 如果是多个账号以,分隔
+@property(nonatomic,assign) NSString* Arr_Account;
 @end

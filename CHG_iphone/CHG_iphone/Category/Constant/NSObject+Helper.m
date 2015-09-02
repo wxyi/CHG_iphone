@@ -252,7 +252,13 @@
     DLog(@"wxy sortedArray = %@",sortedArray);
     return sortedArray;
 }
-
++(NSDate*) convertDateFromString:(NSString*)uiDate
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date=[formatter dateFromString:uiDate];
+    return date;
+}
 //// 正常号转银行卡号 － 增加4位间的空格
 //+(NSString *)normalNumToBankNum
 //{

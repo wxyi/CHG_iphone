@@ -54,6 +54,8 @@
 - (void)viewDidCurrentView
 {
     NSLog(@"加载为当前视图 = %@",self.title);
+//    [SGInfoAlert removeFromSuperview];
+//    [SGInfoAlert removeSGInfoAlert];
     if ([self.items count] == 0) {
         [self setupRefresh];
     }

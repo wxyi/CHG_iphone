@@ -29,7 +29,7 @@
     if (IOS_VERSION >= 7.0) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.title = @"门店信息";
+    self.title = @"基础配置";
     UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 10, 50, 24)];
     [leftButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

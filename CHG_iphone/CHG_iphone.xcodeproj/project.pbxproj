@@ -131,6 +131,29 @@
 		2E9D18531B8EAED600D5B49E /* AwardHomeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E9D18511B8EAED600D5B49E /* AwardHomeCell.xib */; };
 		2EBAE8B31B4A5883002E1C39 /* MyUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */; };
 		2EBAF1431B4E7C3200CDAC1A /* PresellOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */; };
+		2ECF9DCF1B946C4E0000C4C9 /* btn_down_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9DCD1B946C4E0000C4C9 /* btn_down_blue.png */; };
+		2ECF9DD01B946C4E0000C4C9 /* btn_top.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9DCE1B946C4E0000C4C9 /* btn_top.png */; };
+		2ECF9DD41B94715F0000C4C9 /* NIDropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DD31B94715F0000C4C9 /* NIDropDown.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2ECF9DE11B9475E50000C4C9 /* dropdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9DD61B9475E40000C4C9 /* dropdown.png */; };
+		2ECF9DE21B9475E50000C4C9 /* dropup.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9DD71B9475E40000C4C9 /* dropup.png */; };
+		2ECF9DE31B9475E50000C4C9 /* SelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DD91B9475E40000C4C9 /* SelectionCell.m */; };
+		2ECF9DE41B9475E50000C4C9 /* SelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9DDA1B9475E40000C4C9 /* SelectionCell.xib */; };
+		2ECF9DE51B9475E50000C4C9 /* TableViewWithBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DDC1B9475E40000C4C9 /* TableViewWithBlock.m */; };
+		2ECF9DE61B9475E50000C4C9 /* UITableView+DataSourceBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DDE1B9475E40000C4C9 /* UITableView+DataSourceBlocks.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2ECF9DE71B9475E50000C4C9 /* UITableView+DelegateBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DE01B9475E40000C4C9 /* UITableView+DelegateBlocks.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		2ECF9E001B9498280000C4C9 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9DEA1B9498280000C4C9 /* FontAwesome.ttf */; };
+		2ECF9E011B9498280000C4C9 /* NSString+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DEC1B9498280000C4C9 /* NSString+FontAwesome.m */; };
+		2ECF9E021B9498280000C4C9 /* UIButton+Bootstrap.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DEE1B9498280000C4C9 /* UIButton+Bootstrap.m */; };
+		2ECF9E031B9498280000C4C9 /* YUDIVView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DF11B9498280000C4C9 /* YUDIVView.m */; };
+		2ECF9E041B9498280000C4C9 /* UIColor+YUColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DF31B9498280000C4C9 /* UIColor+YUColor.m */; };
+		2ECF9E051B9498280000C4C9 /* UIView+YUStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DF51B9498280000C4C9 /* UIView+YUStyle.m */; };
+		2ECF9E061B9498280000C4C9 /* UIWindow+YUBottomPoper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DF71B9498280000C4C9 /* UIWindow+YUBottomPoper.m */; };
+		2ECF9E071B9498280000C4C9 /* yConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DF91B9498280000C4C9 /* yConst.m */; };
+		2ECF9E081B9498280000C4C9 /* YUBottomPopSelctModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DFB1B9498280000C4C9 /* YUBottomPopSelctModel.m */; };
+		2ECF9E091B9498280000C4C9 /* YUBottomPopSelctView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DFD1B9498280000C4C9 /* YUBottomPopSelctView.m */; };
+		2ECF9E0A1B9498280000C4C9 /* YUDarkGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9DFF1B9498280000C4C9 /* YUDarkGlassView.m */; };
+		2ECF9E0F1B9590930000C4C9 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2ECF9E0C1B9590930000C4C9 /* .gitkeep */; };
+		2ECF9E101B9590930000C4C9 /* ZZCustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECF9E0E1B9590930000C4C9 /* ZZCustomAlertView.m */; };
 		2ED17ECF1B299BD000F96595 /* CompletedOrderDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */; };
 		2ED17ED01B299BD000F96595 /* CompletedOrderDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17ECE1B299BD000F96595 /* CompletedOrderDetailsViewController.xib */; };
 		2ED17EE01B2AE27700F96595 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ED17EDF1B2AE27700F96595 /* icon.png */; };
@@ -620,6 +643,45 @@
 		2EBAF1421B4E7C3200CDAC1A /* PresellOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresellOperation.m; sourceTree = "<group>"; };
 		2EBAF1461B4EC05800CDAC1A /* BaiduMapAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BaiduMapAPI.framework; path = CHG_iphone/Vendor/BaiduMapAPI.framework; sourceTree = "<group>"; };
 		2EC0821E1B6FF17C00D53144 /* libPods-ZXing.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-ZXing.a"; path = "Pods/build/Debug-iphoneos/libPods-ZXing.a"; sourceTree = "<group>"; };
+		2ECF9DCD1B946C4E0000C4C9 /* btn_down_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_down_blue.png; sourceTree = "<group>"; };
+		2ECF9DCE1B946C4E0000C4C9 /* btn_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_top.png; sourceTree = "<group>"; };
+		2ECF9DD21B94715F0000C4C9 /* NIDropDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIDropDown.h; sourceTree = "<group>"; };
+		2ECF9DD31B94715F0000C4C9 /* NIDropDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIDropDown.m; sourceTree = "<group>"; };
+		2ECF9DD61B9475E40000C4C9 /* dropdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dropdown.png; sourceTree = "<group>"; };
+		2ECF9DD71B9475E40000C4C9 /* dropup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dropup.png; sourceTree = "<group>"; };
+		2ECF9DD81B9475E40000C4C9 /* SelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionCell.h; sourceTree = "<group>"; };
+		2ECF9DD91B9475E40000C4C9 /* SelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionCell.m; sourceTree = "<group>"; };
+		2ECF9DDA1B9475E40000C4C9 /* SelectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SelectionCell.xib; sourceTree = "<group>"; };
+		2ECF9DDB1B9475E40000C4C9 /* TableViewWithBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewWithBlock.h; sourceTree = "<group>"; };
+		2ECF9DDC1B9475E40000C4C9 /* TableViewWithBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewWithBlock.m; sourceTree = "<group>"; };
+		2ECF9DDD1B9475E40000C4C9 /* UITableView+DataSourceBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+DataSourceBlocks.h"; sourceTree = "<group>"; };
+		2ECF9DDE1B9475E40000C4C9 /* UITableView+DataSourceBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+DataSourceBlocks.m"; sourceTree = "<group>"; };
+		2ECF9DDF1B9475E40000C4C9 /* UITableView+DelegateBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+DelegateBlocks.h"; sourceTree = "<group>"; };
+		2ECF9DE01B9475E40000C4C9 /* UITableView+DelegateBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+DelegateBlocks.m"; sourceTree = "<group>"; };
+		2ECF9DEA1B9498280000C4C9 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		2ECF9DEB1B9498280000C4C9 /* NSString+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontAwesome.h"; sourceTree = "<group>"; };
+		2ECF9DEC1B9498280000C4C9 /* NSString+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontAwesome.m"; sourceTree = "<group>"; };
+		2ECF9DED1B9498280000C4C9 /* UIButton+Bootstrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Bootstrap.h"; sourceTree = "<group>"; };
+		2ECF9DEE1B9498280000C4C9 /* UIButton+Bootstrap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Bootstrap.m"; sourceTree = "<group>"; };
+		2ECF9DF01B9498280000C4C9 /* YUDIVView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUDIVView.h; sourceTree = "<group>"; };
+		2ECF9DF11B9498280000C4C9 /* YUDIVView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YUDIVView.m; sourceTree = "<group>"; };
+		2ECF9DF21B9498280000C4C9 /* UIColor+YUColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+YUColor.h"; sourceTree = "<group>"; };
+		2ECF9DF31B9498280000C4C9 /* UIColor+YUColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+YUColor.m"; sourceTree = "<group>"; };
+		2ECF9DF41B9498280000C4C9 /* UIView+YUStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+YUStyle.h"; sourceTree = "<group>"; };
+		2ECF9DF51B9498280000C4C9 /* UIView+YUStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+YUStyle.m"; sourceTree = "<group>"; };
+		2ECF9DF61B9498280000C4C9 /* UIWindow+YUBottomPoper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+YUBottomPoper.h"; sourceTree = "<group>"; };
+		2ECF9DF71B9498280000C4C9 /* UIWindow+YUBottomPoper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+YUBottomPoper.m"; sourceTree = "<group>"; };
+		2ECF9DF81B9498280000C4C9 /* yConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yConst.h; sourceTree = "<group>"; };
+		2ECF9DF91B9498280000C4C9 /* yConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = yConst.m; sourceTree = "<group>"; };
+		2ECF9DFA1B9498280000C4C9 /* YUBottomPopSelctModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUBottomPopSelctModel.h; sourceTree = "<group>"; };
+		2ECF9DFB1B9498280000C4C9 /* YUBottomPopSelctModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YUBottomPopSelctModel.m; sourceTree = "<group>"; };
+		2ECF9DFC1B9498280000C4C9 /* YUBottomPopSelctView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUBottomPopSelctView.h; sourceTree = "<group>"; };
+		2ECF9DFD1B9498280000C4C9 /* YUBottomPopSelctView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YUBottomPopSelctView.m; sourceTree = "<group>"; };
+		2ECF9DFE1B9498280000C4C9 /* YUDarkGlassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YUDarkGlassView.h; sourceTree = "<group>"; };
+		2ECF9DFF1B9498280000C4C9 /* YUDarkGlassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YUDarkGlassView.m; sourceTree = "<group>"; };
+		2ECF9E0C1B9590930000C4C9 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		2ECF9E0D1B9590930000C4C9 /* ZZCustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZCustomAlertView.h; sourceTree = "<group>"; };
+		2ECF9E0E1B9590930000C4C9 /* ZZCustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZCustomAlertView.m; sourceTree = "<group>"; };
 		2ED17ECC1B299BD000F96595 /* CompletedOrderDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompletedOrderDetailsViewController.h; path = PickGoods/CompletedOrderDetailsViewController.h; sourceTree = "<group>"; };
 		2ED17ECD1B299BD000F96595 /* CompletedOrderDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompletedOrderDetailsViewController.m; path = PickGoods/CompletedOrderDetailsViewController.m; sourceTree = "<group>"; };
 		2ED17ECE1B299BD000F96595 /* CompletedOrderDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompletedOrderDetailsViewController.xib; path = PickGoods/CompletedOrderDetailsViewController.xib; sourceTree = "<group>"; };
@@ -1367,6 +1429,10 @@
 		2E7D77771B097CDC00222C1E /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2ECF9E0B1B9590930000C4C9 /* ZZCustomAlertView */,
+				2ECF9DE81B9498280000C4C9 /* YUScreentPoper */,
+				2ECF9DD51B9475E40000C4C9 /* ComboBox */,
+				2ECF9DD11B94715F0000C4C9 /* NIDropDown */,
 				2E3B868C1B54111B003BC694 /* SafeTransition */,
 				2EBAE8B01B4A5883002E1C39 /* MyUncaughtExceptionHandler */,
 				2EFD84D21B43CCA400E5A915 /* YRClassSafeCategory */,
@@ -1569,6 +1635,87 @@
 				2EBAE8B21B4A5883002E1C39 /* MyUncaughtExceptionHandler.m */,
 			);
 			path = MyUncaughtExceptionHandler;
+			sourceTree = "<group>";
+		};
+		2ECF9DD11B94715F0000C4C9 /* NIDropDown */ = {
+			isa = PBXGroup;
+			children = (
+				2ECF9DD21B94715F0000C4C9 /* NIDropDown.h */,
+				2ECF9DD31B94715F0000C4C9 /* NIDropDown.m */,
+			);
+			path = NIDropDown;
+			sourceTree = "<group>";
+		};
+		2ECF9DD51B9475E40000C4C9 /* ComboBox */ = {
+			isa = PBXGroup;
+			children = (
+				2ECF9DD61B9475E40000C4C9 /* dropdown.png */,
+				2ECF9DD71B9475E40000C4C9 /* dropup.png */,
+				2ECF9DD81B9475E40000C4C9 /* SelectionCell.h */,
+				2ECF9DD91B9475E40000C4C9 /* SelectionCell.m */,
+				2ECF9DDA1B9475E40000C4C9 /* SelectionCell.xib */,
+				2ECF9DDB1B9475E40000C4C9 /* TableViewWithBlock.h */,
+				2ECF9DDC1B9475E40000C4C9 /* TableViewWithBlock.m */,
+				2ECF9DDD1B9475E40000C4C9 /* UITableView+DataSourceBlocks.h */,
+				2ECF9DDE1B9475E40000C4C9 /* UITableView+DataSourceBlocks.m */,
+				2ECF9DDF1B9475E40000C4C9 /* UITableView+DelegateBlocks.h */,
+				2ECF9DE01B9475E40000C4C9 /* UITableView+DelegateBlocks.m */,
+			);
+			path = ComboBox;
+			sourceTree = "<group>";
+		};
+		2ECF9DE81B9498280000C4C9 /* YUScreentPoper */ = {
+			isa = PBXGroup;
+			children = (
+				2ECF9DE91B9498280000C4C9 /* Button */,
+				2ECF9DEF1B9498280000C4C9 /* DIVVIEW */,
+				2ECF9DF21B9498280000C4C9 /* UIColor+YUColor.h */,
+				2ECF9DF31B9498280000C4C9 /* UIColor+YUColor.m */,
+				2ECF9DF41B9498280000C4C9 /* UIView+YUStyle.h */,
+				2ECF9DF51B9498280000C4C9 /* UIView+YUStyle.m */,
+				2ECF9DF61B9498280000C4C9 /* UIWindow+YUBottomPoper.h */,
+				2ECF9DF71B9498280000C4C9 /* UIWindow+YUBottomPoper.m */,
+				2ECF9DF81B9498280000C4C9 /* yConst.h */,
+				2ECF9DF91B9498280000C4C9 /* yConst.m */,
+				2ECF9DFA1B9498280000C4C9 /* YUBottomPopSelctModel.h */,
+				2ECF9DFB1B9498280000C4C9 /* YUBottomPopSelctModel.m */,
+				2ECF9DFC1B9498280000C4C9 /* YUBottomPopSelctView.h */,
+				2ECF9DFD1B9498280000C4C9 /* YUBottomPopSelctView.m */,
+				2ECF9DFE1B9498280000C4C9 /* YUDarkGlassView.h */,
+				2ECF9DFF1B9498280000C4C9 /* YUDarkGlassView.m */,
+			);
+			path = YUScreentPoper;
+			sourceTree = "<group>";
+		};
+		2ECF9DE91B9498280000C4C9 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				2ECF9DEA1B9498280000C4C9 /* FontAwesome.ttf */,
+				2ECF9DEB1B9498280000C4C9 /* NSString+FontAwesome.h */,
+				2ECF9DEC1B9498280000C4C9 /* NSString+FontAwesome.m */,
+				2ECF9DED1B9498280000C4C9 /* UIButton+Bootstrap.h */,
+				2ECF9DEE1B9498280000C4C9 /* UIButton+Bootstrap.m */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
+		2ECF9DEF1B9498280000C4C9 /* DIVVIEW */ = {
+			isa = PBXGroup;
+			children = (
+				2ECF9DF01B9498280000C4C9 /* YUDIVView.h */,
+				2ECF9DF11B9498280000C4C9 /* YUDIVView.m */,
+			);
+			path = DIVVIEW;
+			sourceTree = "<group>";
+		};
+		2ECF9E0B1B9590930000C4C9 /* ZZCustomAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				2ECF9E0C1B9590930000C4C9 /* .gitkeep */,
+				2ECF9E0D1B9590930000C4C9 /* ZZCustomAlertView.h */,
+				2ECF9E0E1B9590930000C4C9 /* ZZCustomAlertView.m */,
+			);
+			path = ZZCustomAlertView;
 			sourceTree = "<group>";
 		};
 		2ED17EEF1B3192B400F96595 /* MJRefresh */ = {
@@ -1821,6 +1968,8 @@
 		2ED84AA41B12BFE80086992D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				2ECF9DCD1B946C4E0000C4C9 /* btn_down_blue.png */,
+				2ECF9DCE1B946C4E0000C4C9 /* btn_top.png */,
 				2E6FCFD41B85C7B4005DAB12 /* btn_start_hl.png */,
 				2E6FCFD51B85C7B4005DAB12 /* btn_start.png */,
 				2EE015A41B79924D00E2719B /* btn_help_center.png */,
@@ -2429,6 +2578,7 @@
 				2ED17EE01B2AE27700F96595 /* icon.png in Resources */,
 				2ED4751E1B1D46F8005543AC /* AddShoppersViewController.xib in Resources */,
 				2ED474871B1844CA005543AC /* StoresInfoCell.xib in Resources */,
+				2ECF9E001B9498280000C4C9 /* FontAwesome.ttf in Resources */,
 				2EE015A11B78D50900E2719B /* icon_leader.png in Resources */,
 				2ED84C3C1B16A80C0086992D /* successfulIdentifyViewController.xib in Resources */,
 				2ED474E61B1C3A1D005543AC /* SettlementCell.xib in Resources */,
@@ -2472,6 +2622,7 @@
 				2ED84C631B16ECA60086992D /* SuccessRegisterViewController.xib in Resources */,
 				2ED17EEA1B300EEB00F96595 /* icon_register_woman.png in Resources */,
 				2ED84C681B17F38C0086992D /* SuccessRegistereCell.xib in Resources */,
+				2ECF9DCF1B946C4E0000C4C9 /* btn_down_blue.png in Resources */,
 				2EE9F24E1B214D55006EB46B /* registeredMenuColCell.xib in Resources */,
 				2ED17EE71B300EEB00F96595 /* icon_register_girl.png in Resources */,
 				2ED84C1D1B15D0730086992D /* ForgotPasswordViewController.xib in Resources */,
@@ -2488,6 +2639,7 @@
 				2E7B0A5B1B1F34E6007C78CA /* area.plist in Resources */,
 				2ED84AAF1B12BFE80086992D /* image4.jpg in Resources */,
 				2ED84B4D1B148B250086992D /* StoreManagementViewController.xib in Resources */,
+				2ECF9DD01B946C4E0000C4C9 /* btn_top.png in Resources */,
 				2E73EA581B28182000A62558 /* IdentUserInfoCell.xib in Resources */,
 				2ED84AB61B12C06C0086992D /* AccountBriefCell.xib in Resources */,
 				2ED84C2C1B15D64F0086992D /* ResetPasswordCell.xib in Resources */,
@@ -2514,13 +2666,16 @@
 				2EE9F2591B21CA88006EB46B /* MembegrowthCell.xib in Resources */,
 				2ED84B301B1438BB0086992D /* OrdersGoodsCell.xib in Resources */,
 				2E3D11991B1ECED300180782 /* OrderCounterViewController.xib in Resources */,
+				2ECF9DE21B9475E50000C4C9 /* dropup.png in Resources */,
 				2EDC350F1B4D4D20008AB922 /* splash2.png in Resources */,
 				2E9D18531B8EAED600D5B49E /* AwardHomeCell.xib in Resources */,
 				2E4E41361B57B425006E2A57 /* icon_48.png in Resources */,
 				2ED475191B1CA0FB005543AC /* StoresDetailsViewController.xib in Resources */,
 				2E81FF6A1B3C2907006189A9 /* LaunchScreen.xib in Resources */,
+				2ECF9E0F1B9590930000C4C9 /* .gitkeep in Resources */,
 				2ED17EE61B300EEB00F96595 /* icon_register_boy.png in Resources */,
 				2ED474961B186C69005543AC /* GrowthCell.xib in Resources */,
+				2ECF9DE41B9475E50000C4C9 /* SelectionCell.xib in Resources */,
 				2EDC35061B4D49C2008AB922 /* page_320.png in Resources */,
 				2EDC35071B4D49C2008AB922 /* page_640.png in Resources */,
 				2EE015A51B79924D00E2719B /* btn_help_center.png in Resources */,
@@ -2546,6 +2701,7 @@
 				2EE9F25E1B21D135006EB46B /* addBankCardViewController.xib in Resources */,
 				2ED4746D1B183D1D005543AC /* StoreSalesDayViewController.xib in Resources */,
 				2E7B0A4B1B1F109C007C78CA /* StopViewController.xib in Resources */,
+				2ECF9DE11B9475E50000C4C9 /* dropdown.png in Resources */,
 				2ED474DC1B1C347D005543AC /* BankCardDetailsCell.xib in Resources */,
 				2ED84B0B1B13342F0086992D /* AllOrdersViewController.xib in Resources */,
 				2E4E41391B57B425006E2A57 /* icon_80.png in Resources */,
@@ -2602,9 +2758,11 @@
 				2E7EB5F81B25879E00D386C2 /* MMProgressHUD.m in Sources */,
 				2E761B431B207D270028FDF9 /* MemberRewardsColCell.m in Sources */,
 				2ED4750D1B1C860D005543AC /* StoresInfoViewController.m in Sources */,
+				2ECF9DE51B9475E50000C4C9 /* TableViewWithBlock.m in Sources */,
 				2ED84B191B1338580086992D /* QCSlideSwitchView.m in Sources */,
 				2E7EB6031B27D2BA00D386C2 /* AddressInfo.m in Sources */,
 				2EFD84CF1B42ABEF00E5A915 /* UIPopoverListView.m in Sources */,
+				2ECF9E051B9498280000C4C9 /* UIView+YUStyle.m in Sources */,
 				2E3B4C151B2228CF00D4C34F /* QRadioButton.m in Sources */,
 				2E7EB5D01B22F1C800D386C2 /* AFNetworkReachabilityManager.m in Sources */,
 				2ED84B4C1B148B250086992D /* StoreManagementViewController.m in Sources */,
@@ -2623,6 +2781,7 @@
 				2ED84A951B12B8800086992D /* PromoListCell.m in Sources */,
 				2E7D77851B097CDC00222C1E /* main.m in Sources */,
 				2ED474DB1B1C347D005543AC /* BankCardDetailsCell.m in Sources */,
+				2ECF9DE61B9475E50000C4C9 /* UITableView+DataSourceBlocks.m in Sources */,
 				2E761B3E1B207C6C0028FDF9 /* MemberRewardsCell.m in Sources */,
 				2E7EB5D41B22F1C800D386C2 /* AFURLResponseSerialization.m in Sources */,
 				2ED474D61B1C3383005543AC /* BankCardDetailsViewController.m in Sources */,
@@ -2630,6 +2789,7 @@
 				2ED84B721B158C730086992D /* amountCell.m in Sources */,
 				2EFD84DF1B43CCA400E5A915 /* NSDictionary+YRSafeCategory.m in Sources */,
 				2ED17F241B3192B400F96595 /* MJRefreshBackGifFooter.m in Sources */,
+				2ECF9E071B9498280000C4C9 /* yConst.m in Sources */,
 				2ED474951B186C69005543AC /* GrowthCell.m in Sources */,
 				2ED17F2B1B3192B400F96595 /* MJRefreshConst.m in Sources */,
 				2ED4751D1B1D46F8005543AC /* AddShoppersViewController.m in Sources */,
@@ -2672,6 +2832,7 @@
 				2E7EB5CD1B22F1C800D386C2 /* AFHTTPRequestOperation.m in Sources */,
 				2ED84C401B16A88B0086992D /* successfulIdentifyCell.m in Sources */,
 				2E1FF8FE1B7EF9EE00FE3D99 /* UIButtonImageWithLable.m in Sources */,
+				2ECF9E081B9498280000C4C9 /* YUBottomPopSelctModel.m in Sources */,
 				2ED474EF1B1C4D40005543AC /* AccountAndSecurityViewController.m in Sources */,
 				2ED4749F1B187122005543AC /* BaseCell.m in Sources */,
 				2EDC35001B4D4749008AB922 /* WelcomePageViewController.m in Sources */,
@@ -2679,6 +2840,7 @@
 				2ED17F211B3192B400F96595 /* MJRefreshAutoGifFooter.m in Sources */,
 				2ED84C3B1B16A80C0086992D /* successfulIdentifyViewController.m in Sources */,
 				2ED4747C1B184011005543AC /* StatisticAnalysisTopCell.m in Sources */,
+				2ECF9E021B9498280000C4C9 /* UIButton+Bootstrap.m in Sources */,
 				2E7EB5F91B25879E00D386C2 /* MMProgressHUDOverlayView.m in Sources */,
 				2E7EB5E01B230A5E00D386C2 /* UserConfig.m in Sources */,
 				2ED17F431B3297CF00F96595 /* SQLiteManager.m in Sources */,
@@ -2688,7 +2850,10 @@
 				2EE9F2971B221F41006EB46B /* DKFilterModel.m in Sources */,
 				2ED84AA31B12BD3C0086992D /* UIImage+SplitImageIntoTwoParts.m in Sources */,
 				2ED474BF1B189738005543AC /* OCMaskedTextFieldView.m in Sources */,
+				2ECF9DE31B9475E50000C4C9 /* SelectionCell.m in Sources */,
+				2ECF9E061B9498280000C4C9 /* UIWindow+YUBottomPoper.m in Sources */,
 				2ED84C6D1B17F6FE0086992D /* StatisticAnalysisViewController.m in Sources */,
+				2ECF9E091B9498280000C4C9 /* YUBottomPopSelctView.m in Sources */,
 				2EE0159A1B78CC5700E2719B /* HelpDetailsViewController.m in Sources */,
 				2E7422BD1B6A675400E2F976 /* StoreManageSubCell.m in Sources */,
 				2E7D78151B097CDC00222C1E /* HttpClient.m in Sources */,
@@ -2716,10 +2881,12 @@
 				2ED84AFF1B131E630086992D /* RegisteredMembersCell.m in Sources */,
 				2ED84ACE1B12DF2B0086992D /* RewardsCell.m in Sources */,
 				2E3B86921B54111B003BC694 /* UIViewController+APSafeTransition.m in Sources */,
+				2ECF9E0A1B9498280000C4C9 /* YUDarkGlassView.m in Sources */,
 				2ED84AA21B12BD3C0086992D /* LKWelcomeView.m in Sources */,
 				2EE089301B39833500A1B02B /* NSDownNetImage.m in Sources */,
 				2ED84C0D1B15BD170086992D /* LoginCell.m in Sources */,
 				2E7EB5F51B25879E00D386C2 /* MMHud.m in Sources */,
+				2ECF9E041B9498280000C4C9 /* UIColor+YUColor.m in Sources */,
 				2E7D777A1B097CDC00222C1E /* BaseViewController.m in Sources */,
 				2E7EB5FD1B25879E00D386C2 /* MMVectorImage.m in Sources */,
 				2ED474E01B1C37C6005543AC /* MyAccountViewController.m in Sources */,
@@ -2729,6 +2896,7 @@
 				2ED84C531B16B8D40086992D /* MembersRelationCell.m in Sources */,
 				2ED84B781B15924F0086992D /* PresellGoodsViewController.m in Sources */,
 				2E9D18521B8EAED600D5B49E /* AwardHomeCell.m in Sources */,
+				2ECF9DD41B94715F0000C4C9 /* NIDropDown.m in Sources */,
 				2EE9F2991B221F41006EB46B /* DKFilterView.m in Sources */,
 				2ED474EA1B1C4753005543AC /* SettingViewController.m in Sources */,
 				2E3D119D1B1ED53400180782 /* OrderAmountCell.m in Sources */,
@@ -2767,7 +2935,9 @@
 				2E7B0A601B1F34E6007C78CA /* LMContainsLMComboxScrollView.m in Sources */,
 				2E761B4D1B2082DE0028FDF9 /* MemberMenuCell.m in Sources */,
 				2ED474E51B1C3A1D005543AC /* SettlementCell.m in Sources */,
+				2ECF9E031B9498280000C4C9 /* YUDIVView.m in Sources */,
 				2ED84B051B1333910086992D /* OrderManagementViewController.m in Sources */,
+				2ECF9E011B9498280000C4C9 /* NSString+FontAwesome.m in Sources */,
 				2E93B1561B37EA0B00B282FF /* CityInfo.m in Sources */,
 				2E7EB5D71B22F1C800D386C2 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				2ED17F281B3192B400F96595 /* MJRefreshNormalHeader.m in Sources */,
@@ -2777,8 +2947,10 @@
 				2EE9F2981B221F41006EB46B /* DKFilterSectionHeaderView.m in Sources */,
 				2ED474A41B187CF6005543AC /* BasicInfoViewController.m in Sources */,
 				2EFD84E11B43CCA400E5A915 /* NSString+YRSafeCategory.m in Sources */,
+				2ECF9DE71B9475E50000C4C9 /* UITableView+DelegateBlocks.m in Sources */,
 				2ED474761B183D64005543AC /* StoreSalesYearViewController.m in Sources */,
 				2ED8E0241B6E8A8C00AF690F /* NoCopyTextField.m in Sources */,
+				2ECF9E101B9590930000C4C9 /* ZZCustomAlertView.m in Sources */,
 				2E7D777C1B097CDC00222C1E /* UIView+KGViewExtend.m in Sources */,
 				2ED17F201B3192B400F96595 /* MJRefreshHeader.m in Sources */,
 				2ED475081B1C7FE1005543AC /* AboutViewController.m in Sources */,
@@ -2916,7 +3088,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: zhaoguang zheng (LX2KSR4FFP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3004,7 +3176,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: zhaoguang zheng (LX2KSR4FFP)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

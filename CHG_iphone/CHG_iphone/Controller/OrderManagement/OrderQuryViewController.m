@@ -541,7 +541,7 @@
             
             if (dataArr.count == 0) {
                 self.isLastData = YES;
-                
+                [self.tableview reloadData];
                 [SGInfoAlert showInfo:@"最后一页不再刷新"
                               bgColor:[[UIColor blackColor] CGColor]
                                inView:self.view
@@ -739,12 +739,13 @@
         NSLog(@"locationString:%@",locationString);
     }
     if (textField == self.starttime) {
-        self.startdatePicker.ScrollToDate = senddate;
+        
+        self.startdatePicker.ScrollToDate = [NSObject convertDateFromString:textField.text];
         [self.startdatePicker drawRect:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
     }
     else
     {
-        self.enddatePicker.ScrollToDate = senddate;
+        self.enddatePicker.ScrollToDate = self.startdatePicker.ScrollToDate = [NSObject convertDateFromString:textField.text];;
         [self.enddatePicker drawRect:CGRectMake(0, 0, SCREEN_WIDTH, 200)];
     }
     

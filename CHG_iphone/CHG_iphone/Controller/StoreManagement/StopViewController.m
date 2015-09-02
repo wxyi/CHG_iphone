@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"门店管理";
+    self.title = @"基础配置";
     [self setupView];
     // Do any additional setup after loading the view from its nib.
 }
@@ -31,12 +31,12 @@
     UserConfig* config = [[SUHelper sharedInstance] currentUserConfig];
     if ([config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count > 1)
     {
-        self.items = [NSArray arrayWithObjects:@"门店切换",@"门店管理", nil];
+        self.items = [NSArray arrayWithObjects:@"门店切换",@"基础配置", nil];
     }
     else if ([config.Roles isEqualToString:@"SHOPLEADER"]||(
              [config.Roles isEqualToString:@"SHOP_OWNER"]&& config.shopList.count == 1))
     {
-        self.items = [NSArray arrayWithObjects:@"门店管理", nil];
+        self.items = [NSArray arrayWithObjects:@"基础配置", nil];
     }
 //    CGRect rect = self.tableview.frame;
 //    rect.size.height = SCREEN_HEIGHT ;

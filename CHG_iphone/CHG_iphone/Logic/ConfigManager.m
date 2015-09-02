@@ -41,4 +41,8 @@
 @dynamic strUserName;
 
 @dynamic strBankId;
+
+@dynamic strLoginAccount;
+
+@dynamic Arr_Account;
 @end

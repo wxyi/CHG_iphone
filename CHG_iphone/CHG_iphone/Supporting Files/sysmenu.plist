@@ -66,7 +66,7 @@
 		<key>icon</key>
 		<string>store_management.png</string>
 		<key>title</key>
-		<string>门店管理</string>
+		<string>基础配置</string>
 		<key>level</key>
 		<string>2</string>
 		<key>type</key>

@@ -34,6 +34,8 @@
 //获取当前时间
 +(NSString*)currentTime;
 
+//nsstring转NSDate
++(NSDate*) convertDateFromString:(NSString*)uiDate;
 //
 +(BOOL)stringContainsEmoji:(NSString *)string;
 
