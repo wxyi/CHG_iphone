@@ -349,7 +349,7 @@
             self.isRefresh = YES;
             NSArray* dataArr = [data objectForKeySafe:@"datas"];
             
-            if (dataArr.count == 0) {
+            if (dataArr.count < 20) {
                 self.isLastData = YES;
                 [SGInfoAlert showInfo:@"最后一页不再刷新"
                               bgColor:[[UIColor blackColor] CGColor]

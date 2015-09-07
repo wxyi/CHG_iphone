@@ -40,6 +40,11 @@
     if (self.Comordertype == TerminationOrder)
     {
         self.title = @"终止订单";
+        NSString* info = @"点击实退金额项可以修改实退金额";
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     }
     else
     {

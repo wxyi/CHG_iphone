@@ -377,4 +377,10 @@ static BOOL canCHeckNetwork = NO;
         
     }];
 }
+
++ (void)cancelAllAsynchronousOperations
+{
+    
+}
+
 @end

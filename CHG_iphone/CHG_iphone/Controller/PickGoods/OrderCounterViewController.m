@@ -54,8 +54,10 @@
 ////    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftbtn];
 //    
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:(CHGNavigationController *)self.navigationController action:@selector(goback)];
+    NSString *info;
     if (self.orderSaletype == SaleTypeReturnGoods) {
         self.title = @"退货柜台";
+        info = @"点击实退金额项可以修改实退金额";
     }
     else if(self.orderSaletype == SaleTypePickingGoods)
     {
@@ -63,11 +65,20 @@
     }
     else if(self.orderSaletype == SaleTypeStopOrder)
     {
+//        info = @"退货柜台可点击修改实退金额";
         self.title = @"终止订单";
     }
     else
     {
+        info = @"点击实收金额项可以修改实收金额";
         self.title = @"订单柜台";
+    }
+    
+    if (self.orderSaletype != SaleTypePickingGoods) {
+        [SGInfoAlert showInfo:info
+                      bgColor:[[UIColor blackColor] CGColor]
+                       inView:self.view
+                     vertical:0.7];
     }
 //    self.title = @"订单柜台";
     [self setupView];

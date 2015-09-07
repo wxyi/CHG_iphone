@@ -40,6 +40,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect,
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         bgcolor_ = color;
+        self.alpha = 0.88;
         info_ = [[NSString alloc] initWithString:info];
         fontSize_ = frame.size;
     }

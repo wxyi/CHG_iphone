@@ -18,9 +18,12 @@
     self.passwordTextfield.delegate = self;
     if (!self.tb) {
         self.tb = [[TableViewWithBlock alloc] initWithFrame:CGRectMake(self.bgView.frame.origin.x + 7, 40, self.bgView.frame.size.width -14, 1)];
-        self.tb.backgroundColor = COLOR(0, 0, 0, 0.8);
+        self.tb.backgroundColor = UIColorFromRGB(0x323232);
+        self.tb.alpha = 0.7;//COLOR(50, 50, 50, 0.8);
         self.tb.bounces = NO;
         self.tb.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+        
         [self addSubview:self.tb];
         
     }
@@ -107,15 +110,20 @@
             [self.openButton setImage:openImage forState:UIControlStateNormal];
             
             CGRect frame=_tb.frame;
-            if (self.arr_Account.count < 5) {
-                frame.size.height = 30* self.arr_Account.count;
+            if (self.arr_Account.count < 3) {
+                frame.size.height = 40* self.arr_Account.count;
             }
             else
             {
-                frame.size.height=150;
+                frame.size.height=120;
             }
             
             [_tb setFrame:frame];
+            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.tb.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(10, 10)];
+            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+            maskLayer.frame = self.tb.bounds;
+            maskLayer.path = maskPath.CGPath;
+            _tb.layer.mask = maskLayer;
         } completion:^(BOOL finished){
             
             self.isOpened=YES;

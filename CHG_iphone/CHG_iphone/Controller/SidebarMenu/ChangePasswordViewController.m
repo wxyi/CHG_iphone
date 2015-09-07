@@ -312,4 +312,19 @@
         [textField resignFirstResponder];
     }
 }
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (string.length == 0) return YES;
+    if ([NSObject stringContainsEmoji:string]) {
+        return NO;
+    }
+    NSInteger existedLength = textField.text.length;
+    NSInteger selectedLength = range.length;
+    NSInteger replaceLength = string.length;
+    if (existedLength - selectedLength + replaceLength > 16) {
+        return NO;
+    }
+    
+    return YES;
+}
 @end

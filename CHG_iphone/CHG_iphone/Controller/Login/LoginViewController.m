@@ -23,7 +23,7 @@
 #import "AreaInfo.h"
 #import "CityInfo.h"
 
-@interface LoginViewController ()
+@interface LoginViewController ()<UIGestureRecognizerDelegate>
 @property UINib* LoginNib;
 @end
 
@@ -51,21 +51,36 @@
 //    self.tableview.backgroundColor = [UIColor whiteColor];
     self.LoginNib = [UINib nibWithNibName:@"LoginCell" bundle:nil];
     
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePopUpView)];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePopUpView:)];
     //设置成NO表示当前控件响应后会传播到其他控件上，默认为YES。
     tapGestureRecognizer.cancelsTouchesInView = NO;
     //将触摸事件添加到当前view
+    tapGestureRecognizer.delegate = self;
     [self.tableview addGestureRecognizer:tapGestureRecognizer];
 }
--(void)hidePopUpView
+-(void)hidePopUpView:(UITapGestureRecognizer *)sender
 {
-    LoginCell *cell = (LoginCell*)[self.tableview cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    if (cell.isOpened) {
+    CGPoint point = [sender locationInView:self.tableview];
+    NSIndexPath* IndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    
+    CGRect rectInTableView = [self.tableview rectForRowAtIndexPath:IndexPath];
+    
+    
+    CGRect rect = [self.tableview convertRect:rectInTableView toView:[self.tableview superview]];
+    NSLog(@"handleSingleTap!pointx:%f,y:%f rectInTableView y :%f, rect y:%f",point.x,point.y,rectInTableView.origin.y, rect.origin.y);
+    
+    
+    LoginCell *cell = (LoginCell*)[self.tableview cellForRowAtIndexPath:IndexPath];
+    if (cell.isOpened &&
+        (point.y < rect.origin.y + 40 || point.y > rect.origin.y + 40 + cell.arr_Account.count * 40) &&
+        (point.x < cell.bgView.frame.origin.x || point.x > cell.bgView.frame.origin.x + cell.bgView.frame.size.height) ) {
         [cell.openButton sendActionsForControlEvents:UIControlEventTouchUpInside];
     }
     
     
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

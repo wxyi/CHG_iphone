@@ -22,7 +22,10 @@
 
 //刷新token
 +(void)httpRefresh_token:(RequestSuccessBlock) successBlock failureBlock:(RequestFailedBlock)failureBlock ;
+
 + (void)inithttps;
 
+//取消所有请求
++ (void)cancelAllAsynchronousOperations;
 
 @end
